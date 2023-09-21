@@ -22,10 +22,12 @@ function RoomGame() {
 
     const handleButton = () => {
         const selectedCards = {
-            hand: game.player.hand.filter(card => card.selected),
-            shield: game.player.shield.filter(card => card.selected)
+            hand: game.player.hand.filter(card => card.selected).map(card => card.name),
+            shield: game.player.shield.filter(card => card.selected).map(card => card.name)
         }
-        console.log(selectedCards);
+        game.player.discardShield(selectedCards.shield);
+        game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+
         // game.player.revive(2);
         // game.player.buildShield(["tile027.jpg"]);
         // game.player.drawTavern(1, ["tile027.jpg"]);
