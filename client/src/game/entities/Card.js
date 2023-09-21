@@ -19,9 +19,9 @@ export class Card {
         this.cardsContainer.addChild(this.sprite);
 
         this.sprite
-            .on('pointerover', this.onPointerOver, this.sprite)
-            .on('pointerout', this.onPointerOut, this.sprite)
-            .on('pointerdown', () => {this.selected = !this.selected;});
+            .on('pointerover', this.onPointerOver, this)
+            .on('pointerout', this.onPointerOut, this)
+            .on('pointerdown', this.onPointerDown, this);
     }
 
     reveal(name) {
@@ -35,14 +35,17 @@ export class Card {
         this.sprite.texture = this.sheet.textures["tile028.jpg"];
     }
 
-    onPointerOver()
-    {
-        this.tint = 0x666666;
+    onPointerOver() {
+        this.sprite.scale.set(0.45);
     }
 
-    onPointerOut()
-    {
-        this.tint = 0xFFFFFF;
+    onPointerOut() {
+        this.sprite.scale.set(0.4);
+    }
+
+    onPointerDown() {
+        this.selected = !this.selected;
+        this.sprite.tint = this.selected? 0x666666 : 0xFFFFFF;
     }
 
     moveTo(position, reveal, destroy) {
