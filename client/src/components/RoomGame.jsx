@@ -21,11 +21,16 @@ function RoomGame() {
     }, []);
 
     const handleButton = () => {
+        const selectedCards = {
+            hand: game.player.hand.filter(card => card.selected),
+            shield: game.player.shield.filter(card => card.selected)
+        }
+        console.log(selectedCards);
         // game.player.revive(2);
         // game.player.buildShield(["tile027.jpg"]);
         // game.player.drawTavern(1, ["tile027.jpg"]);
         // game.player.drawCastle("tile027.jpg");
-        game.player.attack(["tile003.jpg"]);
+        // game.player.attack(["tile003.jpg"]);
         // game.player.discardShield(["tile016.jpg"]);
         // game.player.discardHand(2, ["tile037.jpg", "tile038.jpg"]);
     }

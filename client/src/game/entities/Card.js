@@ -6,7 +6,6 @@ export class Card {
         this.sheet = sheet;
         this.name = name;
         this.position = position;
-        this.place = "tavern";
         this.selected = false;
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
