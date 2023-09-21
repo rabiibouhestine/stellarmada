@@ -29,7 +29,7 @@ export class Player {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.state.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "tile028.jpg";
-            const card = new Card(this.cardsContainer, this.sheet, cardName, start);
+            const card = new Card(this.cardsContainer, this.sheet, cardName, start, this.isPlayer);
             cards.push(card);
         }
         this.repositionCards(cards, start);
@@ -64,12 +64,12 @@ export class Player {
         this.handCount += x;
         if (this.isPlayer) {
             for (const index in units) {
-                const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
+                const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern, this.isPlayer);
                 this.hand.push(card);
             }
         } else {
             for (let step = 0; step < x; step++) {
-                const card = new Card(this.cardsContainer, this.sheet, "tile028.jpg", this.positions.tavern);
+                const card = new Card(this.cardsContainer, this.sheet, "tile028.jpg", this.positions.tavern, this.isPlayer);
                 this.hand.push(card);
             }
         }
@@ -80,7 +80,7 @@ export class Player {
         this.castle.setSize(this.castle.size - 1);
         this.handCount += 1;
         const name = this.isPlayer? this.castle.getName() : "tile028.jpg";
-        const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle);
+        const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle, this.isPlayer);
         this.castle.setName(unit);
         this.hand.push(card);
         this.repositionCards(this.hand, this.positions.hand);

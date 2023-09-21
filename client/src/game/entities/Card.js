@@ -1,12 +1,13 @@
 import * as PIXI from "pixi.js";
 
 export class Card {
-    constructor(cardsContainer, sheet, name, position) {
+    constructor(cardsContainer, sheet, name, position, isPlayer) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.name = name;
         this.position = position;
         this.selected = false;
+        this.selectable = isPlayer;
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.eventMode = 'static';
@@ -43,8 +44,10 @@ export class Card {
     }
 
     onPointerDown() {
-        this.selected = !this.selected;
-        this.sprite.tint = this.selected? 0x666666 : 0xFFFFFF;
+        if (this.selectable) {
+            this.selected = !this.selected;
+            this.sprite.tint = this.selected? 0x666666 : 0xFFFFFF;
+        }
     }
 
     moveTo(position, reveal, destroy) {
