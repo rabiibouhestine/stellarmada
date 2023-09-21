@@ -17,7 +17,7 @@ export class Player {
 
         this.handCount = state.handCount;
         this.tavern = new Deck(app, sheet, "tile028.jpg", this.positions.tavern, state.tavern);
-        this.grave = new Deck(app, sheet, "tile028.jpg", this.positions.grave, state.grave);
+        this.cemetry = new Deck(app, sheet, "tile028.jpg", this.positions.cemetry, state.cemetry);
         this.castle = new Deck(app, sheet, "tile013.jpg", this.positions.castle, state.castle);
         this.jester = new Deck(app, sheet, "tile014.jpg", this.positions.jester, state.jester);
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
@@ -47,7 +47,7 @@ export class Player {
     }
 
     revive(x) {
-        this.grave.setSize(this.grave.size - x);
+        this.cemetry.setSize(this.cemetry.size - x);
         this.tavern.setSize(this.tavern.size + x);
     }
 
@@ -106,33 +106,33 @@ export class Player {
     }
 
     clearField() {
-        this.field.forEach(card => card.moveTo(this.positions.grave, false, true));
+        this.field.forEach(card => card.moveTo(this.positions.cemetry, false, true));
         this.field = [];
     }
 
     discardShield(units) {
         const cards = this.shield.filter(card => units.includes(card.name));
-        cards.forEach(card => card.moveTo(this.positions.grave, false, true));
+        cards.forEach(card => card.moveTo(this.positions.cemetry, false, true));
         this.shield = this.shield.filter(card => !units.includes(card.name));
         this.repositionCards(this.shield, this.positions.shield);
     }
 
     discardHand(x, units) {
         this.handCount -= x;
-        this.grave.setSize(this.grave.size + x);
+        this.cemetry.setSize(this.cemetry.size + x);
 
-        const moveCardsToGrave = (cards) => {
-            cards.forEach(card => card.moveTo(this.positions.grave, false, true));
+        const moveCardsToCemetry = (cards) => {
+            cards.forEach(card => card.moveTo(this.positions.cemetry, false, true));
         };
 
         if (this.isPlayer) {
             const cards = this.hand.filter(card => units.includes(card.name));
             this.hand = this.hand.filter(card => !units.includes(card.name));
-            moveCardsToGrave(cards);
+            moveCardsToCemetry(cards);
         } else {
             const cards = this.hand.slice(-x);
             this.hand.splice(-x);
-            moveCardsToGrave(cards);
+            moveCardsToCemetry(cards);
         }
 
         this.repositionCards(this.hand, this.positions.hand);

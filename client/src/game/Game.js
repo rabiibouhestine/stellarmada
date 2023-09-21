@@ -5,6 +5,7 @@ import cardsImage from './assets/cards.jpg';
 
 import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
+import { Button } from "./entities/Button";
 
 export class Game {
     constructor({ ref }) {
@@ -31,7 +32,7 @@ export class Game {
             field: ["tile026.jpg", "tile027.jpg", "tile040.jpg", "tile041.jpg"],
             shield: ["tile016.jpg", "tile017.jpg"],
             tavern: 25,
-            grave: 7,
+            cemetry: 7,
             castle: 4,
             jester: 1
         };
@@ -42,7 +43,7 @@ export class Game {
             field: [],
             shield: ["tile016.jpg", "tile017.jpg"],
             tavern: 15,
-            grave: 11,
+            cemetry: 11,
             castle: 7,
             jester: 2
         };
@@ -53,7 +54,7 @@ export class Game {
             field: {x: 480, y: 370},
             shield: {x: 900, y: 520},
             tavern: {x: 360, y: 520},
-            grave: {x: 260, y: 520},
+            cemetry: {x: 260, y: 520},
             castle: {x: 760, y: 520},
             jester: {x: 510, y: 520}
         };
@@ -63,11 +64,12 @@ export class Game {
             field: {x: 480, y: 370},
             shield: {x: 260, y: 220},
             tavern: {x: 900, y: 220},
-            grave: {x: 1000, y: 220},
+            cemetry: {x: 1000, y: 220},
             castle: {x: 510, y: 220},
             jester: {x: 650, y: 220}
         };
 
+        this.button = new Button(this.app, {x:1200, y:500}, "Confirm");
         this.player = new Player(this.app, this.sheet, playerState, playerPositions, true);
         this.opponent = new Player(this.app, this.sheet, opponentState, opponentPositions, false);
 
