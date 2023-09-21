@@ -16,10 +16,10 @@ export class Player {
         this.app.stage.addChild(this.cardsContainer);
 
         this.handCount = state.handCount;
-        this.tavern = new Deck(app, sheet, "tile028.jpg", this.positions.tavern, state.tavern);
-        this.cemetry = new Deck(app, sheet, "tile028.jpg", this.positions.cemetry, state.cemetry);
-        this.castle = new Deck(app, sheet, "tile013.jpg", this.positions.castle, state.castle);
-        this.jester = new Deck(app, sheet, "tile014.jpg", this.positions.jester, state.jester);
+        this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.tavern);
+        this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cemetry);
+        this.castle = new Deck(app, sheet, "KH", this.positions.castle, state.castle);
+        this.jester = new Deck(app, sheet, "J1", this.positions.jester, state.jester);
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
@@ -28,7 +28,7 @@ export class Player {
     createCards(locationState, isPlayer, start) {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.state.handCount); index++) {
-            const cardName = isPlayer ? locationState[index] : "tile028.jpg";
+            const cardName = isPlayer ? locationState[index] : "B1";
             const card = new Card(this.cardsContainer, this.sheet, cardName, start);
             cards.push(card);
         }
@@ -82,7 +82,7 @@ export class Player {
             }
         } else {
             for (let step = 0; step < x; step++) {
-                const card = new Card(this.cardsContainer, this.sheet, "tile028.jpg", this.positions.tavern);
+                const card = new Card(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
                 this.hand.push(card);
             }
         }
@@ -92,7 +92,7 @@ export class Player {
     drawCastle(unit) {
         this.castle.setSize(this.castle.size - 1);
         this.handCount += 1;
-        const name = this.isPlayer? this.castle.getName() : "tile028.jpg";
+        const name = this.isPlayer? this.castle.getName() : "B1";
         const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle);
         this.castle.setName(unit);
         this.hand.push(card);

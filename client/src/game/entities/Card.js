@@ -34,7 +34,7 @@ export class Card {
     }
 
     hide() {
-        this.sprite.texture = this.sheet.textures["tile028.jpg"];
+        this.sprite.texture = this.sheet.textures["B1"];
     }
 
     onPointerOver() {

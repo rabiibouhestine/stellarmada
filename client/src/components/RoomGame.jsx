@@ -9,20 +9,20 @@ function RoomGame({ socket }) {
         phase: "player attack",
         state: {
             player: {
-                hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
+                hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
                 handCount: 7,
-                field: ["tile026.jpg", "tile027.jpg", "tile040.jpg", "tile041.jpg"],
-                shield: ["tile016.jpg", "tile017.jpg"],
+                field: ["AC", "6S"],
+                shield: ["4S", "7S"],
                 tavern: 25,
                 cemetry: 7,
                 castle: 4,
                 jester: 1
             },
             opponent: {
-                hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
+                hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
                 handCount: 7,
                 field: [],
-                shield: ["tile016.jpg", "tile017.jpg"],
+                shield: ["AS", "3S"],
                 tavern: 15,
                 cemetry: 11,
                 castle: 7,
