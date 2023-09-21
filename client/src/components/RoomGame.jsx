@@ -2,17 +2,47 @@ import { useRef, useEffect } from 'react';
 
 import { Game } from '../game/Game';
 
-function RoomGame() {
+function RoomGame({ socket }) {
     const ref = useRef(null);
 
+    const gameState = {
+        phase: "player attack",
+        state: {
+            player: {
+                hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
+                handCount: 7,
+                field: ["tile026.jpg", "tile027.jpg", "tile040.jpg", "tile041.jpg"],
+                shield: ["tile016.jpg", "tile017.jpg"],
+                tavern: 25,
+                cemetry: 7,
+                castle: 4,
+                jester: 1
+            },
+            opponent: {
+                hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
+                handCount: 7,
+                field: [],
+                shield: ["tile016.jpg", "tile017.jpg"],
+                tavern: 15,
+                cemetry: 11,
+                castle: 7,
+                jester: 2
+            }
+        }
+    }
+
+
     // Create our game
-    const game = new Game({ ref:ref });
+    const game = new Game({ ref:ref, gameState:gameState });
+
+
 
 
     useEffect(() => {
         // On load start the game
         game.start();
         game.button.button.on('pointerdown', () => handleButton());
+        game.player.setSelectable(gameState.phase);
 
         // On unload end the game
         return () => {

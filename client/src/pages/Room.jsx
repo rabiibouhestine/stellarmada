@@ -34,7 +34,7 @@ function Room({ socket }) {
         <>
         {
             gameStarted?
-            <RoomGame />
+            <RoomGame socket={socket} />
             :
             <RoomLobby socket={socket} />
         }

@@ -8,8 +8,10 @@ import { Board } from "./entities/Board";
 import { Button } from "./entities/Button";
 
 export class Game {
-    constructor({ ref }) {
+    constructor({ ref, gameState }) {
         this.ref = ref;
+        this.gameState = gameState;
+
         this.app = new PIXI.Application({
             resizeTo: window,
             backgroundColor: 0x5BBA6F,
@@ -25,29 +27,6 @@ export class Game {
     start() {
         this.ref.current.appendChild(this.app.view);
         this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
-
-        const playerState = {
-            hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
-            handCount: 7,
-            field: ["tile026.jpg", "tile027.jpg", "tile040.jpg", "tile041.jpg"],
-            shield: ["tile016.jpg", "tile017.jpg"],
-            tavern: 25,
-            cemetry: 7,
-            castle: 4,
-            jester: 1
-        };
-
-        const opponentState = {
-            hand: ["tile036.jpg", "tile037.jpg", "tile038.jpg", "tile039.jpg", "tile001.jpg", "tile002.jpg", "tile003.jpg"],
-            handCount: 7,
-            field: [],
-            shield: ["tile016.jpg", "tile017.jpg"],
-            tavern: 15,
-            cemetry: 11,
-            castle: 7,
-            jester: 2
-        };
-        
 
         const playerPositions = {
             hand: {x: 320, y: 670},
@@ -70,8 +49,8 @@ export class Game {
         };
 
         this.button = new Button(this.app, {x:1200, y:500}, "Confirm");
-        this.player = new Player(this.app, this.sheet, playerState, playerPositions, true);
-        this.opponent = new Player(this.app, this.sheet, opponentState, opponentPositions, false);
+        this.player = new Player(this.app, this.sheet, this.gameState.state.player, playerPositions, true);
+        this.opponent = new Player(this.app, this.sheet, this.gameState.state.opponent, opponentPositions, false);
 
         this.app.start();
     }

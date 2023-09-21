@@ -29,7 +29,7 @@ export class Player {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.state.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "tile028.jpg";
-            const card = new Card(this.cardsContainer, this.sheet, cardName, start, this.isPlayer);
+            const card = new Card(this.cardsContainer, this.sheet, cardName, start);
             cards.push(card);
         }
         this.repositionCards(cards, start);
@@ -43,6 +43,19 @@ export class Player {
                 y: start.y
             };
             array[index].moveTo(newPosition, true, false);
+        }
+    }
+
+    setSelectable(phase) {
+        if (phase == "player attack") {
+            this.hand.forEach(card => {card.setSelectable(true);});
+            this.shield.forEach(card => {card.setSelectable(false);});
+        } else if (phase == "player discard") {
+            this.hand.forEach(card => {card.setSelectable(true);});
+            this.shield.forEach(card => {card.setSelectable(true);});
+        } else {
+            this.hand.forEach(card => {card.setSelectable(false);});
+            this.shield.forEach(card => {card.setSelectable(false);});
         }
     }
 
@@ -64,12 +77,12 @@ export class Player {
         this.handCount += x;
         if (this.isPlayer) {
             for (const index in units) {
-                const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern, this.isPlayer);
+                const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
                 this.hand.push(card);
             }
         } else {
             for (let step = 0; step < x; step++) {
-                const card = new Card(this.cardsContainer, this.sheet, "tile028.jpg", this.positions.tavern, this.isPlayer);
+                const card = new Card(this.cardsContainer, this.sheet, "tile028.jpg", this.positions.tavern);
                 this.hand.push(card);
             }
         }
@@ -80,7 +93,7 @@ export class Player {
         this.castle.setSize(this.castle.size - 1);
         this.handCount += 1;
         const name = this.isPlayer? this.castle.getName() : "tile028.jpg";
-        const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle, this.isPlayer);
+        const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle);
         this.castle.setName(unit);
         this.hand.push(card);
         this.repositionCards(this.hand, this.positions.hand);
