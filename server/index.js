@@ -96,6 +96,7 @@ io.on("connection", (socket) => {
             phase: "player discard",
             state: {
                 player: {
+                    stance: "discarding", // "discarding", "attacking" or "waiting"
                     hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
                     handCount: 7,
                     field: ["AC", "6S"],
@@ -106,6 +107,7 @@ io.on("connection", (socket) => {
                     jester: 1
                 },
                 opponent: {
+                    stance: "waiting", // "discarding", "attacking" or "waiting"
                     hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
                     handCount: 7,
                     field: [],

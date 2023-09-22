@@ -30,8 +30,8 @@ export class Game {
     start(gameState) {
         this.board = new Board(this.app);
         this.button = new Button(this.app, {x:1200, y:500}, "Confirm");
-        this.player = new Player(this.app, this.sheet, gameState.state.player, gameState.phase, positions.player, true);
-        this.opponent = new Player(this.app, this.sheet, gameState.state.opponent, gameState.phase, positions.opponent, false);
+        this.opponent = new Player(this.app, this.sheet, gameState.state.opponent, gameState.phase, positions.top, false);
+        this.player = new Player(this.app, this.sheet, gameState.state.player, gameState.phase, positions.bottom, true);
 
         this.app.start();
     }

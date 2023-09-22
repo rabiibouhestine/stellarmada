@@ -81,46 +81,26 @@ export class Player {
     }
 
     onPointerDown(card) {
-        if (card.selectable) {
-            if (this.phase === "player attack") {
-                if (card.selected) {
-                    // If card is already selected, we unselect it, and remove it from attack selection
-                    card.setSelected(false);
-                    const index = this.attackSelection.indexOf(card);
-                    this.attackSelection.splice(index, 1);
-                    const notSelectedCards = this.hand.filter(card => !this.attackSelection.includes(card));
-                    notSelectedCards.forEach(card => {card.setSelectable(this.canCardAttack(card));});
-                    this.attackValueIndicator.setValue(this.attackValueIndicator.value - card.value);
-                } else {
-                    card.setSelected(true);
-                    this.attackSelection.push(card);
-                    const notSelectedCards = this.hand.filter(card => !this.attackSelection.includes(card));
-                    notSelectedCards.forEach(card => {card.setSelectable(this.canCardAttack(card));});
-                    this.attackValueIndicator.setValue(this.attackValueIndicator.value + card.value);
-                }
-            }
-            if (this.phase === "player discard") {
-                if (card.selected) {
-                    // If card is already selected, we unselect it, and remove it from attack selection
-                    card.setSelected(false);
-                    const index = this.discardSelection.indexOf(card);
-                    this.discardSelection.splice(index, 1);
-                    const notSelectedCardsHand = this.hand.filter(card => !this.discardSelection.includes(card));
-                    const notSelectedCardsShield = this.shield.filter(card => !this.discardSelection.includes(card));
-                    const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
-                    notSelectedCards.forEach(card => {card.setSelectable(this.canDiscardMore());});
-                    this.discardValueIndicator.setValue(this.discardValueIndicator.value - card.value);
-                } else {
-                    card.setSelected(true);
-                    this.discardSelection.push(card);
-                    const notSelectedCardsHand = this.hand.filter(card => !this.discardSelection.includes(card));
-                    const notSelectedCardsShield = this.shield.filter(card => !this.discardSelection.includes(card));
-                    const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
-                    notSelectedCards.forEach(card => {card.setSelectable(this.canDiscardMore());});
-                    this.discardValueIndicator.setValue(this.discardValueIndicator.value + card.value);
-                }
-            }
+        if (!card.selectable) return;
+    
+        const cardSelection = this.phase === "player attack" ? this.attackSelection : this.discardSelection;
+        const cardIndicator = this.phase === "player attack" ? this.attackValueIndicator : this.discardValueIndicator;
+        
+        cardIndicator.setValue(cardIndicator.value + (card.selected ? -card.value : card.value));
+
+        if (card.selected) {
+            card.setSelected(false);
+            const index = cardSelection.indexOf(card);
+            cardSelection.splice(index, 1);
+        } else {
+            card.setSelected(true);
+            cardSelection.push(card);
         }
+    
+        const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
+        const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
+        const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
+        notSelectedCards.forEach(card => { card.setSelectable(this.phase === "player attack" ? this.canCardAttack(card) : this.canDiscardMore()); });
     }
 
     setSelectable() {
