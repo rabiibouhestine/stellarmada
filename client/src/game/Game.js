@@ -29,9 +29,9 @@ export class Game {
         this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
 
         const playerPositions = {
-            hand: {x: 320, y: 670},
-            field: {x: 480, y: 370},
-            shield: {x: 900, y: 520},
+            hand: {x: 700, y: 670},
+            field: {x: 700, y: 370},
+            shield: {x: 1000, y: 520},
             tavern: {x: 360, y: 520},
             cemetry: {x: 260, y: 520},
             castle: {x: 760, y: 520},
@@ -39,9 +39,9 @@ export class Game {
         };
 
         const opponentPositions = {
-            hand: {x: 320, y: 70},
-            field: {x: 480, y: 370},
-            shield: {x: 260, y: 220},
+            hand: {x: 700, y: 70},
+            field: {x: 700, y: 370},
+            shield: {x: 365, y: 220},
             tavern: {x: 900, y: 220},
             cemetry: {x: 1000, y: 220},
             castle: {x: 510, y: 220},
