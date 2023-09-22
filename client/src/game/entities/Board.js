@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
 export class Board {
-    constructor({ app }) {
+    constructor(app) {
         // Draw Enemy Board
         const enemy = new PIXI.Graphics();
         enemy.beginFill(0x469155);

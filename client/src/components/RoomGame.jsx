@@ -1,81 +1,67 @@
 import { useRef, useEffect } from 'react';
 
 import { Game } from '../game/Game';
+import { useParams } from 'react-router-dom';
 
 function RoomGame({ socket }) {
-    const ref = useRef(null);
-
-    const gameState = {
-        phase: "player discard",
-        state: {
-            player: {
-                hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
-                handCount: 7,
-                field: ["AC", "6S"],
-                shield: ["4S", "7S"],
-                tavern: 25,
-                cemetry: 7,
-                castle: 4,
-                jester: 1
-            },
-            opponent: {
-                hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
-                handCount: 7,
-                field: [],
-                shield: ["AS", "3S"],
-                tavern: 15,
-                cemetry: 11,
-                castle: 7,
-                jester: 2
-            }
-        }
-    }
-
-
-    // Create our game
-    const game = new Game({ ref:ref, gameState:gameState });
-
-
-
+    const canvasRef = useRef(null);
+    const gameRef = useRef(null);
+    const params = useParams();
 
     useEffect(() => {
-        // On load start the game
-        game.start();
-        game.button.button.on('pointerdown', () => handleButton());
-        game.player.phase = "player discard";
-        game.player.setSelectable();
-        game.player.setDamageValue(15);
+        // On load
+        if (!gameRef.current) {
+            gameRef.current = new Game({ canvasRef:canvasRef, socket:socket });
+            socket.emit("gameStateRequest", { roomID: params.roomID });
+        }
 
-        // On unload end the game
+        // On unload
         return () => {
-            game.end();
-        };
+            if (gameRef.current) {
+                gameRef.current.end();
+                gameRef.current = null;
+            }
+        }; 
     }, []);
+
+    useEffect(() => {
+        socket.on("gameStateResponse", (data) => {
+            gameRef.current.start(data.gameState);
+            gameRef.current.onButton(() => handleButton());
+
+            gameRef.current.player.setSelectable();
+            gameRef.current.player.setDamageValue(15);
+        });
+
+        return () => {
+            socket.off("gameStateResponse");
+        };
+    }, [socket]);
 
     const handleButton = () => {
         const selectedCards = {
-            hand: game.player.hand.filter(card => card.selected).map(card => card.name),
-            shield: game.player.shield.filter(card => card.selected).map(card => card.name)
+            hand: gameRef.current.player.hand.filter(card => card.selected).map(card => card.name),
+            shield: gameRef.current.player.shield.filter(card => card.selected).map(card => card.name)
         }
-        game.player.discardShield(selectedCards.shield);
-        game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
-        // game.player.attack(selectedCards.hand);
-        game.player.phase = "player attack";
-        game.player.setSelectable();
-        game.player.setDamageValue(0);
-        game.player.setDiscardValue(0);
+        gameRef.current.player.discardShield(selectedCards.shield);
+        gameRef.current.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+        // // gameRef.player.attack(selectedCards.hand);
+        // gameRef.player.phase = "player attack";
+        // gameRef.player.setSelectable();
+        // gameRef.player.setDamageValue(0);
+        // gameRef.player.setDiscardValue(0);
 
-        // game.player.revive(2);
-        // game.player.buildShield(["tile027.jpg"]);
-        // game.player.drawTavern(1, ["tile027.jpg"]);
-        // game.player.drawCastle("tile027.jpg");
-        // game.player.attack(["tile003.jpg"]);
-        // game.player.discardShield(["tile016.jpg"]);
-        // game.player.discardHand(2, ["tile037.jpg", "tile038.jpg"]);
+        // gameRef.player.revive(2);
+        // gameRef.player.buildShield(["tile027.jpg"]);
+        // gameRef.player.drawTavern(1, ["tile027.jpg"]);
+        // gameRef.player.drawCastle("tile027.jpg");
+        // gameRef.player.attack(["tile003.jpg"]);
+        // gameRef.player.discardShield(["tile016.jpg"]);
+        // gameRef.player.discardHand(2, ["tile037.jpg", "tile038.jpg"]);
     }
 
     return (
-        <div ref={ref} />
+        <div ref={canvasRef} />
     );
 }
 

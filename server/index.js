@@ -91,6 +91,35 @@ io.on("connection", (socket) => {
         }
     })
 
+    socket.on("gameStateRequest", () => {
+        const gameState = {
+            phase: "player discard",
+            state: {
+                player: {
+                    hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
+                    handCount: 7,
+                    field: ["AC", "6S"],
+                    shield: ["4S", "7S"],
+                    tavern: 25,
+                    cemetry: 7,
+                    castle: 4,
+                    jester: 1
+                },
+                opponent: {
+                    hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
+                    handCount: 7,
+                    field: [],
+                    shield: ["AS", "3S"],
+                    tavern: 15,
+                    cemetry: 11,
+                    castle: 7,
+                    jester: 2
+                }
+            }
+        }
+        socket.emit("gameStateResponse", { gameState:gameState, success: true });
+    })
+
     socket.on("disconnect", () => {
         console.log("User disconnected", socket.id);
 
