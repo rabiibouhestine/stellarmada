@@ -23,6 +23,8 @@ export class Player {
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
+
+        this.attackSelection = [];
     }
 
     createCards(locationState, isPlayer, start) {
@@ -30,6 +32,7 @@ export class Player {
         for (let index = 0; index < (isPlayer ? locationState.length : this.state.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "B1";
             const card = new Card(this.cardsContainer, this.sheet, cardName, start);
+            card.sprite.on('pointerdown', () => this.onPointerDown(card));
             cards.push(card);
         }
         this.repositionCards(cards, start);
@@ -56,7 +59,26 @@ export class Player {
         }
     }
 
+    onPointerDown(card) {
+        if (card.selectable) {
+            if (card.selected) {
+                // If card is already selected, we unselect it, and remove it from attack selection
+                card.setSelected(false);
+                const index = this.attackSelection.indexOf(card);
+                this.attackSelection.splice(index, 1);
+                const notSelectedCards = this.hand.filter(card => !this.attackSelection.includes(card));
+                notSelectedCards.forEach(card => {card.setSelectable(this.canSelectCard(card));});
+            } else {
+                card.setSelected(true);
+                this.attackSelection.push(card);
+                const notSelectedCards = this.hand.filter(card => !this.attackSelection.includes(card));
+                notSelectedCards.forEach(card => {card.setSelectable(this.canSelectCard(card));});
+            }
+        }
+    }
+
     setSelectable(phase) {
+        this.field.forEach(card => {card.setSelectable(false);});
         if (phase == "player attack") {
             this.hand.forEach(card => {card.setSelectable(true);});
             this.shield.forEach(card => {card.setSelectable(false);});
@@ -67,6 +89,45 @@ export class Player {
             this.hand.forEach(card => {card.setSelectable(false);});
             this.shield.forEach(card => {card.setSelectable(false);});
         }
+    }
+
+    canSelectCard(card) {
+        // Clone the attackSelection array and add the current card to it for checking the conditions
+        const updatedSelection = [...this.attackSelection, card];
+    
+        // Count the number of cards with values 1 to 5 in the updated selection
+        const valueCounts = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+        };
+    
+        for (const selectedCard of updatedSelection) {
+            valueCounts[selectedCard.value]++;
+        }
+    
+        // Check if the updated selection satisfies only one of the specified conditions
+        const singleCard = updatedSelection.length === 1;
+        const cardAndOne = updatedSelection.length === 2 && valueCounts[1] === 1;
+        const maxFourOnes = updatedSelection.length === valueCounts[1] && valueCounts[1] <= 4;
+        const maxFourTwos = updatedSelection.length === valueCounts[2] && valueCounts[2] <= 4;
+        const maxThreeThrees = updatedSelection.length === valueCounts[3] && valueCounts[3] <= 3;
+        const maxTwoFours = updatedSelection.length === valueCounts[4] && valueCounts[4] <= 2;
+        const maxTwoFives = updatedSelection.length === valueCounts[5] && valueCounts[5] <= 2;
+    
+        const conditionsMet = (
+            singleCard ||
+            cardAndOne ||
+            maxFourOnes ||
+            maxFourTwos ||
+            maxThreeThrees ||
+            maxTwoFours ||
+            maxTwoFives
+        );
+
+        return conditionsMet;
     }
 
     revive(x) {
@@ -88,11 +149,13 @@ export class Player {
         if (this.isPlayer) {
             for (const index in units) {
                 const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
+                card.sprite.on('pointerdown', () => this.onPointerDown(card));
                 this.hand.push(card);
             }
         } else {
             for (let step = 0; step < x; step++) {
                 const card = new Card(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
+                card.sprite.on('pointerdown', () => this.onPointerDown(card));
                 this.hand.push(card);
             }
         }
@@ -104,6 +167,7 @@ export class Player {
         this.handCount += 1;
         const name = this.isPlayer? this.castle.getName() : "B1";
         const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle);
+        card.sprite.on('pointerdown', () => this.onPointerDown(card));
         this.castle.setName(unit);
         this.hand.push(card);
         this.repositionCards(this.hand, this.positions.hand);

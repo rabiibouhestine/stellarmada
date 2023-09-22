@@ -17,7 +17,7 @@ export class Card {
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.eventMode = 'static';
-        this.sprite.cursor = 'pointer';
+        this.sprite.cursor = 'default';
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
         this.sprite.scale.set(0.4);
@@ -26,8 +26,7 @@ export class Card {
 
         this.sprite
             .on('pointerover', this.onPointerOver, this)
-            .on('pointerout', this.onPointerOut, this)
-            .on('pointerdown', this.onPointerDown, this);
+            .on('pointerout', this.onPointerOut, this);
     }
 
     reveal(name) {
@@ -49,17 +48,20 @@ export class Card {
         this.sprite.scale.set(0.4);
     }
 
-    onPointerDown() {
+    setSelected(isSelected) {
         if (this.selectable) {
-            this.selected = !this.selected;
-            this.sprite.tint = this.selected? 0x444444 : this.spriteTint;
+            this.selected = isSelected;
+            this.sprite.tint = isSelected? 0x444444 : this.spriteTint;
         }
     }
 
     setSelectable(selectable) {
         this.selectable = selectable;
-        this.spriteTint = selectable? 0x666666 : 0xFFFFFF;
-        this.sprite.tint = this.spriteTint;
+        this.sprite.cursor = selectable? 'pointer' : 'default';
+        if (!this.selected) {
+            this.spriteTint = selectable? 0x666666 : 0xFFFFFF;
+            this.sprite.tint = this.spriteTint;
+        }
     }
 
     moveTo(position, reveal, destroy) {

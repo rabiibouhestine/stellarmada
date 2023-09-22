@@ -9,7 +9,7 @@ function RoomGame({ socket }) {
         phase: "player attack",
         state: {
             player: {
-                hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
+                hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
                 handCount: 7,
                 field: ["AC", "6S"],
                 shield: ["4S", "7S"],
@@ -55,8 +55,10 @@ function RoomGame({ socket }) {
             hand: game.player.hand.filter(card => card.selected).map(card => card.name),
             shield: game.player.shield.filter(card => card.selected).map(card => card.name)
         }
-        game.player.discardShield(selectedCards.shield);
-        game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+        // game.player.discardShield(selectedCards.shield);
+        // game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+        game.player.attack(selectedCards.hand);
+        game.player.setSelectable("opponent discard");
 
         // game.player.revive(2);
         // game.player.buildShield(["tile027.jpg"]);
