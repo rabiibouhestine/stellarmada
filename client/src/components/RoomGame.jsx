@@ -6,7 +6,7 @@ function RoomGame({ socket }) {
     const ref = useRef(null);
 
     const gameState = {
-        phase: "player attack",
+        phase: "player discard",
         state: {
             player: {
                 hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
@@ -42,7 +42,9 @@ function RoomGame({ socket }) {
         // On load start the game
         game.start();
         game.button.button.on('pointerdown', () => handleButton());
-        game.player.setSelectable(gameState.phase);
+        game.player.phase = "player discard";
+        game.player.setSelectable();
+        game.player.setDamageValue(15);
 
         // On unload end the game
         return () => {
@@ -55,10 +57,13 @@ function RoomGame({ socket }) {
             hand: game.player.hand.filter(card => card.selected).map(card => card.name),
             shield: game.player.shield.filter(card => card.selected).map(card => card.name)
         }
-        // game.player.discardShield(selectedCards.shield);
-        // game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
-        game.player.attack(selectedCards.hand);
-        game.player.setSelectable("opponent discard");
+        game.player.discardShield(selectedCards.shield);
+        game.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+        // game.player.attack(selectedCards.hand);
+        game.player.phase = "player attack";
+        game.player.setSelectable();
+        game.player.setDamageValue(0);
+        game.player.setDiscardValue(0);
 
         // game.player.revive(2);
         // game.player.buildShield(["tile027.jpg"]);
