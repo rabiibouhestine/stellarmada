@@ -10,7 +10,7 @@ import { Button } from "./entities/Button";
 
 export class Game {
     constructor({ canvasRef, socket }) {
-        this.playerID = socket.id;
+        this.playerID = "P1"; // TODO replace hardcoded id with socket.id
 
         this.app = new PIXI.Application({
             resizeTo: window,
@@ -30,8 +30,7 @@ export class Game {
     start(gameState) {
         this.board = new Board(this.app);
         this.button = new Button(this.app, {x:1200, y:500}, "Confirm");
-        this.opponent = new Player(this.app, this.sheet, gameState.state.opponent, gameState.phase, positions.top, false);
-        this.player = new Player(this.app, this.sheet, gameState.state.player, gameState.phase, positions.bottom, true);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
 
         this.app.start();
     }
@@ -63,5 +62,23 @@ export class Game {
 
     onButton(event) {
         this.button.button.on('pointerdown', event);
+    }
+
+    createPlayers(app, sheet, playerID, gameState, positions) {
+        const players = {};
+        let bottomPlayerSet = false; // Flag to track if a bottom player has been created
+        
+        for (const key in gameState.players) {
+          const isCurrentPlayer = key === playerID;
+          const isBottomPlayer = !bottomPlayerSet && isCurrentPlayer;
+          
+          players[key] = new Player(app, sheet, gameState.players[key], isBottomPlayer ? positions.bottom : positions.top, isCurrentPlayer);
+          
+          if (isBottomPlayer) {
+            bottomPlayerSet = true; // Set the flag to true once a bottom player is created
+          }
+        }
+        
+        return players;
     }
 }

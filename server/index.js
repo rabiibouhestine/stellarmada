@@ -94,10 +94,12 @@ io.on("connection", (socket) => {
     socket.on("gameStateRequest", () => {
         const gameState = {
             phase: "player discard",
-            state: {
-                player: {
+            isGameOver: false,
+            players: {
+                "P1": {
+                    isWinner: false,
                     stance: "discarding", // "discarding", "attacking" or "waiting"
-                    hand: ["2D", "AS", "AD", "5C", "8H", "5S", "9H"],
+                    hand: ["2D", "AS", "AD", "5C", "8H", "5S", "2H"],
                     handCount: 7,
                     field: ["AC", "6S"],
                     shield: ["4S", "7S"],
@@ -106,7 +108,8 @@ io.on("connection", (socket) => {
                     castle: 4,
                     jester: 1
                 },
-                opponent: {
+                "P2": {
+                    isWinner: false,
                     stance: "waiting", // "discarding", "attacking" or "waiting"
                     hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
                     handCount: 7,

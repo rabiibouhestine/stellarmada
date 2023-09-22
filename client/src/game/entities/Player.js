@@ -5,11 +5,11 @@ import { Card } from "./Card";
 import { Indicator } from "./Indicator";
 
 export class Player {
-    constructor(app, sheet, state, phase, positions, isPlayer) {
+    constructor(app, sheet, state, positions, isPlayer) {
         this.app = app;
         this.sheet = sheet;
         this.state = state;
-        this.phase = phase;
+        this.phase = state.stance;
         this.isPlayer = isPlayer;
         this.positions = positions;
 
@@ -83,8 +83,8 @@ export class Player {
     onPointerDown(card) {
         if (!card.selectable) return;
     
-        const cardSelection = this.phase === "player attack" ? this.attackSelection : this.discardSelection;
-        const cardIndicator = this.phase === "player attack" ? this.attackValueIndicator : this.discardValueIndicator;
+        const cardSelection = this.phase === "attacking" ? this.attackSelection : this.discardSelection;
+        const cardIndicator = this.phase === "attacking" ? this.attackValueIndicator : this.discardValueIndicator;
         
         cardIndicator.setValue(cardIndicator.value + (card.selected ? -card.value : card.value));
 
@@ -100,12 +100,12 @@ export class Player {
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
         const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
-        notSelectedCards.forEach(card => { card.setSelectable(this.phase === "player attack" ? this.canCardAttack(card) : this.canDiscardMore()); });
+        notSelectedCards.forEach(card => { card.setSelectable(this.phase === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
     }
 
     setSelectable() {
-        const attackPhase = this.phase === "player attack";
-        const discardPhase = this.phase === "player discard";
+        const attackPhase = this.phase === "attacking";
+        const discardPhase = this.phase === "discarding";
     
         this.field.forEach(card => {
             card.setSelectable(false);

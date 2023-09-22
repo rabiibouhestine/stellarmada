@@ -29,8 +29,8 @@ function RoomGame({ socket }) {
             gameRef.current.start(data.gameState);
             gameRef.current.onButton(() => handleButton());
 
-            gameRef.current.player.setSelectable();
-            gameRef.current.player.setDamageValue(15);
+            gameRef.current.players["P1"].setSelectable();
+            gameRef.current.players["P1"].setDamageValue(15);
         });
 
         return () => {
@@ -40,11 +40,11 @@ function RoomGame({ socket }) {
 
     const handleButton = () => {
         const selectedCards = {
-            hand: gameRef.current.player.hand.filter(card => card.selected).map(card => card.name),
-            shield: gameRef.current.player.shield.filter(card => card.selected).map(card => card.name)
+            hand: gameRef.current.players["P1"].hand.filter(card => card.selected).map(card => card.name),
+            shield: gameRef.current.players["P1"].shield.filter(card => card.selected).map(card => card.name)
         }
-        gameRef.current.player.discardShield(selectedCards.shield);
-        gameRef.current.player.discardHand(selectedCards.hand.length, selectedCards.hand);
+        gameRef.current.players["P1"].discardShield(selectedCards.shield);
+        gameRef.current.players["P1"].discardHand(selectedCards.hand.length, selectedCards.hand);
         // // gameRef.player.attack(selectedCards.hand);
         // gameRef.player.phase = "player attack";
         // gameRef.player.setSelectable();
