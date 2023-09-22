@@ -1,11 +1,15 @@
 import * as PIXI from "pixi.js";
 
+import cardsDict from '../assets/cardsDict.json';
+
 export class Card {
     constructor(cardsContainer, sheet, name, position) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.name = name;
         this.position = position;
+
+        this.value = cardsDict[name].value;
 
         this.selectable = false;
         this.selected = false;
