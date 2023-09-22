@@ -104,17 +104,20 @@ export class Player {
     }
 
     setSelectable() {
-        this.field.forEach(card => {card.setSelectable(false);});
-        if (this.phase == "player attack") {
-            this.hand.forEach(card => {card.setSelectable(true);});
-            this.shield.forEach(card => {card.setSelectable(false);});
-        } else if (this.phase == "player discard") {
-            this.hand.forEach(card => {card.setSelectable(true);});
-            this.shield.forEach(card => {card.setSelectable(true);});
-        } else {
-            this.hand.forEach(card => {card.setSelectable(false);});
-            this.shield.forEach(card => {card.setSelectable(false);});
-        }
+        const attackPhase = this.phase === "player attack";
+        const discardPhase = this.phase === "player discard";
+    
+        this.field.forEach(card => {
+            card.setSelectable(false);
+        });
+    
+        this.hand.forEach(card => {
+            card.setSelectable(attackPhase || discardPhase);
+        });
+    
+        this.shield.forEach(card => {
+            card.setSelectable(discardPhase);
+        });
     }
 
     canDiscardMore() {
