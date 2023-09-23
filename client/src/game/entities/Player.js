@@ -7,15 +7,14 @@ export class Player {
     constructor(app, sheet, state, positions, isPlayer) {
         this.app = app;
         this.sheet = sheet;
-        this.state = state;
-        this.stance = state.stance;
-        this.isPlayer = isPlayer;
         this.positions = positions;
-
+        this.isPlayer = isPlayer;
+        
         this.cardsContainer = new PIXI.Container();
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
-
+        
+        this.stance = state.stance;
         this.handCount = state.handCount;
         this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.tavern);
         this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cemetry);
@@ -40,7 +39,7 @@ export class Player {
 
     createCards(locationState, isPlayer, start) {
         const cards = [];
-        for (let index = 0; index < (isPlayer ? locationState.length : this.state.handCount); index++) {
+        for (let index = 0; index < (isPlayer ? locationState.length : this.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "B1";
             const card = new Card(this.cardsContainer, this.sheet, cardName, start);
             card.sprite.on('pointerdown', () => this.onPointerDown(card));
