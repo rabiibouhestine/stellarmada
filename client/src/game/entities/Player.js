@@ -130,11 +130,11 @@ export class Player {
         });
 
         this.hand.forEach(card => {
-            card.setSelectable(isAttacking || canDiscardMore);
+            card.setSelectable(this.isPlayer && (isAttacking || canDiscardMore));
         });
     
         this.shield.forEach(card => {
-            card.setSelectable(isAttacking ? false : canDiscardMore);
+            card.setSelectable(isAttacking ? false : (this.isPlayer && canDiscardMore));
         });
     }
 
