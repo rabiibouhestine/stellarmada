@@ -9,10 +9,6 @@ import { Board } from "./entities/Board";
 
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
-        this.start(canvasRef, socket, gameState);
-    }
-
-    start(canvasRef, socket, gameState ) {
         this.playerID = "P1"; // TODO replace hardcoded id with socket.id
 
         this.app = new PIXI.Application({
