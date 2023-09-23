@@ -13,6 +13,7 @@ export class Game {
 
         this.app = new PIXI.Application({
             resizeTo: window,
+            resolution: Math.max(window.devicePixelRatio, 2),
             backgroundColor: 0x87C1FF,
         });
         global.__PIXI_APP__ = this.app;
