@@ -34,8 +34,6 @@ function RoomGame({ socket }) {
             hand: gameRef.current.players["P1"].hand.filter(card => card.selected).map(card => card.name),
             shield: gameRef.current.players["P1"].shield.filter(card => card.selected).map(card => card.name)
         }
-        gameRef.current.players["P1"].discardShield(selectedCards.shield);
-        gameRef.current.players["P1"].discardHand(selectedCards.hand.length, selectedCards.hand);
 
         gameRef.current.update(
             {
@@ -47,6 +45,9 @@ function RoomGame({ socket }) {
                         attackValue: 0,
                         damageValue: 0,
                         actions: {
+                            attack: {
+                                units: [...selectedCards.hand, ...selectedCards.shield]
+                            },
                             revive: {
                                 x: 2
                             },
@@ -55,7 +56,7 @@ function RoomGame({ socket }) {
                             },
                             drawTavern: {
                                 x: 0,
-                                units: ["2H", "5D"]
+                                units: ["3H", "5D"]
                             }
                         } 
                     },
