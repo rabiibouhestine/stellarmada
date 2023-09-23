@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
             players: {
                 "P1": {
                     isWinner: false,
-                    stance: "attacking", // "discarding", "attacking" or "waiting"
+                    stance: "discarding", // "discarding", "attacking" or "waiting"
                     hand: ["2D", "AS", "AD", "5C", "8H", "5S", "2H"],
                     handCount: 7,
                     field: ["AC", "6S"],
@@ -108,7 +108,7 @@ io.on("connection", (socket) => {
                     castle: 4,
                     jester: 1,
                     attackValue: 0,
-                    damageValue: 0
+                    damageValue: 13
                 },
                 "P2": {
                     isWinner: false,

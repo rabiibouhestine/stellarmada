@@ -26,14 +26,19 @@ export class Player {
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
-        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue);
+        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue, true);
         this.damageValue = state.damageValue;
 
+        this.discardIndicator = new Indicator(app, positions.discardIndicator, null, 0, isPlayer);
 
         this.attackSelection = [];
         this.discardSelection = [];
 
         this.setStance(state.stance);
+    }
+
+    setDiscardValue(value) {
+        this.discardIndicator.setValue(value);
     }
 
     setAttackValue(value) {
@@ -100,6 +105,13 @@ export class Player {
                 return accumulator + card.value;
             }, 0);
             this.setAttackValue(sum);
+        }
+
+        if (this.stance === "discarding") {
+            const sum = cardSelection.reduce((accumulator, card) => {
+                return accumulator + card.value;
+            }, 0);
+            this.setDiscardValue(sum);
         }
 
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
