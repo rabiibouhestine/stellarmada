@@ -112,20 +112,19 @@ export class Player {
 
     setStance(stance) {
         this.stance = stance;
-
-        const attackPhase = this.stance === "attacking";
-        const discardPhase = this.stance === "discarding";
+        const isAttacking = this.stance === "attacking";
+        const canDiscardMore = this.stance === "discarding" && this.canDiscardMore();
     
         this.field.forEach(card => {
             card.setSelectable(false);
         });
-    
+
         this.hand.forEach(card => {
-            card.setSelectable(attackPhase || discardPhase);
+            card.setSelectable(isAttacking || canDiscardMore);
         });
     
         this.shield.forEach(card => {
-            card.setSelectable(discardPhase);
+            card.setSelectable(isAttacking ? false : canDiscardMore);
         });
     }
 
