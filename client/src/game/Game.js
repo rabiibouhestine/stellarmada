@@ -35,24 +35,51 @@ export class Game {
         this.app.start();
     }
 
-    // update(data) {
-    //     if (this.playerID === data.player) {
-    //         // update the stance of the player instance (this.player)
-    //         // the stance is either 'attacking', 'discarding' or 'waiting'
-    //     }
+    update(data) {
+        for (const key of Object.keys(data.players)) {
+            // Define player and playerData
+            const player = this.players[key];
+            const playerData = data.players[key];
 
-    //     // execute opponent actions
-    //     // get actions of data.actions.id !== socket.id
-    //     for (action in actions) {
-    //         // execute action
-    //     }
+            // Update player states
+            player.setStance(playerData.stance);
+            player.setAttackValue(playerData.attackValue);
+            player.setDamageValue(playerData.damageValue);
 
-    //     // execute player actions
-    //     // get actions of data.actions.id == socket.id
-    //     for (action in actions) {
-    //         // execute action
-    //     }
-    // }
+            // Perform player actions
+            for (const key of Object.keys(playerData.actions)) {
+                const params = playerData.actions[key];
+                switch(key) {
+                    case "revive":
+                        player.revive(params.x);
+                        break;
+                    case "buildShield":
+                        player.buildShield(params.units);
+                        break;
+                    case "drawTavern":
+                        player.drawTavern(params.x, params.units);
+                        break;
+                    case "drawCastle":
+                        player.drawCastle(params.unit);
+                        break;
+                    case "attack":
+                        player.attack(params.units);
+                        break;
+                    case "clearField":
+                        player.clearField();
+                        break;
+                    case "discardShield":
+                        player.discardShield(params.units);
+                        break;
+                    case "discardHand":
+                        player.discardHand(params.x, params.units);
+                        break;
+                    default:
+                        throw new Error('action ' + key + ' not defined in Player.');
+                  }
+            }
+        }
+    }
 
     end() {
         this.sheet.destroy(true);

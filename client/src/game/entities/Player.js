@@ -18,14 +18,14 @@ export class Player {
         this.app.stage.addChild(this.cardsContainer);
         
         this.stance = state.stance;
-        this.handCount = state.handCount;
-        this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.tavern);
-        this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cemetry);
-        this.castle = new Deck(app, sheet, "KH", this.positions.castle, state.castle);
-        this.jester = new Deck(app, sheet, "J1", this.positions.jester, state.jester);
-        this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
-        this.field = this.createCards(state.field, true, this.positions.field);
-        this.shield = this.createCards(state.shield, true, this.positions.shield);
+        this.handCount = state.cards.handCount;
+        this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.cards.tavern);
+        this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cards.cemetry);
+        this.castle = new Deck(app, sheet, "KH", this.positions.castle, state.cards.castle);
+        this.jester = new Deck(app, sheet, "J1", this.positions.jester, state.cards.jester);
+        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
+        this.field = this.createCards(state.cards.field, true, this.positions.field);
+        this.shield = this.createCards(state.cards.shield, true, this.positions.shield);
         this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue, true);
         this.damageValue = state.damageValue;
 

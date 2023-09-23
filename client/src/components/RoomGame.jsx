@@ -42,16 +42,46 @@ function RoomGame({ socket }) {
         }
         gameRef.current.players["P1"].discardShield(selectedCards.shield);
         gameRef.current.players["P1"].discardHand(selectedCards.hand.length, selectedCards.hand);
-        // // gameRef.player.attack(selectedCards.hand);
-        // gameRef.player.phase = "player attack";
 
-        // gameRef.player.revive(2);
-        // gameRef.player.buildShield(["tile027.jpg"]);
-        // gameRef.player.drawTavern(1, ["tile027.jpg"]);
-        // gameRef.player.drawCastle("tile027.jpg");
-        // gameRef.player.attack(["tile003.jpg"]);
-        // gameRef.player.discardShield(["tile016.jpg"]);
-        // gameRef.player.discardHand(2, ["tile037.jpg", "tile038.jpg"]);
+        gameRef.current.update(
+            {
+                isGameOver: false,
+                players: {
+                    P1: {
+                        isWinner: false,
+                        stance: "attacking",
+                        attackValue: 0,
+                        damageValue: 0,
+                        actions: {
+                            revive: {
+                                x: 2
+                            },
+                            buildShield: {
+                                units: "6S"
+                            },
+                            drawTavern: {
+                                x: 0,
+                                units: ["2H", "5D"]
+                            }
+                        } 
+                    },
+                    P2: {
+                        isWinner: false,
+                        stance: "attacking",
+                        attackValue: 0,
+                        damageValue: 0,
+                        actions: {
+                            revive: {
+                                x: 2
+                            },
+                            buildShield: {
+                                unit: "3H"
+                            }
+                        } 
+                    }
+                }
+            }
+        );
     }
 
     return (
