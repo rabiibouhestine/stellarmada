@@ -13,7 +13,6 @@ export class Game {
 
         this.app = new PIXI.Application({
             resizeTo: window,
-            resolution: Math.max(window.devicePixelRatio, 2),
             backgroundColor: 0x87C1FF,
         });
         global.__PIXI_APP__ = this.app;
@@ -25,10 +24,6 @@ export class Game {
         this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
 
         canvasRef.current.appendChild(this.app.view);
-
-        // this was added when the parameter resolution was added to this.app
-        this.app.renderer.view.style.width = `${window.innerWidth}px`;
-        this.app.renderer.view.style.height = `${window.innerHeight}px`;
     }
 
     start(gameState) {
