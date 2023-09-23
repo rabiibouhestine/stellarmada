@@ -36,16 +36,21 @@ export class Player {
         this.damageValue = value;
     }
 
-    createCards(locationState, isPlayer, start) {
+    createCards(locationState, isPlayer, startPosition) {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "B1";
-            const card = new Card(this.cardsContainer, this.sheet, cardName, start);
-            card.sprite.on('pointerdown', () => this.onPointerDown(card));
+            const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition);
             cards.push(card);
         }
-        this.repositionCards(cards, start);
+        this.repositionCards(cards, startPosition);
         return cards;
+    }
+
+    createCard(cardsContainer, sheet, cardName, startPosition) {
+        const card = new Card(cardsContainer, sheet, cardName, startPosition);
+        card.sprite.on('pointerdown', () => this.onPointerDown(card));
+        return card;
     }
 
     repositionCards(array, centerPosition) {
@@ -170,14 +175,12 @@ export class Player {
         this.handCount += x;
         if (this.isPlayer) {
             for (const index in units) {
-                const card = new Card(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
-                card.sprite.on('pointerdown', () => this.onPointerDown(card));
+                const card = this.createCard(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
                 this.hand.push(card);
             }
         } else {
             for (let step = 0; step < x; step++) {
-                const card = new Card(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
-                card.sprite.on('pointerdown', () => this.onPointerDown(card));
+                const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
                 this.hand.push(card);
             }
         }
@@ -188,8 +191,7 @@ export class Player {
         this.castle.setSize(this.castle.size - 1);
         this.handCount += 1;
         const name = this.isPlayer? this.castle.getName() : "B1";
-        const card = new Card(this.cardsContainer, this.sheet, name, this.positions.castle);
-        card.sprite.on('pointerdown', () => this.onPointerDown(card));
+        const card = this.createCard(this.cardsContainer, this.sheet, name, this.positions.castle);
         this.castle.setName(unit);
         this.hand.push(card);
         this.repositionCards(this.hand, this.positions.hand);
