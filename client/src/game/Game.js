@@ -25,6 +25,10 @@ export class Game {
         this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
 
         canvasRef.current.appendChild(this.app.view);
+
+        // this was added when the parameter resolution was added to this.app
+        this.app.renderer.view.style.width = `${window.innerWidth}px`;
+        this.app.renderer.view.style.height = `${window.innerHeight}px`;
     }
 
     start(gameState) {
