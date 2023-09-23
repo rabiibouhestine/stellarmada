@@ -2,9 +2,16 @@ import * as PIXI from "pixi.js";
 
 import { Deck } from "./Deck";
 import { Card } from "./Card";
+import { Button } from "./Button";
 import { Indicator } from "./Indicator";
 
-import swordImage from '../assets/sword.png';
+import swordImage from '../assets/images/sword.png';
+import skullImage from '../assets/images/skull.png';
+import hourImage from '../assets/images/hourglass.png';
+
+import greenBtnImg from '../assets/images/green_button.png';
+import redBtnImg from '../assets/images/red_button.png';
+import yellowBtnImg from '../assets/images/yellow_button.png';
 
 export class Player {
     constructor(app, sheet, state, positions, isPlayer) {
@@ -29,6 +36,7 @@ export class Player {
         this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue, true);
         this.damageValue = state.damageValue;
 
+        this.confirmButton = new Button(app, positions.confirmButton, yellowBtnImg, hourImage, "", false, isPlayer);
         this.discardIndicator = new Indicator(app, positions.discardIndicator, null, 0, isPlayer);
 
         this.attackSelection = [];
@@ -137,6 +145,17 @@ export class Player {
         this.shield.forEach(card => {
             card.setSelectable(isAttacking ? false : (this.isPlayer && canDiscardMore));
         });
+
+        switch(stance) {
+            case "attacking":
+                this.confirmButton.update(greenBtnImg, swordImage, "Attack", true);
+                break;
+            case "discarding":
+                this.confirmButton.update(redBtnImg, skullImage, "Discard", true);
+                break;
+            default:
+                this.confirmButton.update(yellowBtnImg, hourImage, "Wait", false);
+          }
     }
 
     canDiscardMore() {

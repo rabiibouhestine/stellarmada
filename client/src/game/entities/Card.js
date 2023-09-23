@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-import cardsDict from '../assets/cardsDict.json';
+import cardsDict from '../assets/mappings/cardsDict.json';
 
 export class Card {
     constructor(cardsContainer, sheet, name, position) {

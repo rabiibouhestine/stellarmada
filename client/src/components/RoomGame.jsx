@@ -27,7 +27,7 @@ function RoomGame({ socket }) {
     useEffect(() => {
         socket.on("gameStateResponse", (data) => {
             gameRef.current.start(data.gameState);
-            gameRef.current.onButton(() => handleButton());
+            gameRef.current.onConfirmButton(() => handleConfirmButton());
         });
 
         return () => {
@@ -35,7 +35,8 @@ function RoomGame({ socket }) {
         };
     }, [socket]);
 
-    const handleButton = () => {
+    const handleConfirmButton = () => {
+        console.log("handleConfirmButton");
         const selectedCards = {
             hand: gameRef.current.players["P1"].hand.filter(card => card.selected).map(card => card.name),
             shield: gameRef.current.players["P1"].shield.filter(card => card.selected).map(card => card.name)

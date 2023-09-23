@@ -1,12 +1,11 @@
 import * as PIXI from "pixi.js";
 
-import cardsSheet from './assets/cards.json';
-import cardsImage from './assets/cards.jpg';
-import positions from './assets/positionsDict.json';
+import cardsSheet from './assets/mappings/cards.json';
+import cardsImage from './assets/images/cards.jpg';
+import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
-import { Button } from "./entities/Button";
 
 export class Game {
     constructor({ canvasRef, socket }) {
@@ -29,7 +28,6 @@ export class Game {
 
     start(gameState) {
         this.board = new Board(this.app);
-        this.button = new Button(this.app, {x:1200, y:500}, "Confirm");        
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
 
         this.app.start();
@@ -87,8 +85,8 @@ export class Game {
         this.app.destroy(true, true);
     }
 
-    onButton(event) {
-        this.button.button.on('pointerdown', event);
+    onConfirmButton(event) {
+        this.players[this.playerID].confirmButton.button.on('pointerdown', event);
     }
 
     createPlayers(app, sheet, playerID, gameState, positions) {
