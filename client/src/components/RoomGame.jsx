@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Game } from '../game/Game';
-import { useParams } from 'react-router-dom';
 
 function RoomGame({ socket }) {
     const canvasRef = useRef(null);
