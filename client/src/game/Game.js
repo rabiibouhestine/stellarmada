@@ -13,6 +13,7 @@ export class Game {
 
         this.app = new PIXI.Application({
             resizeTo: window,
+            resolution: Math.max(window.devicePixelRatio, 2),
             backgroundColor: 0x87C1FF,
         });
         global.__PIXI_APP__ = this.app;
@@ -24,6 +25,11 @@ export class Game {
         this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
 
         canvasRef.current.appendChild(this.app.view);
+
+
+
+        this.resize();
+        window.addEventListener('resize', this.resize, this);
     }
 
     start(gameState) {
@@ -112,5 +118,28 @@ export class Game {
         }
       
         return players;
-      }
+    }
+
+
+    resize = () => {
+        console.log("run");
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const minWidth = 800;
+        const minHeight = 400;
+
+        // Calculate renderer and canvas sizes based on current dimensions
+        const scaleX = windowWidth < minWidth ? minWidth / windowWidth : 1;
+        const scaleY = windowHeight < minHeight ? minHeight / windowHeight : 1;
+        const scale = scaleX > scaleY ? scaleX : scaleY;
+        const width = windowWidth * scale;
+        const height = windowHeight * scale;
+
+        // Update canvas style dimensions and scroll window up to avoid issues on mobile resize
+        this.app.renderer.view.style.width = `${windowWidth}px`;
+        this.app.renderer.view.style.height = `${windowHeight}px`;
+
+        // Update renderer  and navigation screens dimensions
+        this.app.renderer.resize(width, height);
+    }
 }
