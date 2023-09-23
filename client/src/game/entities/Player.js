@@ -84,7 +84,7 @@ export class Player {
     
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
-        const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
+        const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsShield];
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
     }
 
