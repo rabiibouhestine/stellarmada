@@ -122,7 +122,6 @@ export class Game {
 
 
     resize = () => {
-        console.log("run");
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
         const minWidth = 800;
