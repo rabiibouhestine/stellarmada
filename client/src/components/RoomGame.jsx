@@ -36,7 +36,6 @@ function RoomGame({ socket }) {
     }, [socket]);
 
     const handleConfirmButton = () => {
-        console.log("handleConfirmButton");
         const selectedCards = {
             hand: gameRef.current.players["P1"].hand.filter(card => card.selected).map(card => card.name),
             shield: gameRef.current.players["P1"].shield.filter(card => card.selected).map(card => card.name)
