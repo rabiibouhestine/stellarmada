@@ -39,11 +39,6 @@ export class Game {
             const player = this.players[key];
             const playerData = data.players[key];
 
-            // Update player states
-            player.setStance(playerData.stance);
-            player.setAttackValue(playerData.attackValue);
-            player.setDamageValue(playerData.damageValue);
-
             // Perform player actions
             for (const key of Object.keys(playerData.actions)) {
                 const params = playerData.actions[key];
@@ -76,6 +71,11 @@ export class Game {
                         throw new Error('action ' + key + ' not defined in Player.');
                   }
             }
+
+            // Update player states
+            player.setStance(playerData.stance);
+            player.setAttackValue(playerData.attackValue);
+            player.setDamageValue(playerData.damageValue);
 
             // Move cards
             player.repositionBoard();

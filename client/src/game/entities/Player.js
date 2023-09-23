@@ -141,14 +141,17 @@ export class Player {
         const canDiscardMore = this.stance === "discarding" && this.canDiscardMore();
     
         this.field.forEach(card => {
+            card.setSelected(false);
             card.setSelectable(false);
         });
 
         this.hand.forEach(card => {
+            card.setSelected(false);
             card.setSelectable(this.isPlayer && (isAttacking || canDiscardMore));
         });
     
         this.shield.forEach(card => {
+            card.setSelected(false);
             card.setSelectable(isAttacking ? false : (this.isPlayer && canDiscardMore));
         });
 
