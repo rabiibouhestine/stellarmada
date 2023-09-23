@@ -2,14 +2,13 @@ import * as PIXI from "pixi.js";
 
 import { Deck } from "./Deck";
 import { Card } from "./Card";
-import { Indicator } from "./Indicator";
 
 export class Player {
     constructor(app, sheet, state, positions, isPlayer) {
         this.app = app;
         this.sheet = sheet;
         this.state = state;
-        this.phase = state.stance;
+        this.stance = state.stance;
         this.isPlayer = isPlayer;
         this.positions = positions;
 
@@ -26,26 +25,17 @@ export class Player {
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
 
-        if (this.isPlayer) {
-            this.damageValueIndicator = new Indicator(this.app, {x:1010, y:330});
-            this.attackValueIndicator = new Indicator(this.app, {x:260, y:410});
-            this.discardValueIndicator = new Indicator(this.app, {x:1010, y:410});
-        }
+        this.damageValue = 0;
 
         this.attackSelection = [];
         this.discardSelection = [];
+
+
+        this.setStance(state.stance);
     }
 
     setDamageValue(value) {
-        this.damageValueIndicator.setValue(value);
-    }
-
-    setAttackValue(value) {
-        this.attackValueIndicator.setValue(value);
-    }
-
-    setDiscardValue(value) {
-        this.discardValueIndicator.setValue(value);
+        this.damageValue = value;
     }
 
     createCards(locationState, isPlayer, start) {
@@ -83,10 +73,7 @@ export class Player {
     onPointerDown(card) {
         if (!card.selectable) return;
     
-        const cardSelection = this.phase === "attacking" ? this.attackSelection : this.discardSelection;
-        const cardIndicator = this.phase === "attacking" ? this.attackValueIndicator : this.discardValueIndicator;
-        
-        cardIndicator.setValue(cardIndicator.value + (card.selected ? -card.value : card.value));
+        const cardSelection = this.stance === "attacking" ? this.attackSelection : this.discardSelection;
 
         if (card.selected) {
             card.setSelected(false);
@@ -100,12 +87,14 @@ export class Player {
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
         const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsShield];
-        notSelectedCards.forEach(card => { card.setSelectable(this.phase === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
+        notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
     }
 
-    setSelectable() {
-        const attackPhase = this.phase === "attacking";
-        const discardPhase = this.phase === "discarding";
+    setStance(stance) {
+        this.stance = stance;
+
+        const attackPhase = this.stance === "attacking";
+        const discardPhase = this.stance === "discarding";
     
         this.field.forEach(card => {
             card.setSelectable(false);
@@ -123,7 +112,7 @@ export class Player {
     canDiscardMore() {
         // Calculate the sum of values of selected cards
         const totalValue = this.discardSelection.reduce((sum, card) => sum + card.value, 0);
-        return totalValue < this.damageValueIndicator.value;
+        return totalValue < this.damageValue;
     }
 
     canCardAttack(card) {

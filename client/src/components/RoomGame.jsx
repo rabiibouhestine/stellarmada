@@ -28,9 +28,6 @@ function RoomGame({ socket }) {
         socket.on("gameStateResponse", (data) => {
             gameRef.current.start(data.gameState);
             gameRef.current.onButton(() => handleButton());
-
-            gameRef.current.players["P1"].setSelectable();
-            gameRef.current.players["P1"].setDamageValue(15);
         });
 
         return () => {
@@ -47,9 +44,6 @@ function RoomGame({ socket }) {
         gameRef.current.players["P1"].discardHand(selectedCards.hand.length, selectedCards.hand);
         // // gameRef.player.attack(selectedCards.hand);
         // gameRef.player.phase = "player attack";
-        // gameRef.player.setSelectable();
-        // gameRef.player.setDamageValue(0);
-        // gameRef.player.setDiscardValue(0);
 
         // gameRef.player.revive(2);
         // gameRef.player.buildShield(["tile027.jpg"]);

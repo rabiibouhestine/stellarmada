@@ -66,19 +66,26 @@ export class Game {
 
     createPlayers(app, sheet, playerID, gameState, positions) {
         const players = {};
-        let bottomPlayerSet = false; // Flag to track if a bottom player has been created
-        
-        for (const key in gameState.players) {
-          const isCurrentPlayer = key === playerID;
-          const isBottomPlayer = !bottomPlayerSet && isCurrentPlayer;
-          
-          players[key] = new Player(app, sheet, gameState.players[key], isBottomPlayer ? positions.bottom : positions.top, isCurrentPlayer);
-          
-          if (isBottomPlayer) {
-            bottomPlayerSet = true; // Set the flag to true once a bottom player is created
-          }
+        const keys = Object.keys(gameState.players);
+      
+        if (keys.length !== 2) {
+          throw new Error('gameState.players must have exactly 2 players.');
         }
-        
+      
+        const firstPlayerKey = keys[0];
+        const secondPlayerKey = keys[1];
+      
+        if (firstPlayerKey === playerID) {
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, true);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, false);
+        } else if (secondPlayerKey === playerID) {
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, true);
+        } else {
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, false);
+        }
+      
         return players;
-    }
+      }
 }
