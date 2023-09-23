@@ -104,7 +104,8 @@ export class Player {
             const sum = cardSelection.reduce((accumulator, card) => {
                 return accumulator + card.value;
             }, 0);
-            this.setAttackValue(sum);
+            const hasClubs = cardSelection.some(card => card.suit === "C");
+            this.setAttackValue(hasClubs? 2*sum : sum);
         }
 
         if (this.stance === "discarding") {

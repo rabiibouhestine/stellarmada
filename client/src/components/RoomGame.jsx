@@ -49,7 +49,7 @@ function RoomGame({ socket }) {
                 players: {
                     P1: {
                         isWinner: false,
-                        stance: "attacking",
+                        stance: "waiting",
                         attackValue: 0,
                         damageValue: 0,
                         actions: {
@@ -67,7 +67,7 @@ function RoomGame({ socket }) {
                     },
                     P2: {
                         isWinner: false,
-                        stance: "attacking",
+                        stance: "discarding",
                         attackValue: 0,
                         damageValue: 0,
                         actions: {

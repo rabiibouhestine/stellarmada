@@ -97,7 +97,7 @@ io.on("connection", (socket) => {
             players: {
                 "P1": {
                     isWinner: false,
-                    stance: "discarding", // "discarding", "attacking" or "waiting"
+                    stance: "attacking", // "discarding", "attacking" or "waiting"
                     attackValue: 0,
                     damageValue: 13,
                     cards: {
