@@ -6,7 +6,8 @@
         "tavern": {"x": 900, "y": 220},
         "cemetry": {"x": 1000, "y": 220},
         "castle": {"x": 510, "y": 220},
-        "jester": {"x": 650, "y": 220}
+        "jester": {"x": 650, "y": 220},
+        "attackIndicator": {"x":300, "y":370}
     },
     "bottom": {
         "hand": {"x": 700, "y": 670},
@@ -15,6 +16,7 @@
         "tavern": {"x": 360, "y": 520},
         "cemetry": {"x": 260, "y": 520},
         "castle": {"x": 760, "y": 520},
-        "jester": {"x": 510, "y": 520}
+        "jester": {"x": 510, "y": 520},
+        "attackIndicator": {"x":1000, "y":370}
     }
 }

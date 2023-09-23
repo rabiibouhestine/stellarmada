@@ -29,7 +29,7 @@ export class Game {
 
     start(gameState) {
         this.board = new Board(this.app);
-        this.button = new Button(this.app, {x:1200, y:500}, "Confirm");
+        this.button = new Button(this.app, {x:1200, y:500}, "Confirm");        
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
 
         this.app.start();

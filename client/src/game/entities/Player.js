@@ -2,6 +2,9 @@ import * as PIXI from "pixi.js";
 
 import { Deck } from "./Deck";
 import { Card } from "./Card";
+import { Indicator } from "./Indicator";
+
+import swordImage from '../assets/sword.png';
 
 export class Player {
     constructor(app, sheet, state, positions, isPlayer) {
@@ -23,13 +26,20 @@ export class Player {
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
+        this.attackValue = state.attackValue;
+        this.damageValue = state.damageValue;
 
-        this.damageValue = 0;
+        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue);
 
         this.attackSelection = [];
         this.discardSelection = [];
 
         this.setStance(state.stance);
+    }
+
+    setAttackValue(value) {
+        this.attackValue = value;
+        this.attackIndicator.setValue(value);
     }
 
     setDamageValue(value) {
@@ -87,6 +97,13 @@ export class Player {
             cardSelection.push(card);
         }
     
+        if (this.stance === "attacking") {
+            const sum = cardSelection.reduce((accumulator, card) => {
+                return accumulator + card.value;
+            }, 0);
+            this.setAttackValue(sum);
+        }
+
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
         const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsShield];

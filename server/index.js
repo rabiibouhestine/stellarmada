@@ -106,7 +106,9 @@ io.on("connection", (socket) => {
                     tavern: 25,
                     cemetry: 7,
                     castle: 4,
-                    jester: 1
+                    jester: 1,
+                    attackValue: 0,
+                    damageValue: 0
                 },
                 "P2": {
                     isWinner: false,
@@ -118,7 +120,9 @@ io.on("connection", (socket) => {
                     tavern: 15,
                     cemetry: 11,
                     castle: 7,
-                    jester: 2
+                    jester: 2,
+                    attackValue: 0,
+                    damageValue: 0
                 }
             }
         }

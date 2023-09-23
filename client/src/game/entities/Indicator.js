@@ -1,14 +1,14 @@
 import * as PIXI from "pixi.js";
 
 export class Indicator {
-    constructor(app, position, texture) {
-        this.value = 0;
+    constructor(app, position, asset, value) {
+        this.value = value;
 
-        // this.texture = PIXI.Texture.from(swordPNG);
-        // this.sprite = new PIXI.Sprite(this.texture);
-        // this.sprite.anchor.set(0.5);
-        // this.sprite.scale.set(0.5);
-        // this.sprite.x = -40;
+        this.texture = PIXI.Texture.from(asset);
+        this.sprite = new PIXI.Sprite(this.texture);
+        this.sprite.anchor.set(0.5);
+        this.sprite.scale.set(0.5);
+        this.sprite.x = -40;
         
         this.text = new PIXI.Text(this.value, {
             fontFamily: 'Arial',
@@ -26,7 +26,7 @@ export class Indicator {
 
         this.container = new PIXI.Container();
         // this.container.addChild(this.graphic);
-        // this.container.addChild(this.sprite);
+        this.container.addChild(this.sprite);
         this.container.addChild(this.text);
         this.container.x = position.x; // 300
         this.container.y = position.y; // 370
