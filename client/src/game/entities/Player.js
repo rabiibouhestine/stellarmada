@@ -29,7 +29,6 @@ export class Player {
         this.attackSelection = [];
         this.discardSelection = [];
 
-
         this.setStance(state.stance);
     }
 
