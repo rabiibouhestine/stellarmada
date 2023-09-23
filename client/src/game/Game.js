@@ -8,7 +8,11 @@ import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
 
 export class Game {
-    constructor({ canvasRef, socket }) {
+    constructor({ canvasRef, socket, gameState }) {
+        this.start(canvasRef, socket, gameState);
+    }
+
+    start(canvasRef, socket, gameState ) {
         this.playerID = "P1"; // TODO replace hardcoded id with socket.id
 
         this.app = new PIXI.Application({
@@ -25,17 +29,12 @@ export class Game {
 
         canvasRef.current.appendChild(this.app.view);
 
+        this.board = new Board(this.app);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
 
 
         this.resize();
         window.addEventListener('resize', this.resize, this);
-    }
-
-    start(gameState) {
-        this.board = new Board(this.app);
-        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
-
-        this.app.start();
     }
 
     update(data) {

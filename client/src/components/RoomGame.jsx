@@ -9,29 +9,23 @@ function RoomGame({ socket }) {
     const params = useParams();
 
     useEffect(() => {
-        // On load
-        if (!gameRef.current) {
-            gameRef.current = new Game({ canvasRef:canvasRef, socket:socket });
-            socket.emit("gameStateRequest", { roomID: params.roomID });
-        }
-
-        // On unload
-        return () => {
-            if (gameRef.current) {
-                gameRef.current.end();
-                gameRef.current = null;
-            }
-        }; 
+        socket.emit("gameStateRequest", { roomID: params.roomID });
     }, []);
 
     useEffect(() => {
         socket.on("gameStateResponse", (data) => {
-            gameRef.current.start(data.gameState);
-            gameRef.current.onConfirmButton(() => handleConfirmButton());
+            if (!gameRef.current) {
+                gameRef.current = new Game({ canvasRef:canvasRef, socket:socket, gameState:data.gameState });
+                gameRef.current.onConfirmButton(() => handleConfirmButton());
+            }
         });
 
         return () => {
             socket.off("gameStateResponse");
+            if (gameRef.current) {
+                gameRef.current.end();
+                gameRef.current = null;
+            }
         };
     }, [socket]);
 
