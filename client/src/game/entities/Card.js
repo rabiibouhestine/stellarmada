@@ -10,6 +10,7 @@ export class Card {
         this.position = position;
 
         this.value = cardsDict[name].value;
+        this.suit = cardsDict[name].suit;
 
         this.selectable = false;
         this.selected = false;

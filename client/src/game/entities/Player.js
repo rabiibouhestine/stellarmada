@@ -26,10 +26,9 @@ export class Player {
         this.hand = this.createCards(state.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.field, true, this.positions.field);
         this.shield = this.createCards(state.shield, true, this.positions.shield);
-        this.attackValue = state.attackValue;
+        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue);
         this.damageValue = state.damageValue;
 
-        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue);
 
         this.attackSelection = [];
         this.discardSelection = [];
@@ -38,7 +37,6 @@ export class Player {
     }
 
     setAttackValue(value) {
-        this.attackValue = value;
         this.attackIndicator.setValue(value);
     }
 
