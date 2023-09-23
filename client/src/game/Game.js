@@ -80,6 +80,9 @@ export class Game {
                         throw new Error('action ' + key + ' not defined in Player.');
                   }
             }
+
+            // Move cards
+            player.repositionBoard();
         }
     }
 

@@ -94,6 +94,12 @@ export class Player {
         }
     }
 
+    repositionBoard() {
+        this.repositionCards(this.field, this.positions.field);
+        this.repositionCards(this.shield, this.positions.shield);
+        this.repositionCards(this.hand, this.positions.hand);
+    }
+
     onPointerDown(card) {
         if (!card.selectable) return;
     
@@ -212,8 +218,6 @@ export class Player {
         const cards = this.field.filter(card => units.includes(card.name));
         this.shield.push(...cards);
         this.field = this.field.filter(card => !units.includes(card.name));
-        this.repositionCards(this.field, this.positions.field);
-        this.repositionCards(this.shield, this.positions.shield);
     }
 
     drawTavern(x, units) {
@@ -230,7 +234,6 @@ export class Player {
                 this.hand.push(card);
             }
         }
-        this.repositionCards(this.hand, this.positions.hand);
     }
 
     drawCastle(unit) {
@@ -240,7 +243,6 @@ export class Player {
         const card = this.createCard(this.cardsContainer, this.sheet, name, this.positions.castle);
         this.castle.setName(unit);
         this.hand.push(card);
-        this.repositionCards(this.hand, this.positions.hand);
     }
 
     attack(units) {
@@ -258,8 +260,6 @@ export class Player {
                 this.field.push(cards[card]);
             }
         }
-        this.repositionCards(this.field, this.positions.field);
-        this.repositionCards(this.hand, this.positions.hand);
     }
 
     clearField() {
@@ -271,7 +271,6 @@ export class Player {
         const cards = this.shield.filter(card => units.includes(card.name));
         cards.forEach(card => card.moveTo(this.positions.cemetry, false, true));
         this.shield = this.shield.filter(card => !units.includes(card.name));
-        this.repositionCards(this.shield, this.positions.shield);
     }
 
     discardHand(x, units) {
@@ -291,7 +290,5 @@ export class Player {
             this.hand.splice(-x);
             moveCardsToCemetry(cards);
         }
-
-        this.repositionCards(this.hand, this.positions.hand);
     }
 }
