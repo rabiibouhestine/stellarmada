@@ -13,10 +13,11 @@ function RoomLobby({ socket }) {
     }
 
     return (
-        <div>
-            <h1>Lobby</h1>
-            <h3>I am ready: {playerReady.toString()}</h3>
+        <div className="flex flex-col items-center justify-center h-screen bg-blue-300">
+            <h1 className="text-8xl text-center text-slate-100 drop-shadow-md">Lobby</h1>
+            <h3 className="mt-10 text-4xl text-center text-slate-100 drop-shadow-md">I am ready: {playerReady.toString()}</h3>
             <input
+                className='mt-10'
                 type="checkbox"
                 checked={playerReady}
                 onChange={handleReady}
