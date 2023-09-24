@@ -16,7 +16,7 @@ function Home({ socket }) {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <h3 className="text-center">Create A Room</h3>
+            <h1 className="text-9xl text-center">Cowards Castle</h1>
             <button className="mt-4 px-4 py-2 bg-blue-500 text-white" onClick={createRoom}>Create A Room</button>
         </div>
     );
