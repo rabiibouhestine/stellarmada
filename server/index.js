@@ -18,7 +18,7 @@ const io = new Server(server, {
 
 const rooms = {};
 const users = {};
-const { initializeGame } = require("./game/game.js");
+const { initGame } = require("./game/game.js");
 
 io.on("connection", (socket) => {
     console.log("User connected", socket.id);
@@ -88,7 +88,7 @@ io.on("connection", (socket) => {
             isLobbyReady = isLobbyReady && players[player].isReady;
         }
         if (isLobbyReady) {
-            initializeGame(rooms[data.roomID]);
+            initGame(rooms[data.roomID]);
             io.to(data.roomID).emit("handleReadyResponse");
         }
     })
