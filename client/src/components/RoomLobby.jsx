@@ -1,27 +1,28 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function RoomLobby({ socket }) {
     const params = useParams();
-
-    const [playerReady, setPlayerReady] = useState(false);
+    const navigate = useNavigate();
 
     const handleReady = () => {
-        const isPlayerReady = !playerReady;
-        setPlayerReady(isPlayerReady);
-        socket.emit("handleReady", { roomID: params.roomID, isReady:isPlayerReady });
+        socket.emit("handleReady", { roomID: params.roomID, isReady:true });
+    }
+
+    const handleLeave = () => {
+        navigate("/");
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-blue-300">
-            <h1 className="text-8xl text-center text-slate-100 drop-shadow-md">Lobby</h1>
-            <h3 className="mt-10 text-4xl text-center text-slate-100 drop-shadow-md">I am ready: {playerReady.toString()}</h3>
-            <input
-                className='mt-10'
-                type="checkbox"
-                checked={playerReady}
-                onChange={handleReady}
-            />
+        <div className="flex items-center justify-center h-screen bg-blue-300">
+            <div className='grid justify-items-center'>
+                <div className='mb-15 p-6'>
+                    <h1 className="text-2xl text-center text-slate-100 font-black drop-shadow-md">WAITING FOR EVERYONE TO BE READY</h1>
+                </div>
+                <div className='flex justify-between w-full'>
+                    <button className="w-2/5 mt-4 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white" onClick={handleLeave} >LEAVE</button>
+                    <button className="w-2/5 mt-4 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-700 font-black text-lg text-white" onClick={handleReady} >READY</button>
+                </div>
+            </div>
         </div>
     );
 }

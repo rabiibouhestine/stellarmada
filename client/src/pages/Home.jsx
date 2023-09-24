@@ -15,9 +15,15 @@ function Home({ socket }) {
     }, [socket]);
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-blue-300">
-            <h1 className="text-8xl text-center text-slate-100 drop-shadow-md">Cowards Castle</h1>
-            <button className="mt-20 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white" onClick={createRoom}>Create A Room</button>
+        <div className="flex items-center justify-center h-screen bg-blue-300">
+            <div className='grid justify-items-center'>
+                <div className='mb-15 p-6'>
+                    <h1 className="text-6xl text-center text-slate-100 font-black drop-shadow-md">COWARDS CASTLE</h1>
+                </div>
+                <button className="w-1/2 mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 font-black text-lg text-white" >FIND A MATCH</button>
+                <button className="w-1/2 mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 font-black text-lg text-white" >PLAY AGAINST AI</button>
+                <button className="w-1/2 mt-4 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-700 font-black text-lg text-white" onClick={createRoom}>CREATE A ROOM</button>
+            </div>
         </div>
     );
 }
