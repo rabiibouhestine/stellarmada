@@ -18,7 +18,7 @@ const io = new Server(server, {
 
 const rooms = {};
 const users = {};
-const { initGameState } = require("./game/game.js");
+const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
@@ -98,6 +98,15 @@ io.on("connection", (socket) => {
     socket.on("gameStateRequest", (data) => {
         const gameState = processGameState(rooms[data.roomID].gameState, socket.id);
         socket.emit("gameStateResponse", { gameState:gameState, success: true });
+    })
+
+    socket.on("gameActionRequest", (data) => {
+        const gameState = rooms[data.roomID].gameState;
+        const playerSelection = data.playerSelection;
+
+        const gameAction = handleActionRequest(socket.id, playerSelection, gameState);
+
+        io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
     socket.on("disconnect", () => {

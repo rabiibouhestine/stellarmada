@@ -20,8 +20,13 @@ function RoomGame({ socket }) {
             }
         });
 
+        socket.on("gameActionResponse", (data) => {
+            gameRef.current.update(data.gameAction);
+        });
+
         return () => {
             socket.off("gameStateResponse");
+            socket.off("gameActionResponse");
             if (gameRef.current) {
                 gameRef.current.end();
                 gameRef.current = null;
@@ -35,34 +40,7 @@ function RoomGame({ socket }) {
             shield: gameRef.current.players[socket.id].shield.filter(card => card.selected).map(card => card.name)
         }
 
-        const gameAction = {
-            isGameOver: false,
-            players: {}
-        };
-
-        gameAction.players[socket.id] = {
-            isWinner: false,
-            stance: "waiting",
-            attackValue: 0,
-            damageValue: 0,
-            actions: {
-                attack: {
-                    units: [...selectedCards.hand, ...selectedCards.shield]
-                },
-                revive: {
-                    x: 2
-                },
-                buildShield: {
-                    units: "6S"
-                },
-                drawTavern: {
-                    x: 0,
-                    units: ["3H", "5D"]
-                }
-            } 
-        }
-
-        gameRef.current.update(gameAction);
+        socket.emit("gameActionRequest", { roomID: params.roomID, playerSelection:selectedCards });
     }
 
     return (

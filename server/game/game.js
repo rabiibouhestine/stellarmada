@@ -60,56 +60,36 @@ const initPlayerState = (deck) => {
     return playerState;
 }
 
-const handleActionRequest = (playerSelection, gamestate) => {
-    // Returns gameAction
+const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
-    // const gameAction = {
-    //     isGameOver: false,
-    //     players: {
-    //         id1: {
-    //             isWinner: false,
-    //             stance: "waiting",
-    //             attackValue: 0,
-    //             damageValue: 0,
-    //             actions: {
-    //                 attack: {
-    //                     units: [...selectedCards.hand, ...selectedCards.shield]
-    //                 },
-    //                 revive: {
-    //                     x: 2
-    //                 },
-    //                 buildShield: {
-    //                     units: "6S"
-    //                 },
-    //                 drawTavern: {
-    //                     x: 0,
-    //                     units: ["3H", "5D"]
-    //                 }
-    //             } 
-    //         },
-    //         id2: {
-    //             isWinner: false,
-    //             stance: "waiting",
-    //             attackValue: 0,
-    //             damageValue: 0,
-    //             actions: {
-    //                 attack: {
-    //                     units: [...selectedCards.hand, ...selectedCards.shield]
-    //                 },
-    //                 revive: {
-    //                     x: 2
-    //                 },
-    //                 buildShield: {
-    //                     units: "6S"
-    //                 },
-    //                 drawTavern: {
-    //                     x: 0,
-    //                     units: ["3H", "5D"]
-    //                 }
-    //             } 
-    //         }
-    //     }
-    // };
+    const gameAction = {
+        isGameOver: false,
+        players: {}
+    };
+
+    gameAction.players[playerID] = {
+        isWinner: false,
+        stance: "waiting",
+        attackValue: 0,
+        damageValue: 0,
+        actions: {
+            attack: {
+                units: [...playerSelection.hand, ...playerSelection.shield]
+            },
+            revive: {
+                x: 2
+            },
+            buildShield: {
+                units: "6S"
+            },
+            drawTavern: {
+                x: 0,
+                units: ["3H", "5D"]
+            }
+        } 
+    };
+
+    return gameAction;
 }
 
-module.exports = { initGameState }
+module.exports = { initGameState, handleActionRequest }
