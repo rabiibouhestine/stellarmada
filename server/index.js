@@ -18,7 +18,8 @@ const io = new Server(server, {
 
 const rooms = {};
 const users = {};
-const { initGame } = require("./game/game.js");
+const { initGameState } = require("./game/game.js");
+const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
     console.log("User connected", socket.id);
@@ -88,13 +89,14 @@ io.on("connection", (socket) => {
             isLobbyReady = isLobbyReady && players[player].isReady;
         }
         if (isLobbyReady) {
-            initGame(rooms[data.roomID]);
+            rooms[data.roomID].gameStarted = true;
+            rooms[data.roomID].gameState = initGameState(rooms[data.roomID]);
             io.to(data.roomID).emit("handleReadyResponse");
         }
     })
 
     socket.on("gameStateRequest", (data) => {
-        const gameState = rooms[data.roomID].gameState;
+        const gameState = processGameState(rooms[data.roomID].gameState, socket.id);
         socket.emit("gameStateResponse", { gameState:gameState, success: true });
     })
 

@@ -8,43 +8,27 @@ const deck = [
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
 ];
 
-// const players = {
-//     "P1": {
-//         isWinner: false,
-//         stance: "waiting", // "discarding", "attacking" or "waiting"
-//         attackValue: 0,
-//         damageValue: 0,
-//         cards: {
-//             hand: ["2D", "3S", "TD", "5C", "8H", "5S", "9H"],
-//             handCount: 7,
-//             field: [],
-//             shield: ["AS", "3S"],
-//             tavern: 15,
-//             cemetry: 11,
-//             castle: 7,
-//             jester: 2
-//         }
-//     },
-//     "P2": initPlayerState(deck)
-// }
-
-const initGame = (room) => {
-    room.gameStarted = true;
-    room.gameState = {
-        isGameOver: false,
-        players: {
-            "P1": initPlayerState(deck),
-            "P2": initPlayerState(deck)
-        }
+const initGameState = (room) => {
+    // Create players states
+    const players = {};
+    const playersIDs = Object.keys(room.players);
+    for (const id of playersIDs) {
+        players[id] = initPlayerState(deck);
     }
-    // Get the players IDs in the room
-    const playerIDs = Object.keys(room.gameState.players);
     // Pick a random player index
-    const randomPlayerIndex = Math.floor(Math.random() * playerIDs.length);
+    const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
     // Get the player with the random index
-    const attackingPlayerID = playerIDs[randomPlayerIndex];
+    const attackingPlayerID = playersIDs[randomPlayerIndex];
     // Assign an attacking stance to the player with the random index
-    room.gameState.players[attackingPlayerID].stance = "attacking";
+    players[attackingPlayerID].stance = "attacking";
+
+    // Define gameState
+    const gameState = {
+        isGameOver: false,
+        players: players
+    };
+
+    return gameState;
 }
 
 const initPlayerState = (deck) => {
@@ -53,9 +37,10 @@ const initPlayerState = (deck) => {
     // Draw 7 cards from the shuffled deck
     const hand = shuffledDeck.slice(-7);
     // Put the remaining cards in the tavern
-    const tavern = shuffledDeck.splice(-7);
+    const tavern = shuffledDeck.slice(0, shuffledDeck.length - 7);
 
-    return {
+    // Define playerState
+    const playerState = {
         isWinner: false,
         stance: "waiting", // "discarding", "attacking" or "waiting"
         attackValue: 0,
@@ -70,7 +55,9 @@ const initPlayerState = (deck) => {
             castle: [],
             jester: 0
         }
-    }
+    };
+
+    return playerState;
 }
 
-module.exports = { initGame }
+module.exports = { initGameState }

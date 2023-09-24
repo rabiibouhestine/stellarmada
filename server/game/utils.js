@@ -1,11 +1,31 @@
 
 
 const shuffleDeck = (deck) => {
-    for (let i = deck.length - 1; i > 0; i--) {
+    const shuffled = JSON.parse(JSON.stringify(deck));
+    for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    return deck;
+    return shuffled;
 }
 
-module.exports = { shuffleDeck }
+const processGameState = (gameState, playerID) => {
+    const processedState = JSON.parse(JSON.stringify(gameState));
+    const playersIDs = Object.keys(processedState.players);
+    for (const id of playersIDs) {
+        if (id === playerID) {
+            processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
+            processedState.players[id].cards.cemetry = gameState.players[id].cards.cemetry.length;
+            processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
+        } else {
+            processedState.players[id].cards.hand = [];
+            processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
+            processedState.players[id].cards.cemetry = gameState.players[id].cards.cemetry.length;
+            processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
+        }
+    }
+
+    return processedState;
+}
+
+module.exports = { shuffleDeck, processGameState }
