@@ -21,7 +21,7 @@ export class Game {
             PIXI.BaseTexture.from(cardsImage),
             cardsSheet
         );
-        this.sheet.parse(); // load assets: see docs, needs await for some reason!!!
+        this.parseSheet();
 
         canvasRef.current.appendChild(this.app.view);
 
@@ -31,6 +31,10 @@ export class Game {
 
         this.resize();
         window.addEventListener('resize', this.resize, this);
+    }
+
+    parseSheet = async () => {
+        await this.sheet.parse();
     }
 
     update(data) {
