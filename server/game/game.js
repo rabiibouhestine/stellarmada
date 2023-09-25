@@ -72,21 +72,23 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         stance: "waiting",
         attackValue: 0,
         damageValue: 0,
-        actions: {
-            attack: {
-                units: [...playerSelection.hand, ...playerSelection.shield]
+        moves: [
+            {
+                units: [...playerSelection.hand, ...playerSelection.shield],
+                location: "hand",
+                destination: "field"
             },
-            revive: {
-                x: 2
+            {
+                x: 2,
+                location: "cemetry",
+                destination: "tavern"
             },
-            buildShield: {
-                units: "6S"
-            },
-            drawTavern: {
-                x: 0,
-                units: ["3H", "5D"]
+            {
+                units: "6S",
+                location: "field",
+                destination: "shield"
             }
-        } 
+        ]
     };
 
     return gameAction;

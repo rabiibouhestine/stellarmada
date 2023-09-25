@@ -212,89 +212,6 @@ export class Player {
         return conditionsMet;
     }
 
-    revive(x) {
-        this.cemetry.setSize(this.cemetry.size - x);
-        this.tavern.setSize(this.tavern.size + x);
-    }
-
-    buildShield(units) {
-        const cards = this.field.filter(card => units.includes(card.name));
-        this.shield.push(...cards);
-        this.field = this.field.filter(card => !units.includes(card.name));
-    }
-
-    drawTavern(x, units) {
-        this.tavern.setSize(this.tavern.size - x);
-        this.handCount += x;
-        if (this.isPlayer) {
-            for (const index in units) {
-                const card = this.createCard(this.cardsContainer, this.sheet, units[index], this.positions.tavern);
-                this.hand.push(card);
-            }
-        } else {
-            for (let step = 0; step < x; step++) {
-                const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
-                this.hand.push(card);
-            }
-        }
-    }
-
-    drawCastle(unit) {
-        this.castle.setSize(this.castle.size - 1);
-        this.handCount += 1;
-        const name = this.isPlayer? this.castle.getName() : "B1";
-        const card = this.createCard(this.cardsContainer, this.sheet, name, this.positions.castle);
-        this.castle.setName(unit);
-        this.hand.push(card);
-    }
-
-    attack(units) {
-        const x = units.length;
-        this.handCount -= x;
-        if (this.isPlayer) {
-            const cards = this.hand.filter(card => units.includes(card.name));
-            this.hand = this.hand.filter(card => !units.includes(card.name));
-            this.field.push(...cards);
-        } else {
-            const cards = this.hand.slice(-x);
-            this.hand.splice(-x);
-            for (const card in cards) {
-                cards[card].reveal(units[card]);
-                this.field.push(cards[card]);
-            }
-        }
-    }
-
-    clearField() {
-        this.field.forEach(card => card.moveTo(this.positions.cemetry, false, true));
-        this.field = [];
-    }
-
-    discardShield(units) {
-        const cards = this.shield.filter(card => units.includes(card.name));
-        cards.forEach(card => card.moveTo(this.positions.cemetry, false, true));
-        this.shield = this.shield.filter(card => !units.includes(card.name));
-    }
-
-    discardHand(x, units) {
-        this.handCount -= x;
-        this.cemetry.setSize(this.cemetry.size + x);
-
-        const moveCardsToCemetry = (cards) => {
-            cards.forEach(card => card.moveTo(this.positions.cemetry, false, true));
-        };
-
-        if (this.isPlayer) {
-            const cards = this.hand.filter(card => units.includes(card.name));
-            this.hand = this.hand.filter(card => !units.includes(card.name));
-            moveCardsToCemetry(cards);
-        } else {
-            const cards = this.hand.slice(-x);
-            this.hand.splice(-x);
-            moveCardsToCemetry(cards);
-        }
-    }
-
     /**
    * This is a description of your method.
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
@@ -356,7 +273,7 @@ export class Player {
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
                 moveCardsToDestination(cards);
             } else {
-                const cards = this.hand.slice(-x);
+                const cards = this.hand.slice(-nCards);
                 this.hand.splice(-nCards);
                 moveCardsToDestination(cards);
             }

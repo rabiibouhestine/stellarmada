@@ -43,37 +43,10 @@ export class Game {
             const player = this.players[key];
             const playerData = data.players[key];
 
-            // Perform player actions
-            for (const key of Object.keys(playerData.actions)) {
-                const params = playerData.actions[key];
-                switch(key) {
-                    case "revive":
-                        player.revive(params.x);
-                        break;
-                    case "buildShield":
-                        player.buildShield(params.units);
-                        break;
-                    case "drawTavern":
-                        player.drawTavern(params.x, params.units);
-                        break;
-                    case "drawCastle":
-                        player.drawCastle(params.unit);
-                        break;
-                    case "attack":
-                        player.attack(params.units);
-                        break;
-                    case "clearField":
-                        player.clearField();
-                        break;
-                    case "discardShield":
-                        player.discardShield(params.units);
-                        break;
-                    case "discardHand":
-                        player.discardHand(params.x, params.units);
-                        break;
-                    default:
-                        throw new Error('action ' + key + ' not defined in Player.');
-                  }
+            // Perform player moves
+            for (const moveIndex in playerData.moves) {
+                const move = playerData.moves[moveIndex];
+                player.moveCards(move.units, move.x, move.location, move.destination);
             }
 
             // Update player states
