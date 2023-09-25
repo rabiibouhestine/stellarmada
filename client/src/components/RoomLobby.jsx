@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import pawn from '../images/pawn.png';
+import pawnReady from '../images/pawn_up.png';
+
 function RoomLobby({ socket }) {
     const params = useParams();
     const navigate = useNavigate();
@@ -20,6 +23,10 @@ function RoomLobby({ socket }) {
     return (
         <div className="flex items-center justify-center h-screen bg-blue-300">
             <div className='grid justify-items-center'>
+                <div className='flex justify-between'>
+                    <img src={isReady? pawnReady : pawn} alt="Pawn" />
+                    <img src={pawn} alt="Pawn" />
+                </div>
                 <div className='mb-15 p-6'>
                     <h1 className="text-2xl text-center text-slate-100 font-black drop-shadow-md">WAITING FOR EVERYONE TO BE READY</h1>
                 </div>
