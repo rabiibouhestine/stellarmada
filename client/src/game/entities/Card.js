@@ -11,6 +11,7 @@ export class Card {
 
         this.value = cardsDict[name].value;
         this.suit = cardsDict[name].suit;
+        this.isCastle = cardsDict[name].isCastle;
 
         this.selectable = false;
         this.selected = false;
