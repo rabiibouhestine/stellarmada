@@ -295,25 +295,16 @@ export class Player {
         }
     }
 
+    /**
+   * This is a description of your method.
+   * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
+   * @param {number} nCards - The number of cards to move.
+   * @param {string} location - The current location of cards.
+   * Must be one of "hand", "field", "shield", "cemetry", "tavern", "castle".
+   * @param {string} destination - The destination to where the cards should move.
+   * Must be one of "hand", "field", "shield", "cemetry", "tavern", "castle".
+   */
     moveCards(cardsNames, nCards, location, destination) {
-
-        // hand, field, shield 
-        // cemetry, tavern, castle
-
-        // cemetry -> tavern
-        // tavern -> hand
-        // shield -> cemetry
-        // field -> cemetry
-        // shield -> castle
-        // field -> castle
-        // field -> shield
-
-        // hand -> cemetry
-        // hand -> castle
-        // hand -> field
-
-        const decks = ["tavern, cemetry, castle"];
-        const platoons = ["hand, field, shield"];
 
         if (location === "cemetry" && destination === "tavern") {
             const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.cemetry);
@@ -349,6 +340,42 @@ export class Player {
             const cards = this.field.filter(card => cardsNames.includes(card.name));
             this.shield.push(...cards);
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
+        }
+
+        if (location === "hand" && ["cemetry", "castle"].includes(destination)) {
+            const currentDestination = destination === "cemetry"? this.cemetry : this.castle;
+            this.handCount -= nCards;
+            currentDestination.setSize(currentDestination.size + nCards);
+    
+            const moveCardsToDestination = (cards) => {
+                cards.forEach(card => card.moveTo(this.positions[destination], false, true));
+            };
+    
+            if (this.isPlayer) {
+                const cards = this.hand.filter(card => cardsNames.includes(card.name));
+                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                moveCardsToDestination(cards);
+            } else {
+                const cards = this.hand.slice(-x);
+                this.hand.splice(-nCards);
+                moveCardsToDestination(cards);
+            }
+        }
+
+        if (location === "hand" && destination === "field") {
+            this.handCount -= nCards;
+            if (this.isPlayer) {
+                const cards = this.hand.filter(card => cardsNames.includes(card.name));
+                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                this.field.push(...cards);
+            } else {
+                const cards = this.hand.slice(-nCards);
+                this.hand.splice(-nCards);
+                for (const card in cards) {
+                    cards[card].reveal(cardsNames[card]);
+                    this.field.push(cards[card]);
+                }
+            }
         }
     }
 }
