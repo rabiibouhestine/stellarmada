@@ -84,12 +84,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 nCards: 2,
                 location: "cemetry",
                 destination: "tavern"
-            },
-            {
-                cardsNames: playerSelection.hand[0],
-                nCards: 1,
-                location: "field",
-                destination: "shield"
             }
         ]
     };
