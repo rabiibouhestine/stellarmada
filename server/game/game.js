@@ -73,17 +73,29 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         attackValue: 0,
         damageValue: 0,
         moves: [
+            // {
+            //     cardsNames: [...playerSelection.hand, ...playerSelection.shield],
+            //     nCards: [...playerSelection.hand, ...playerSelection.shield].length,
+            //     location: "hand",
+            //     destination: "field"
+            // },
+            // {
+            //     cardsNames: [],
+            //     nCards: 2,
+            //     location: "cemetry",
+            //     destination: "tavern"
+            // },
             {
-                cardsNames: [...playerSelection.hand, ...playerSelection.shield],
-                nCards: [...playerSelection.hand, ...playerSelection.shield].length,
+                cardsNames: [playerSelection.hand[0]],
+                nCards: 1,
                 location: "hand",
-                destination: "field"
+                destination: "cemetry"
             },
             {
-                cardsNames: [],
-                nCards: 2,
-                location: "cemetry",
-                destination: "tavern"
+                cardsNames: [playerSelection.hand[1]],
+                nCards: 1,
+                location: "hand",
+                destination: "castle"
             }
         ]
     };

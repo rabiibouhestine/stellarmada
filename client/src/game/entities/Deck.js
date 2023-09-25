@@ -33,6 +33,7 @@ export class Deck {
     setSize(x) {
         this.size = x;
         this.text.text = this.size;
+        this.container.visible = this.size > 0;
     }
 
     getName() {
