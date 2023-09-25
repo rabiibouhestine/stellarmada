@@ -46,7 +46,7 @@ export class Game {
             // Perform player moves
             for (const moveIndex in playerData.moves) {
                 const move = playerData.moves[moveIndex];
-                player.moveCards(move.cardsNames, move.cardsNames, move.location, move.destination);
+                player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
             }
 
             // Update player states
