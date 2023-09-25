@@ -294,4 +294,61 @@ export class Player {
             moveCardsToCemetry(cards);
         }
     }
+
+    moveCards(cardsNames, nCards, location, destination) {
+
+        // hand, field, shield 
+        // cemetry, tavern, castle
+
+        // cemetry -> tavern
+        // tavern -> hand
+        // shield -> cemetry
+        // field -> cemetry
+        // shield -> castle
+        // field -> castle
+        // field -> shield
+
+        // hand -> cemetry
+        // hand -> castle
+        // hand -> field
+
+        const decks = ["tavern, cemetry, castle"];
+        const platoons = ["hand, field, shield"];
+
+        if (location === "cemetry" && destination === "tavern") {
+            const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.cemetry);
+            card.moveTo(this.positions.tavern, false, true);
+            this.cemetry.setSize(this.cemetry.size - nCards);
+            this.tavern.setSize(this.tavern.size + nCards);
+        }
+
+        if (location === "tavern" && destination === "hand") {
+            this.tavern.setSize(this.tavern.size - nCards);
+            this.handCount += nCards;
+            if (this.isPlayer) {
+                for (const index in cardsNames) {
+                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern);
+                    this.hand.push(card);
+                }
+            } else {
+                for (let step = 0; step < nCards; step++) {
+                    const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
+                    this.hand.push(card);
+                }
+            }
+        }
+
+        if (["shield", "field"].includes(location) && ["cemetry", "castle"].includes(destination)) {
+            const currentLocation = location === "shield" ? this.shield : this.field;
+            const cards = currentLocation.filter(card => cardsNames.includes(card.name));
+            cards.forEach(card => card.moveTo(this.positions[destination], false, true));
+            currentLocation = currentLocation.filter(card => !cardsNames.includes(card.name));
+        }
+
+        if (location === "field" && destination === "shield") {
+            const cards = this.field.filter(card => cardsNames.includes(card.name));
+            this.shield.push(...cards);
+            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+        }
+    }
 }
