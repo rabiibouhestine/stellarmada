@@ -74,17 +74,17 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         damageValue: 0,
         moves: [
             {
-                units: [...playerSelection.hand, ...playerSelection.shield],
+                cardsNames: [...playerSelection.hand, ...playerSelection.shield],
                 location: "hand",
                 destination: "field"
             },
             {
-                x: 2,
+                nCards: 2,
                 location: "cemetry",
                 destination: "tavern"
             },
             {
-                units: "6S",
+                cardsNames: "6S",
                 location: "field",
                 destination: "shield"
             }
