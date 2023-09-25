@@ -98,6 +98,9 @@ export class Player {
         this.repositionCards(this.field, this.positions.field);
         this.repositionCards(this.shield, this.positions.shield);
         this.repositionCards(this.hand, this.positions.hand);
+        this.cemetry.repositionCards();
+        this.tavern.repositionCards();
+        this.castle.repositionCards();
     }
 
     onPointerDown(card) {
@@ -225,7 +228,7 @@ export class Player {
 
         if (location === "cemetry" && destination === "tavern") {
             const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.cemetry);
-            card.moveTo(this.positions.tavern, false, true);
+            this.tavern.cardsToGet.push(card);
             this.cemetry.setSize(this.cemetry.size - nCards);
             this.tavern.setSize(this.tavern.size + nCards);
         }
@@ -248,8 +251,9 @@ export class Player {
 
         if (["shield", "field"].includes(location) && ["cemetry", "castle"].includes(destination)) {
             const currentLocation = location === "shield" ? this.shield : this.field;
+            const currentDestination = destination === "cemetry" ? this.cemetry : this.castle;
             const cards = currentLocation.filter(card => cardsNames.includes(card.name));
-            cards.forEach(card => card.moveTo(this.positions[destination], false, true));
+            currentDestination.cardsToGet.push(...cards);
             currentLocation = currentLocation.filter(card => !cardsNames.includes(card.name));
         }
 
@@ -264,18 +268,18 @@ export class Player {
             this.handCount -= nCards;
             currentDestination.setSize(currentDestination.size + nCards);
     
-            const moveCardsToDestination = (cards) => {
-                cards.forEach(card => card.moveTo(this.positions[destination], false, true));
+            const pushCardsToDestination = (cards) => {
+                currentDestination.cardsToGet.push(...cards);
             };
     
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                moveCardsToDestination(cards);
+                pushCardsToDestination(cards);
             } else {
                 const cards = this.hand.slice(-nCards);
                 this.hand.splice(-nCards);
-                moveCardsToDestination(cards);
+                pushCardsToDestination(cards);
             }
         }
 

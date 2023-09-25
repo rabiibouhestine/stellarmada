@@ -8,6 +8,8 @@ export class Deck {
         this.position = position;
         this.size = size;
 
+        this.cardsToGet = [];
+
         this.container = new PIXI.Container();
         this.container.position = this.position;
         this.container.visible = this.size > 0;
@@ -40,5 +42,10 @@ export class Deck {
     setName(name) {
         this.name = name;
         this.sprite.texture = this.sheet.textures[this.name]
+    }
+
+    repositionCards() {
+        this.cardsToGet.forEach(card => card.moveTo(this.position, false, true));
+        this.cardsToGet = [];
     }
 }
