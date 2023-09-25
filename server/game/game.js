@@ -75,6 +75,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         moves: [
             {
                 cardsNames: [...playerSelection.hand, ...playerSelection.shield],
+                nCards: [...playerSelection.hand, ...playerSelection.shield].length,
                 location: "hand",
                 destination: "field"
             },
