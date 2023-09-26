@@ -17,8 +17,6 @@ export class Card {
         this.selected = false;
         this.spriteTint = 0xFFFFFF;
 
-        this.isMoving = false;
-
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.eventMode = 'static';
         this.sprite.cursor = 'default';
@@ -69,19 +67,14 @@ export class Card {
     }
 
     moveTo(position, reveal, destroy) {
-        if (this.isMoving) {
-            return;
-        }
-
         if (reveal) {
             this.reveal();
         } else {
             this.hide();
         }
-    
-        const velocity = 0.15;
-        let ticker;
-    
+
+        const ticker = new PIXI.Ticker();
+
         // Function to update card position
         const updatePosition = (delta) => {
             // Calculate direction towards position
@@ -90,13 +83,15 @@ export class Card {
     
             // Calculate distance
             let distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Set velocity
+            const velocity = 0.2;
     
             // Move Card towards position
             if (distance <= 1) {
                 this.sprite.x = position.x;
                 this.sprite.y = position.y;
                 this.position = position;
-                this.isMoving = false;
                 ticker.stop();
                 ticker.destroy();
                 if (destroy) {
@@ -108,8 +103,6 @@ export class Card {
             }
         };
     
-        this.isMoving = true;
-        ticker = new PIXI.Ticker();
         ticker.add(updatePosition);
         ticker.start();
     }
