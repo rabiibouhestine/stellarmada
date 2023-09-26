@@ -109,6 +109,9 @@ export class Card {
         } else {   
             this.sprite.x = position.x;
             this.sprite.y = position.y; 
+            if (destroy) {
+                this.sprite.destroy();
+            }
         }
     }
 }
