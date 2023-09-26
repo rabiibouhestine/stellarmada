@@ -101,7 +101,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
         const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
         const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
-        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => { accumulator + cardsMapping[card].value}, 0);
+        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to field
@@ -127,9 +129,27 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.action.moves.push(
                 {
                     cardsNames: [],
-                    nCards: playerHandSelection.length,
+                    nCards: playerSelectionValue,
                     location: "cemetry",
                     destination: "tavern"
+                }
+            );
+        }
+
+        // If Diamonds in selection, move cards from tavern to hand
+        if (hasDiamonds && playerCards.tavern.length !== 0) {
+            const nCardsMissingFromHand = 7 - playerCards.hand.length;
+            const nCardsToDraw = Math.min(playerSelectionValue, nCardsMissingFromHand);
+            const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
+            playerCards.tavern.splice(-nCardsToDraw);
+            playerCards.hand.push(...cardsToDraw);
+
+            gameAction.action.moves.push(
+                {
+                    cardsNames: cardsToDraw,
+                    nCards: nCardsToDraw,
+                    location: "tavern",
+                    destination: "hand"
                 }
             );
         }
