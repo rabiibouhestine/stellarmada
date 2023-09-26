@@ -166,8 +166,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             stance: "discarding",
             damage: playerSelectionValue
         }
-
-        
     }
 
     // If player is discarding

@@ -67,9 +67,9 @@ export class Game {
             const damage = data.turn.damage;
 
             // Update player states
-            player.setAttackValue(this.playerID === turnPlayerID? damage : 0);
-            player.setDamageValue(this.playerID === turnPlayerID? 0 : damage);
-            player.setStance(this.playerID === turnPlayerID? stance : "waiting");
+            player.setAttackValue(key === turnPlayerID? 0 : damage);
+            player.setDamageValue(key === turnPlayerID? damage : 0);
+            player.setStance(key === turnPlayerID? stance : "waiting");
         }
     }
 

@@ -142,7 +142,7 @@ export class Player {
     setStance(stance) {
         this.stance = stance;
         const isAttacking = this.stance === "attacking";
-        const canDiscardMore = this.stance === "discarding" && this.canDiscardMore();
+        const isDiscarding = this.stance === "discarding";
     
         this.field.forEach(card => {
             card.setSelected(false);
@@ -151,12 +151,12 @@ export class Player {
 
         this.hand.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(this.isPlayer && (isAttacking || canDiscardMore));
+            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding));
         });
     
         this.shield.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(isAttacking ? false : (this.isPlayer && canDiscardMore));
+            card.setSelectable(this.isPlayer && isDiscarding);
         });
 
         switch(stance) {
