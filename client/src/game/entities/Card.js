@@ -17,6 +17,8 @@ export class Card {
         this.selected = false;
         this.spriteTint = 0xFFFFFF;
 
+        this.isMoving = false;
+
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.eventMode = 'static';
         this.sprite.cursor = 'default';
@@ -67,6 +69,10 @@ export class Card {
     }
 
     moveTo(position, reveal, destroy) {
+        if (this.isMoving) {
+            return;
+        }
+
         if (reveal) {
             this.reveal();
         } else {
@@ -90,6 +96,7 @@ export class Card {
                 this.sprite.x = position.x;
                 this.sprite.y = position.y;
                 this.position = position;
+                this.isMoving = false;
                 ticker.stop();
                 ticker.destroy();
                 if (destroy) {
@@ -101,25 +108,9 @@ export class Card {
             }
         };
     
-        if (document.visibilityState === 'visible') {
-            // Tab is currently visible, start animation immediately
-            ticker = new PIXI.Ticker();
-            ticker.add(updatePosition);
-            ticker.start();
-        } else {
-            // Tab is not visible, add an event listener for visibility change
-            const handleVisibilityChange = () => {
-                if (document.visibilityState === 'visible') {
-                    ticker = new PIXI.Ticker();
-                    ticker.add(updatePosition);
-                    ticker.start();
-    
-                    // Remove the event listener once the tab is visible again
-                    document.removeEventListener('visibilitychange', handleVisibilityChange);
-                }
-            };
-    
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-        }
+        this.isMoving = true;
+        ticker = new PIXI.Ticker();
+        ticker.add(updatePosition);
+        ticker.start();
     }
 }
