@@ -158,6 +158,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
 
 
+    const playersIDS = Object.keys(gamestate.players);
+    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
     // Update gameAction turn
     gameAction.turn = {
         playerID: playerID,
