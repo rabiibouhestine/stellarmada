@@ -75,6 +75,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // Get the players ids
     const playersIDS = Object.keys(gamestate.players);
 
+    // Get the second player id
+    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
     // Initialise game action
     const gameAction = {
         isGameOver: false,
@@ -156,18 +159,20 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 }
             );
         }
+
+        // Update gameAction turn
+        gameAction.turn = {
+            playerID: secondPlayerID,
+            stance: "discarding",
+            damage: playerSelectionValue
+        }
+
+        
     }
 
+    // If player is discarding
+    if (gamestate.turn.stance === "discarding") {
 
-
-    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
-
-
-    // Update gameAction turn
-    gameAction.turn = {
-        playerID: playerID,
-        stance: "attacking",
-        damage: 0
     }
 
     return gameAction;
