@@ -72,24 +72,25 @@ export class Card {
         } else {
             this.hide();
         }
-        const ticker = new PIXI.Ticker();
-        ticker.add((delta) =>
-        {
-            // Constants
-            const velocity = 0.15;
-
+    
+        const velocity = 0.15;
+        let ticker;
+    
+        // Function to update card position
+        const updatePosition = (delta) => {
             // Calculate direction towards position
             let dx = position.x - this.sprite.x;
             let dy = position.y - this.sprite.y;
-
+    
             // Calculate distance
             let distance = Math.sqrt(dx * dx + dy * dy);
-
+    
             // Move Card towards position
             if (distance <= 1) {
                 this.sprite.x = position.x;
                 this.sprite.y = position.y;
                 this.position = position;
+                ticker.stop();
                 ticker.destroy();
                 if (destroy) {
                     this.sprite.destroy();
@@ -98,7 +99,27 @@ export class Card {
                 this.sprite.x += dx * velocity * delta;
                 this.sprite.y += dy * velocity * delta;
             }
-        });
-        ticker.start()
+        };
+    
+        if (document.visibilityState === 'visible') {
+            // Tab is currently visible, start animation immediately
+            ticker = new PIXI.Ticker();
+            ticker.add(updatePosition);
+            ticker.start();
+        } else {
+            // Tab is not visible, add an event listener for visibility change
+            const handleVisibilityChange = () => {
+                if (document.visibilityState === 'visible') {
+                    ticker = new PIXI.Ticker();
+                    ticker.add(updatePosition);
+                    ticker.start();
+    
+                    // Remove the event listener once the tab is visible again
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                }
+            };
+    
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
     }
 }
