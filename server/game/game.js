@@ -72,6 +72,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (playerID !== gamestate.turn.playerID)
         return;
 
+    // Get the players ids
+    const playersIDS = Object.keys(gamestate.players);
+
     // Initialise game action
     const gameAction = {
         isGameOver: false,
@@ -80,11 +83,11 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             stance: "",
             damage: 0
         },
-        action: {
-            playerID: playerID,
-            moves: []
-        }
+        moves: {}
     };
+    for (const id of playersIDS) {
+        gameAction.moves[id] = [];
+    }
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
@@ -112,7 +115,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         playerCards.field = playerHandSelection;
 
         // Add move to game action
-        gameAction.action.moves.push(
+        gameAction.moves[playerID].push(
             {
                 cardsNames: playerHandSelection,
                 nCards: playerHandSelection.length,
@@ -126,7 +129,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             const revivedCards = playerCards.cemetry.splice(0, playerSelectionValue);
             playerCards.tavern.unshift(...revivedCards);
 
-            gameAction.action.moves.push(
+            gameAction.moves[playerID].push(
                 {
                     cardsNames: [],
                     nCards: playerSelectionValue,
@@ -144,7 +147,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.tavern.splice(-nCardsToDraw);
             playerCards.hand.push(...cardsToDraw);
 
-            gameAction.action.moves.push(
+            gameAction.moves[playerID].push(
                 {
                     cardsNames: cardsToDraw,
                     nCards: nCardsToDraw,
@@ -157,9 +160,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
 
 
-
-    const playersIDS = Object.keys(gamestate.players);
     const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
 
     // Update gameAction turn
     gameAction.turn = {

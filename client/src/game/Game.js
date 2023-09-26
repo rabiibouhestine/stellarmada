@@ -54,14 +54,12 @@ export class Game {
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
-            if (key === data.action.playerID) {
-                // Perform player moves
-                for (const moveIndex in data.action.moves) {
-                    const move = data.action.moves[moveIndex];
-                    player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
-                }
-                player.repositionBoard();
+            // Perform player moves
+            for (const moveIndex in data.moves[key]) {
+                const move = data.moves[key][moveIndex];
+                player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
             }
+            player.repositionBoard();
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
