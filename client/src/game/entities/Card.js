@@ -73,37 +73,42 @@ export class Card {
             this.hide();
         }
 
-        const ticker = new PIXI.Ticker();
-
-        // Function to update card position
-        const updatePosition = (delta) => {
-            // Calculate direction towards position
-            let dx = position.x - this.sprite.x;
-            let dy = position.y - this.sprite.y;
+        if (document.visibilityState === 'visible') {
+            const ticker = new PIXI.Ticker();
     
-            // Calculate distance
-            let distance = Math.sqrt(dx * dx + dy * dy);
-
-            // Set velocity
-            const velocity = 0.16;
+            // Function to update card position
+            const updatePosition = (delta) => {
+                // Calculate direction towards position
+                let dx = position.x - this.sprite.x;
+                let dy = position.y - this.sprite.y;
+        
+                // Calculate distance
+                let distance = Math.sqrt(dx * dx + dy * dy);
     
-            // Move Card towards position
-            if (distance <= 1) {
-                this.sprite.x = position.x;
-                this.sprite.y = position.y;
-                this.position = position;
-                ticker.stop();
-                ticker.destroy();
-                if (destroy) {
-                    this.sprite.destroy();
+                // Set velocity
+                const velocity = 0.16;
+        
+                // Move Card towards position
+                if (distance <= 1) {
+                    this.sprite.x = position.x;
+                    this.sprite.y = position.y;
+                    this.position = position;
+                    ticker.stop();
+                    ticker.destroy();
+                    if (destroy) {
+                        this.sprite.destroy();
+                    }
+                } else {
+                    this.sprite.x += dx * velocity * delta;
+                    this.sprite.y += dy * velocity * delta;
                 }
-            } else {
-                this.sprite.x += dx * velocity * delta;
-                this.sprite.y += dy * velocity * delta;
-            }
-        };
-    
-        ticker.add(updatePosition);
-        ticker.start();
+            };
+        
+            ticker.add(updatePosition);
+            ticker.start();
+        } else {   
+            this.sprite.x = position.x;
+            this.sprite.y = position.y; 
+        }
     }
 }
