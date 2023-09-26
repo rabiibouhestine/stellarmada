@@ -85,7 +85,7 @@ export class Card {
             let distance = Math.sqrt(dx * dx + dy * dy);
 
             // Set velocity
-            const velocity = 0.2;
+            const velocity = 0.16;
     
             // Move Card towards position
             if (distance <= 1) {
