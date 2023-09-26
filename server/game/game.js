@@ -96,10 +96,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (gamestate.turn.stance === "attacking") {
         const playerCards = gamestate.players[playerID].cards
         const playerHandSelection = playerSelection.hand;
-        const playerHand = playerCards.hand;
 
         // If player selection does not make sense we exit
-        if (playerHandSelection.some(card => !playerHand.includes(card)))
+        if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
         // Check selection suits and calculate selection value
@@ -172,6 +171,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (gamestate.turn.stance === "discarding") {
 
     }
+
+    // Update game state
+    gamestate.isGameOver = gameAction.isGameOver;
+    gamestate.turn = gameAction.turn;
 
     return gameAction;
 }

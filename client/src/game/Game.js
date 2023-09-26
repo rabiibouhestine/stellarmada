@@ -51,15 +51,18 @@ export class Game {
     }
 
     update(data) {
+        console.log(data);
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
             // Perform player moves
-            for (const moveIndex in data.moves[key]) {
-                const move = data.moves[key][moveIndex];
-                player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
+            if (data.moves[key].length > 0) {
+                for (const moveIndex in data.moves[key]) {
+                    const move = data.moves[key][moveIndex];
+                    player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
+                }
+                player.repositionBoard();
             }
-            player.repositionBoard();
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
