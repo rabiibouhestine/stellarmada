@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
-import cardsSheet from './assets/kenny/cards.json';
-import cardsImage from './assets/kenny/cards.png';
+import cardsImage from './assets/images/cards.png';
+import cardsSheet from './assets/mappings/cards.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
@@ -28,6 +28,19 @@ export class Game {
         this.board = new Board(this.app);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
 
+        for (const key of Object.keys(this.players)) {
+            const player = this.players[key];
+
+            // Get game turn state
+            const turnPlayerID = gameState.turn.playerID;
+            const stance = gameState.turn.stance;
+            const damage = gameState.turn.damage;
+
+            // Update player states
+            player.setStance(this.playerID === turnPlayerID? stance : "waiting");
+            player.setAttackValue(this.playerID === turnPlayerID? damage : 0);
+            player.setDamageValue(this.playerID === turnPlayerID? 0 : damage);
+        }
 
         this.resize();
         window.addEventListener('resize', this.resize, this);
@@ -38,24 +51,27 @@ export class Game {
     }
 
     update(data) {
-        for (const key of Object.keys(data.players)) {
-            // Define player and playerData
+        for (const key of Object.keys(this.players)) {
             const player = this.players[key];
-            const playerData = data.players[key];
 
-            // Perform player moves
-            for (const moveIndex in playerData.moves) {
-                const move = playerData.moves[moveIndex];
-                player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
+            if (key === data.action.playerID) {
+                // Perform player moves
+                for (const moveIndex in data.action.moves) {
+                    const move = data.action.moves[moveIndex];
+                    player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
+                }
+                player.repositionBoard();
             }
 
-            // Update player states
-            player.setStance(playerData.stance);
-            player.setAttackValue(playerData.attackValue);
-            player.setDamageValue(playerData.damageValue);
+            // Get game turn state
+            const turnPlayerID = data.turn.playerID;
+            const stance = data.turn.stance;
+            const damage = data.turn.damage;
 
-            // Move cards
-            player.repositionBoard();
+            // Update player states
+            player.setStance(this.playerID === turnPlayerID? stance : "waiting");
+            player.setAttackValue(this.playerID === turnPlayerID? damage : 0);
+            player.setDamageValue(this.playerID === turnPlayerID? 0 : damage);
         }
     }
 

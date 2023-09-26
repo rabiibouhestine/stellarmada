@@ -24,7 +24,6 @@ export class Player {
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
         
-        this.stance = state.stance;
         this.handCount = state.cards.handCount;
         this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.cards.tavern);
         this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cards.cemetry);
@@ -33,8 +32,10 @@ export class Player {
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.cards.field, true, this.positions.field);
         this.shield = this.createCards(state.cards.shield, true, this.positions.shield);
-        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, state.attackValue, true);
-        this.damageValue = state.damageValue;
+
+        this.stance = "waiting";
+        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, 0, true);
+        this.damageValue = 0;
 
         this.confirmButton = new Button(app, positions.confirmButton, yellowBtnImg, hourImage, "", false, isPlayer);
         this.discardIndicator = new Indicator(app, positions.discardIndicator, null, 0, isPlayer);

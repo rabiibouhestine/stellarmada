@@ -15,18 +15,24 @@ const initGameState = (room) => {
     for (const id of playersIDs) {
         players[id] = initPlayerState(deck);
     }
-    // Pick a random player index
-    const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
-    // Get the player with the random index
-    const attackingPlayerID = playersIDs[randomPlayerIndex];
-    // Assign an attacking stance to the player with the random index
-    players[attackingPlayerID].stance = "attacking";
 
     // Define gameState
     const gameState = {
         isGameOver: false,
+        turn: {
+            playerID: "",
+            stance: "attacking", // "discarding", "attacking" or "waiting"
+            damage: 0 // only set when state discarding
+        },
         players: players
     };
+
+    // Pick a random player index
+    const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
+    // Get the player with the random index
+    const attackingPlayerID = playersIDs[randomPlayerIndex];
+    // Give the turn to the player
+    gameState.turn.playerID = attackingPlayerID;
 
     return gameState;
 }
@@ -62,37 +68,82 @@ const initPlayerState = (deck) => {
 
 const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
+    // If not player turn exit
+    if (playerID !== gamestate.turn.playerID)
+        return;
+
+    // Initialise game action
     const gameAction = {
         isGameOver: false,
-        players: {}
+        turn: {
+            playerID: "",
+            stance: "",
+            damage: 0
+        },
+        action: {
+            playerID: playerID,
+            moves: []
+        }
     };
 
-    gameAction.players[playerID] = {
-        isWinner: false,
-        stance: "waiting",
-        attackValue: 0,
-        damageValue: 0,
-        moves: [
-            // {
-            //     cardsNames: [...playerSelection.hand, ...playerSelection.shield],
-            //     nCards: [...playerSelection.hand, ...playerSelection.shield].length,
-            //     location: "hand",
-            //     destination: "field"
-            // },
-            // {
-            //     cardsNames: [],
-            //     nCards: 2,
-            //     location: "cemetry",
-            //     destination: "tavern"
-            // },
+    // If player is attacking
+    if (gamestate.turn.stance === "attacking") {
+        const playerCards = gamestate.players[playerID].cards
+        const playerHandSelection = playerSelection.hand;
+        const playerHand = playerCards.hand;
+
+        // If player selection does not make sense we exit
+        if (playerHandSelection.some(card => !playerHand.includes(card)))
+            return;
+
+        // Check selection suits and calculate selection value
+        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
+        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
+        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
+        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => { accumulator + cardsMapping[card].value}, 0);
+        const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
+
+        // Move selected cards from hand to field
+        playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
+        playerCards.handCount = playerCards.hand.length;
+        playerCards.field = playerHandSelection;
+
+        // Add move to game action
+        gameAction.action.moves.push(
             {
-                cardsNames: playerSelection.hand,
-                nCards: playerSelection.hand.length,
+                cardsNames: playerHandSelection,
+                nCards: playerHandSelection.length,
                 location: "hand",
-                destination: "cemetry"
+                destination: "field"
             }
-        ]
-    };
+        );
+
+        // If Hearts in selection, move cards from cemetry to tavern
+        if (hasHearts && playerCards.cemetry.length !== 0) {
+            const revivedCards = playerCards.cemetry.splice(0, playerSelectionValue);
+            playerCards.tavern.unshift(...revivedCards);
+
+            gameAction.action.moves.push(
+                {
+                    cardsNames: [],
+                    nCards: playerHandSelection.length,
+                    location: "cemetry",
+                    destination: "tavern"
+                }
+            );
+        }
+    }
+
+
+
+
+    // Update gameAction turn
+    gameAction.turn = {
+        playerID: playerID,
+        stance: "attacking",
+        damage: 0
+    }
 
     return gameAction;
 }
