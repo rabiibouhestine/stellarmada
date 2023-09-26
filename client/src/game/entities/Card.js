@@ -22,7 +22,7 @@ export class Card {
         this.sprite.cursor = 'default';
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
-        this.sprite.scale.set(0.4);
+        this.sprite.scale.set(0.6);
         this.sprite.anchor.set(0.5);
         this.cardsContainer.addChild(this.sprite);
 
@@ -43,11 +43,11 @@ export class Card {
     }
 
     onPointerOver() {
-        this.sprite.scale.set(0.45);
+        this.sprite.scale.set(0.65);
     }
 
     onPointerOut() {
-        this.sprite.scale.set(0.4);
+        this.sprite.scale.set(0.6);
     }
 
     setSelected(isSelected) {

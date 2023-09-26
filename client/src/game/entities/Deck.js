@@ -14,7 +14,7 @@ export class Deck {
         this.container.position = this.position;
         this.container.visible = this.size > 0;
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
-        this.sprite.scale.set(0.4);
+        this.sprite.scale.set(0.6);
         this.sprite.anchor.set(0.5);
         this.graphics = new PIXI.Graphics();
         this.graphics.lineStyle(0);
