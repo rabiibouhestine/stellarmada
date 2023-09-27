@@ -15,7 +15,6 @@ export class Card {
 
         this.selectable = false;
         this.selected = false;
-        this.spriteTint = 0xFFFFFF;
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.eventMode = 'static';
@@ -53,17 +52,14 @@ export class Card {
     setSelected(isSelected) {
         if (this.selectable) {
             this.selected = isSelected;
-            this.sprite.tint = isSelected? 0x444444 : this.spriteTint;
+            this.sprite.y = isSelected? this.sprite.y - 30 : this.position.y;
         }
     }
 
     setSelectable(selectable) {
         this.selectable = selectable;
         this.sprite.cursor = selectable? 'pointer' : 'default';
-        if (!this.selected) {
-            this.spriteTint = selectable? 0x666666 : 0xFFFFFF;
-            this.sprite.tint = this.spriteTint;
-        }
+        this.sprite.tint = selectable? 0x999999 : 0xFFFFFF;
     }
 
     moveTo(position, reveal, destroy) {
