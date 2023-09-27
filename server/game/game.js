@@ -105,7 +105,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
         const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
         const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
-        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
         const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
@@ -169,6 +168,128 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // If player is discarding
     if (gamestate.turn.stance === "discarding") {
+        const playerCards = gamestate.players[playerID].cards
+        const playerHandSelection = playerSelection.hand;
+        const playerShieldSelection = playerSelection.shield;
+
+        // If player selection does not make sense we exit
+        const isHandSelectionScam = playerHandSelection.some(card => !playerCards.hand.includes(card));
+        const isShieldSelectionScam = playerShieldSelection.some(card => !playerCards.shield.includes(card));
+        const handSelectionDamage = playerHandSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const shieldSelectionDamage = playerShieldSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const selectionDamage = handSelectionDamage + shieldSelectionDamage;
+        const isDamageEnough = selectionDamage >= gamestate.turn.damage;
+        if (isHandSelectionScam || isShieldSelectionScam || !isDamageEnough)
+            return;
+
+        // Discard Royals from Shield
+        const shieldHasRoyals = playerShieldSelection.some(card => cardsMapping[card].isCastle === true);
+        if (shieldHasRoyals) {
+            const shieldSelectedRoyals = playerShieldSelection.filter(card => cardsMapping[card].isCastle === true);
+            playerCards.shield = playerCards.shield.filter(card => !shieldSelectedRoyals.includes(card));
+            playerCards.castle.push(...shieldSelectedRoyals);
+
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: shieldSelectedRoyals,
+                    nCards: shieldSelectedRoyals.length,
+                    location: "shield",
+                    destination: "castle"
+                }
+            );
+        }
+
+        // Discard non Royals from Shield
+        const shieldHasStandards = playerShieldSelection.some(card => cardsMapping[card].isCastle === false);
+        if (shieldHasStandards) {
+            const shieldSelectedStandards = playerShieldSelection.filter(card => cardsMapping[card].isCastle === false);
+            playerCards.shield = playerCards.shield.filter(card => !shieldSelectedStandards.includes(card));
+            playerCards.cemetry.push(...shieldSelectedStandards);
+
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: shieldSelectedStandards,
+                    nCards: shieldSelectedStandards.length,
+                    location: "shield",
+                    destination: "cemetry"
+                }
+            );
+        }
+
+        // Discard Royals from Hand
+        const handHasRoyals = playerHandSelection.some(card => cardsMapping[card].isCastle === true);
+        if (handHasRoyals) {
+            const handSelectedRoyals = playerHandSelection.filter(card => cardsMapping[card].isCastle === true);
+            playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
+            playerCards.castle.push(...handSelectedRoyals);
+
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: handSelectedRoyals,
+                    nCards: handSelectedRoyals.length,
+                    location: "hand",
+                    destination: "castle"
+                }
+            );
+        }
+
+        // Discard non Royals from Hand
+        const handHasStandards = playerHandSelection.some(card => cardsMapping[card].isCastle === false);
+        if (handHasStandards) {
+            const handSelectedStandards = playerHandSelection.filter(card => cardsMapping[card].isCastle === false);
+            playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
+            playerCards.cemetry.push(...handSelectedStandards);
+
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: handSelectedStandards,
+                    nCards: handSelectedStandards.length,
+                    location: "hand",
+                    destination: "cemetry"
+                }
+            );
+        }
+
+        // second player moves //
+        const secondPlayerCards = gamestate.players[secondPlayerID].cards;
+        const isSecondPlayerShieldFull = secondPlayerCards.shield.length == 2;
+        const secondPlayerFieldHasSpades = secondPlayerCards.field.some(card => cardsMapping[card].suit === "S");
+
+        // Move cards from field to secondPlayer shield
+        if (!isSecondPlayerShieldFull && secondPlayerFieldHasSpades) {
+
+            // Sort the field array by value in descending order
+            secondPlayerCards.field.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
+
+            // Calculate how many cards can be moved to the shield
+            const nCardsToMove = Math.min(2 - secondPlayerCards.shield.length, secondPlayerCards.field.length);
+            const cardsToMove = secondPlayerCards.field.slice(-nCardsToMove);
+
+            // Move the cards from the field to the shield
+            secondPlayerCards.shield.push(...cardsToMove);
+            secondPlayerCards.field.splice(0, nCardsToMove);
+
+            gameAction.moves[secondPlayerID].push(
+                {
+                    cardsNames: cardsToMove,
+                    nCards: cardsToMove.length,
+                    location: "field",
+                    destination: "shield"
+                }
+            );
+        }
+        
+
+
+
+
+
+
+
 
     }
 
