@@ -59,4 +59,16 @@ export class Button {
         this.button.eventMode = enabled? 'static' : 'none';
         this.button.cursor = enabled? 'pointer' : 'default';
     }
+
+    enable() {
+        this.enabled = true;
+        this.button.eventMode = 'static';
+        this.button.cursor = 'pointer';
+    }
+
+    disable() {
+        this.enabled = false;
+        this.button.eventMode = 'none';
+        this.button.cursor = 'default';
+    }
 }
