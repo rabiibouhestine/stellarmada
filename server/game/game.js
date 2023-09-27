@@ -8,7 +8,7 @@ const deck = [
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
 ];
 
-const handMax = 8;
+const handMax = 7;
 
 const initGameState = (room) => {
     // Create players states
