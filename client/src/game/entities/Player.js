@@ -250,12 +250,28 @@ export class Player {
             }
         }
 
-        if (["shield", "field"].includes(location) && ["cemetry", "castle"].includes(destination)) {
-            const currentLocation = location === "shield" ? this.shield : this.field;
-            const currentDestination = destination === "cemetry" ? this.cemetry : this.castle;
-            const cards = currentLocation.filter(card => cardsNames.includes(card.name));
-            currentDestination.cardsToGet.push(...cards);
-            currentLocation = currentLocation.filter(card => !cardsNames.includes(card.name));
+        if (location === "field" && destination === "cemetry") {
+            const cards = this.field.filter(card => cardsNames.includes(card.name));
+            this.cemetry.cardsToGet.push(...cards);
+            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+        }
+
+        if (location === "field" && destination === "castle") {
+            const cards = this.field.filter(card => cardsNames.includes(card.name));
+            this.castle.cardsToGet.push(...cards);
+            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+        }
+
+        if (location === "shield" && destination === "cemetry") {
+            const cards = this.shield.filter(card => cardsNames.includes(card.name));
+            this.cemetry.cardsToGet.push(...cards);
+            this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
+        }
+
+        if (location === "shield" && destination === "castle") {
+            const cards = this.shield.filter(card => cardsNames.includes(card.name));
+            this.castle.cardsToGet.push(...cards);
+            this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
         }
 
         if (location === "field" && destination === "shield") {

@@ -10,7 +10,6 @@ import { Board } from "./entities/Board";
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
         this.playerID = socket.id;
-
         this.app = new PIXI.Application({
             resolution: Math.max(window.devicePixelRatio, 2),
             backgroundColor: 0x87C1FF,
@@ -51,7 +50,6 @@ export class Game {
     }
 
     update(data) {
-        console.log(data);
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 

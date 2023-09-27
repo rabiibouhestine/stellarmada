@@ -80,12 +80,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // Initialise game action
     const gameAction = {
-        isGameOver: false,
-        turn: {
-            playerID: "",
-            stance: "",
-            damage: 0
-        },
+        isGameOver: gamestate.isGameOver,
+        turn: gamestate.turn,
         moves: {}
     };
     for (const id of playersIDS) {
@@ -254,14 +250,12 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // second player moves //
+        // Move cards from field to secondPlayer shield
         const secondPlayerCards = gamestate.players[secondPlayerID].cards;
         const isSecondPlayerShieldFull = secondPlayerCards.shield.length == 2;
         const secondPlayerFieldHasSpades = secondPlayerCards.field.some(card => cardsMapping[card].suit === "S");
 
-        // Move cards from field to secondPlayer shield
         if (!isSecondPlayerShieldFull && secondPlayerFieldHasSpades) {
-
             // Sort the field array by value in descending order
             secondPlayerCards.field.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
 
@@ -282,15 +276,47 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 }
             );
         }
+
+        // Discard second player Royals from Field
+        const secondPlayerFieldHasRoyals = secondPlayerCards.field.some(card => cardsMapping[card].isCastle === true);
+        if (secondPlayerFieldHasRoyals) {
+            const secondPlayerFieldRoyals = secondPlayerCards.field.filter(card => cardsMapping[card].isCastle === true);
+            secondPlayerCards.field = secondPlayerCards.field.filter(card => !secondPlayerFieldRoyals.includes(card));
+            secondPlayerCards.castle.push(...secondPlayerFieldRoyals);
+
+            gameAction.moves[secondPlayerID].push(
+                {
+                    cardsNames: secondPlayerFieldRoyals,
+                    nCards: secondPlayerFieldRoyals.length,
+                    location: "field",
+                    destination: "castle"
+                }
+            );
+        }
         
+        // Discard second player non Royals from Field
+        const secondPlayerFieldHasStandards = secondPlayerCards.field.some(card => cardsMapping[card].isCastle === false);
+        if (secondPlayerFieldHasStandards) {
+            const secondPlayerFieldStandards = secondPlayerCards.field.filter(card => cardsMapping[card].isCastle === false);
+            secondPlayerCards.field = secondPlayerCards.field.filter(card => !secondPlayerFieldStandards.includes(card));
+            secondPlayerCards.cemetry.push(...secondPlayerFieldStandards);
 
+            gameAction.moves[secondPlayerID].push(
+                {
+                    cardsNames: secondPlayerFieldStandards,
+                    nCards: secondPlayerFieldStandards.length,
+                    location: "field",
+                    destination: "cemetry"
+                }
+            );
+        }
 
-
-
-
-
-
-
+        // Update gameAction turn
+        gameAction.turn = {
+            playerID: playerID,
+            stance: "attacking",
+            damage: 0
+        }
     }
 
     // Update game state
