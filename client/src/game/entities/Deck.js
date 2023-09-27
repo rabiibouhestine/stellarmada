@@ -16,16 +16,15 @@ export class Deck {
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
         this.sprite.scale.set(0.6);
         this.sprite.anchor.set(0.5);
-        this.graphics = new PIXI.Graphics();
-        this.graphics.lineStyle(0);
-        this.graphics.beginFill(0xDE3249, 1);
-        this.graphics.drawCircle(0, 0, 20);
-        this.graphics.endFill();
-        this.text = new PIXI.Text(this.size);
+        this.text = new PIXI.Text(this.size, {
+            fontFamily: 'Arial',
+            fontSize: 24,
+            fill: 0xffffff,
+            align: 'center',
+        });
         this.text.anchor.set(0.5);
 
         this.container.addChild(this.sprite);
-        this.container.addChild(this.graphics);
         this.container.addChild(this.text);
         this.app.stage.addChild(this.container);
     }
