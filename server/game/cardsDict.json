@@ -97,7 +97,7 @@
     },
     "QS":
     {
-        "value": 15,
+        "value": 10,
         "suit": "S",
         "isCastle": true,
         "isJoker": false,
@@ -105,7 +105,7 @@
     },
     "KS":
     {
-        "value": 20,
+        "value": 10,
         "suit": "S",
         "isCastle": true,
         "isJoker": false,
@@ -209,7 +209,7 @@
     },
     "QH":
     {
-        "value": 15,
+        "value": 10,
         "suit": "H",
         "isCastle": true,
         "isJoker": false,
@@ -217,7 +217,7 @@
     },
     "KH":
     {
-        "value": 20,
+        "value": 10,
         "suit": "H",
         "isCastle": true,
         "isJoker": false,
@@ -321,7 +321,7 @@
     },
     "QC":
     {
-        "value": 15,
+        "value": 10,
         "suit": "C",
         "isCastle": true,
         "isJoker": false,
@@ -329,7 +329,7 @@
     },
     "KC":
     {
-        "value": 20,
+        "value": 10,
         "suit": "C",
         "isCastle": true,
         "isJoker": false,
@@ -433,7 +433,7 @@
     },
     "QD":
     {
-        "value": 15,
+        "value": 10,
         "suit": "D",
         "isCastle": true,
         "isJoker": false,
@@ -441,7 +441,7 @@
     },
     "KD":
     {
-        "value": 20,
+        "value": 10,
         "suit": "D",
         "isCastle": true,
         "isJoker": false,
