@@ -105,7 +105,7 @@ export class Player {
     }
 
     onPointerDown(card) {
-        if (!card.selectable) return;
+        if (!card.selectable || !["attacking", "discarding"].includes(this.stance)) return;
     
         const cardSelection = this.stance === "attacking" ? this.attackSelection : this.discardSelection;
 
@@ -171,6 +171,8 @@ export class Player {
         }
 
         this.setDiscardValue(0);
+        this.attackSelection = [];
+        this.discardSelection = [];
     }
 
     canDiscardMore() {
