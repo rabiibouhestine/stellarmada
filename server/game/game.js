@@ -8,6 +8,8 @@ const deck = [
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
 ];
 
+const handMax = 8;
+
 const initGameState = (room) => {
     // Create players states
     const players = {};
@@ -40,10 +42,10 @@ const initGameState = (room) => {
 const initPlayerState = (deck) => {
     // Shuffle player deck
     const shuffledDeck =  shuffleDeck(deck);
-    // Draw 7 cards from the shuffled deck
-    const hand = shuffledDeck.slice(-7);
+    // Draw handMax cards from the shuffled deck
+    const hand = shuffledDeck.slice(-handMax);
     // Put the remaining cards in the tavern
-    const tavern = shuffledDeck.slice(0, shuffledDeck.length - 7);
+    const tavern = shuffledDeck.slice(0, shuffledDeck.length - handMax);
 
     // Define playerState
     const playerState = {
@@ -53,7 +55,7 @@ const initPlayerState = (deck) => {
         damageValue: 0,
         cards: {
             hand: hand,
-            handCount: 7,
+            handCount: handMax,
             field: [],
             shield: [],
             tavern: tavern,
@@ -138,7 +140,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If Diamonds in selection, move cards from tavern to hand
         if (hasDiamonds && playerCards.tavern.length !== 0) {
-            const nCardsMissingFromHand = 7 - playerCards.hand.length;
+            const nCardsMissingFromHand = handMax - playerCards.hand.length;
             const nCardsToDraw = Math.min(playerSelectionValue, nCardsMissingFromHand);
             const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
             playerCards.tavern.splice(-nCardsToDraw);

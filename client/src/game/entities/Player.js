@@ -258,24 +258,28 @@ export class Player {
             const cards = this.field.filter(card => cardsNames.includes(card.name));
             this.cemetry.cardsToGet.push(...cards);
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
+            this.cemetry.setSize(this.cemetry.size + nCards);
         }
 
         if (location === "field" && destination === "castle") {
             const cards = this.field.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
+            this.castle.setSize(this.castle.size + nCards);
         }
 
         if (location === "shield" && destination === "cemetry") {
             const cards = this.shield.filter(card => cardsNames.includes(card.name));
             this.cemetry.cardsToGet.push(...cards);
             this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
+            this.cemetry.setSize(this.cemetry.size + nCards);
         }
 
         if (location === "shield" && destination === "castle") {
             const cards = this.shield.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
             this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
+            this.castle.setSize(this.castle.size + nCards);
         }
 
         if (location === "field" && destination === "shield") {
