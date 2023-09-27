@@ -73,7 +73,7 @@ export class Card {
             this.hide();
         }
 
-        if (false) { //if (document.visibilityState === 'visible') {
+        if (document.visibilityState === 'visible') {
             const ticker = new PIXI.Ticker();
     
             // Function to update card position

@@ -168,7 +168,9 @@ export class Player {
                 break;
             default:
                 this.confirmButton.update(yellowBtnImg, hourImage, "Wait", false);
-          }
+        }
+
+        this.setDiscardValue(0);
     }
 
     canDiscardMore() {
