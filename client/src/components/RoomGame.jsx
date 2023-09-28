@@ -17,6 +17,8 @@ function RoomGame({ socket }) {
             if (!gameRef.current) {
                 gameRef.current = new Game({ canvasRef:canvasRef, socket:socket, gameState:data.gameState });
                 gameRef.current.onConfirmButton(() => handleConfirmButton());
+                gameRef.current.onJokerLeft(() => handleJokerLeft());
+                gameRef.current.onJokerRight(() => handleJokerRight());
             }
         });
 
@@ -41,6 +43,14 @@ function RoomGame({ socket }) {
         }
 
         socket.emit("gameActionRequest", { roomID: params.roomID, playerSelection:selectedCards });
+    }
+
+    const handleJokerLeft = () => {
+        //
+    }
+
+    const handleJokerRight = () => {
+        //
     }
 
     return (

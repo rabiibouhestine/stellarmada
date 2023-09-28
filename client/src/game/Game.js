@@ -84,6 +84,14 @@ export class Game {
         this.players[this.playerID].confirmButton.button.on('pointerdown', event);
     }
 
+    onJokerLeft(event) {
+        this.players[this.playerID].jokerLeft.sprite.on('pointerdown', event);
+    }
+
+    onJokerRight(event) {
+        this.players[this.playerID].jokerRight.sprite.on('pointerdown', event);
+    }
+
     createPlayers(app, sheet, playerID, gameState, positions) {
         const players = {};
         const keys = Object.keys(gameState.players);

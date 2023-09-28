@@ -290,23 +290,33 @@ export class Player {
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
         }
 
-        if (location === "hand" && ["cemetry", "castle"].includes(destination)) {
-            const currentDestination = destination === "cemetry"? this.cemetry : this.castle;
+        if (location === "hand" && destination === "castle") {
             this.handCount -= nCards;
-            currentDestination.setSize(currentDestination.size + nCards);
-    
-            const pushCardsToDestination = (cards) => {
-                currentDestination.cardsToGet.push(...cards);
-            };
-    
+            this.castle.setSize(this.castle.size + nCards);
+
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                pushCardsToDestination(cards);
+                this.castle.cardsToGet.push(...cards);
             } else {
                 const cards = this.hand.slice(-nCards);
                 this.hand.splice(-nCards);
-                pushCardsToDestination(cards);
+                this.castle.cardsToGet.push(...cards);
+            }
+        }
+
+        if (location === "hand" && destination === "cemetry") {
+            this.handCount -= nCards;
+            this.cemetry.setSize(this.cemetry.size + nCards);
+
+            if (this.isPlayer) {
+                const cards = this.hand.filter(card => cardsNames.includes(card.name));
+                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                this.cemetry.cardsToGet.push(...cards);
+            } else {
+                const cards = this.hand.slice(-nCards);
+                this.hand.splice(-nCards);
+                this.cemetry.cardsToGet.push(...cards);
             }
         }
 
