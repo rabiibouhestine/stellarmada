@@ -88,8 +88,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     };
     for (const id of playersIDS) {
         gameAction.jokers[id] = {
-            jokerLeft: gamestate.players[id].jokerLeft,
-            jokerRight: gamestate.players[id].jokerRight
+            jokerLeft: gamestate.players[id].cards.jokerLeft,
+            jokerRight: gamestate.players[id].cards.jokerRight
         };
     }
     for (const id of playersIDS) {

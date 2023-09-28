@@ -61,6 +61,10 @@ export class Game {
                 }
                 player.repositionBoard();
             }
+console.log(data);
+            // Update jokers
+            player.jokerLeft.setState(data.jokers[key].jokerLeft);
+            player.jokerRight.setState(data.jokers[key].jokerRight);
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
