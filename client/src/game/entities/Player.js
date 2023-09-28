@@ -290,6 +290,21 @@ export class Player {
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
         }
 
+        if (location === "hand" && destination === "tavern") {
+            this.handCount -= nCards;
+            this.tavern.setSize(this.tavern.size + nCards);
+
+            if (this.isPlayer) {
+                const cards = this.hand.filter(card => cardsNames.includes(card.name));
+                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                this.tavern.cardsToGet.push(...cards);
+            } else {
+                const cards = this.hand.slice(-nCards);
+                this.hand.splice(-nCards);
+                this.tavern.cardsToGet.push(...cards);
+            }
+        }
+
         if (location === "hand" && destination === "castle") {
             this.handCount -= nCards;
             this.castle.setSize(this.castle.size + nCards);
