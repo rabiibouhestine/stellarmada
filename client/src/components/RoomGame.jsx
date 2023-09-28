@@ -46,11 +46,17 @@ function RoomGame({ socket }) {
     }
 
     const handleJokerLeft = () => {
-        socket.emit("jokerRequest", { roomID: params.roomID, joker: "left" });
+        const canSelect = gameRef.current.players[socket.id].jokerLeft.isSelectable;
+        if (canSelect) {
+            socket.emit("jokerRequest", { roomID: params.roomID, joker: "left" });
+        }
     }
 
     const handleJokerRight = () => {
-        socket.emit("jokerRequest", { roomID: params.roomID, joker: "right" });
+        const canSelect = gameRef.current.players[socket.id].jokerRight.isSelectable;
+        if (canSelect) {
+            socket.emit("jokerRequest", { roomID: params.roomID, joker: "right" });
+        }
     }
 
     return (

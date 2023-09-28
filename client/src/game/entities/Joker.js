@@ -10,6 +10,7 @@ export class Joker {
         this.isAlive = isAlive;
         this.position = position;
 
+        this.isSelectable = false;
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[frontName]);
         this.sprite.eventMode = 'static';
@@ -28,8 +29,16 @@ export class Joker {
     setState(isJokerAlive) {
         if (this.isAlive && !isJokerAlive) {
             this.isAlive = false;
+            this.isSelectable = false;
             this.sprite.cursor = 'default';
             this.sprite.texture = this.sheet.textures[this.backName];
+        }
+    }
+
+    setSelectable(isSelectable) {
+        if (this.isAlive && this.isPlayer) {
+            this.isSelectable = isSelectable;
+            this.sprite.cursor = isSelectable? 'pointer' : 'default';
         }
     }
 

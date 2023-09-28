@@ -164,12 +164,18 @@ export class Player {
         switch(stance) {
             case "attacking":
                 this.confirmButton.update(greenBtnImg, swordImage, "Attack", true);
+                this.jokerLeft.setSelectable(true);
+                this.jokerRight.setSelectable(true);
                 break;
             case "discarding":
                 this.confirmButton.update(redBtnImg, skullImage, "Discard", true);
+                this.jokerLeft.setSelectable(true);
+                this.jokerRight.setSelectable(true);
                 break;
             default:
                 this.confirmButton.update(yellowBtnImg, hourImage, "Wait", false);
+                this.jokerLeft.setSelectable(false);
+                this.jokerRight.setSelectable(false);
         }
 
         this.setDiscardValue(0);
