@@ -32,8 +32,8 @@ export class Player {
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.cards.field, true, this.positions.field);
         this.shield = this.createCards(state.cards.shield, true, this.positions.shield);
-        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", "B1", state.cards.jokerLeft, this.positions.jokerLeft);
-        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", "B1", state.cards.jokerRight, this.positions.jokerRight);
+        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
+        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
         this.stance = "waiting";
         this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, 0, true);

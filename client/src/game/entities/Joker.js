@@ -1,18 +1,19 @@
 import * as PIXI from "pixi.js";
 
 export class Joker {
-    constructor(cardsContainer, sheet, frontName, backName, isAlive, position) {
+    constructor(cardsContainer, sheet, frontName, backName, isPlayer, isAlive, position) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.frontName = frontName;
         this.backName = backName;
+        this.isPlayer = isPlayer;
+        this.isAlive = isAlive;
         this.position = position;
 
-        this.isAlive = isAlive;
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[frontName]);
         this.sprite.eventMode = 'static';
-        this.sprite.cursor = 'pointer';
+        this.sprite.cursor = this.isPlayer? 'pointer' : 'default';
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
         this.sprite.scale.set(0.6);

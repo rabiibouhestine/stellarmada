@@ -109,6 +109,20 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
+    socket.on("jokerLeftRequest", (data) => {
+        // Hanlde Request
+        //
+        // socket.emit("jokerLeftResponse", { gameAction:gameAction, success: true });
+        console.log("Joker Left Requested");
+    })
+
+    socket.on("jokerRightRequest", (data) => {
+        // Hanlde Request
+        //
+        // socket.emit("jokerRightResponse", { gameAction:gameAction, success: true });
+        console.log("Joker Right Requested");
+    })
+
     socket.on("disconnect", () => {
         console.log("User disconnected", socket.id);
 
