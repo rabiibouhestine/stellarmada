@@ -19,8 +19,8 @@
         "tavern": {"x": 360, "y": 520},
         "cemetry": {"x": 260, "y": 520},
         "castle": {"x": 760, "y": 520},
-        "jokerLeft": {"x": 510, "y": 520},
-        "jokerRight": {"x": 610, "y": 520},
+        "jokerLeft": {"x": 520, "y": 520},
+        "jokerRight": {"x": 620, "y": 520},
         "attackIndicator": {"x":1000, "y":370},
         "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":1200, "y":500}
