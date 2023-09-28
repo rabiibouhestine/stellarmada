@@ -24,10 +24,12 @@ export class Joker {
             .on('pointerout', this.onPointerOut, this);
     }
 
-    hide() {
-        this.isAlive = false;
-        this.sprite.cursor = 'default';
-        this.sprite.texture = this.sheet.textures[this.backName];
+    setState(isAlive) {
+        if (this.isAlive && !isAlive) {
+            this.isAlive = false;
+            this.sprite.cursor = 'default';
+            this.sprite.texture = this.sheet.textures[this.backName];
+        }
     }
 
     onPointerOver() {
