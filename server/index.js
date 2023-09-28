@@ -112,14 +112,14 @@ io.on("connection", (socket) => {
     socket.on("jokerLeftRequest", (data) => {
         // Hanlde Request
         //
-        // socket.emit("jokerLeftResponse", { gameAction:gameAction, success: true });
+        // io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
         console.log("Joker Left Requested");
     })
 
     socket.on("jokerRightRequest", (data) => {
         // Hanlde Request
         //
-        // socket.emit("jokerRightResponse", { gameAction:gameAction, success: true });
+        // io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
         console.log("Joker Right Requested");
     })
 
