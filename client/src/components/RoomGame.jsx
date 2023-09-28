@@ -46,11 +46,11 @@ function RoomGame({ socket }) {
     }
 
     const handleJokerLeft = () => {
-        socket.emit("jokerLeftRequest", { roomID: params.roomID });
+        socket.emit("jokerRequest", { roomID: params.roomID, joker: "left" });
     }
 
     const handleJokerRight = () => {
-        socket.emit("jokerRightRequest", { roomID: params.roomID });
+        socket.emit("jokerRequest", { roomID: params.roomID, joker: "right" });
     }
 
     return (

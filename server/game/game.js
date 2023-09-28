@@ -334,4 +334,78 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     return gameAction;
 }
 
-module.exports = { initGameState, handleActionRequest }
+const handleJokerRequest = (playerID, joker, gamestate) => {
+    // If not player turn exit
+    if (playerID !== gamestate.turn.playerID)
+        return;
+
+    // If requested Joker is already dead exit
+    if (joker === "left" && !gamestate.players[playerID].cards.jokerLeft) {
+        return;
+    }
+    if (joker === "right" && !gamestate.players[playerID].cards.jokerRight) {
+        return;
+    }
+
+    // Update joker in gamestate
+    if (joker === "left") {
+        gamestate.players[playerID].cards.jokerLeft = false;
+    }
+    if (joker === "right") {
+        gamestate.players[playerID].cards.jokerRight = false;
+    }
+
+    // Get the players ids
+    const playersIDS = Object.keys(gamestate.players);
+
+    // Initialise game action
+    const gameAction = {
+        isGameOver: gamestate.isGameOver,
+        winnerID: gamestate.winnerID,
+        turn: gamestate.turn,
+        jokers: {},
+        moves: {}
+    };
+    for (const id of playersIDS) {
+        gameAction.jokers[id] = {
+            jokerLeft: gamestate.players[id].cards.jokerLeft,
+            jokerRight: gamestate.players[id].cards.jokerRight
+        };
+    }
+    for (const id of playersIDS) {
+        gameAction.moves[id] = [];
+    }
+
+    // Return hand to tavern
+    const hand = gamestate.players[playerID].cards.hand;
+    const tavern = gamestate.players[playerID].cards.tavern;
+    const oldHand = [...hand];
+    tavern.push(...oldHand);
+    hand.splice(0, hand.length);
+    gameAction.moves[playerID].push(
+        {
+            cardsNames: oldHand,
+            nCards: oldHand.length,
+            location: "hand",
+            destination: "tavern"
+        }
+    );
+
+    // Shuffle tavern and draw handMax cards
+    const shuffledDeck =  shuffleDeck(tavern);
+    gamestate.players[playerID].cards.hand = shuffledDeck.slice(-handMax);
+    gamestate.players[playerID].cards.tavern = shuffledDeck.slice(0, shuffledDeck.length - handMax);
+    const newHand = gamestate.players[playerID].cards.hand;
+    gameAction.moves[playerID].push(
+        {
+            cardsNames: newHand,
+            nCards: newHand.length,
+            location: "tavern",
+            destination: "hand"
+        }
+    );
+
+    return gameAction;
+}
+
+module.exports = { initGameState, handleActionRequest, handleJokerRequest }
