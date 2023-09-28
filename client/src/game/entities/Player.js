@@ -28,10 +28,10 @@ export class Player {
         this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.cards.tavern);
         this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cards.cemetry);
         this.castle = new Deck(app, sheet, "B1", this.positions.castle, state.cards.castle);
-        this.jester = new Deck(app, sheet, "J1", this.positions.jester, state.cards.jester);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.cards.field, true, this.positions.field);
         this.shield = this.createCards(state.cards.shield, true, this.positions.shield);
+        this.joker = new Deck(app, sheet, "J1", this.positions.joker, state.cards.joker);
 
         this.stance = "waiting";
         this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, 0, true);
