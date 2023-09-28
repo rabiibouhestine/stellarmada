@@ -83,8 +83,15 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         isGameOver: gamestate.isGameOver,
         winnerID: gamestate.winnerID,
         turn: gamestate.turn,
+        jokers: {},
         moves: {}
     };
+    for (const id of playersIDS) {
+        gameAction.jokers[id] = {
+            jokerLeft: gamestate.players[id].jokerLeft,
+            jokerRight: gamestate.players[id].jokerRight
+        };
+    }
     for (const id of playersIDS) {
         gameAction.moves[id] = [];
     }
