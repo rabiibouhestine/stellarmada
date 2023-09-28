@@ -61,7 +61,7 @@ const initPlayerState = (deck) => {
             tavern: tavern,
             cemetry: [],
             castle: [],
-            joker: 0
+            jokers: 0
         }
     };
 
