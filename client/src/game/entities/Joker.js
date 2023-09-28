@@ -24,8 +24,8 @@ export class Joker {
             .on('pointerout', this.onPointerOut, this);
     }
 
-    setState(isAlive) {
-        if (this.isAlive && !isAlive) {
+    setState(isJokerAlive) {
+        if (this.isAlive && !isJokerAlive) {
             this.isAlive = false;
             this.sprite.cursor = 'default';
             this.sprite.texture = this.sheet.textures[this.backName];
