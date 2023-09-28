@@ -113,14 +113,12 @@ io.on("connection", (socket) => {
         // Hanlde Request
         //
         // io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
-        console.log("Joker Left Requested");
     })
 
     socket.on("jokerRightRequest", (data) => {
         // Hanlde Request
         //
         // io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
-        console.log("Joker Right Requested");
     })
 
     socket.on("disconnect", () => {
