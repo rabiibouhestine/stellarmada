@@ -21,6 +21,7 @@ const initGameState = (room) => {
     // Define gameState
     const gameState = {
         isGameOver: false,
+        winnerID: "",
         turn: {
             playerID: "",
             stance: "attacking", // "discarding", "attacking" or "waiting"
@@ -49,10 +50,6 @@ const initPlayerState = (deck) => {
 
     // Define playerState
     const playerState = {
-        isWinner: false,
-        stance: "waiting", // "discarding", "attacking" or "waiting"
-        attackValue: 0,
-        damageValue: 0,
         cards: {
             hand: hand,
             handCount: handMax,
@@ -61,7 +58,8 @@ const initPlayerState = (deck) => {
             tavern: tavern,
             cemetry: [],
             castle: [],
-            jokers: 0
+            jokerLeft: true,
+            jokerRight: true
         }
     };
 
@@ -83,6 +81,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // Initialise game action
     const gameAction = {
         isGameOver: gamestate.isGameOver,
+        winnerID: gamestate.winnerID,
         turn: gamestate.turn,
         moves: {}
     };

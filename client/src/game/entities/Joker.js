@@ -21,8 +21,7 @@ export class Joker {
 
         this.sprite
             .on('pointerover', this.onPointerOver, this)
-            .on('pointerout', this.onPointerOut, this)
-            .on('pointerdown', this.hide, this);
+            .on('pointerout', this.onPointerOut, this);
     }
 
     hide() {
