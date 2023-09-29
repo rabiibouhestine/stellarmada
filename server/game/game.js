@@ -274,7 +274,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
             // Move the cards from the field to the shield
             secondPlayerCards.shield.push(...cardsToMove);
-            secondPlayerCards.field.splice(0, nCardsToMove);
+            secondPlayerCards.field = secondPlayerCards.field.filter(card => !cardsToMove.includes(card));
 
             gameAction.moves[secondPlayerID].push(
                 {
