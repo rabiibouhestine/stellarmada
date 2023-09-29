@@ -258,11 +258,12 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // Move cards from field to secondPlayer shield
+        // Get second player cards
         const secondPlayerCards = gamestate.players[secondPlayerID].cards;
+
+        // Move cards from field to secondPlayer shield
         const isSecondPlayerShieldFull = secondPlayerCards.shield.length == 2;
         const secondPlayerFieldHasSpades = secondPlayerCards.field.some(card => cardsMapping[card].suit === "S");
-
         if (!isSecondPlayerShieldFull && secondPlayerFieldHasSpades) {
             // Sort the field array by value in descending order
             secondPlayerCards.field.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
