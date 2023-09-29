@@ -58,7 +58,7 @@ function RoomLobby({ socket }) {
                         LEAVE
                     </button>
                     <button className={readyBtnClass} onClick={handleReady} >
-                        {isReady? "NOT READY": "READY"}
+                        {isReady? "UNREADY": "READY"}
                     </button>
                 </div>
                 </div>
