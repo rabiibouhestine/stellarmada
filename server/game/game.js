@@ -137,7 +137,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: [],
-                    nCards: playerSelectionValue,
+                    nCards: revivedCards.length,
                     location: "cemetry",
                     destination: "tavern"
                 }
