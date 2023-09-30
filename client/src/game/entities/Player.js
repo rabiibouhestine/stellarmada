@@ -139,6 +139,22 @@ export class Player {
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
         const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsShield];
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
+
+        // Update confirm button
+        if (this.stance === "attacking") {
+            if (this.attackSelection.length > 0) {
+                this.confirmButton.enable();
+            } else {
+                this.confirmButton.disable();
+            }
+        }
+        if (this.stance === "discarding") {
+            if (this.discardIndicator.value >= this.damageValue) {
+                this.confirmButton.enable();
+            } else {
+                this.confirmButton.disable();
+            }
+        }
     }
 
     setStance(stance) {
@@ -163,12 +179,12 @@ export class Player {
 
         switch(stance) {
             case "attacking":
-                this.confirmButton.update(greenBtnImg, swordImage, "Attack", true);
+                this.confirmButton.update(greenBtnImg, swordImage, "Attack", false);
                 this.jokerLeft.setSelectable(true);
                 this.jokerRight.setSelectable(true);
                 break;
             case "discarding":
-                this.confirmButton.update(redBtnImg, skullImage, "Discard", true);
+                this.confirmButton.update(redBtnImg, skullImage, "Discard", false);
                 this.jokerLeft.setSelectable(true);
                 this.jokerRight.setSelectable(true);
                 break;
