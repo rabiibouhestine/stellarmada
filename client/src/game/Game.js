@@ -27,7 +27,7 @@ export class Game {
         canvasRef.current.appendChild(this.app.view);
 
         this.board = new Board(this.app);
-        this.damageIndicator = new Indicator(this.app, positions.field.damageIndicator, swordImage, gameState.turn.damage, true);
+        this.damageIndicator = new Indicator(this.app, positions.field.damageIndicator, swordImage, gameState.turn.damage);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
 
         for (const key of Object.keys(this.players)) {

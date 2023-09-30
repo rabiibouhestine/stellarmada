@@ -1,14 +1,13 @@
 import * as PIXI from "pixi.js";
 
 export class Indicator {
-    constructor(app, position, asset, value, visible) {
+    constructor(app, position, asset, value) {
         this.value = value;
 
         // Define the indicator container
         this.container = new PIXI.Container();
         this.container.x = position.x; // 300
         this.container.y = position.y; // 370
-        this.container.visible = visible;
 
         // Define the indicator text
         this.text = new PIXI.Text(this.value, {
