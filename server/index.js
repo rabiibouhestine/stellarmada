@@ -4,6 +4,7 @@ const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const ShortUniqueId = require('short-unique-id');
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 
@@ -155,6 +156,6 @@ io.on("connection", (socket) => {
 })
 
 
-server.listen(3001, () => {
+server.listen(port, () => {
     console.log("SERVER RUNNING");
 });
