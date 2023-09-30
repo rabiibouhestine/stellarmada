@@ -13,7 +13,9 @@ export class Game {
     constructor({ canvasRef, socket, gameState }) {
         this.playerID = socket.id;
         this.app = new PIXI.Application({
-            resolution: Math.max(window.devicePixelRatio, 2),
+            resizeTo: window,
+            resolution: window.devicePixelRatio || 1,
+            autoDensity: true,
             backgroundColor: 0x87C1FF,
         });
         global.__PIXI_APP__ = this.app;
