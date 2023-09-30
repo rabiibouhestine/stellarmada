@@ -41,6 +41,18 @@ export class Game {
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
         }
 
+        this.resize = () => {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+    
+            // Update canvas style dimensions
+            this.app.renderer.view.style.width = `${windowWidth}px`;
+            this.app.renderer.view.style.height = `${windowHeight}px`;
+
+            // Update renderer dimensions
+            this.app.renderer.resize(windowWidth, windowHeight);
+        }
+
         this.resize();
         window.addEventListener('resize', this.resize, this);
     }
@@ -117,18 +129,5 @@ export class Game {
         }
       
         return players;
-    }
-
-
-    resize = () => {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-
-        // Update canvas style dimensions
-        this.app.renderer.view.style.width = `${windowWidth}px`;
-        this.app.renderer.view.style.height = `${windowHeight}px`;
-
-        // Update renderer dimensions
-        this.app.renderer.resize(windowWidth, windowHeight);
     }
 }
