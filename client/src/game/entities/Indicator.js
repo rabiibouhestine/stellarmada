@@ -30,12 +30,6 @@ export class Indicator {
             this.sprite.x = -40;
             this.container.addChild(this.sprite);
         }
-        
-        // this.graphic = new PIXI.Graphics();
-        // this.graphic.beginFill(0x000000);
-        // this.graphic.drawRoundedRect(-50, -25, 100, 50, 20);
-        // this.graphic.endFill();
-        // this.container.addChild(this.graphic);
 
         // Add container to app stage
         app.stage.addChild(this.container);
@@ -43,6 +37,6 @@ export class Indicator {
 
     setValue(value) {
         this.value = value;
-        this.text.text = value;
+        this.text.text = Math.max(0, value);
     }
 }

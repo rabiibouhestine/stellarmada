@@ -15,10 +15,11 @@ import redBtnImg from '../assets/images/red_button.png';
 import yellowBtnImg from '../assets/images/yellow_button.png';
 
 export class Player {
-    constructor(app, sheet, state, positions, isPlayer) {
+    constructor(app, sheet, state, positions, damageIndicator, isPlayer) {
         this.app = app;
         this.sheet = sheet;
         this.positions = positions;
+        this.damageIndicator = damageIndicator;
         this.isPlayer = isPlayer;
         
         this.cardsContainer = new PIXI.Container();
@@ -36,11 +37,8 @@ export class Player {
         this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
         this.stance = "waiting";
-        this.attackIndicator = new Indicator(app, positions.attackIndicator, swordImage, 0, true);
-        this.damageValue = 0;
 
         this.confirmButton = new Button(app, positions.confirmButton, yellowBtnImg, hourImage, "", false, isPlayer);
-        this.discardIndicator = new Indicator(app, positions.discardIndicator, null, 0, isPlayer);
 
         this.attackSelection = [];
         this.discardSelection = [];
@@ -48,16 +46,8 @@ export class Player {
         this.setStance(state.stance);
     }
 
-    setDiscardValue(value) {
-        this.discardIndicator.setValue(value);
-    }
-
-    setAttackValue(value) {
-        this.attackIndicator.setValue(value);
-    }
-
     setDamageValue(value) {
-        this.damageValue = value;
+        this.damageIndicator.setValue(value);
     }
 
     createCards(locationState, isPlayer, startPosition) {
@@ -125,20 +115,21 @@ export class Player {
                 return accumulator + card.value;
             }, 0);
             const hasClubs = cardSelection.some(card => card.suit === "C");
-            this.setAttackValue(hasClubs? 2*sum : sum);
+            this.setDamageValue(hasClubs? 2*sum : sum);
         }
 
         if (this.stance === "discarding") {
-            const sum = cardSelection.reduce((accumulator, card) => {
-                return accumulator + card.value;
-            }, 0);
-            this.setDiscardValue(sum);
+            if (card.selected) {
+                this.setDamageValue(this.damageIndicator.value - card.value);
+            } else {
+                this.setDamageValue(this.damageIndicator.value + card.value);
+            }
         }
 
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
         const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsShield];
-        notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.canDiscardMore()); });
+        notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.damageIndicator.value > 0); });
 
         // Update confirm button
         if (this.stance === "attacking") {
@@ -149,7 +140,7 @@ export class Player {
             }
         }
         if (this.stance === "discarding") {
-            if (this.discardIndicator.value >= this.damageValue) {
+            if (this.damageIndicator.value <= 0) {
                 this.confirmButton.enable();
             } else {
                 this.confirmButton.disable();
@@ -194,15 +185,8 @@ export class Player {
                 this.jokerRight.setSelectable(false);
         }
 
-        this.setDiscardValue(0);
         this.attackSelection = [];
         this.discardSelection = [];
-    }
-
-    canDiscardMore() {
-        // Calculate the sum of values of selected cards
-        const totalValue = this.discardSelection.reduce((sum, card) => sum + card.value, 0);
-        return totalValue < this.damageValue;
     }
 
     canCardAttack(card) {

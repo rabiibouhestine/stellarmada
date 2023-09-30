@@ -24,5 +24,8 @@
         "attackIndicator": {"x":1000, "y":370},
         "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":1200, "y":500}
+    },
+    "field": {
+        "damageIndicator": {"x":300, "y":370}
     }
 }

@@ -1,11 +1,13 @@
 import * as PIXI from "pixi.js";
 
+import swordImage from './assets/images/sword.png';
 import cardsImage from './assets/images/cards.png';
 import cardsSheet from './assets/mappings/cards.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
+import { Indicator } from "./entities/Indicator";
 
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
@@ -25,7 +27,8 @@ export class Game {
         canvasRef.current.appendChild(this.app.view);
 
         this.board = new Board(this.app);
-        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions)
+        this.damageIndicator = new Indicator(this.app, positions.field.damageIndicator, swordImage, gameState.turn.damage, true);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
 
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
@@ -33,12 +36,9 @@ export class Game {
             // Get game turn state
             const turnPlayerID = gameState.turn.playerID;
             const stance = gameState.turn.stance;
-            const damage = gameState.turn.damage;
 
             // Update player states
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
-            player.setAttackValue(this.playerID === turnPlayerID? damage : 0);
-            player.setDamageValue(this.playerID === turnPlayerID? 0 : damage);
         }
 
         this.resize();
@@ -50,6 +50,7 @@ export class Game {
     }
 
     update(data) {
+        this.damageIndicator.setValue(data.turn.damage);
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
@@ -69,11 +70,8 @@ export class Game {
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
             const stance = data.turn.stance;
-            const damage = data.turn.damage;
 
             // Update player states
-            player.setAttackValue(key === turnPlayerID? 0 : damage);
-            player.setDamageValue(key === turnPlayerID? damage : 0);
             player.setStance(key === turnPlayerID? stance : "waiting");
         }
     }
@@ -96,7 +94,7 @@ export class Game {
         this.players[this.playerID].jokerRight.sprite.on('pointerdown', event);
     }
 
-    createPlayers(app, sheet, playerID, gameState, positions) {
+    createPlayers(app, sheet, playerID, gameState, positions, damageIndicator) {
         const players = {};
         const keys = Object.keys(gameState.players);
       
@@ -108,14 +106,14 @@ export class Game {
         const secondPlayerKey = keys[1];
       
         if (firstPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, true);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, false);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, true);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, false);
         } else if (secondPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, true);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, true);
         } else {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, false);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, false);
         }
       
         return players;
