@@ -39,10 +39,13 @@ function RoomLobby({ socket }) {
     return (
         <div className="flex items-center justify-center h-screen bg-blue-300">
             <div className='grid justify-items-center'>
-                <div className='flex justify-between w-1/3'>
+                <div className='flex items-center justify-between w-1/3'>
                     <div className={playerDotClass}>
                         <img className='w-12 h-12 mx-auto' src={playerIcon}></img>
                     </div>
+                    <h1 className='text-xl text-center text-slate-100 font-black'>
+                        VS
+                    </h1>
                     <div className={playerDotClass}>
                         <img className='w-12 h-12 mx-auto' src={playerIcon}></img>
                     </div>
