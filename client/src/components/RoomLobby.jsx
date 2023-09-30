@@ -8,8 +8,8 @@ function RoomLobby({ socket }) {
     const params = useParams();
     const navigate = useNavigate();
     const [isReady, setIsReady] = useState(false);
-    const [playerDotClass, setplayerDotClass] = useState("");
     const [readyBtnClass, setReadyBtnClass] = useState("");
+    const [playersNb, setPlayersNb] = useState(0);
 
     const handleReady = () => {
         const isCurrentReady = !isReady;
@@ -18,16 +18,17 @@ function RoomLobby({ socket }) {
     }
 
     const handleLeave = () => {
+        socket.emit("leftRoom");
         navigate("/");
     }
 
     useEffect(() => {
-        setplayerDotClass(
-            isReady?
-            "flex justify-center items-center rounded-full w-16 h-16 bg-emerald-500"
-            :
-            "flex justify-center items-center rounded-full w-16 h-16 bg-orange-500"
-        );
+        socket.on("roomUpdate", (data) => {
+            setPlayersNb(data.playersNb);
+        });
+    }, [socket]);
+
+    useEffect(() => {
         setReadyBtnClass(
             isReady?
             "w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-orange-500 hover:bg-orange-700"
@@ -40,18 +41,28 @@ function RoomLobby({ socket }) {
         <div className="flex items-center justify-center h-screen bg-blue-300">
             <div className='grid justify-items-center'>
                 <div className='flex items-center justify-between w-1/3'>
-                    <div className={playerDotClass}>
+                    <div className="flex justify-center items-center rounded-full w-16 h-16 bg-sky-600">
                         <img className='w-12 h-12 mx-auto' src={playerIcon}></img>
                     </div>
-                    <h1 className='text-xl text-center text-slate-100 font-black'>
-                        VS
-                    </h1>
-                    <div className={playerDotClass}>
-                        <img className='w-12 h-12 mx-auto' src={playerIcon}></img>
-                    </div>
+                    <h1 className='text-xl text-center text-slate-100 font-black'> VS </h1>
+                    {
+                        playersNb === 2 ?
+                        <div className="flex justify-center items-center rounded-full w-16 h-16 bg-rose-600">
+                            <img className='w-12 h-12 mx-auto' src={playerIcon}></img>
+                        </div>
+                        :
+                        <div className="flex justify-center items-center rounded-full w-16 h-16 bg-slate-400"></div>
+                    }
                 </div>
                 <div className='mb-15 p-6'>
-                    <h1 className="text-2xl text-center text-slate-100 font-black drop-shadow-md">WAITING FOR EVERYONE TO BE READY</h1>
+                    <h1 className="text-2xl text-center text-slate-100 font-black drop-shadow-md">
+                    {
+                        playersNb === 2 ?
+                        "WAITING FOR EVERYONE TO BE READY"
+                        :
+                        "WAITING FOR OPPONENT TO JOIN"
+                    }
+                    </h1>
                 </div>
                 <div className='mb-15 p-6'>
                     <h1 className="text-2xl text-center text-slate-100 font-black drop-shadow-md">Invite Link: {window.location.href}</h1>

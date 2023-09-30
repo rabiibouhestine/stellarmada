@@ -71,6 +71,9 @@ io.on("connection", (socket) => {
 
         // emit response event
         socket.emit("joinRoomResponse", { room: room, success: true });
+
+        // emit room update event
+        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(room.players).length })
     })
 
     socket.on("handleReady", (data) => {
@@ -112,6 +115,23 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
+    socket.on("leftRoom", () => {
+        // if user was in a room
+        const userRoom = users[socket.id].room;
+        if (userRoom !== null) {
+            // remove user from room
+            delete rooms[userRoom].players[socket.id];
+
+            // emit room update event
+            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+
+            // delete room if empty
+            if (Object.keys(rooms[userRoom].players).length == 0) {
+                delete rooms[userRoom];
+            }
+        }
+    })
+
     socket.on("disconnect", () => {
         console.log("User disconnected", socket.id);
 
@@ -120,6 +140,10 @@ io.on("connection", (socket) => {
         if (userRoom !== null) {
             // remove user from room
             delete rooms[userRoom].players[socket.id];
+
+            // emit room update event
+            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+
             // delete room if empty
             if (Object.keys(rooms[userRoom].players).length == 0) {
                 delete rooms[userRoom];
