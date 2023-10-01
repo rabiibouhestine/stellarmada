@@ -12,12 +12,12 @@ export class Board {
         enemy.endFill();
         app.stage.addChild(enemy);
         
-        // Draw Field Board
-        const field = new PIXI.Graphics();
-        field.beginFill(0x7393B3);
-        field.drawRect(200, 300, 868, 140);
-        field.endFill();
-        app.stage.addChild(field);
+        // Draw Frontline Board
+        const frontline = new PIXI.Graphics();
+        frontline.beginFill(0x7393B3);
+        frontline.drawRect(200, 300, 868, 140);
+        frontline.endFill();
+        app.stage.addChild(frontline);
 
         // Draw Player Board
         const player = new PIXI.Graphics();

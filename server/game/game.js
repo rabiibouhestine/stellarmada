@@ -58,8 +58,8 @@ const initPlayerState = (deck) => {
         cards: {
             hand: hand,
             handCount: handMax,
-            field: [],
-            shield: [],
+            frontline: [],
+            rearguard: [],
             tavern: tavern,
             graveyard: [],
             castle: [],
@@ -119,10 +119,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }, 0);
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
-        // Move selected cards from hand to field
+        // Move selected cards from hand to frontline
         playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
         playerCards.handCount = playerCards.hand.length;
-        playerCards.field = playerHandSelection;
+        playerCards.frontline = playerHandSelection;
 
         // Add move to game action
         gameAction.moves[playerID].push(
@@ -130,7 +130,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 cardsNames: playerHandSelection,
                 nCards: playerHandSelection.length,
                 location: "hand",
-                destination: "field"
+                destination: "frontline"
             }
         );
 
@@ -178,10 +178,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const secondPlayerShieldValue = gamestate.players[secondPlayerID].cards.shield.reduce((accumulator, card) => {
+        const secondPlayerRearguardValue = gamestate.players[secondPlayerID].cards.rearguard.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerShieldValue;
+        const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerRearguardValue;
         const secondPlayerJokerLeft = gamestate.players[secondPlayerID].cards.jokerLeft;
         const secondPlayerJokerRight = gamestate.players[secondPlayerID].cards.jokerRight;
         const secondPlayerJokersDead = !secondPlayerJokerLeft && !secondPlayerJokerRight;
@@ -196,51 +196,51 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (gamestate.turn.stance === "discarding") {
         const playerCards = gamestate.players[playerID].cards
         const playerHandSelection = playerSelection.hand;
-        const playerShieldSelection = playerSelection.shield;
+        const playerRearguardSelection = playerSelection.rearguard;
 
         // If player selection does not make sense we exit
         const isHandSelectionScam = playerHandSelection.some(card => !playerCards.hand.includes(card));
-        const isShieldSelectionScam = playerShieldSelection.some(card => !playerCards.shield.includes(card));
+        const isRearguardSelectionScam = playerRearguardSelection.some(card => !playerCards.rearguard.includes(card));
         const handSelectionDamage = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const shieldSelectionDamage = playerShieldSelection.reduce((accumulator, card) => {
+        const rearguardSelectionDamage = playerRearguardSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const selectionDamage = handSelectionDamage + shieldSelectionDamage;
+        const selectionDamage = handSelectionDamage + rearguardSelectionDamage;
         const isDamageEnough = selectionDamage >= gamestate.turn.damage;
-        if (isHandSelectionScam || isShieldSelectionScam || !isDamageEnough)
+        if (isHandSelectionScam || isRearguardSelectionScam || !isDamageEnough)
             return;
 
-        // Discard Royals from Shield
-        const shieldHasRoyals = playerShieldSelection.some(card => cardsMapping[card].isCastle === true);
-        if (shieldHasRoyals) {
-            const shieldSelectedRoyals = playerShieldSelection.filter(card => cardsMapping[card].isCastle === true);
-            playerCards.shield = playerCards.shield.filter(card => !shieldSelectedRoyals.includes(card));
-            playerCards.castle.push(...shieldSelectedRoyals);
+        // Discard Royals from Rearguard
+        const rearguardHasRoyals = playerRearguardSelection.some(card => cardsMapping[card].isCastle === true);
+        if (rearguardHasRoyals) {
+            const rearguardSelectedRoyals = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === true);
+            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedRoyals.includes(card));
+            playerCards.castle.push(...rearguardSelectedRoyals);
 
             gameAction.moves[playerID].push(
                 {
-                    cardsNames: shieldSelectedRoyals,
-                    nCards: shieldSelectedRoyals.length,
-                    location: "shield",
+                    cardsNames: rearguardSelectedRoyals,
+                    nCards: rearguardSelectedRoyals.length,
+                    location: "rearguard",
                     destination: "castle"
                 }
             );
         }
 
-        // Discard non Royals from Shield
-        const shieldHasStandards = playerShieldSelection.some(card => cardsMapping[card].isCastle === false);
-        if (shieldHasStandards) {
-            const shieldSelectedStandards = playerShieldSelection.filter(card => cardsMapping[card].isCastle === false);
-            playerCards.shield = playerCards.shield.filter(card => !shieldSelectedStandards.includes(card));
-            playerCards.graveyard.push(...shieldSelectedStandards);
+        // Discard non Royals from Rearguard
+        const rearguardHasStandards = playerRearguardSelection.some(card => cardsMapping[card].isCastle === false);
+        if (rearguardHasStandards) {
+            const rearguardSelectedStandards = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === false);
+            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedStandards.includes(card));
+            playerCards.graveyard.push(...rearguardSelectedStandards);
 
             gameAction.moves[playerID].push(
                 {
-                    cardsNames: shieldSelectedStandards,
-                    nCards: shieldSelectedStandards.length,
-                    location: "shield",
+                    cardsNames: rearguardSelectedStandards,
+                    nCards: rearguardSelectedStandards.length,
+                    location: "rearguard",
                     destination: "graveyard"
                 }
             );
@@ -283,60 +283,60 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // Get second player cards
         const secondPlayerCards = gamestate.players[secondPlayerID].cards;
 
-        // Move cards from field to secondPlayer shield
-        const isSecondPlayerShieldFull = secondPlayerCards.shield.length == 2;
-        const secondPlayerFieldHasSpades = secondPlayerCards.field.some(card => cardsMapping[card].suit === "S");
-        if (!isSecondPlayerShieldFull && secondPlayerFieldHasSpades) {
-            // Sort the field array by value in descending order
-            secondPlayerCards.field.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
+        // Move cards from frontline to secondPlayer rearguard
+        const isSecondPlayerRearguardFull = secondPlayerCards.rearguard.length == 2;
+        const secondPlayerFrontlineHasSpades = secondPlayerCards.frontline.some(card => cardsMapping[card].suit === "S");
+        if (!isSecondPlayerRearguardFull && secondPlayerFrontlineHasSpades) {
+            // Sort the frontline array by value in descending order
+            secondPlayerCards.frontline.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
 
-            // Calculate how many cards can be moved to the shield
-            const nCardsToMove = Math.min(2 - secondPlayerCards.shield.length, secondPlayerCards.field.length);
-            const cardsToMove = secondPlayerCards.field.slice(-nCardsToMove);
+            // Calculate how many cards can be moved to the rearguard
+            const nCardsToMove = Math.min(2 - secondPlayerCards.rearguard.length, secondPlayerCards.frontline.length);
+            const cardsToMove = secondPlayerCards.frontline.slice(-nCardsToMove);
 
-            // Move the cards from the field to the shield
-            secondPlayerCards.shield.push(...cardsToMove);
-            secondPlayerCards.field = secondPlayerCards.field.filter(card => !cardsToMove.includes(card));
+            // Move the cards from the frontline to the rearguard
+            secondPlayerCards.rearguard.push(...cardsToMove);
+            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !cardsToMove.includes(card));
 
             gameAction.moves[secondPlayerID].push(
                 {
                     cardsNames: cardsToMove,
                     nCards: cardsToMove.length,
-                    location: "field",
-                    destination: "shield"
+                    location: "frontline",
+                    destination: "rearguard"
                 }
             );
         }
 
-        // Discard second player Royals from Field
-        const secondPlayerFieldHasRoyals = secondPlayerCards.field.some(card => cardsMapping[card].isCastle === true);
-        if (secondPlayerFieldHasRoyals) {
-            const secondPlayerFieldRoyals = secondPlayerCards.field.filter(card => cardsMapping[card].isCastle === true);
-            secondPlayerCards.field = secondPlayerCards.field.filter(card => !secondPlayerFieldRoyals.includes(card));
-            secondPlayerCards.castle.push(...secondPlayerFieldRoyals);
+        // Discard second player Royals from Frontline
+        const secondPlayerFrontlineHasRoyals = secondPlayerCards.frontline.some(card => cardsMapping[card].isCastle === true);
+        if (secondPlayerFrontlineHasRoyals) {
+            const secondPlayerFrontlineRoyals = secondPlayerCards.frontline.filter(card => cardsMapping[card].isCastle === true);
+            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !secondPlayerFrontlineRoyals.includes(card));
+            secondPlayerCards.castle.push(...secondPlayerFrontlineRoyals);
 
             gameAction.moves[secondPlayerID].push(
                 {
-                    cardsNames: secondPlayerFieldRoyals,
-                    nCards: secondPlayerFieldRoyals.length,
-                    location: "field",
+                    cardsNames: secondPlayerFrontlineRoyals,
+                    nCards: secondPlayerFrontlineRoyals.length,
+                    location: "frontline",
                     destination: "castle"
                 }
             );
         }
         
-        // Discard second player non Royals from Field
-        const secondPlayerFieldHasStandards = secondPlayerCards.field.some(card => cardsMapping[card].isCastle === false);
-        if (secondPlayerFieldHasStandards) {
-            const secondPlayerFieldStandards = secondPlayerCards.field.filter(card => cardsMapping[card].isCastle === false);
-            secondPlayerCards.field = secondPlayerCards.field.filter(card => !secondPlayerFieldStandards.includes(card));
-            secondPlayerCards.graveyard.push(...secondPlayerFieldStandards);
+        // Discard second player non Royals from Frontline
+        const secondPlayerFrontlineHasStandards = secondPlayerCards.frontline.some(card => cardsMapping[card].isCastle === false);
+        if (secondPlayerFrontlineHasStandards) {
+            const secondPlayerFrontlineStandards = secondPlayerCards.frontline.filter(card => cardsMapping[card].isCastle === false);
+            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !secondPlayerFrontlineStandards.includes(card));
+            secondPlayerCards.graveyard.push(...secondPlayerFrontlineStandards);
 
             gameAction.moves[secondPlayerID].push(
                 {
-                    cardsNames: secondPlayerFieldStandards,
-                    nCards: secondPlayerFieldStandards.length,
-                    location: "field",
+                    cardsNames: secondPlayerFrontlineStandards,
+                    nCards: secondPlayerFrontlineStandards.length,
+                    location: "frontline",
                     destination: "graveyard"
                 }
             );
@@ -447,10 +447,10 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
         const playerHandValue = gamestate.players[playerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const playerShieldValue = gamestate.players[playerID].cards.shield.reduce((accumulator, card) => {
+        const playerRearguardValue = gamestate.players[playerID].cards.rearguard.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const playerMaxDiscardValue = playerHandValue + playerShieldValue;
+        const playerMaxDiscardValue = playerHandValue + playerRearguardValue;
         const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
         const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
         const playerJokersDead = !playerJokerLeft && !playerJokerRight;

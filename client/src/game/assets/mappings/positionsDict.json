@@ -1,8 +1,8 @@
 {
     "top": {
         "hand": {"x": 700, "y": 70},
-        "field": {"x": 700, "y": 370},
-        "shield": {"x": 365, "y": 220},
+        "frontline": {"x": 700, "y": 370},
+        "rearguard": {"x": 365, "y": 220},
         "tavern": {"x": 900, "y": 220},
         "graveyard": {"x": 1000, "y": 220},
         "castle": {"x": 510, "y": 220},
@@ -14,8 +14,8 @@
     },
     "bottom": {
         "hand": {"x": 700, "y": 670},
-        "field": {"x": 700, "y": 370},
-        "shield": {"x": 1000, "y": 520},
+        "frontline": {"x": 700, "y": 370},
+        "rearguard": {"x": 1000, "y": 520},
         "tavern": {"x": 360, "y": 520},
         "graveyard": {"x": 260, "y": 520},
         "castle": {"x": 760, "y": 520},
@@ -25,7 +25,7 @@
         "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":1200, "y":500}
     },
-    "field": {
+    "frontline": {
         "damageIndicator": {"x":300, "y":370}
     }
 }

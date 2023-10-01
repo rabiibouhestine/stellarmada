@@ -31,8 +31,8 @@ export class Player {
         this.graveyard = new Deck(app, sheet, "B1", this.positions.graveyard, state.cards.graveyard);
         this.castle = new Deck(app, sheet, "B1", this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
-        this.field = this.createCards(state.cards.field, true, this.positions.field);
-        this.shield = this.createCards(state.cards.shield, true, this.positions.shield);
+        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline);
+        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard);
         this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
         this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
@@ -88,8 +88,8 @@ export class Player {
     }
 
     repositionBoard() {
-        this.repositionCards(this.field, this.positions.field);
-        this.repositionCards(this.shield, this.positions.shield);
+        this.repositionCards(this.frontline, this.positions.frontline);
+        this.repositionCards(this.rearguard, this.positions.rearguard);
         this.repositionCards(this.hand, this.positions.hand);
         this.graveyard.repositionCards();
         this.tavern.repositionCards();
@@ -127,8 +127,8 @@ export class Player {
         }
 
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
-        const notSelectedCardsShield = this.shield.filter(card => !cardSelection.includes(card));
-        const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsShield];
+        const notSelectedCardsRearguard = this.rearguard.filter(card => !cardSelection.includes(card));
+        const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsRearguard];
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.damageIndicator.value > 0); });
 
         // Update confirm button
@@ -153,7 +153,7 @@ export class Player {
         const isAttacking = this.stance === "attacking";
         const isDiscarding = this.stance === "discarding";
     
-        this.field.forEach(card => {
+        this.frontline.forEach(card => {
             card.setSelected(false);
             card.setSelectable(false);
         });
@@ -163,7 +163,7 @@ export class Player {
             card.setSelectable(this.isPlayer && (isAttacking || isDiscarding));
         });
     
-        this.shield.forEach(card => {
+        this.rearguard.forEach(card => {
             card.setSelected(false);
             card.setSelectable(this.isPlayer && isDiscarding);
         });
@@ -233,9 +233,9 @@ export class Player {
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
    * @param {number} nCards - The number of cards to move.
    * @param {string} location - The current location of cards.
-   * Must be one of "hand", "field", "shield", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
    * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "field", "shield", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
    */
     moveCards(cardsNames, nCards, location, destination) {
 
@@ -262,38 +262,38 @@ export class Player {
             }
         }
 
-        if (location === "field" && destination === "graveyard") {
-            const cards = this.field.filter(card => cardsNames.includes(card.name));
+        if (location === "frontline" && destination === "graveyard") {
+            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
-            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
             this.graveyard.setSize(this.graveyard.size + nCards);
         }
 
-        if (location === "field" && destination === "castle") {
-            const cards = this.field.filter(card => cardsNames.includes(card.name));
+        if (location === "frontline" && destination === "castle") {
+            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
-            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
             this.castle.setSize(this.castle.size + nCards);
         }
 
-        if (location === "shield" && destination === "graveyard") {
-            const cards = this.shield.filter(card => cardsNames.includes(card.name));
+        if (location === "rearguard" && destination === "graveyard") {
+            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
-            this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
+            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
             this.graveyard.setSize(this.graveyard.size + nCards);
         }
 
-        if (location === "shield" && destination === "castle") {
-            const cards = this.shield.filter(card => cardsNames.includes(card.name));
+        if (location === "rearguard" && destination === "castle") {
+            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
-            this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
+            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
             this.castle.setSize(this.castle.size + nCards);
         }
 
-        if (location === "field" && destination === "shield") {
-            const cards = this.field.filter(card => cardsNames.includes(card.name));
-            this.shield.push(...cards);
-            this.field = this.field.filter(card => !cardsNames.includes(card.name));
+        if (location === "frontline" && destination === "rearguard") {
+            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
+            this.rearguard.push(...cards);
+            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
         }
 
         if (location === "hand" && destination === "tavern") {
@@ -341,18 +341,18 @@ export class Player {
             }
         }
 
-        if (location === "hand" && destination === "field") {
+        if (location === "hand" && destination === "frontline") {
             this.handCount -= nCards;
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.field.push(...cards);
+                this.frontline.push(...cards);
             } else {
                 const cards = this.hand.slice(-nCards);
                 this.hand.splice(-nCards);
                 for (const card in cards) {
                     cards[card].reveal(cardsNames[card]);
-                    this.field.push(cards[card]);
+                    this.frontline.push(cards[card]);
                 }
             }
         }
