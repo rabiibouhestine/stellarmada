@@ -8,6 +8,11 @@ const deck = [
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
 ];
 
+// const deck = [
+//     'AH', '2H', '3H', '4H', '5H', '6H', '7H',
+//     'AC', '2C', '3C', '4C', '5C', '6C', '7C'
+// ];
+
 const handMax = 7;
 
 const initGameState = (room) => {
@@ -168,6 +173,23 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             stance: "discarding",
             damage: playerSelectionValue
         }
+
+        // If second player can't discard the attack, current player wins
+        const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const secondPlayerShieldValue = gamestate.players[secondPlayerID].cards.shield.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerShieldValue;
+        const secondPlayerJokerLeft = gamestate.players[secondPlayerID].cards.jokerLeft;
+        const secondPlayerJokerRight = gamestate.players[secondPlayerID].cards.jokerRight;
+        const secondPlayerJokersDead = !secondPlayerJokerLeft && !secondPlayerJokerRight;
+
+        if (secondPlayerMaxDiscardValue < playerSelectionValue &&  secondPlayerJokersDead) {
+            gameAction.isGameOver = true;
+            gameAction.winnerID = playerID;
+        }
     }
 
     // If player is discarding
@@ -326,10 +348,21 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             stance: "attacking",
             damage: 0
         }
+
+        // If current player has no cards in hand after discard, secondPlayer wins
+        const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
+        const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
+        const playerJokersDead = !playerJokerLeft && !playerJokerRight;
+
+        if (gamestate.players[playerID].cards.hand.length === 0 &&  playerJokersDead) {
+            gameAction.isGameOver = true;
+            gameAction.winnerID = secondPlayerID;
+        }
     }
 
     // Update game state
     gamestate.isGameOver = gameAction.isGameOver;
+    gamestate.winnerID = gameAction.winnerID;
     gamestate.turn = gameAction.turn;
 
     return gameAction;
@@ -358,6 +391,9 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
 
     // Get the players ids
     const playersIDS = Object.keys(gamestate.players);
+
+    // Get the second player id
+    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
 
     // Initialise game action
     const gameAction = {
@@ -405,6 +441,29 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
             destination: "hand"
         }
     );
+
+    // If player still can't answer attack after both jokers die, second player wins
+    if (gamestate.turn.stance === "discarding") {
+        const playerHandValue = gamestate.players[playerID].cards.hand.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const playerShieldValue = gamestate.players[playerID].cards.shield.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const playerMaxDiscardValue = playerHandValue + playerShieldValue;
+        const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
+        const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
+        const playerJokersDead = !playerJokerLeft && !playerJokerRight;
+
+        if (playerMaxDiscardValue < gamestate.turn.damage &&  playerJokersDead) {
+            gameAction.isGameOver = true;
+            gameAction.winnerID = secondPlayerID;
+        }
+    }
+
+    // Update gameAction
+    gamestate.isGameOver = gameAction.isGameOver;
+    gamestate.winnerID = gameAction.winnerID;
 
     return gameAction;
 }

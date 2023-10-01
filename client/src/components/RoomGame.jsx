@@ -1,12 +1,32 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Modal from 'react-modal';
 
 import { Game } from '../game/Game';
+
+
+const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+};
+
+Modal.setAppElement('#root');
+
+
 
 function RoomGame({ socket }) {
     const canvasRef = useRef(null);
     const gameRef = useRef(null);
     const params = useParams();
+    const [isGameOver, setIsGameOver] = useState(false);
+    const [winnerID, setWinnerID] = useState("");
+
 
     useEffect(() => {
         socket.emit("gameStateRequest", { roomID: params.roomID });
@@ -24,6 +44,8 @@ function RoomGame({ socket }) {
 
         socket.on("gameActionResponse", (data) => {
             gameRef.current.update(data.gameAction);
+            setIsGameOver(data.gameAction.isGameOver);
+            setWinnerID(data.gameAction.winnerID);
         });
 
         return () => {
@@ -60,7 +82,22 @@ function RoomGame({ socket }) {
     }
 
     return (
-        <div ref={canvasRef} />
+        <div ref={canvasRef} >
+            <Modal
+                isOpen={isGameOver}
+                // onAfterOpen={afterOpenModal}
+                // onRequestClose={closeModal}
+                style={customStyles}
+                contentLabel="Game Over"
+            >
+                {
+                    winnerID === socket.id?
+                    <h2>You Won !!!</h2>
+                    :
+                    <h2>You lost...</h2>
+                }
+            </Modal>
+        </div>
     );
 }
 
