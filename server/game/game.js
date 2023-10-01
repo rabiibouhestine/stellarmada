@@ -429,9 +429,10 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
     );
 
     // Shuffle tavern and draw handMax cards
-    const shuffledDeck =  shuffleDeck(tavern);
+    const oldTavern = [...tavern];
+    const shuffledDeck =  shuffleDeck(oldTavern);
     gamestate.players[playerID].cards.hand = shuffledDeck.slice(-handMax);
-    gamestate.players[playerID].cards.tavern = shuffledDeck.slice(0, shuffledDeck.length - handMax);
+    gamestate.players[playerID].cards.tavern = shuffledDeck.slice(0, -handMax);
     const newHand = gamestate.players[playerID].cards.hand;
     gameAction.moves[playerID].push(
         {
