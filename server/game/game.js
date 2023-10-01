@@ -61,7 +61,7 @@ const initPlayerState = (deck) => {
             field: [],
             shield: [],
             tavern: tavern,
-            cemetry: [],
+            graveyard: [],
             castle: [],
             jokerLeft: true,
             jokerRight: true
@@ -134,16 +134,16 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             }
         );
 
-        // If Hearts in selection, move cards from cemetry to tavern
-        if (hasHearts && playerCards.cemetry.length !== 0) {
-            const revivedCards = playerCards.cemetry.splice(0, playerSelectionValue);
+        // If Hearts in selection, move cards from graveyard to tavern
+        if (hasHearts && playerCards.graveyard.length !== 0) {
+            const revivedCards = playerCards.graveyard.splice(0, playerSelectionValue);
             playerCards.tavern.unshift(...revivedCards);
 
             gameAction.moves[playerID].push(
                 {
                     cardsNames: [],
                     nCards: revivedCards.length,
-                    location: "cemetry",
+                    location: "graveyard",
                     destination: "tavern"
                 }
             );
@@ -234,14 +234,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (shieldHasStandards) {
             const shieldSelectedStandards = playerShieldSelection.filter(card => cardsMapping[card].isCastle === false);
             playerCards.shield = playerCards.shield.filter(card => !shieldSelectedStandards.includes(card));
-            playerCards.cemetry.push(...shieldSelectedStandards);
+            playerCards.graveyard.push(...shieldSelectedStandards);
 
             gameAction.moves[playerID].push(
                 {
                     cardsNames: shieldSelectedStandards,
                     nCards: shieldSelectedStandards.length,
                     location: "shield",
-                    destination: "cemetry"
+                    destination: "graveyard"
                 }
             );
         }
@@ -268,14 +268,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (handHasStandards) {
             const handSelectedStandards = playerHandSelection.filter(card => cardsMapping[card].isCastle === false);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
-            playerCards.cemetry.push(...handSelectedStandards);
+            playerCards.graveyard.push(...handSelectedStandards);
 
             gameAction.moves[playerID].push(
                 {
                     cardsNames: handSelectedStandards,
                     nCards: handSelectedStandards.length,
                     location: "hand",
-                    destination: "cemetry"
+                    destination: "graveyard"
                 }
             );
         }
@@ -330,14 +330,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (secondPlayerFieldHasStandards) {
             const secondPlayerFieldStandards = secondPlayerCards.field.filter(card => cardsMapping[card].isCastle === false);
             secondPlayerCards.field = secondPlayerCards.field.filter(card => !secondPlayerFieldStandards.includes(card));
-            secondPlayerCards.cemetry.push(...secondPlayerFieldStandards);
+            secondPlayerCards.graveyard.push(...secondPlayerFieldStandards);
 
             gameAction.moves[secondPlayerID].push(
                 {
                     cardsNames: secondPlayerFieldStandards,
                     nCards: secondPlayerFieldStandards.length,
                     location: "field",
-                    destination: "cemetry"
+                    destination: "graveyard"
                 }
             );
         }

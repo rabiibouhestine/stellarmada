@@ -28,7 +28,7 @@ export class Player {
         
         this.handCount = state.cards.handCount;
         this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.cards.tavern);
-        this.cemetry = new Deck(app, sheet, "B1", this.positions.cemetry, state.cards.cemetry);
+        this.graveyard = new Deck(app, sheet, "B1", this.positions.graveyard, state.cards.graveyard);
         this.castle = new Deck(app, sheet, "B1", this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
         this.field = this.createCards(state.cards.field, true, this.positions.field);
@@ -91,7 +91,7 @@ export class Player {
         this.repositionCards(this.field, this.positions.field);
         this.repositionCards(this.shield, this.positions.shield);
         this.repositionCards(this.hand, this.positions.hand);
-        this.cemetry.repositionCards();
+        this.graveyard.repositionCards();
         this.tavern.repositionCards();
         this.castle.repositionCards();
     }
@@ -233,16 +233,16 @@ export class Player {
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
    * @param {number} nCards - The number of cards to move.
    * @param {string} location - The current location of cards.
-   * Must be one of "hand", "field", "shield", "cemetry", "tavern", "castle".
+   * Must be one of "hand", "field", "shield", "graveyard", "tavern", "castle".
    * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "field", "shield", "cemetry", "tavern", "castle".
+   * Must be one of "hand", "field", "shield", "graveyard", "tavern", "castle".
    */
     moveCards(cardsNames, nCards, location, destination) {
 
-        if (location === "cemetry" && destination === "tavern") {
-            const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.cemetry);
+        if (location === "graveyard" && destination === "tavern") {
+            const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.graveyard);
             this.tavern.cardsToGet.push(card);
-            this.cemetry.setSize(this.cemetry.size - nCards);
+            this.graveyard.setSize(this.graveyard.size - nCards);
             this.tavern.setSize(this.tavern.size + nCards);
         }
 
@@ -262,11 +262,11 @@ export class Player {
             }
         }
 
-        if (location === "field" && destination === "cemetry") {
+        if (location === "field" && destination === "graveyard") {
             const cards = this.field.filter(card => cardsNames.includes(card.name));
-            this.cemetry.cardsToGet.push(...cards);
+            this.graveyard.cardsToGet.push(...cards);
             this.field = this.field.filter(card => !cardsNames.includes(card.name));
-            this.cemetry.setSize(this.cemetry.size + nCards);
+            this.graveyard.setSize(this.graveyard.size + nCards);
         }
 
         if (location === "field" && destination === "castle") {
@@ -276,11 +276,11 @@ export class Player {
             this.castle.setSize(this.castle.size + nCards);
         }
 
-        if (location === "shield" && destination === "cemetry") {
+        if (location === "shield" && destination === "graveyard") {
             const cards = this.shield.filter(card => cardsNames.includes(card.name));
-            this.cemetry.cardsToGet.push(...cards);
+            this.graveyard.cardsToGet.push(...cards);
             this.shield = this.shield.filter(card => !cardsNames.includes(card.name));
-            this.cemetry.setSize(this.cemetry.size + nCards);
+            this.graveyard.setSize(this.graveyard.size + nCards);
         }
 
         if (location === "shield" && destination === "castle") {
@@ -326,18 +326,18 @@ export class Player {
             }
         }
 
-        if (location === "hand" && destination === "cemetry") {
+        if (location === "hand" && destination === "graveyard") {
             this.handCount -= nCards;
-            this.cemetry.setSize(this.cemetry.size + nCards);
+            this.graveyard.setSize(this.graveyard.size + nCards);
 
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.cemetry.cardsToGet.push(...cards);
+                this.graveyard.cardsToGet.push(...cards);
             } else {
                 const cards = this.hand.slice(-nCards);
                 this.hand.splice(-nCards);
-                this.cemetry.cardsToGet.push(...cards);
+                this.graveyard.cardsToGet.push(...cards);
             }
         }
 

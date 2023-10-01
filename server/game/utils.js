@@ -15,12 +15,12 @@ const processGameState = (gameState, playerID) => {
     for (const id of playersIDs) {
         if (id === playerID) {
             processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
-            processedState.players[id].cards.cemetry = gameState.players[id].cards.cemetry.length;
+            processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
             processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
         } else {
             processedState.players[id].cards.hand = [];
             processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
-            processedState.players[id].cards.cemetry = gameState.players[id].cards.cemetry.length;
+            processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
             processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
         }
     }
