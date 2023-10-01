@@ -4,28 +4,14 @@ import Modal from 'react-modal';
 
 import { Game } from '../game/Game';
 
-
-const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-};
-
 Modal.setAppElement('#root');
-
-
 
 function RoomGame({ socket }) {
     const navigate = useNavigate();
     const canvasRef = useRef(null);
     const gameRef = useRef(null);
     const params = useParams();
-    const [isGameOver, setIsGameOver] = useState(false);
+    const [isGameOver, setIsGameOver] = useState(true);
     const [winnerID, setWinnerID] = useState("");
 
 
@@ -94,23 +80,33 @@ function RoomGame({ socket }) {
         <div ref={canvasRef} >
             <Modal
                 isOpen={isGameOver}
-                // onAfterOpen={afterOpenModal}
-                // onRequestClose={closeModal}
-                style={customStyles}
+                className={"flex items-center justify-center h-screen"}
                 contentLabel="Game Over"
             >
-                {
-                    winnerID === socket.id?
-                    <h2>You Won !!!</h2>
-                    :
-                    <h2>You lost...</h2>
-                }
-                <button onClick={handleLeave} >
-                        LEAVE
-                </button>
-                <button onClick={handleRematch} >
-                        Rematch
-                </button>
+                <div className='grid justify-items-center w-2/3'>
+                    <div className='text-4xl text-center text-slate-500 font-black drop-shadow-md'>
+                        {
+                            winnerID === socket.id?
+                            <h2>You Won !!!</h2>
+                            :
+                            <h2>You lost...</h2>
+                        }
+                    </div>
+                    <div className='p-6 flex justify-center '>
+                        <button
+                            className="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+                            onClick={handleLeave}
+                        >
+                            LEAVE
+                        </button>
+                        <button
+                            className="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+                            onClick={handleRematch}
+                        >
+                            REMATCH
+                        </button>
+                    </div>
+                </div>
             </Modal>
         </div>
     );
