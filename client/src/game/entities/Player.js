@@ -4,7 +4,6 @@ import { Deck } from "./Deck";
 import { Card } from "./Card";
 import { Joker } from "./Joker";
 import { Button } from "./Button";
-import { Indicator } from "./Indicator";
 
 import swordImage from '../assets/images/sword.png';
 import skullImage from '../assets/images/skull.png';
