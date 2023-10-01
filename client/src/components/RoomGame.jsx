@@ -11,7 +11,7 @@ function RoomGame({ socket }) {
     const canvasRef = useRef(null);
     const gameRef = useRef(null);
     const params = useParams();
-    const [isGameOver, setIsGameOver] = useState(true);
+    const [isGameOver, setIsGameOver] = useState(false);
     const [winnerID, setWinnerID] = useState("");
 
 
