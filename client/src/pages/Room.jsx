@@ -28,6 +28,10 @@ function Room({ socket }) {
         socket.on("handleReadyResponse", () => {
             setGameStarted(true);
         });
+
+        socket.on("goBackLobbyResponse", () => {
+            setGameStarted(false);
+        });
     }, [socket]);
 
     return (

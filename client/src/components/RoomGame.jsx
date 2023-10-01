@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 
 import { Game } from '../game/Game';
@@ -21,6 +21,7 @@ Modal.setAppElement('#root');
 
 
 function RoomGame({ socket }) {
+    const navigate = useNavigate();
     const canvasRef = useRef(null);
     const gameRef = useRef(null);
     const params = useParams();
@@ -81,6 +82,14 @@ function RoomGame({ socket }) {
         }
     }
 
+    const handleRematch = () => {
+        socket.emit("goBackLobbyRequest", { roomID: params.roomID });
+    }
+
+    const handleLeave = () => {
+        navigate("/");
+    }
+
     return (
         <div ref={canvasRef} >
             <Modal
@@ -96,6 +105,12 @@ function RoomGame({ socket }) {
                     :
                     <h2>You lost...</h2>
                 }
+                <button onClick={handleLeave} >
+                        LEAVE
+                </button>
+                <button onClick={handleRematch} >
+                        Rematch
+                </button>
             </Modal>
         </div>
     );

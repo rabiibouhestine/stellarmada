@@ -108,13 +108,30 @@ io.on("connection", (socket) => {
     socket.on("gameActionRequest", (data) => {
         const gameState = rooms[data.roomID].gameState;
         const gameAction = handleActionRequest(socket.id, data.playerSelection, gameState);
+        if (gameAction.isGameOver) {
+            rooms[data.roomID].gameStarted = false;
+            Object.keys(rooms[data.roomID].players).forEach(playerID => {
+                rooms[data.roomID].players[playerID].isReady = false;
+            });
+        }
         io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
     socket.on("jokerRequest", (data) => {
         const gameState = rooms[data.roomID].gameState;
         const gameAction = handleJokerRequest(socket.id, data.joker, gameState);
+        if (gameAction.isGameOver) {
+            rooms[data.roomID].gameStarted = false;
+            Object.keys(rooms[data.roomID].players).forEach(playerID => {
+                rooms[data.roomID].players[playerID].isReady = false;
+            });
+        }
         io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
+    })
+
+    socket.on("goBackLobbyRequest", (data) => {
+        socket.emit("goBackLobbyResponse");
+        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
     })
 
     socket.on("leftRoom", () => {
