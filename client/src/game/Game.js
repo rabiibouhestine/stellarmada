@@ -58,6 +58,8 @@ export class Game {
 
             // // Update stage scale
             // this.app.stage.scale.set(stageScale);
+
+            // // Center the stage
             // this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
             // this.app.stage.y = (windowHeight - this.app.stage.height ) / 2;
         }
