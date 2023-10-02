@@ -47,12 +47,12 @@ export class Game {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
     
-            // Update canvas style dimensions
-            this.app.renderer.view.style.width = `${windowWidth}px`;
-            this.app.renderer.view.style.height = `${windowHeight}px`;
-
             // Update renderer dimensions
             this.app.renderer.resize(windowWidth, windowHeight);
+
+            // Update canvas style dimensions
+            this.app.stage.width = windowWidth;
+            this.app.stage.height = windowHeight;
         }
 
         this.resize();
