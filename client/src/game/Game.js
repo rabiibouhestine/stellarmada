@@ -16,7 +16,7 @@ export class Game {
             resizeTo: window,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
-            backgroundColor: 0x87C1FF,
+            backgroundColor: 0x00a37a,
         });
         global.__PIXI_APP__ = this.app;
         
