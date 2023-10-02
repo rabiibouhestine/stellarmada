@@ -13,7 +13,9 @@ export class Game {
     constructor({ canvasRef, socket, gameState }) {
         this.playerID = socket.id;
         this.app = new PIXI.Application({
-            resizeTo: window,
+            // resizeTo: window,
+            width: 1280,
+            height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
             backgroundColor: 0x00a37a,
@@ -43,21 +45,21 @@ export class Game {
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
         }
 
+        this.width = this.app.stage.width;
+        this.height = this.app.stage.height;
+
         this.resize = () => {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
+            const stageScale = Math.min(windowWidth / 1280, windowHeight / 720);
     
-            // Update renderer dimensions
-            this.app.renderer.resize(windowWidth, windowHeight);
+            // // Update renderer dimensions
+            // this.app.renderer.resize(windowWidth, windowHeight);
 
-            // // Update canvas style dimensions
-            // if ( (windowWidth / windowHeight) > (16 / 9) ) {
-            //     this.app.stage.width = (16 / 9) * windowHeight;
-            //     this.app.stage.height = windowHeight;
-            // } else {
-            //     this.app.stage.width = windowWidth;
-            //     this.app.stage.height = (9 / 16) * windowWidth;
-            // }
+            // // Update stage scale
+            // this.app.stage.scale.set(stageScale);
+            // this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
+            // this.app.stage.y = (windowHeight - this.app.stage.height ) / 2;
         }
 
         this.resize();
