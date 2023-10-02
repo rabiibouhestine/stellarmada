@@ -26,14 +26,14 @@ export class Player {
         this.app.stage.addChild(this.cardsContainer);
         
         this.handCount = state.cards.handCount;
-        this.tavern = new Deck(app, sheet, "B1", this.positions.tavern, state.cards.tavern);
-        this.graveyard = new Deck(app, sheet, "B1", this.positions.graveyard, state.cards.graveyard);
-        this.castle = new Deck(app, sheet, "B1", this.positions.castle, state.cards.castle);
+        this.tavern = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, state.cards.tavern);
+        this.graveyard = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, state.cards.graveyard);
+        this.castle = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline);
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard);
-        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
-        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", "B1", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
+        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
+        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
         this.stance = "waiting";
 
@@ -52,7 +52,7 @@ export class Player {
     createCards(locationState, isPlayer, startPosition) {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.handCount); index++) {
-            const cardName = isPlayer ? locationState[index] : "B1";
+            const cardName = isPlayer ? locationState[index] : "B2";
             const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition);
             cards.push(card);
         }
@@ -239,7 +239,7 @@ export class Player {
     moveCards(cardsNames, nCards, location, destination) {
 
         if (location === "graveyard" && destination === "tavern") {
-            const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.graveyard);
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard);
             this.tavern.cardsToGet.push(card);
             this.graveyard.setSize(this.graveyard.size - nCards);
             this.tavern.setSize(this.tavern.size + nCards);
@@ -255,7 +255,7 @@ export class Player {
                 }
             } else {
                 for (let step = 0; step < nCards; step++) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, "B1", this.positions.tavern);
+                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.tavern);
                     this.hand.push(card);
                 }
             }
