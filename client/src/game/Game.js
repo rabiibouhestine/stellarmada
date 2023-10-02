@@ -51,8 +51,13 @@ export class Game {
             this.app.renderer.resize(windowWidth, windowHeight);
 
             // Update canvas style dimensions
-            this.app.stage.width = windowWidth;
-            this.app.stage.height = windowHeight;
+            // if ( (windowWidth / windowHeight) > (16 / 9) ) {
+            //     this.app.stage.width = (16 / 9) * windowHeight;
+            //     this.app.stage.height = windowHeight;
+            // } else {
+            //     this.app.stage.width = windowWidth;
+            //     this.app.stage.height = (9 / 16) * windowWidth;
+            // }
         }
 
         this.resize();
