@@ -50,7 +50,7 @@ export class Game {
             // Update renderer dimensions
             this.app.renderer.resize(windowWidth, windowHeight);
 
-            // Update canvas style dimensions
+            // // Update canvas style dimensions
             // if ( (windowWidth / windowHeight) > (16 / 9) ) {
             //     this.app.stage.width = (16 / 9) * windowHeight;
             //     this.app.stage.height = windowHeight;
