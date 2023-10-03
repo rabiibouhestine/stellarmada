@@ -14,7 +14,7 @@ import redBtnImg from '../assets/images/red_button.png';
 import yellowBtnImg from '../assets/images/yellow_button.png';
 
 export class Player {
-    constructor(app, sheet, state, positions, damageIndicator, isPlayer) {
+    constructor(app, sheet, state, positions, damageIndicator, confirmButton, isPlayer) {
         this.app = app;
         this.sheet = sheet;
         this.positions = positions;
@@ -37,7 +37,7 @@ export class Player {
 
         this.stance = "waiting";
 
-        this.confirmButton = new Button(app, positions.confirmButton, yellowBtnImg, hourImage, "", false, isPlayer);
+        this.confirmButton = confirmButton;
 
         this.attackSelection = [];
         this.discardSelection = [];

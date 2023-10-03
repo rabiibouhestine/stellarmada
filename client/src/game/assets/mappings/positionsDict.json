@@ -7,8 +7,7 @@
         "graveyard": {"x": 703, "y": 225.5},
         "castle": {"x": 286, "y": 225.5},
         "jokerLeft": {"x": 477, "y": 225.5},
-        "jokerRight": {"x": 399, "y": 225.5},
-        "confirmButton": {"x":1200, "y":300}
+        "jokerRight": {"x": 399, "y": 225.5}
     },
     "bottom": {
         "hand": {"x": 400, "y": 653.5},
@@ -18,10 +17,10 @@
         "graveyard": {"x": 95, "y": 493.5},
         "castle": {"x": 512, "y": 493.5},
         "jokerLeft": {"x": 321, "y": 493.5},
-        "jokerRight": {"x": 399, "y": 493.5},
-        "confirmButton": {"x":640, "y":350}
+        "jokerRight": {"x": 399, "y": 493.5}
     },
     "frontline": {
-        "damageIndicator": {"x":150, "y":350}
+        "damageIndicator": {"x":150, "y":350},
+        "confirmButton": {"x":640, "y":350}
     }
 }

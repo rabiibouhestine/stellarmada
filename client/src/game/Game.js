@@ -8,6 +8,10 @@ import positions from './assets/mappings/positionsDict.json';
 import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
 import { Indicator } from "./entities/Indicator";
+import { Button } from "./entities/Button";
+
+import yellowBtnImg from './assets/images/yellow_button.png';
+import hourImage from './assets/images/hourglass.png';
 
 import layout from './assets/images/mattress.png';
 
@@ -38,7 +42,8 @@ export class Game {
         this.board = new Board(this.app);
 
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
-        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
+        this.confirmButton = new Button(this.app, positions.frontline.confirmButton, yellowBtnImg, hourImage, "", false, true);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
@@ -120,7 +125,7 @@ export class Game {
         this.players[this.playerID].jokerRight.sprite.on('pointerdown', event);
     }
 
-    createPlayers(app, sheet, playerID, gameState, positions, damageIndicator) {
+    createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
         const players = {};
         const keys = Object.keys(gameState.players);
       
@@ -132,14 +137,14 @@ export class Game {
         const secondPlayerKey = keys[1];
       
         if (firstPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, true);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, false);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, confirmButton, false);
         } else if (secondPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, true);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
         } else {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, false);
+          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
+          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, false);
         }
       
         return players;
