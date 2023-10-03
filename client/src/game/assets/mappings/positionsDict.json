@@ -8,8 +8,6 @@
         "castle": {"x": 286, "y": 225.5},
         "jokerLeft": {"x": 477, "y": 225.5},
         "jokerRight": {"x": 399, "y": 225.5},
-        "attackIndicator": {"x":300, "y":370},
-        "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":1200, "y":300}
     },
     "bottom": {
@@ -21,8 +19,6 @@
         "castle": {"x": 512, "y": 493.5},
         "jokerLeft": {"x": 321, "y": 493.5},
         "jokerRight": {"x": 399, "y": 493.5},
-        "attackIndicator": {"x":1000, "y":370},
-        "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":640, "y":350}
     },
     "frontline": {
