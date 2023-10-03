@@ -1,31 +1,31 @@
 {
     "top": {
-        "hand": {"x": 359, "y": 22},
-        "frontline": {"x": 700, "y": 370},
-        "rearguard": {"x": 365, "y": 220},
-        "tavern": {"x": 555, "y": 178},
-        "graveyard": {"x": 1000, "y": 220},
-        "castle": {"x": 510, "y": 220},
-        "jokerLeft": {"x": 750, "y": 220},
-        "jokerRight": {"x": 650, "y": 220},
+        "hand": {"x": 400, "y": 65.5},
+        "frontline": {"x": 400, "y": 359.5},
+        "rearguard": {"x": 134, "y": 225.5},
+        "tavern": {"x": 590, "y": 225.5},
+        "graveyard": {"x": 703, "y": 225.5},
+        "castle": {"x": 286, "y": 225.5},
+        "jokerLeft": {"x": 477, "y": 225.5},
+        "jokerRight": {"x": 399, "y": 225.5},
         "attackIndicator": {"x":300, "y":370},
         "discardIndicator": {"x":360, "y":370},
         "confirmButton": {"x":1200, "y":300}
     },
     "bottom": {
-        "hand": {"x": 359, "y": 583},
-        "frontline": {"x": 700, "y": 370},
-        "rearguard": {"x": 1000, "y": 520},
-        "tavern": {"x": 173, "y": 446},
-        "graveyard": {"x": 260, "y": 520},
-        "castle": {"x": 760, "y": 520},
+        "hand": {"x": 400, "y": 653.5},
+        "frontline": {"x": 400, "y": 359.5},
+        "rearguard": {"x": 664, "y": 493.5},
+        "tavern": {"x": 208, "y": 493.5},
+        "graveyard": {"x": 95, "y": 493.5},
+        "castle": {"x": 512, "y": 493.5},
         "jokerLeft": {"x": 321, "y": 493.5},
         "jokerRight": {"x": 399, "y": 493.5},
         "attackIndicator": {"x":1000, "y":370},
         "discardIndicator": {"x":360, "y":370},
-        "confirmButton": {"x":1200, "y":500}
+        "confirmButton": {"x":640, "y":350}
     },
     "frontline": {
-        "damageIndicator": {"x":300, "y":370}
+        "damageIndicator": {"x":150, "y":350}
     }
 }

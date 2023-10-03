@@ -15,18 +15,14 @@ export class Deck {
         this.container.visible = this.size > 0;
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
         this.sprite.scale.set(0.5);
-        this.sprite.anchor.set(0);
+        this.sprite.anchor.set(0.5);
         this.text = new PIXI.Text(this.size, {
             fontFamily: 'Arial',
             fontSize: 26,
             fill: 0xffffff,
             align: 'center'
         });
-        this.text.anchor.set(0);
-        this.text.width = 23;
-        this.text.hight = 23;
-        this.text.x = 23;
-        this.text.y = 36;
+        this.text.anchor.set(0.5);
 
         this.container.addChild(this.sprite);
         this.container.addChild(this.text);
