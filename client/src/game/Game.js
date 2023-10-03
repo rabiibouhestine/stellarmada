@@ -34,7 +34,7 @@ export class Game {
 
         const layoutbg = PIXI.Sprite.from(layout);
         this.app.stage.addChild(layoutbg);
-        
+
         // this.board = new Board(this.app);
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
@@ -50,9 +50,6 @@ export class Game {
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
         }
 
-        this.width = this.app.stage.width;
-        this.height = this.app.stage.height;
-
         this.resize = () => {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
@@ -64,9 +61,9 @@ export class Game {
             // Update stage scale
             this.app.stage.scale.set(stageScale);
 
-            // // Center the stage
-            // this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
-            // this.app.stage.y = (windowHeight - this.app.stage.height ) / 2;
+            // Center the stage
+            this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
+            this.app.stage.y = (windowHeight - this.app.stage.height ) / 2;
         }
 
         this.resize();
