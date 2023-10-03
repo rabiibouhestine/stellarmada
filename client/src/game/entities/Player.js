@@ -68,7 +68,7 @@ export class Player {
 
     repositionCards(array, centerPosition) {
         // Calculate the total width of the cards in the array
-        const totalWidth = array.length * 100; // Assuming each card has a width of 100 units
+        const totalWidth = array.length * 98; // Assuming each card has a width of 100 units
     
         // Calculate the starting position to center the cards
         const startX = centerPosition.x - (totalWidth / 2);
@@ -79,7 +79,7 @@ export class Player {
         // Reposition the cards
         for (let index = 0; index < array.length; index++) {
             const newPosition = {
-                x: startX + (index * 100),
+                x: startX + (index * 98),
                 y: startY
             };
             array[index].moveTo(newPosition, true, false);

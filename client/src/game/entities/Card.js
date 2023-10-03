@@ -22,7 +22,7 @@ export class Card {
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
         this.sprite.scale.set(0.6);
-        this.sprite.anchor.set(0.5);
+        this.sprite.anchor.set(0);
         this.cardsContainer.addChild(this.sprite);
 
         this.sprite
