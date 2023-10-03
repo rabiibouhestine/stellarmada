@@ -18,7 +18,7 @@ export class Deck {
         this.sprite.anchor.set(0.5);
         this.text = new PIXI.Text(this.size, {
             fontFamily: 'Arial',
-            fontSize: 26,
+            fontSize: 20,
             fill: 0xffffff,
             align: 'center'
         });
