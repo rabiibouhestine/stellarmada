@@ -9,12 +9,14 @@ import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
 import { Indicator } from "./entities/Indicator";
 
+import layout from './assets/images/layoutbg.png';
+
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
         this.playerID = socket.id;
         this.app = new PIXI.Application({
             // resizeTo: window,
-            width: 1280,
+            width: 800,
             height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
@@ -34,6 +36,9 @@ export class Game {
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
 
+        const layoutbg = PIXI.Sprite.from(layout);
+        this.app.stage.addChild(layoutbg);
+
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
@@ -51,7 +56,7 @@ export class Game {
         this.resize = () => {
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
-            const stageScale = Math.min(windowWidth / 1280, windowHeight / 720);
+            const stageScale = Math.min(windowWidth / 800, windowHeight / 720);
     
             // // Update renderer dimensions
             // this.app.renderer.resize(windowWidth, windowHeight);
