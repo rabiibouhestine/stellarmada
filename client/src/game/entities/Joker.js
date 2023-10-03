@@ -17,7 +17,7 @@ export class Joker {
         this.sprite.cursor = this.isPlayer? 'pointer' : 'default';
         this.sprite.x = this.position.x;
         this.sprite.y = this.position.y;
-        this.sprite.scale.set(0.6);
+        this.sprite.scale.set(0.5);
         this.sprite.anchor.set(0.5);
         this.cardsContainer.addChild(this.sprite);
 
@@ -43,10 +43,10 @@ export class Joker {
     }
 
     onPointerOver() {
-        this.sprite.scale.set(0.65);
+        this.sprite.scale.set(0.6);
     }
 
     onPointerOut() {
-        this.sprite.scale.set(0.6);
+        this.sprite.scale.set(0.5);
     }
 }

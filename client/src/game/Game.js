@@ -9,7 +9,7 @@ import { Player } from "./entities/Player";
 import { Board } from "./entities/Board";
 import { Indicator } from "./entities/Indicator";
 
-import layout from './assets/images/layoutbg.png';
+import layout from './assets/images/mattress.png';
 
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
@@ -32,12 +32,12 @@ export class Game {
 
         canvasRef.current.appendChild(this.app.view);
 
+        const layoutbg = PIXI.Sprite.from(layout);
+        this.app.stage.addChild(layoutbg);
+        
         // this.board = new Board(this.app);
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator)
-
-        const layoutbg = PIXI.Sprite.from(layout);
-        this.app.stage.addChild(layoutbg);
 
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
@@ -58,11 +58,11 @@ export class Game {
             const windowHeight = window.innerHeight;
             const stageScale = Math.min(windowWidth / 800, windowHeight / 720);
     
-            // // Update renderer dimensions
-            // this.app.renderer.resize(windowWidth, windowHeight);
+            // Update renderer dimensions
+            this.app.renderer.resize(windowWidth, windowHeight);
 
-            // // Update stage scale
-            // this.app.stage.scale.set(stageScale);
+            // Update stage scale
+            this.app.stage.scale.set(stageScale);
 
             // // Center the stage
             // this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
