@@ -59,7 +59,7 @@ export class Card {
     setSelectable(selectable) {
         this.selectable = selectable;
         this.sprite.cursor = selectable? 'pointer' : 'default';
-        this.sprite.tint = selectable? 0x999999 : 0xFFFFFF;
+        this.sprite.tint = selectable? 0x89CFF0 : 0xFFFFFF;
     }
 
     moveTo(position, reveal, destroy) {
