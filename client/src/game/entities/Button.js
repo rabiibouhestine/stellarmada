@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
 export class Button {
-    constructor(app, position, buttonImage, iconImage, text, enabled, visible) {
+    constructor(app, position, buttonImage, iconImage, text, enabled) {
         this.enabled = enabled;
 
         this.texture = PIXI.Texture.from(buttonImage);
@@ -23,7 +23,6 @@ export class Button {
         this.button.cursor = enabled? 'pointer' : 'default';
         this.button.x = position.x;
         this.button.y = position.y;
-        this.button.visible = visible;
         this.button.addChild(this.sprite);
         this.button.addChild(this.iconSprite);
         this.button.addChild(this.text);
