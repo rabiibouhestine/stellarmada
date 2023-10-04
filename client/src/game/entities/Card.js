@@ -104,7 +104,8 @@ export class Card {
             ticker.start();
         } else {
             this.sprite.x = position.x;
-            this.sprite.y = position.y; 
+            this.sprite.y = position.y;
+            this.position = position;
             if (destroy) {
                 this.sprite.destroy();
             }
