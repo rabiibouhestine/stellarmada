@@ -12,7 +12,7 @@ export class Indicator {
         // Define indicator graphic
         this.graphic = new PIXI.Graphics();
         this.graphic.beginFill(0x000000, 0.25);
-        this.graphic.drawRoundedRect(-60, -30, 120, 60, 8);
+        this.graphic.drawRoundedRect(-70, -30, 140, 60, 8);
         this.graphic.endFill();
         this.container.addChild(this.graphic);
 
