@@ -31,7 +31,7 @@ export class Button {
         this.iconSprite = new PIXI.Sprite(this.hourIcon);
         this.iconSprite.anchor.set(0.5);
         this.iconSprite.scale.set(0.2);
-        this.iconSprite.x = -35;
+        this.iconSprite.x = -45;
         this.button.addChild(this.iconSprite);
 
         // Define button label
