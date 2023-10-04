@@ -10,9 +10,6 @@ import { Board } from "./entities/Board";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
-import yellowBtnImg from './assets/images/yellow_button.png';
-import hourImage from './assets/images/hourglass.png';
-
 import layout from './assets/images/mattress.png';
 
 export class Game {
@@ -42,7 +39,7 @@ export class Game {
         this.board = new Board(this.app);
 
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
-        this.confirmButton = new Button(this.app, positions.frontline.confirmButton, yellowBtnImg, hourImage, "", false, true);
+        this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 
         for (const key of Object.keys(this.players)) {

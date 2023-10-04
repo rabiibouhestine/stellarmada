@@ -1,31 +1,51 @@
 import * as PIXI from "pixi.js";
 
+import swordImage from '../assets/images/sword.png';
+import skullImage from '../assets/images/skull.png';
+import hourImage from '../assets/images/hourglass.png';
+
 export class Button {
-    constructor(app, position, buttonImage, iconImage, text, enabled) {
-        this.enabled = enabled;
+    constructor(app, position) {
+        this.enabled = false;
+        this.color = 0x000000;
 
-        this.texture = PIXI.Texture.from(buttonImage);
-        this.sprite = new PIXI.Sprite(this.texture);
-        this.sprite.anchor.set(0.5);
+        this.swordIcon = PIXI.Texture.from(swordImage);
+        this.skullIcon = PIXI.Texture.from(skullImage);
+        this.hourIcon = PIXI.Texture.from(hourImage);
 
-        this.iconTexture = PIXI.Texture.from(iconImage);
-        this.iconSprite = new PIXI.Sprite(this.iconTexture);
-        this.iconSprite.anchor.set(0.5);
-        this.iconSprite.scale.set(0.25);
-        this.iconSprite.x = -70;
-
-        this.text = new PIXI.Text(text, { fill: 0xffffff });
-        this.text.anchor.set(0.5);
-        this.text.x = 10;
-
+        // Define button container
         this.button = new PIXI.Container();
-        this.button.eventMode = enabled? 'static' : 'static';
-        this.button.cursor = enabled? 'pointer' : 'default';
+        this.button.eventMode = this.enabled? 'static' : 'static';
+        this.button.cursor = this.enabled? 'pointer' : 'default';
         this.button.x = position.x;
         this.button.y = position.y;
-        this.button.addChild(this.sprite);
+
+        // Define button graphic
+        this.graphic = new PIXI.Graphics();
+        this.graphic.beginFill(0x000000, 0.8);
+        this.graphic.drawRoundedRect(-60, -30, 120, 60, 8);
+        this.graphic.endFill();
+        this.button.addChild(this.graphic);
+
+        // Define button icon
+        this.iconSprite = new PIXI.Sprite(this.hourIcon);
+        this.iconSprite.anchor.set(0.5);
+        this.iconSprite.scale.set(0.2);
+        this.iconSprite.x = -35;
         this.button.addChild(this.iconSprite);
+
+        // Define button label
+        this.text = new PIXI.Text("", {
+            fontFamily: 'Arial',
+            fontSize: 24,
+            fill: 0xFFFFFF,
+            align: 'center'
+        });
+        this.text.anchor.set(0.5);
+        this.text.x = 12;
         this.button.addChild(this.text);
+
+        // Add button container to app stage
         app.stage.addChild(this.button);
 
         this.button
@@ -35,24 +55,40 @@ export class Button {
 
     onPointerOver()
     {
-        this.sprite.tint = this.enabled? 0x666666 : this.sprite.tint;
+        this.setColor(this.color, 0.5)
     }
 
     onPointerOut()
     {
-        this.sprite.tint = this.enabled? 0xFFFFFF : this.sprite.tint;
+        this.setColor(this.color, 0.8)
     }
-    
-    update(buttonImage, iconImage, text, enabled) {
-        this.texture = PIXI.Texture.from(buttonImage);
-        this.sprite.texture = this.texture;
-        this.iconTexture = PIXI.Texture.from(iconImage);
-        this.iconSprite.texture = this.iconTexture;
-        this.text.text = text;
-        this.sprite.tint = 0xFFFFFF;
-        this.enabled = enabled;
-        this.button.eventMode = enabled? 'static' : 'none';
-        this.button.cursor = enabled? 'pointer' : 'default';
+
+    setColor(color, alpha) {
+        this.graphic.clear();
+        this.graphic.beginFill(color, alpha);
+        this.graphic.drawRoundedRect(-60, -30, 120, 60, 8);
+        this.graphic.endFill();
+    }
+
+    setState(stance) {
+        this.disable();
+        switch(stance) {
+            case "attacking":
+                this.text.text = "Attack";
+                this.iconSprite.texture = this.swordIcon;
+                this.color = 0x00FFFF;
+                break;
+            case "discarding":
+                this.text.text = "Discard";
+                this.iconSprite.texture = this.skullIcon;
+                this.color = 0xFF0000;
+                break;
+            default:
+                this.text.text = "Wait...";
+                this.iconSprite.texture = this.hourIcon;
+                this.color = 0x000000;
+        }
+        this.setColor(this.color, 0.8);
     }
 
     enable() {

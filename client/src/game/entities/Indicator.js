@@ -19,20 +19,20 @@ export class Indicator {
         // Define indicator text
         this.text = new PIXI.Text(this.value, {
             fontFamily: 'Arial',
-            fontSize: 32,
+            fontSize: 24,
             fill: 0xFFFFFF,
-            align: 'center',
+            align: 'center'
         });
         this.text.anchor.set(0.5);
-        this.text.x = 25;
+        this.text.x = 20;
         this.container.addChild(this.text);
 
         // Define indicator icon
         this.texture = PIXI.Texture.from(asset);
         this.sprite = new PIXI.Sprite(this.texture);
         this.sprite.anchor.set(0.5);
-        this.sprite.scale.set(0.25);
-        this.sprite.x = -30;
+        this.sprite.scale.set(0.2);
+        this.sprite.x = -20;
         this.container.addChild(this.sprite);
 
         // Add indicator container to app stage

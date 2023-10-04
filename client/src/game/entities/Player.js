@@ -3,15 +3,6 @@ import * as PIXI from "pixi.js";
 import { Deck } from "./Deck";
 import { Card } from "./Card";
 import { Joker } from "./Joker";
-import { Button } from "./Button";
-
-import swordImage from '../assets/images/sword.png';
-import skullImage from '../assets/images/skull.png';
-import hourImage from '../assets/images/hourglass.png';
-
-import greenBtnImg from '../assets/images/green_button.png';
-import redBtnImg from '../assets/images/red_button.png';
-import yellowBtnImg from '../assets/images/yellow_button.png';
 
 export class Player {
     constructor(app, sheet, state, positions, damageIndicator, confirmButton, isPlayer) {
@@ -168,19 +159,20 @@ export class Player {
             card.setSelectable(this.isPlayer && isDiscarding);
         });
 
+        if (this.isPlayer) {
+            this.confirmButton.setState(stance);
+        }
+
         switch(stance) {
             case "attacking":
-                if (this.isPlayer) this.confirmButton.update(greenBtnImg, swordImage, "Attack", false);
                 this.jokerLeft.setSelectable(true);
                 this.jokerRight.setSelectable(true);
                 break;
             case "discarding":
-                if (this.isPlayer) this.confirmButton.update(redBtnImg, skullImage, "Discard", false);
                 this.jokerLeft.setSelectable(true);
                 this.jokerRight.setSelectable(true);
                 break;
             default:
-                if (this.isPlayer) this.confirmButton.update(yellowBtnImg, hourImage, "Wait", false);
                 this.jokerLeft.setSelectable(false);
                 this.jokerRight.setSelectable(false);
         }
