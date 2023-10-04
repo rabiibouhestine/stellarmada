@@ -42,10 +42,6 @@ export class Button {
     {
         this.sprite.tint = this.enabled? 0xFFFFFF : this.sprite.tint;
     }
-
-    setLabel(text) {
-        this.text.text = text;
-    }
     
     update(buttonImage, iconImage, text, enabled) {
         this.texture = PIXI.Texture.from(buttonImage);
