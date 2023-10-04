@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
 
-import swordImage from './assets/images/sword.png';
 import cardsImage from './assets/images/cards.png';
 import cardsSheet from './assets/mappings/cards.json';
 import positions from './assets/mappings/positionsDict.json';
@@ -38,7 +37,7 @@ export class Game {
 
         this.board = new Board(this.app);
 
-        this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, swordImage, gameState.turn.damage);
+        this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 

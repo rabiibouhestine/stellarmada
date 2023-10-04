@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
 export class Indicator {
-    constructor(app, position, asset, value) {
+    constructor(app, position, value) {
         this.value = value;
 
         // Define the indicator container
@@ -12,7 +12,7 @@ export class Indicator {
         // Define indicator graphic
         this.graphic = new PIXI.Graphics();
         this.graphic.beginFill(0x000000, 0.25);
-        this.graphic.drawRoundedRect(-70, -30, 140, 60, 8);
+        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
         this.graphic.endFill();
         this.container.addChild(this.graphic);
 
@@ -24,16 +24,7 @@ export class Indicator {
             align: 'center'
         });
         this.text.anchor.set(0.5);
-        this.text.x = 20;
         this.container.addChild(this.text);
-
-        // Define indicator icon
-        this.texture = PIXI.Texture.from(asset);
-        this.sprite = new PIXI.Sprite(this.texture);
-        this.sprite.anchor.set(0.5);
-        this.sprite.scale.set(0.2);
-        this.sprite.x = -20;
-        this.container.addChild(this.sprite);
 
         // Add indicator container to app stage
         app.stage.addChild(this.container);

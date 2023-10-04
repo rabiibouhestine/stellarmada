@@ -7,7 +7,9 @@ import hourImage from '../assets/images/hourglass.png';
 export class Button {
     constructor(app, position) {
         this.enabled = false;
-        this.color = 0x000000;
+        this.disabledColor = 0x000000;
+        this.enabledColor = 0x8E44AD;
+        this.enabledColorHover = 0x7D3C98;
 
         this.swordIcon = PIXI.Texture.from(swordImage);
         this.skullIcon = PIXI.Texture.from(skullImage);
@@ -22,8 +24,8 @@ export class Button {
 
         // Define button graphic
         this.graphic = new PIXI.Graphics();
-        this.graphic.beginFill(0x000000, 0.8);
-        this.graphic.drawRoundedRect(-70, -30, 140, 60, 8);
+        this.graphic.beginFill(this.disabledColor, 0.25);
+        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
         this.graphic.endFill();
         this.button.addChild(this.graphic);
 
@@ -31,19 +33,7 @@ export class Button {
         this.iconSprite = new PIXI.Sprite(this.hourIcon);
         this.iconSprite.anchor.set(0.5);
         this.iconSprite.scale.set(0.2);
-        this.iconSprite.x = -45;
         this.button.addChild(this.iconSprite);
-
-        // Define button label
-        this.text = new PIXI.Text("", {
-            fontFamily: 'Arial',
-            fontSize: 24,
-            fill: 0xFFFFFF,
-            align: 'center'
-        });
-        this.text.anchor.set(0.5);
-        this.text.x = 12;
-        this.button.addChild(this.text);
 
         // Add button container to app stage
         app.stage.addChild(this.button);
@@ -55,18 +45,18 @@ export class Button {
 
     onPointerOver()
     {
-        this.setColor(this.color, 0.5)
+        this.setColor(this.enabledColorHover, 1)
     }
 
     onPointerOut()
     {
-        this.setColor(this.color, 0.8)
+        this.setColor(this.enabledColor, 1)
     }
 
     setColor(color, alpha) {
         this.graphic.clear();
         this.graphic.beginFill(color, alpha);
-        this.graphic.drawRoundedRect(-70, -30, 140, 60, 8);
+        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
         this.graphic.endFill();
     }
 
@@ -74,32 +64,27 @@ export class Button {
         this.disable();
         switch(stance) {
             case "attacking":
-                this.text.text = "Attack";
                 this.iconSprite.texture = this.swordIcon;
-                this.color = 0x00FFFF;
                 break;
             case "discarding":
-                this.text.text = "Discard";
                 this.iconSprite.texture = this.skullIcon;
-                this.color = 0xFF0000;
                 break;
             default:
-                this.text.text = "Wait...";
                 this.iconSprite.texture = this.hourIcon;
-                this.color = 0x000000;
         }
-        this.setColor(this.color, 0.8);
     }
 
     enable() {
         this.enabled = true;
         this.button.eventMode = 'static';
         this.button.cursor = 'pointer';
+        this.setColor(this.enabledColor, 1)
     }
 
     disable() {
         this.enabled = false;
         this.button.eventMode = 'none';
         this.button.cursor = 'default';
+        this.setColor(this.disabledColor, 0.25)
     }
 }
