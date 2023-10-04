@@ -6,13 +6,20 @@ export class Indicator {
 
         // Define the indicator container
         this.container = new PIXI.Container();
-        this.container.x = position.x; // 300
-        this.container.y = position.y; // 370
+        this.container.x = position.x;
+        this.container.y = position.y;
 
-        // Define the indicator text
+        // Define indicator graphic
+        this.graphic = new PIXI.Graphics();
+        this.graphic.beginFill(0x000000, 0.25);
+        this.graphic.drawRoundedRect(-60, -30, 120, 60, 8);
+        this.graphic.endFill();
+        this.container.addChild(this.graphic);
+
+        // Define indicator text
         this.text = new PIXI.Text(this.value, {
             fontFamily: 'Arial',
-            fontSize: 48,
+            fontSize: 32,
             fill: 0xFFFFFF,
             align: 'center',
         });
@@ -20,17 +27,15 @@ export class Indicator {
         this.text.x = 25;
         this.container.addChild(this.text);
 
-        // Define hte indicator logo if asset provided
-        if (asset) {
-            this.texture = PIXI.Texture.from(asset);
-            this.sprite = new PIXI.Sprite(this.texture);
-            this.sprite.anchor.set(0.5);
-            this.sprite.scale.set(0.5);
-            this.sprite.x = -40;
-            this.container.addChild(this.sprite);
-        }
+        // Define indicator icon
+        this.texture = PIXI.Texture.from(asset);
+        this.sprite = new PIXI.Sprite(this.texture);
+        this.sprite.anchor.set(0.5);
+        this.sprite.scale.set(0.25);
+        this.sprite.x = -30;
+        this.container.addChild(this.sprite);
 
-        // Add container to app stage
+        // Add indicator container to app stage
         app.stage.addChild(this.container);
     }
 
