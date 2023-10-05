@@ -53,7 +53,7 @@ export class Player {
 
     createCard(cardsContainer, sheet, cardName, startPosition) {
         const card = new Card(cardsContainer, sheet, cardName, startPosition);
-        card.sprite.on('pointerdown', () => this.onPointerDown(card));
+        card.card.on('pointerdown', () => this.onPointerDown(card));
         return card;
     }
 

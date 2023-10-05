@@ -16,16 +16,20 @@ export class Card {
         this.selectable = false;
         this.selected = false;
 
-        this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
-        this.sprite.eventMode = 'static';
-        this.sprite.cursor = 'default';
-        this.sprite.x = this.position.x;
-        this.sprite.y = this.position.y;
-        this.sprite.scale.set(0.5);
-        this.sprite.anchor.set(0.5);
-        this.cardsContainer.addChild(this.sprite);
+        this.card = new PIXI.Container();
+        this.card.eventMode = 'static';
+        this.card.cursor = 'default';
+        this.card.x = this.position.x;
+        this.card.y = this.position.y;
+        this.card.scale.set(0.5);
 
-        this.sprite
+        this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
+        this.sprite.anchor.set(0.5);
+        this.card.addChild(this.sprite);
+
+        this.cardsContainer.addChild(this.card);
+
+        this.card
             .on('pointerover', this.onPointerOver, this)
             .on('pointerout', this.onPointerOut, this);
     }
@@ -42,23 +46,23 @@ export class Card {
     }
 
     onPointerOver() {
-        this.sprite.scale.set(0.6);
+        this.card.scale.set(0.6);
     }
 
     onPointerOut() {
-        this.sprite.scale.set(0.5);
+        this.card.scale.set(0.5);
     }
 
     setSelected(isSelected) {
         if (this.selectable) {
             this.selected = isSelected;
-            this.sprite.y = isSelected? this.sprite.y - 30 : this.position.y;
+            this.card.y = isSelected? this.card.y - 30 : this.position.y;
         }
     }
 
     setSelectable(selectable) {
         this.selectable = selectable;
-        this.sprite.cursor = selectable? 'pointer' : 'default';
+        this.card.cursor = selectable? 'pointer' : 'default';
         this.sprite.tint = selectable? 0x89CFF0 : 0xFFFFFF;
     }
 
@@ -75,8 +79,8 @@ export class Card {
             // Function to update card position
             const updatePosition = (delta) => {
                 // Calculate direction towards position
-                let dx = position.x - this.sprite.x;
-                let dy = position.y - this.sprite.y;
+                let dx = position.x - this.card.x;
+                let dy = position.y - this.card.y;
         
                 // Calculate distance
                 let distance = Math.sqrt(dx * dx + dy * dy);
@@ -86,28 +90,28 @@ export class Card {
         
                 // Move Card towards position
                 if (distance <= 1) {
-                    this.sprite.x = position.x;
-                    this.sprite.y = position.y;
+                    this.card.x = position.x;
+                    this.card.y = position.y;
                     this.position = position;
                     ticker.stop();
                     ticker.destroy();
                     if (destroy) {
-                        this.sprite.destroy();
+                        this.card.destroy();
                     }
                 } else {
-                    this.sprite.x += dx * velocity * delta;
-                    this.sprite.y += dy * velocity * delta;
+                    this.card.x += dx * velocity * delta;
+                    this.card.y += dy * velocity * delta;
                 }
             };
         
             ticker.add(updatePosition);
             ticker.start();
         } else {
-            this.sprite.x = position.x;
-            this.sprite.y = position.y;
+            this.card.x = position.x;
+            this.card.y = position.y;
             this.position = position;
             if (destroy) {
-                this.sprite.destroy();
+                this.card.destroy();
             }
         }
     }
