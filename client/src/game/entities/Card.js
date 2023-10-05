@@ -94,6 +94,7 @@ export class Card {
                 this.container.y = coords.y;
             })
             .onComplete(() => {
+                this.position = position;
                 if (destroy) {
                     this.container.destroy();
                 }
