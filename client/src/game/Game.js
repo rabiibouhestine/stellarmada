@@ -9,6 +9,7 @@ import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
 import layout from './assets/images/mattress.png';
+import { Mattress } from "./entities/Mattress";
 
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
@@ -31,9 +32,7 @@ export class Game {
 
         canvasRef.current.appendChild(this.app.view);
 
-        const layoutbg = PIXI.Sprite.from(layout);
-        this.app.stage.addChild(layoutbg);
-
+        this.mattress = new Mattress(this.app, positions.mattress, layout);
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
