@@ -5,7 +5,6 @@ import cardsSheet from './assets/mappings/cards.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
-import { Board } from "./entities/Board";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
@@ -35,7 +34,6 @@ export class Game {
         const layoutbg = PIXI.Sprite.from(layout);
         this.app.stage.addChild(layoutbg);
 
-        this.board = new Board(this.app, this.playerID, gameState.turn);
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
@@ -77,7 +75,6 @@ export class Game {
 
     update(data) {
         this.damageIndicator.setValue(data.turn.damage);
-        this.board.setState(this.playerID, data.turn);
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 

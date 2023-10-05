@@ -16,7 +16,7 @@ export class Indicator {
         this.graphic.endFill();
         this.container.addChild(this.graphic);
 
-        // Define indicator text
+        // Define indicator number
         this.text = new PIXI.Text(this.value, {
             fontFamily: 'Arial',
             fontSize: 24,
@@ -25,6 +25,18 @@ export class Indicator {
         });
         this.text.anchor.set(0.5);
         this.container.addChild(this.text);
+
+        // Define indicator label
+        this.label = new PIXI.Text("Damage", {
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            fontSize: 12,
+            fill: 0xFFFFFF,
+            align: 'center'
+        });
+        this.label.y = 40;
+        this.label.anchor.set(0.5);
+        this.container.addChild(this.label);
 
         // Add indicator container to app stage
         app.stage.addChild(this.container);

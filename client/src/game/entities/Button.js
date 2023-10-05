@@ -35,6 +35,18 @@ export class Button {
         this.iconSprite.scale.set(0.2);
         this.button.addChild(this.iconSprite);
 
+        // Define button label
+        this.label = new PIXI.Text("", {
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            fontSize: 12,
+            fill: 0xFFFFFF,
+            align: 'center'
+        });
+        this.label.y = 40;
+        this.label.anchor.set(0.5);
+        this.button.addChild(this.label);
+
         // Add button container to app stage
         app.stage.addChild(this.button);
 
@@ -65,12 +77,15 @@ export class Button {
         switch(stance) {
             case "attacking":
                 this.iconSprite.texture = this.swordIcon;
+                this.label.text = "Attack";
                 break;
             case "discarding":
                 this.iconSprite.texture = this.skullIcon;
+                this.label.text = "Discard";
                 break;
             default:
                 this.iconSprite.texture = this.hourIcon;
+                this.label.text = "Opponent's turn";
         }
     }
 
