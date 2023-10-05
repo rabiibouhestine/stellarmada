@@ -23,6 +23,15 @@ export class Card {
         this.container.y = this.position.y;
         this.container.scale.set(0.5);
 
+        const blur = new PIXI.BlurFilter(10);
+        this.glow = new PIXI.Sprite(this.sheet.textures[name]);
+        this.glow.scale.set(1.1);
+        this.glow.anchor.set(0.5);
+        this.glow.tint = 0x89CFF0;
+        this.glow.filters = [blur];
+        this.glow.visible = false;
+        this.container.addChild(this.glow);
+
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
         this.container.addChild(this.sprite);
@@ -63,7 +72,7 @@ export class Card {
     setSelectable(selectable) {
         this.selectable = selectable;
         this.container.cursor = selectable? 'pointer' : 'default';
-        this.sprite.tint = selectable? 0x89CFF0 : 0xFFFFFF;
+        this.glow.visible = selectable;
     }
 
     moveTo(position, reveal, destroy) {
