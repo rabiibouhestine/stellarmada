@@ -26,6 +26,7 @@ export class Mattress {
                 align: 'center'
             });
             label.anchor.set(0.5);
+            label.alpha = 0.8;
 
             labelContainer.addChild(label);
             container.addChild(labelContainer);
