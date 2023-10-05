@@ -16,20 +16,20 @@ export class Card {
         this.selectable = false;
         this.selected = false;
 
-        this.card = new PIXI.Container();
-        this.card.eventMode = 'static';
-        this.card.cursor = 'default';
-        this.card.x = this.position.x;
-        this.card.y = this.position.y;
-        this.card.scale.set(0.5);
+        this.container = new PIXI.Container();
+        this.container.eventMode = 'static';
+        this.container.cursor = 'default';
+        this.container.x = this.position.x;
+        this.container.y = this.position.y;
+        this.container.scale.set(0.5);
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
-        this.card.addChild(this.sprite);
+        this.container.addChild(this.sprite);
 
-        this.cardsContainer.addChild(this.card);
+        this.cardsContainer.addChild(this.container);
 
-        this.card
+        this.container
             .on('pointerover', this.onPointerOver, this)
             .on('pointerout', this.onPointerOut, this);
     }
@@ -46,23 +46,23 @@ export class Card {
     }
 
     onPointerOver() {
-        this.card.scale.set(0.6);
+        this.container.scale.set(0.6);
     }
 
     onPointerOut() {
-        this.card.scale.set(0.5);
+        this.container.scale.set(0.5);
     }
 
     setSelected(isSelected) {
         if (this.selectable) {
             this.selected = isSelected;
-            this.card.y = isSelected? this.card.y - 30 : this.position.y;
+            this.container.y = isSelected? this.container.y - 30 : this.position.y;
         }
     }
 
     setSelectable(selectable) {
         this.selectable = selectable;
-        this.card.cursor = selectable? 'pointer' : 'default';
+        this.container.cursor = selectable? 'pointer' : 'default';
         this.sprite.tint = selectable? 0x89CFF0 : 0xFFFFFF;
     }
 
@@ -76,11 +76,11 @@ export class Card {
         if (document.visibilityState === 'visible') {
             const ticker = new PIXI.Ticker();
     
-            // Function to update card position
+            // Function to update container position
             const updatePosition = (delta) => {
                 // Calculate direction towards position
-                let dx = position.x - this.card.x;
-                let dy = position.y - this.card.y;
+                let dx = position.x - this.container.x;
+                let dy = position.y - this.container.y;
         
                 // Calculate distance
                 let distance = Math.sqrt(dx * dx + dy * dy);
@@ -90,28 +90,28 @@ export class Card {
         
                 // Move Card towards position
                 if (distance <= 1) {
-                    this.card.x = position.x;
-                    this.card.y = position.y;
+                    this.container.x = position.x;
+                    this.container.y = position.y;
                     this.position = position;
                     ticker.stop();
                     ticker.destroy();
                     if (destroy) {
-                        this.card.destroy();
+                        this.container.destroy();
                     }
                 } else {
-                    this.card.x += dx * velocity * delta;
-                    this.card.y += dy * velocity * delta;
+                    this.container.x += dx * velocity * delta;
+                    this.container.y += dy * velocity * delta;
                 }
             };
         
             ticker.add(updatePosition);
             ticker.start();
         } else {
-            this.card.x = position.x;
-            this.card.y = position.y;
+            this.container.x = position.x;
+            this.container.y = position.y;
             this.position = position;
             if (destroy) {
-                this.card.destroy();
+                this.container.destroy();
             }
         }
     }
