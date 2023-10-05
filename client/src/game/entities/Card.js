@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import * as TWEEN from '@tweenjs/tween.js'
 
 import cardsDict from '../assets/mappings/cardsDict.json';
 
@@ -76,52 +77,34 @@ export class Card {
     }
 
     moveTo(position, reveal, destroy) {
-        if (reveal) {
-            this.reveal();
-        } else {
-            this.hide();
-        }
+        const coords = {x: this.container.x, y: this.container.y}
 
-        if (document.visibilityState === 'visible') {
-            const ticker = new PIXI.Ticker();
-    
-            // Function to update container position
-            const updatePosition = (delta) => {
-                // Calculate direction towards position
-                let dx = position.x - this.container.x;
-                let dy = position.y - this.container.y;
-        
-                // Calculate distance
-                let distance = Math.sqrt(dx * dx + dy * dy);
-    
-                // Set velocity
-                const velocity = 0.14;
-        
-                // Move Card towards position
-                if (distance <= 1) {
-                    this.container.x = position.x;
-                    this.container.y = position.y;
-                    this.position = position;
-                    ticker.stop();
-                    ticker.destroy();
-                    if (destroy) {
-                        this.container.destroy();
-                    }
+        const tween = new TWEEN.Tween(coords, false)
+            .to({x: position.x, y: position.y}, 800)
+            .easing(TWEEN.Easing.Exponential.Out)
+            .onStart(() => {
+                if (reveal) {
+                    this.reveal();
                 } else {
-                    this.container.x += dx * velocity * delta;
-                    this.container.y += dy * velocity * delta;
+                    this.hide();
                 }
-            };
-        
-            ticker.add(updatePosition);
-            ticker.start();
-        } else {
-            this.container.x = position.x;
-            this.container.y = position.y;
-            this.position = position;
-            if (destroy) {
-                this.container.destroy();
-            }
-        }
+            })
+            .onUpdate(() => {
+                this.container.x = coords.x;
+                this.container.y = coords.y;
+            })
+            .onComplete(() => {
+                if (destroy) {
+                    this.container.destroy();
+                }
+            })
+            .start()
+
+        const updatePosition = (delta) => {
+            tween.update(delta);
+            requestAnimationFrame(updatePosition);
+        };
+    
+        requestAnimationFrame(updatePosition);
     }
 }
