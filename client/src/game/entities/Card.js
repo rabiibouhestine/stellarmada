@@ -23,11 +23,11 @@ export class Card {
         this.container.y = this.position.y;
         this.container.scale.set(0.5);
 
-        const blur = new PIXI.BlurFilter(10);
+        const blur = new PIXI.BlurFilter(8);
         this.glow = new PIXI.Sprite(this.sheet.textures[name]);
         this.glow.scale.set(1.1);
         this.glow.anchor.set(0.5);
-        this.glow.tint = 0x89CFF0;
+        this.glow.tint = 0x0096FF;
         this.glow.filters = [blur];
         this.glow.visible = false;
         this.container.addChild(this.glow);
