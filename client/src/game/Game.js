@@ -110,11 +110,11 @@ export class Game {
     }
 
     onJokerLeft(event) {
-        this.players[this.playerID].jokerLeft.sprite.on('pointerdown', event);
+        this.players[this.playerID].jokerLeft.card.on('pointerdown', event);
     }
 
     onJokerRight(event) {
-        this.players[this.playerID].jokerRight.sprite.on('pointerdown', event);
+        this.players[this.playerID].jokerRight.card.on('pointerdown', event);
     }
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
