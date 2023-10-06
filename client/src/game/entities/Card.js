@@ -103,7 +103,9 @@ export class Card {
             .onUpdate(() => {
                 this.container.x = propreties.x;
                 this.container.y = propreties.y;
-                this.container.scale.set(propreties.scale);
+                if (this.scale !== targetScale) {
+                    this.container.scale.set(propreties.scale);
+                }
             })
             .onComplete(() => {
                 this.position = position;
