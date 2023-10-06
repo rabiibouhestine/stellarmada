@@ -16,13 +16,14 @@ export class Card {
 
         this.selectable = false;
         this.selected = false;
+        this.scale = 0.5;
 
         this.container = new PIXI.Container();
         this.container.eventMode = 'static';
         this.container.cursor = 'default';
         this.container.x = this.position.x;
         this.container.y = this.position.y;
-        this.container.scale.set(0.5);
+        this.container.scale.set(this.scale);
 
         const blur = new PIXI.BlurFilter(8);
         this.glow = new PIXI.Sprite(this.sheet.textures[name]);
@@ -56,11 +57,11 @@ export class Card {
     }
 
     onPointerOver() {
-        this.container.scale.set(0.6);
+        this.container.scale.set(this.scale * 1.1);
     }
 
     onPointerOut() {
-        this.container.scale.set(0.5);
+        this.container.scale.set(this.scale);
     }
 
     setSelected(isSelected) {
@@ -76,11 +77,21 @@ export class Card {
         this.glow.visible = selectable;
     }
 
-    moveTo(position, reveal, destroy) {
-        const coords = {x: this.container.x, y: this.container.y}
+    moveTo(position, isHand, reveal, destroy) {
+        const propreties = {
+            x: this.container.x,
+            y: this.container.y,
+            scale: this.scale
+        };
 
-        const tween = new TWEEN.Tween(coords, false)
-            .to({x: position.x, y: position.y}, 800)
+        const targetScale = isHand? 0.6 : 0.5;
+
+        const tween = new TWEEN.Tween(propreties, false)
+            .to({
+                x: position.x,
+                y: position.y,
+                scale: targetScale
+            }, 800)
             .easing(TWEEN.Easing.Exponential.Out)
             .onStart(() => {
                 if (reveal) {
@@ -90,11 +101,13 @@ export class Card {
                 }
             })
             .onUpdate(() => {
-                this.container.x = coords.x;
-                this.container.y = coords.y;
+                this.container.x = propreties.x;
+                this.container.y = propreties.y;
+                this.container.scale.set(propreties.scale);
             })
             .onComplete(() => {
                 this.position = position;
+                this.scale = targetScale;
                 if (destroy) {
                     this.container.destroy();
                 }

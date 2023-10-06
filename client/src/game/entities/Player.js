@@ -20,9 +20,9 @@ export class Player {
         this.tavern = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, state.cards.tavern);
         this.graveyard = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, state.cards.graveyard);
         this.castle = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.castle, state.cards.castle);
-        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand);
-        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline);
-        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard);
+        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true);
+        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false);
+        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false);
         this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
         this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
@@ -40,14 +40,14 @@ export class Player {
         this.damageIndicator.setValue(value);
     }
 
-    createCards(locationState, isPlayer, startPosition) {
+    createCards(locationState, isPlayer, startPosition, isHand) {
         const cards = [];
         for (let index = 0; index < (isPlayer ? locationState.length : this.handCount); index++) {
             const cardName = isPlayer ? locationState[index] : "B2";
             const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition);
             cards.push(card);
         }
-        this.repositionCards(cards, startPosition);
+        this.repositionCards(cards, startPosition, isHand);
         return cards;
     }
 
@@ -57,10 +57,10 @@ export class Player {
         return card;
     }
 
-    repositionCards(array, centerPosition) {
+    repositionCards(array, centerPosition, isHand) {
         // Calculate the total width of the cards in the array
-        const cardWidth = 70;
-        const cardGap = 8;
+        const cardWidth = isHand? 84 : 70;
+        const cardGap = isHand? 10 : 8;
 
         // Calculate the starting position to center the cards
         const startX = centerPosition.x - ((cardWidth + cardGap)/2) * (array.length - 1);
@@ -74,14 +74,14 @@ export class Player {
                 x: startX + (index * (cardWidth + cardGap)),
                 y: startY
             };
-            array[index].moveTo(newPosition, true, false);
+            array[index].moveTo(newPosition, isHand, true, false);
         }
     }
 
     repositionBoard() {
-        this.repositionCards(this.frontline, this.positions.frontline);
-        this.repositionCards(this.rearguard, this.positions.rearguard);
-        this.repositionCards(this.hand, this.positions.hand);
+        this.repositionCards(this.frontline, this.positions.frontline, false);
+        this.repositionCards(this.rearguard, this.positions.rearguard, false);
+        this.repositionCards(this.hand, this.positions.hand, true);
         this.graveyard.repositionCards();
         this.tavern.repositionCards();
         this.castle.repositionCards();

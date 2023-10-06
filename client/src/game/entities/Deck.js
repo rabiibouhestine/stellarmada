@@ -45,7 +45,7 @@ export class Deck {
     }
 
     repositionCards() {
-        this.cardsToGet.forEach(card => card.moveTo(this.position, false, true));
+        this.cardsToGet.forEach(card => card.moveTo(this.position, false, false, true));
         this.cardsToGet = [];
     }
 }
