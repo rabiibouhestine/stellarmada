@@ -117,6 +117,7 @@ export class Card {
             .start()
 
         const updatePosition = (delta) => {
+            if (!tween.isPlaying()) return;
             tween.update(delta);
             requestAnimationFrame(updatePosition);
         };
