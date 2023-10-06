@@ -56,9 +56,10 @@ const initPlayerState = (deck) => {
     // Shuffle player deck
     const shuffledPlayerDeck =  shuffleDeck(playerDeck);
     // Draw handMax - 1 cards from the shuffled deck
-    hand.push(...shuffledPlayerDeck.slice(1 - handMax));
+    const cardsToDraw = shuffledPlayerDeck.splice(0, handMax - 1); 
+    hand.push(...cardsToDraw);
     // Put the remaining cards in the tavern
-    const tavern = shuffledPlayerDeck.slice(0, shuffledPlayerDeck.length - handMax + 1);
+    const tavern = shuffledPlayerDeck;
 
     // Define playerState
     const playerState = {
