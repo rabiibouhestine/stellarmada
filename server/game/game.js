@@ -46,12 +46,19 @@ const initGameState = (room) => {
 }
 
 const initPlayerState = (deck) => {
+    // Make a player deck
+    const playerDeck = deck.slice();
+    // Remove Ace of Diamonds from player deck
+    const indexToRemove = playerDeck.indexOf("AD");
+    playerDeck.splice(indexToRemove, 1);
+    // Add the Ace of Diamonds to hand
+    const hand = ["AD"];
     // Shuffle player deck
-    const shuffledDeck =  shuffleDeck(deck);
-    // Draw handMax cards from the shuffled deck
-    const hand = shuffledDeck.slice(-handMax);
+    const shuffledPlayerDeck =  shuffleDeck(playerDeck);
+    // Draw handMax - 1 cards from the shuffled deck
+    hand.push(...shuffledPlayerDeck.slice(1 - handMax));
     // Put the remaining cards in the tavern
-    const tavern = shuffledDeck.slice(0, shuffledDeck.length - handMax);
+    const tavern = shuffledPlayerDeck.slice(0, shuffledPlayerDeck.length - handMax + 1);
 
     // Define playerState
     const playerState = {
