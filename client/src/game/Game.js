@@ -60,8 +60,8 @@ export class Game {
             this.app.stage.scale.set(stageScale);
 
             // Center the stage
-            this.app.stage.x = (windowWidth - this.app.stage.width ) / 2;
-            this.app.stage.y = (windowHeight - this.app.stage.height ) / 2;
+            this.app.stage.x = (windowWidth - 800 * stageScale ) / 2;
+            this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
         }
 
         this.resize();
