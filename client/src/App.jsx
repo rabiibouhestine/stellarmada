@@ -4,8 +4,8 @@ import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } 
 import Home from './pages/Home';
 import Room from './pages/Room';
 
-// const socket = io.connect("https://cowards-castle-server.onrender.com");
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://cowards-castle-server.onrender.com");
+// const socket = io.connect("http://localhost:3001");
 
 const router = createBrowserRouter(
   createRoutesFromElements(
