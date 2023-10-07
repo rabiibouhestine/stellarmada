@@ -53,7 +53,7 @@ export class Joker {
             .to({
                 x: 0,
                 y: 0.6
-            }, 250)
+            }, 150)
             .onUpdate(() => {
                 this.card.scale.set(propreties.x, propreties.y);
             })
@@ -65,7 +65,7 @@ export class Joker {
             .to({
                 x: 0.5,
                 y: 0.5
-            }, 250)
+            }, 150)
             .onUpdate(() => {
                 this.card.scale.set(propreties.x, propreties.y);
             });
