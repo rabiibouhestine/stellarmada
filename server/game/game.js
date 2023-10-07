@@ -478,4 +478,4 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
     return gameAction;
 }
 
-module.exports = { initGameState, handleActionRequest, handleJokerRequest }
+module.exports = { initGameState, handleActionRequest }

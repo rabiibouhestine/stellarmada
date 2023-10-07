@@ -86,9 +86,15 @@ export class Game {
                 player.repositionBoard();
             }
 
-            // Update jokers
-            player.jokerLeft.setState(data.jokers[key].jokerLeft);
-            player.jokerRight.setState(data.jokers[key].jokerRight);
+            // Update joker left
+            if (!data.jokers[key].jokerLeft) {
+                player.jokerLeft.flipCard();
+            }
+
+            // Update joker right
+            if (!data.jokers[key].jokerRight) {
+                player.jokerRight.flipCard();
+            }
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
@@ -107,14 +113,6 @@ export class Game {
 
     onConfirmButton(event) {
         this.players[this.playerID].confirmButton.button.on('pointerdown', event);
-    }
-
-    onJokerLeft(event) {
-        this.players[this.playerID].jokerLeft.card.on('pointerdown', event);
-    }
-
-    onJokerRight(event) {
-        this.players[this.playerID].jokerRight.card.on('pointerdown', event);
     }
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
