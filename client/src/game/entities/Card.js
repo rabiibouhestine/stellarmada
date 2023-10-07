@@ -91,7 +91,7 @@ export class Card {
                 x: position.x,
                 y: position.y,
                 scale: targetScale
-            }, 800)
+            }, 600)
             .easing(TWEEN.Easing.Exponential.Out)
             .onStart(() => {
                 if (reveal) {

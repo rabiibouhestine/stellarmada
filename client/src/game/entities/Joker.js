@@ -1,6 +1,5 @@
 import * as PIXI from "pixi.js";
-
-import skullImage from '../assets/images/skull.png';
+import * as TWEEN from '@tweenjs/tween.js'
 
 export class Joker {
     constructor(cardsContainer, sheet, frontName, backName, isPlayer, isAlive, position) {
@@ -25,24 +24,7 @@ export class Joker {
         this.sprite.anchor.set(0.5);
         this.card.addChild(this.sprite);
 
-        this.overlay = new PIXI.Container();
-        this.overlay.visible = false;
-        this.graphic = new PIXI.Graphics();
-        this.graphic.beginFill(0x000000, 0.6);
-        this.graphic.drawRoundedRect(-70, -95, 140, 190, 4);
-        this.graphic.endFill();
-        this.overlay.addChild(this.graphic);
-        this.icon = PIXI.Sprite.from(skullImage);
-        this.icon.anchor.set(0.5);
-        this.icon.scale.set(0.5);
-        this.overlay.addChild(this.icon);
-        this.card.addChild(this.overlay);
-
         this.cardsContainer.addChild(this.card);
-
-        this.card
-            .on('pointerover', this.onPointerOver, this)
-            .on('pointerout', this.onPointerOut, this);
     }
 
     setState(isJokerAlive) {
@@ -50,8 +32,7 @@ export class Joker {
             this.isAlive = false;
             this.isSelectable = false;
             this.card.cursor = 'default';
-            this.sprite.texture = this.sheet.textures[this.backName];
-            this.overlay.visible = false;
+            this.flipCard();
         }
     }
 
@@ -62,13 +43,41 @@ export class Joker {
         }
     }
 
-    onPointerOver() {
-        if (this.isAlive && this.isPlayer && this.isSelectable) {
-            this.overlay.visible = true;
-        }
-    }
+    flipCard() {
+        const propreties = {
+            x: 0.5,
+            y: 0.5
+        };
 
-    onPointerOut() {
-        this.overlay.visible = false;
+        const tweenUp = new TWEEN.Tween(propreties, false)
+            .to({
+                x: 0,
+                y: 0.6
+            }, 250)
+            .onUpdate(() => {
+                this.card.scale.set(propreties.x, propreties.y);
+            })
+            .onComplete(() => {
+                this.sprite.texture = this.sheet.textures[this.backName];
+            });
+
+        const tweenDown = new TWEEN.Tween(propreties, false)
+            .to({
+                x: 0.5,
+                y: 0.5
+            }, 250)
+            .onUpdate(() => {
+                this.card.scale.set(propreties.x, propreties.y);
+            });
+
+        const updatePosition = (delta) => {
+            if (!tweenUp.isPlaying() && !tweenDown.isPlaying()) return;
+            tweenUp.update(delta);
+            tweenDown.update(delta);
+            requestAnimationFrame(updatePosition);
+        };
+    
+        tweenUp.chain(tweenDown).start();
+        requestAnimationFrame(updatePosition);
     }
 }
