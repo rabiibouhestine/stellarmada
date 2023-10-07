@@ -151,8 +151,8 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("disconnect", () => {
-        console.log("User disconnected", socket.id);
+    socket.on("disconnect", (reason) => {
+        console.log("User disconnected", socket.id, "because", reason);
 
         // if user was in a room
         const userRoom = users[socket.id].room;
