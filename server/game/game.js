@@ -14,6 +14,7 @@ const deck = [
 // ];
 
 const handMax = 7;
+const outpostCapacity = 3;
 
 const initGameState = (room) => {
     // Create players states
@@ -144,7 +145,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
-            const revivedCards = playerCards.graveyard.splice(0, playerSelectionValue);
+            const revivedCards = playerCards.graveyard.splice(0, playerSelectionSum);
             playerCards.tavern.unshift(...revivedCards);
 
             gameAction.moves[playerID].push(
@@ -160,7 +161,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // If Diamonds in selection, move cards from tavern to hand
         if (hasDiamonds && playerCards.tavern.length !== 0) {
             const nCardsMissingFromHand = handMax - playerCards.hand.length;
-            const nCardsToDraw = Math.min(playerSelectionValue, nCardsMissingFromHand);
+            const nCardsToDraw = Math.min(playerSelectionSum, nCardsMissingFromHand);
             const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
             playerCards.tavern.splice(-nCardsToDraw);
             playerCards.hand.push(...cardsToDraw);
@@ -292,14 +293,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const secondPlayerCards = gamestate.players[secondPlayerID].cards;
 
         // Move cards from frontline to secondPlayer rearguard
-        const isSecondPlayerRearguardFull = secondPlayerCards.rearguard.length == 2;
+        const isSecondPlayerRearguardFull = secondPlayerCards.rearguard.length == outpostCapacity;
         const secondPlayerFrontlineHasSpades = secondPlayerCards.frontline.some(card => cardsMapping[card].suit === "S");
         if (!isSecondPlayerRearguardFull && secondPlayerFrontlineHasSpades) {
             // Sort the frontline array by value in descending order
             secondPlayerCards.frontline.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
 
             // Calculate how many cards can be moved to the rearguard
-            const nCardsToMove = Math.min(2 - secondPlayerCards.rearguard.length, secondPlayerCards.frontline.length);
+            const nCardsToMove = Math.min(outpostCapacity - secondPlayerCards.rearguard.length, secondPlayerCards.frontline.length);
             const cardsToMove = secondPlayerCards.frontline.slice(-nCardsToMove);
 
             // Move the cards from the frontline to the rearguard
