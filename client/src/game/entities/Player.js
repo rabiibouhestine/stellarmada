@@ -23,8 +23,8 @@ export class Player {
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false);
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false);
-        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
-        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
+        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", state.cards.jokerLeft, this.positions.jokerLeft);
+        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", state.cards.jokerRight, this.positions.jokerRight);
 
         this.stance = "waiting";
 
@@ -161,20 +161,6 @@ export class Player {
 
         if (this.isPlayer) {
             this.confirmButton.setState(stance);
-        }
-
-        switch(stance) {
-            case "attacking":
-                this.jokerLeft.setSelectable(true);
-                this.jokerRight.setSelectable(true);
-                break;
-            case "discarding":
-                this.jokerLeft.setSelectable(true);
-                this.jokerRight.setSelectable(true);
-                break;
-            default:
-                this.jokerLeft.setSelectable(false);
-                this.jokerRight.setSelectable(false);
         }
 
         this.attackSelection = [];
