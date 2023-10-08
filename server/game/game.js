@@ -1,5 +1,5 @@
 const cardsMapping = require('./cardsDict.json');
-const { shuffleDeck } = require('./utils.js');
+const { shuffleDeck, resetState, clearAttack } = require('./utils.js');
 
 const deck = [
     'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
@@ -176,6 +176,13 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
+        // If player hand empty after attack, reset
+        if (playerCards.hand.length === 0) {
+            const resetAction = resetState(playerID, gamestate, handMax);
+            gameAction.jokers[playerID] = resetAction.jokers;
+            gameAction.moves[playerID].push(...resetAction.moves);
+        }
+
         // Update gameAction turn
         gameAction.turn = {
             playerID: secondPlayerID,
@@ -183,7 +190,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: playerSelectionValue
         }
 
-        // If second player can't discard the attack, current player wins
+        // If second player can't discard the attack, check towers
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
@@ -195,9 +202,22 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const secondPlayerJokerRight = gamestate.players[secondPlayerID].cards.jokerRight;
         const secondPlayerJokersDead = !secondPlayerJokerLeft && !secondPlayerJokerRight;
 
-        if (secondPlayerMaxDiscardValue < playerSelectionValue &&  secondPlayerJokersDead) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = playerID;
+        // If second player does not have enough to discard attack
+        if (secondPlayerMaxDiscardValue < playerSelectionValue) {
+            // If second player both towers destroyed, curren player wins
+            if (secondPlayerJokersDead) {
+                gameAction.isGameOver = true;
+                gameAction.winnerID = playerID;
+            } else {
+            // Id second player still has towers, attack is cleared, and second player resets
+                const resetAction = resetState(secondPlayerID, gamestate, handMax);
+                gameAction.jokers[secondPlayerID] = resetAction.jokers;
+                gameAction.moves[secondPlayerID].push(...resetAction.moves);
+
+                // Clear second player attack
+                const clearAttackMoves = clearAttack(playerID, gamestate, outpostCapacity);
+                gameAction.moves[playerID].push(...clearAttackMoves);
+            }
         }
     }
 
@@ -289,67 +309,16 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // Get second player cards
-        const secondPlayerCards = gamestate.players[secondPlayerID].cards;
-
-        // Move cards from frontline to secondPlayer rearguard
-        const isSecondPlayerRearguardFull = secondPlayerCards.rearguard.length == outpostCapacity;
-        const secondPlayerFrontlineHasSpades = secondPlayerCards.frontline.some(card => cardsMapping[card].suit === "S");
-        if (!isSecondPlayerRearguardFull && secondPlayerFrontlineHasSpades) {
-            // Sort the frontline array by value in descending order
-            secondPlayerCards.frontline.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
-
-            // Calculate how many cards can be moved to the rearguard
-            const nCardsToMove = Math.min(outpostCapacity - secondPlayerCards.rearguard.length, secondPlayerCards.frontline.length);
-            const cardsToMove = secondPlayerCards.frontline.slice(-nCardsToMove);
-
-            // Move the cards from the frontline to the rearguard
-            secondPlayerCards.rearguard.push(...cardsToMove);
-            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !cardsToMove.includes(card));
-
-            gameAction.moves[secondPlayerID].push(
-                {
-                    cardsNames: cardsToMove,
-                    nCards: cardsToMove.length,
-                    location: "frontline",
-                    destination: "rearguard"
-                }
-            );
+        // If hand empty after discard, reset
+        if (playerCards.hand.length === 0) {
+            const resetAction = resetState(playerID, gamestate, handMax);
+            gameAction.jokers[playerID] = resetAction.jokers;
+            gameAction.moves[playerID].push(...resetAction.moves);
         }
 
-        // Discard second player Royals from Frontline
-        const secondPlayerFrontlineHasRoyals = secondPlayerCards.frontline.some(card => cardsMapping[card].isCastle === true);
-        if (secondPlayerFrontlineHasRoyals) {
-            const secondPlayerFrontlineRoyals = secondPlayerCards.frontline.filter(card => cardsMapping[card].isCastle === true);
-            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !secondPlayerFrontlineRoyals.includes(card));
-            secondPlayerCards.castle.push(...secondPlayerFrontlineRoyals);
-
-            gameAction.moves[secondPlayerID].push(
-                {
-                    cardsNames: secondPlayerFrontlineRoyals,
-                    nCards: secondPlayerFrontlineRoyals.length,
-                    location: "frontline",
-                    destination: "castle"
-                }
-            );
-        }
-        
-        // Discard second player non Royals from Frontline
-        const secondPlayerFrontlineHasStandards = secondPlayerCards.frontline.some(card => cardsMapping[card].isCastle === false);
-        if (secondPlayerFrontlineHasStandards) {
-            const secondPlayerFrontlineStandards = secondPlayerCards.frontline.filter(card => cardsMapping[card].isCastle === false);
-            secondPlayerCards.frontline = secondPlayerCards.frontline.filter(card => !secondPlayerFrontlineStandards.includes(card));
-            secondPlayerCards.graveyard.push(...secondPlayerFrontlineStandards);
-
-            gameAction.moves[secondPlayerID].push(
-                {
-                    cardsNames: secondPlayerFrontlineStandards,
-                    nCards: secondPlayerFrontlineStandards.length,
-                    location: "frontline",
-                    destination: "graveyard"
-                }
-            );
-        }
+        // Clear second player attack
+        const clearAttackMoves = clearAttack(secondPlayerID, gamestate, outpostCapacity);
+        gameAction.moves[secondPlayerID].push(...clearAttackMoves);
 
         // Update gameAction turn
         gameAction.turn = {
@@ -478,4 +447,4 @@ const handleJokerRequest = (playerID, joker, gamestate) => {
     return gameAction;
 }
 
-module.exports = { initGameState, handleActionRequest, handleJokerRequest }
+module.exports = { initGameState, handleActionRequest }
