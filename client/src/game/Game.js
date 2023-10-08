@@ -87,12 +87,12 @@ export class Game {
             }
 
             // Update joker left
-            if (!data.jokers[key].jokerLeft) {
+            if (!data.jokers[key].jokerLeft && player.jokerRight.isAlive) {
                 player.jokerLeft.flipCard();
             }
 
             // Update joker right
-            if (!data.jokers[key].jokerRight) {
+            if (!data.jokers[key].jokerRight && player.jokerRight.isAlive) {
                 player.jokerRight.flipCard();
             }
 
