@@ -176,6 +176,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
+        // TODO: If player hand empty after attack, reset
+
         // Update gameAction turn
         gameAction.turn = {
             playerID: secondPlayerID,
@@ -183,7 +185,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: playerSelectionValue
         }
 
-        // If second player can't discard the attack, current player wins
+        // If second player can't discard the attack, check towers
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
@@ -195,6 +197,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const secondPlayerJokerRight = gamestate.players[secondPlayerID].cards.jokerRight;
         const secondPlayerJokersDead = !secondPlayerJokerLeft && !secondPlayerJokerRight;
 
+        // TODO: If second player still has towers, reset and discard the attack
+
+        // If second player has no towers, current player wins
         if (secondPlayerMaxDiscardValue < playerSelectionValue &&  secondPlayerJokersDead) {
             gameAction.isGameOver = true;
             gameAction.winnerID = playerID;
@@ -288,6 +293,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 }
             );
         }
+
+        // TODO: If hand empty after discard, reset
 
         // Get second player cards
         const secondPlayerCards = gamestate.players[secondPlayerID].cards;
