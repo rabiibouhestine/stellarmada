@@ -176,8 +176,11 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // If player hand empty after attack, reset
-        if (playerCards.hand.length === 0) {
+        // If player hand empty after attack, and still has towers, reset
+        const jokerLeft = gamestate.players[playerID].cards.jokerLeft;
+        const jokerRight = gamestate.players[playerID].cards.jokerRight;
+        const stillHasJokers = jokerLeft || jokerRight;
+        if (playerCards.hand.length === 0 && stillHasJokers) {
             const resetAction = resetState(playerID, gamestate, handMax);
             gameAction.jokers[playerID] = resetAction.jokers;
             gameAction.moves[playerID].push(...resetAction.moves);
