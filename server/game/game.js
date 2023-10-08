@@ -217,6 +217,13 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 // Clear second player attack
                 const clearAttackMoves = clearAttack(playerID, gamestate, outpostCapacity);
                 gameAction.moves[playerID].push(...clearAttackMoves);
+
+                // Update gameAction turn
+                gameAction.turn = {
+                    playerID: secondPlayerID,
+                    stance: "attacking",
+                    damage: 0
+                }
             }
         }
     }
