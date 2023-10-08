@@ -7,6 +7,7 @@ export class Joker {
         this.sheet = sheet;
         this.frontName = frontName;
         this.backName = backName;
+        this.isAlive = isAlive;
         this.position = position;
 
         this.card = new PIXI.Container();
@@ -46,6 +47,9 @@ export class Joker {
             }, 150)
             .onUpdate(() => {
                 this.card.scale.set(propreties.x, propreties.y);
+            })
+            .onComplete(() => {
+                this.isAlive = false;
             });
 
         const updatePosition = (delta) => {
