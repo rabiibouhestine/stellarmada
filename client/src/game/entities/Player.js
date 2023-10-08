@@ -268,6 +268,13 @@ export class Player {
             this.castle.setSize(this.castle.size + nCards);
         }
 
+        if (location === "rearguard" && destination === "tavern") {
+            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
+            this.tavern.cardsToGet.push(...cards);
+            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
+            this.tavern.setSize(this.tavern.size + nCards);
+        }
+
         if (location === "frontline" && destination === "rearguard") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.rearguard.push(...cards);
