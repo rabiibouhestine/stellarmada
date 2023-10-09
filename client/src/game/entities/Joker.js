@@ -10,16 +10,26 @@ export class Joker {
         this.isAlive = isAlive;
         this.position = position;
 
+        // Define tower card
         this.card = new PIXI.Container();
         this.card.x = this.position.x;
         this.card.y = this.position.y;
 
+        // Define card frame
+        this.frame = new PIXI.Graphics();
+        this.frame.beginFill(0xffffff, 1);
+        this.frame.drawRoundedRect(-35, -47.5, 70, 95, 4);
+        this.frame.endFill();
+        this.card.addChild(this.frame);
+
+        // Define tower sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? frontName : backName]);
         this.sprite.anchor.set(0.5);
-        this.sprite.width = 70;
-        this.sprite.height = 95;
+        this.sprite.width = 65;
+        this.sprite.height = 90;
         this.card.addChild(this.sprite);
 
+        // Add tower to cards container
         this.cardsContainer.addChild(this.card);
     }
 
