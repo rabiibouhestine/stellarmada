@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import * as TWEEN from '@tweenjs/tween.js'
+import * as TWEEN from '@tweenjs/tween.js';
 
 import cardsDict from '../assets/mappings/cardsDict.json';
 
