@@ -16,18 +16,18 @@ export class Card {
 
         this.selectable = false;
         this.selected = false;
-        this.scale = 0.5;
+        this.scale = 1;
 
         this.container = new PIXI.Container();
         this.container.eventMode = 'static';
         this.container.cursor = 'default';
         this.container.x = this.position.x;
         this.container.y = this.position.y;
-        this.container.scale.set(this.scale);
 
         const blur = new PIXI.BlurFilter(8);
         this.glow = new PIXI.Sprite(this.sheet.textures[name]);
-        this.glow.scale.set(1.1);
+        this.glow.width = 77;
+        this.glow.height = 104.5;
         this.glow.anchor.set(0.5);
         this.glow.tint = 0x0096FF;
         this.glow.filters = [blur];
@@ -36,6 +36,8 @@ export class Card {
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
+        this.sprite.width = 70;
+        this.sprite.height = 95;
         this.container.addChild(this.sprite);
 
         this.cardsContainer.addChild(this.container);
@@ -84,7 +86,7 @@ export class Card {
             scale: this.scale
         };
 
-        const targetScale = isHand? 0.6 : 0.5;
+        const targetScale = isHand? 1.2 : 1;
 
         const tween = new TWEEN.Tween(propreties, false)
             .to({
