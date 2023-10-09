@@ -18,12 +18,14 @@ export class Card {
         this.selected = false;
         this.scale = 1;
 
+        // Define card container
         this.container = new PIXI.Container();
         this.container.eventMode = 'static';
         this.container.cursor = 'default';
         this.container.x = this.position.x;
         this.container.y = this.position.y;
 
+        // Define card glow
         const blur = new PIXI.BlurFilter(8);
         this.glow = new PIXI.Sprite(this.sheet.textures[name]);
         this.glow.width = 77;
@@ -34,14 +36,17 @@ export class Card {
         this.glow.visible = false;
         this.container.addChild(this.glow);
 
+        // Define card sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
         this.sprite.width = 70;
         this.sprite.height = 95;
         this.container.addChild(this.sprite);
 
+        // Add card to cards container
         this.cardsContainer.addChild(this.container);
 
+        // Handle events
         this.container
             .on('pointerover', this.onPointerOver, this)
             .on('pointerout', this.onPointerOut, this);
