@@ -8,7 +8,7 @@ import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
-import layout from './assets/images/mattress.png';
+import layout from './assets/images/brownMattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
@@ -20,7 +20,7 @@ export class Game {
             height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
-            backgroundColor: 0x00a37a,
+            backgroundColor: 0x312e2b,
         });
         global.__PIXI_APP__ = this.app;
         

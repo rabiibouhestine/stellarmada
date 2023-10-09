@@ -28,8 +28,8 @@ export class Card {
         // Define card glow
         const blur = new PIXI.BlurFilter(8);
         this.glow = new PIXI.Sprite(this.sheet.textures[name]);
-        this.glow.width = 77;
-        this.glow.height = 104.5;
+        this.glow.width = 75;
+        this.glow.height = 100;
         this.glow.anchor.set(0.5);
         this.glow.tint = 0x0096FF;
         this.glow.filters = [blur];

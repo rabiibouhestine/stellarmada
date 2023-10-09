@@ -8,8 +8,8 @@ export class Button {
     constructor(app, position) {
         this.enabled = false;
         this.disabledColor = 0x000000;
-        this.enabledColor = 0x8E44AD;
-        this.enabledColorHover = 0x7D3C98;
+        this.enabledColor = 0x81b64c;
+        this.enabledColorHover = 0xa3d160;
 
         this.swordIcon = PIXI.Texture.from(swordImage);
         this.skullIcon = PIXI.Texture.from(skullImage);
