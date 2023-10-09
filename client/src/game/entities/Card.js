@@ -36,11 +36,18 @@ export class Card {
         this.glow.visible = false;
         this.container.addChild(this.glow);
 
+        // Define card frame
+        this.frame = new PIXI.Graphics();
+        this.frame.beginFill(0xffffff, 1);
+        this.frame.drawRoundedRect(-35, -47.5, 70, 95, 4);
+        this.frame.endFill();
+        this.container.addChild(this.frame);
+
         // Define card sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
-        this.sprite.width = 70;
-        this.sprite.height = 95;
+        this.sprite.width = 65;
+        this.sprite.height = 90;
         this.container.addChild(this.sprite);
 
         // Add card to cards container
