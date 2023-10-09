@@ -13,10 +13,11 @@ export class Joker {
         this.card = new PIXI.Container();
         this.card.x = this.position.x;
         this.card.y = this.position.y;
-        this.card.scale.set(0.5);
 
         this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? frontName : backName]);
         this.sprite.anchor.set(0.5);
+        this.sprite.width = 70;
+        this.sprite.height = 95;
         this.card.addChild(this.sprite);
 
         this.cardsContainer.addChild(this.card);
@@ -24,14 +25,14 @@ export class Joker {
 
     flipCard() {
         const propreties = {
-            x: 0.5,
-            y: 0.5
+            x: 1,
+            y: 1
         };
 
         const tweenUp = new TWEEN.Tween(propreties, false)
             .to({
                 x: 0,
-                y: 0.6
+                y: 1.1
             }, 150)
             .onUpdate(() => {
                 this.card.scale.set(propreties.x, propreties.y);
@@ -42,8 +43,8 @@ export class Joker {
 
         const tweenDown = new TWEEN.Tween(propreties, false)
             .to({
-                x: 0.5,
-                y: 0.5
+                x: 1,
+                y: 1
             }, 150)
             .onUpdate(() => {
                 this.card.scale.set(propreties.x, propreties.y);
