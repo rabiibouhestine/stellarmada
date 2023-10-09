@@ -10,12 +10,19 @@ export class Deck {
 
         this.cardsToGet = [];
 
+        // Define deck container
         this.container = new PIXI.Container();
         this.container.position = this.position;
         this.container.visible = this.size > 0;
+
+        // Define deck sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
-        this.sprite.scale.set(0.5);
+        this.sprite.width = 70;
+        this.sprite.height = 95;
         this.sprite.anchor.set(0.5);
+        this.container.addChild(this.sprite);
+
+        // Define deck text
         this.text = new PIXI.Text(this.size, {
             fontFamily: 'Arial',
             fontSize: 20,
@@ -23,9 +30,9 @@ export class Deck {
             align: 'center'
         });
         this.text.anchor.set(0.5);
-
-        this.container.addChild(this.sprite);
         this.container.addChild(this.text);
+
+        // Add deck to app stage
         this.app.stage.addChild(this.container);
     }
 
@@ -33,15 +40,6 @@ export class Deck {
         this.size = x;
         this.text.text = this.size;
         this.container.visible = this.size > 0;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    setName(name) {
-        this.name = name;
-        this.sprite.texture = this.sheet.textures[this.name]
     }
 
     repositionCards() {
