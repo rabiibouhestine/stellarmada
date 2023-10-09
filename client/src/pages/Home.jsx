@@ -15,7 +15,7 @@ function Home({ socket }) {
     }, [socket]);
 
     return (
-        <div className="flex items-center justify-center h-screen bg-blue-300">
+        <div className="flex items-center justify-center h-screen bg-stone-600">
             <div className='grid justify-items-center'>
                 <div className='mb-15 p-6'>
                     <h1 className="text-6xl text-center text-slate-100 font-black drop-shadow-md">COWARDS CASTLE</h1>

@@ -43,7 +43,7 @@ function RoomLobby({ socket }) {
     }, [isReady]);
 
     return (
-        <div className="flex items-center justify-center h-screen bg-blue-300">
+        <div className="flex items-center justify-center h-screen bg-stone-600">
             <div className='grid justify-items-center w-2/3'>
                 <div className='flex items-center justify-between w-1/3'>
                     <div className="flex justify-center items-center rounded-full w-16 h-16 bg-sky-600">
