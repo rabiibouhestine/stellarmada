@@ -32,7 +32,7 @@ export class Deck {
         // Define text background
         this.textBG = new PIXI.Graphics();
         this.textBG.beginFill(0x000000, 0.4);
-        this.textBG.drawCircle(0, 0, 14);
+        this.textBG.drawCircle(0, 0, 15);
         this.textBG.endFill();
         this.container.addChild(this.textBG);
 
