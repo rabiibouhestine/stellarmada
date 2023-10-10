@@ -36,9 +36,9 @@ function RoomLobby({ socket }) {
     useEffect(() => {
         setReadyBtnClass(
             isReady?
-            "w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-orange-500 hover:bg-orange-700"
+            "w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-orange-600 hover:bg-orange-700"
             :
-            "w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+            "w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-lime-600 hover:bg-lime-700"
         );
     }, [isReady]);
 
@@ -70,16 +70,16 @@ function RoomLobby({ socket }) {
                     </h1>
                 </div>
                 <div className='my-6 flex justify-center items-center w-full'>
-                    <h1 className="px-4 py-2 rounded-l-lg text-md text-center text-slate-100 font-medium bg-sky-400">
+                    <h1 className="px-4 py-2 rounded-l-lg text-md text-center text-slate-100 font-medium bg-stone-400">
                         {window.location.href}
                     </h1>
-                    <button className="px-4 py-2 inline-flex items-center justify-center rounded-r-lg bg-sky-500 hover:bg-sky-700 font-black text-md text-white" onClick={handleCopy} >
+                    <button className="px-4 py-2 inline-flex items-center justify-center rounded-r-lg bg-stone-500 hover:bg-stone-700 font-black text-md text-white" onClick={handleCopy} >
                         <ClipboardIcon className="h-6 w-6 mr-2" />
                         <span>COPY INVITE LINK</span>
                     </button>
                 </div>
                 <div className='p-6 flex justify-center w-2/3'>
-                    <button className="w-1/5 mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white" onClick={handleLeave} >
+                    <button className="w-1/5 mx-2 px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 font-black text-lg text-white" onClick={handleLeave} >
                         LEAVE
                     </button>
                     <button className={readyBtnClass} onClick={handleReady} >
