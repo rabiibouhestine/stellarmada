@@ -20,7 +20,7 @@ export class Game {
             height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
-            backgroundColor: 0x526478,
+            backgroundColor: 0x475569,
         });
         global.__PIXI_APP__ = this.app;
         
