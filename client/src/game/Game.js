@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
-import cardsImage from './assets/images/regicideCards.jpg';
-import cardsSheet from './assets/mappings/regicideCards.json';
+import cardsImage from './assets/images/kennyCards.jpg';
+import cardsSheet from './assets/mappings/kennyCards.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
