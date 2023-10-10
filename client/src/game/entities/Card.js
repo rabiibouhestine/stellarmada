@@ -32,6 +32,7 @@ export class Card {
         this.glow.width = 140;
         this.glow.height = 190;
         this.glow.visible = false;
+        this.glow.eventMode = 'none';
         this.container.addChild(this.glow);
 
         // Define card frame
