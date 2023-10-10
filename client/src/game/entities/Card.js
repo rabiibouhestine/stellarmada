@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
 
 import cardsDict from '../assets/mappings/cardsDict.json';
+import glow from '../assets/images/glow.png';
 
 export class Card {
     constructor(cardsContainer, sheet, name, position) {
@@ -25,6 +26,14 @@ export class Card {
         this.container.x = this.position.x;
         this.container.y = this.position.y;
 
+        // Define card glow
+        this.glow = PIXI.Sprite.from(glow);
+        this.glow.anchor.set(0.5);
+        this.glow.width = 140;
+        this.glow.height = 190;
+        this.glow.visible = false;
+        this.container.addChild(this.glow);
+
         // Define card frame
         this.frame = new PIXI.Graphics();
         this.frame.beginFill(0xffffff, 1);
@@ -38,13 +47,6 @@ export class Card {
         this.sprite.width = 65;
         this.sprite.height = 90;
         this.container.addChild(this.sprite);
-
-        // Define card glow
-        this.glow = new PIXI.Graphics();
-        this.glow.lineStyle(2, 0x0096FF, 1);
-        this.glow.drawRoundedRect(-35, -47.5, 70, 95, 4);
-        this.glow.visible = false;
-        this.container.addChild(this.glow);
 
         // Add card to cards container
         this.cardsContainer.addChild(this.container);
