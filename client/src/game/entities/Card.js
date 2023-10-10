@@ -33,7 +33,7 @@ export class Card {
         this.glow.height = 190;
         this.glow.visible = false;
         this.glow.eventMode = 'none';
-        this.glow.tint = 0x0096FF;
+        this.glow.tint = 0x0096FF; //0xD22B2B
         this.container.addChild(this.glow);
 
         // Define card frame
@@ -85,10 +85,11 @@ export class Card {
         }
     }
 
-    setSelectable(selectable) {
+    setSelectable(selectable, isAttack) {
         this.selectable = selectable;
         this.container.cursor = selectable? 'pointer' : 'default';
         this.glow.visible = selectable;
+        this.glow.tint = isAttack? 0x0096FF : 0xD22B2B;
     }
 
     moveTo(position, isHand, reveal, destroy) {

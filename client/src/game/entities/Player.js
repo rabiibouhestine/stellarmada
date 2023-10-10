@@ -120,7 +120,7 @@ export class Player {
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsRearguard = this.rearguard.filter(card => !cardSelection.includes(card));
         const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsRearguard];
-        notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.damageIndicator.value > 0); });
+        notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : this.damageIndicator.value > 0, this.stance === "attacking"); });
 
         // Update confirm button
         if (this.stance === "attacking") {
@@ -146,17 +146,17 @@ export class Player {
     
         this.frontline.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(false);
+            card.setSelectable(false, false);
         });
 
         this.hand.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding));
+            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
         });
     
         this.rearguard.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(this.isPlayer && isDiscarding);
+            card.setSelectable(this.isPlayer && isDiscarding, false);
         });
 
         if (this.isPlayer) {
