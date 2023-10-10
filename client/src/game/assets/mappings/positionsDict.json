@@ -31,7 +31,7 @@
             "y": 537.5
         },
         {
-            "label": "Barracks",
+            "label": "Outpost",
             "width": 200,
             "x": 189,
             "y": 537.5
@@ -61,7 +61,7 @@
             "y": 181.5
         },
         {
-            "label": "Barracks",
+            "label": "Outpost",
             "width": 200,
             "x": 611,
             "y": 181.5
