@@ -1,7 +1,8 @@
 import * as PIXI from "pixi.js";
-import * as TWEEN from '@tweenjs/tween.js'
+import * as TWEEN from '@tweenjs/tween.js';
 
 import cardsDict from '../assets/mappings/cardsDict.json';
+import glow from '../assets/images/glow.png';
 
 export class Card {
     constructor(cardsContainer, sheet, name, position) {
@@ -16,30 +17,43 @@ export class Card {
 
         this.selectable = false;
         this.selected = false;
-        this.scale = 0.5;
+        this.scale = 1;
 
+        // Define card container
         this.container = new PIXI.Container();
         this.container.eventMode = 'static';
         this.container.cursor = 'default';
         this.container.x = this.position.x;
         this.container.y = this.position.y;
-        this.container.scale.set(this.scale);
 
-        const blur = new PIXI.BlurFilter(8);
-        this.glow = new PIXI.Sprite(this.sheet.textures[name]);
-        this.glow.scale.set(1.1);
+        // Define card glow
+        this.glow = PIXI.Sprite.from(glow);
         this.glow.anchor.set(0.5);
-        this.glow.tint = 0x0096FF;
-        this.glow.filters = [blur];
+        this.glow.width = 140;
+        this.glow.height = 190;
         this.glow.visible = false;
+        this.glow.eventMode = 'none';
+        this.glow.tint = 0x0096FF; //0xD22B2B
         this.container.addChild(this.glow);
 
+        // Define card frame
+        this.frame = new PIXI.Graphics();
+        this.frame.beginFill(0xffffff, 1);
+        this.frame.drawRoundedRect(-35, -47.5, 70, 95, 4);
+        this.frame.endFill();
+        this.container.addChild(this.frame);
+
+        // Define card sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
+        this.sprite.width = 65;
+        this.sprite.height = 90;
         this.container.addChild(this.sprite);
 
+        // Add card to cards container
         this.cardsContainer.addChild(this.container);
 
+        // Handle events
         this.container
             .on('pointerover', this.onPointerOver, this)
             .on('pointerout', this.onPointerOut, this);
@@ -71,10 +85,11 @@ export class Card {
         }
     }
 
-    setSelectable(selectable) {
+    setSelectable(selectable, isAttack) {
         this.selectable = selectable;
         this.container.cursor = selectable? 'pointer' : 'default';
         this.glow.visible = selectable;
+        this.glow.tint = isAttack? 0x0096FF : 0xD22B2B;
     }
 
     moveTo(position, isHand, reveal, destroy) {
@@ -84,7 +99,7 @@ export class Card {
             scale: this.scale
         };
 
-        const targetScale = isHand? 0.6 : 0.5;
+        const targetScale = isHand? 1.2 : 1;
 
         const tween = new TWEEN.Tween(propreties, false)
             .to({

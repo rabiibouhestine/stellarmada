@@ -1,14 +1,14 @@
 import * as PIXI from "pixi.js";
 
-import cardsImage from './assets/images/cards.png';
-import cardsSheet from './assets/mappings/cards.json';
+import cardsImage from './assets/images/kennyCards.jpg';
+import cardsSheet from './assets/mappings/kennyCards.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
-import layout from './assets/images/mattress.png';
+import layout from './assets/images/brownMattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
@@ -20,7 +20,7 @@ export class Game {
             height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
-            backgroundColor: 0x00a37a,
+            backgroundColor: 0x475569,
         });
         global.__PIXI_APP__ = this.app;
         

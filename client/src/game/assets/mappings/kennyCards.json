@@ -1,6 +1,6 @@
 {"frames": {
 
-"cardBack_blue1":
+"B1":
 {
 	"frame": {"x":0,"y":0,"w":140,"h":190},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":140,"h":190},
 	"anchor": {"x":0.5,"y":0.5}
 },
-"B1":
+"cardBack_blue3":
 {
 	"frame": {"x":280,"y":0,"w":140,"h":190},
 	"rotated": false,
@@ -90,7 +90,7 @@
 	"sourceSize": {"w":140,"h":190},
 	"anchor": {"x":0.5,"y":0.5}
 },
-"cardBack_red1":
+"B2":
 {
 	"frame": {"x":1400,"y":0,"w":140,"h":190},
 	"rotated": false,
@@ -108,7 +108,7 @@
 	"sourceSize": {"w":140,"h":190},
 	"anchor": {"x":0.5,"y":0.5}
 },
-"B2":
+"cardBack_red3":
 {
 	"frame": {"x":1680,"y":0,"w":140,"h":190},
 	"rotated": false,
