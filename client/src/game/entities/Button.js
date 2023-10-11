@@ -75,6 +75,19 @@ export class Button {
         // Add button container to app stage
         app.stage.addChild(this.button);
 
+        // Animate the button icon
+        let time = 0;
+        app.ticker.add(() =>
+        {
+            time += 0.1;
+            if ( this.enabled ) {
+                this.iconSprite.scale.set(0.25 + 0.05 * Math.sin(time));
+            } else {
+                this.iconSprite.scale.set(0.2);
+                time = 0;
+            }
+        });
+
         this.button
             .on('pointerover', this.onPointerOver, this)
             .on('pointerout', this.onPointerOut, this);
