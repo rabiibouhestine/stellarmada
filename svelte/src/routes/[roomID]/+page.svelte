@@ -18,7 +18,7 @@
 				return;
 			}
 			// if response is success we proceed
-			gameStarted = true;
+			gameStarted = data.room.gameStarted;
 		});
 
 		socket.on('handleReadyResponse', () => {
