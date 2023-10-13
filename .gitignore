@@ -2,5 +2,6 @@
 *.DS_Store
 
 # ignore node modules
+svelte/node_modules/
 client/node_modules/
 server/node_modules/
