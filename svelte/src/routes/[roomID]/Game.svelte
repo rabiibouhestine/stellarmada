@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socket } from '$lib/index.js';
+	import { socket } from '$lib/modules/socket.js';
 	import { Game } from '../../game/Game.js';
 	import Modal from '$lib/components/Modal.svelte';
 
