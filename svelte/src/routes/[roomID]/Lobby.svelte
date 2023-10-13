@@ -35,6 +35,10 @@
 		socket.on('roomUpdate', (data) => {
 			playersNb = data.playersNb;
 		});
+
+		return () => {
+			socket.off('roomUpdate');
+		};
 	});
 </script>
 

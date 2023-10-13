@@ -1,0 +1,150 @@
+{
+    "top": {
+        "hand": {"x": 400, "y": 89},
+        "frontline": {"x": 400, "y": 359.5},
+        "rearguard": {"x": 173, "y": 240.5},
+        "tavern": {"x": 611, "y": 240.5},
+        "graveyard": {"x": 705, "y": 240.5},
+        "castle": {"x": 345, "y": 240.5},
+        "jokerLeft": {"x": 517, "y": 240.5},
+        "jokerRight": {"x": 439, "y": 240.5}
+    },
+    "bottom": {
+        "hand": {"x": 400, "y": 634.5},
+        "frontline": {"x": 400, "y": 359.5},
+        "rearguard": {"x": 627, "y": 478.5},
+        "tavern": {"x": 189, "y": 478.5},
+        "graveyard": {"x": 95, "y": 478.5},
+        "castle": {"x": 455, "y": 478.5},
+        "jokerLeft": {"x": 283, "y": 478.5},
+        "jokerRight": {"x": 361, "y": 478.5}
+    },
+    "frontline": {
+        "damageIndicator": {"x":110, "y":360},
+        "confirmButton": {"x":690, "y":360}
+    },
+    "old_mattress": [
+        {
+            "label": "Hospice",
+            "width": 200,
+            "x": 95,
+            "y": 537.5
+        },
+        {
+            "label": "Outpost",
+            "width": 200,
+            "x": 189,
+            "y": 537.5
+        },
+        {
+            "label": "Towers",
+            "width": 164,
+            "x": 322,
+            "y": 537.5
+        },
+        {
+            "label": "Castle",
+            "width": 200,
+            "x": 455,
+            "y": 537.5
+        },
+        {
+            "label": "Rearguard",
+            "width": 242,
+            "x": 627,
+            "y": 537.5
+        },
+        {
+            "label": "Hospice",
+            "width": 200,
+            "x": 705,
+            "y": 181.5
+        },
+        {
+            "label": "Outpost",
+            "width": 200,
+            "x": 611,
+            "y": 181.5
+        },
+        {
+            "label": "Towers",
+            "width": 164,
+            "x": 478,
+            "y": 181.5
+        },
+        {
+            "label": "Castle",
+            "width": 200,
+            "x": 345,
+            "y": 181.5
+        },
+        {
+            "label": "Rearguard",
+            "width": 242,
+            "x": 173,
+            "y": 181.5
+        }
+    ],
+    "mattress": [
+        {
+            "label": "Scrapyard",
+            "width": 200,
+            "x": 95,
+            "y": 537.5
+        },
+        {
+            "label": "Shipyard",
+            "width": 200,
+            "x": 189,
+            "y": 537.5
+        },
+        {
+            "label": "Anomalies",
+            "width": 164,
+            "x": 322,
+            "y": 537.5
+        },
+        {
+            "label": "Home Base",
+            "width": 200,
+            "x": 455,
+            "y": 537.5
+        },
+        {
+            "label": "Hideout",
+            "width": 242,
+            "x": 627,
+            "y": 537.5
+        },
+        {
+            "label": "Scrapyard",
+            "width": 200,
+            "x": 705,
+            "y": 181.5
+        },
+        {
+            "label": "Shipyard",
+            "width": 200,
+            "x": 611,
+            "y": 181.5
+        },
+        {
+            "label": "Anomalies",
+            "width": 164,
+            "x": 478,
+            "y": 181.5
+        },
+        {
+            "label": "Home Base",
+            "width": 200,
+            "x": 345,
+            "y": 181.5
+        },
+        {
+            "label": "Hideout",
+            "width": 242,
+            "x": 173,
+            "y": 181.5
+        }
+    ]
+}

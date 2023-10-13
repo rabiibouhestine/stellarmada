@@ -11,6 +11,10 @@
 		socket.on('createRoomResponse', (data) => {
 			goto(`/${data.room.roomID}`);
 		});
+
+		return () => {
+			socket.off('createRoomResponse');
+		};
 	});
 </script>
 

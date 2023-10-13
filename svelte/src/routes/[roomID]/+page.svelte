@@ -28,6 +28,12 @@
 		socket.on('goBackLobbyResponse', () => {
 			gameStarted = false;
 		});
+
+		return () => {
+			socket.off('joinRoomResponse');
+			socket.off('handleReadyResponse');
+			socket.off('goBackLobbyResponse');
+		};
 	});
 </script>
 
