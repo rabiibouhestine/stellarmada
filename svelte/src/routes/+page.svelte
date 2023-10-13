@@ -18,6 +18,6 @@
 
 <style lang="postcss">
 	:global(html) {
-		background-color: theme(colors.slate.600);
+		@apply bg-slate-600;
 	}
 </style>
