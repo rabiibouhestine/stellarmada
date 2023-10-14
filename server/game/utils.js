@@ -29,19 +29,6 @@ const processGameState = (gameState, playerID) => {
 }
 
 const resetState = (playerID, gamestate, handMax) => {
-    const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
-    const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
-    const playerJokersDead = !playerJokerLeft && !playerJokerRight;
-
-    // If both towers dead, abort reset
-    if (playerJokersDead) return;
-
-    // Destory one tower, starting with left
-    if (playerJokerLeft) {
-        gamestate.players[playerID].cards.jokerLeft = false;
-    } else {
-        gamestate.players[playerID].cards.jokerRight = false;
-    }
 
     // Initialise reset action
     const resetAction = {
@@ -51,6 +38,22 @@ const resetState = (playerID, gamestate, handMax) => {
         },
         moves: []
     };
+
+    const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
+    const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
+    const playerJokersDead = !playerJokerLeft && !playerJokerRight;
+
+    // If both towers dead, abort reset
+    if (playerJokersDead) return resetAction;
+
+    // Destory one tower, starting with left
+    if (playerJokerLeft) {
+        gamestate.players[playerID].cards.jokerLeft = false;
+        resetAction.jokers.jokerLeft = false;
+    } else {
+        gamestate.players[playerID].cards.jokerRight = false;
+        resetAction.jokers.jokerRight = false;
+    }
 
     // Put outpost cards in Barracks
     if (gamestate.players[playerID].cards.rearguard.length) {
