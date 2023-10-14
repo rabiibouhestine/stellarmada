@@ -60,9 +60,9 @@
 		<div class="p-6">
 			<h1 class="text-2xl text-center text-slate-100 font-black drop-shadow-md">
 				{#if playersNb === 2}
-					"WAITING FOR EVERYONE TO BE READY"
+					WAITING FOR EVERYONE TO BE READY
 				{:else}
-					"WAITING FOR OPPONENT TO JOIN"
+					WAITING FOR OPPONENT TO JOIN
 				{/if}
 			</h1>
 		</div>
@@ -89,9 +89,9 @@
 			</button>
 			<button class={readyBtnClass} on:click={handleReady}>
 				{#if isReady}
-					"UNREADY"
+					UNREADY
 				{:else}
-					"READY"
+					READY
 				{/if}
 			</button>
 		</div>
