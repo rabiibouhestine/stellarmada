@@ -9,6 +9,7 @@
 	let game;
 	let winnerID;
 	let isGameOver = false;
+	const playerID = localStorage.getItem('playerID');
 
 	onMount(() => {
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
@@ -37,8 +38,8 @@
 
 	function handleConfirmButton() {
 		const selectedCards = {
-			hand: game.players[socket.id].hand.filter((card) => card.selected).map((card) => card.name),
-			rearguard: game.players[socket.id].rearguard
+			hand: game.players[playerID].hand.filter((card) => card.selected).map((card) => card.name),
+			rearguard: game.players[playerID].rearguard
 				.filter((card) => card.selected)
 				.map((card) => card.name)
 		};
@@ -62,7 +63,7 @@
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
-				{#if winnerID === socket.id}
+				{#if winnerID === playerID}
 					<h2>You Won !!!</h2>
 				{:else}
 					<h2>You lost...</h2>

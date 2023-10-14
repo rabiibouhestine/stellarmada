@@ -13,7 +13,8 @@ import { Mattress } from "./entities/Mattress";
 
 export class Game {
     constructor({ canvasRef, socket, gameState }) {
-        this.playerID = socket.id;
+        this.playerID = localStorage.getItem("playerID");
+
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 800,
