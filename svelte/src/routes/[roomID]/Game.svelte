@@ -8,7 +8,7 @@
 
 	let game;
 	let winnerID;
-	let isGameOver = true;
+	let isGameOver = false;
 
 	onMount(() => {
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
