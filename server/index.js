@@ -26,6 +26,8 @@ const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
     console.log("Socket connected", socket.id);
+    console.log("PlayerID:", socket.handshake.query.playerID);
+
     users[socket.id] = {
         socketID: socket.id,
         room: null
