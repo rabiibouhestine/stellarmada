@@ -23,7 +23,7 @@
         "damageIndicator": {"x":110, "y":360},
         "confirmButton": {"x":690, "y":360}
     },
-    "mattress": [
+    "old_mattress": [
         {
             "label": "Hospice",
             "width": 200,
@@ -80,6 +80,68 @@
         },
         {
             "label": "Rearguard",
+            "width": 242,
+            "x": 173,
+            "y": 181.5
+        }
+    ],
+    "mattress": [
+        {
+            "label": "Scrapyard",
+            "width": 200,
+            "x": 95,
+            "y": 537.5
+        },
+        {
+            "label": "Shipyard",
+            "width": 200,
+            "x": 189,
+            "y": 537.5
+        },
+        {
+            "label": "Anomalies",
+            "width": 164,
+            "x": 322,
+            "y": 537.5
+        },
+        {
+            "label": "Home Base",
+            "width": 200,
+            "x": 455,
+            "y": 537.5
+        },
+        {
+            "label": "Hideout",
+            "width": 242,
+            "x": 627,
+            "y": 537.5
+        },
+        {
+            "label": "Scrapyard",
+            "width": 200,
+            "x": 705,
+            "y": 181.5
+        },
+        {
+            "label": "Shipyard",
+            "width": 200,
+            "x": 611,
+            "y": 181.5
+        },
+        {
+            "label": "Anomalies",
+            "width": 164,
+            "x": 478,
+            "y": 181.5
+        },
+        {
+            "label": "Home Base",
+            "width": 200,
+            "x": 345,
+            "y": 181.5
+        },
+        {
+            "label": "Hideout",
             "width": 242,
             "x": 173,
             "y": 181.5

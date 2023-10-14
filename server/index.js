@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: "https://cowardscastle.netlify.app",
-        // origin: "http://localhost:3000",
+        // origin: "http://localhost:5173",
         methods: ["GET", "POST"],
     }
 });
@@ -144,7 +144,7 @@ io.on("connection", (socket) => {
 
         // if user was in a room
         const userRoom = users[socket.id].room;
-        if (userRoom !== null) {
+        if (rooms[userRoom]) {
             // remove user from room
             delete rooms[userRoom].players[socket.id];
 

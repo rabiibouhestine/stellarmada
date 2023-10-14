@@ -22,7 +22,7 @@ export class Game {
             autoDensity: true,
             backgroundColor: 0x475569,
         });
-        global.__PIXI_APP__ = this.app;
+        globalThis.__PIXI_APP__ = this.app;
         
         this.sheet = new PIXI.Spritesheet(
             PIXI.BaseTexture.from(cardsImage),
@@ -30,7 +30,7 @@ export class Game {
         );
         this.parseSheet();
 
-        canvasRef.current.appendChild(this.app.view);
+        canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress, layout);
         this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
