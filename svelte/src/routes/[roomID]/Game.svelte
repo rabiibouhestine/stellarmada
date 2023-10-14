@@ -8,7 +8,7 @@
 
 	let game;
 	let winnerID;
-	let isGameOver = false;
+	let isGameOver = true;
 
 	onMount(() => {
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
@@ -59,5 +59,29 @@
 </script>
 
 <div id="pixi-container">
-	<Modal />
+	<Modal bind:showModal={isGameOver}>
+		<div class="grid justify-items-center w-2/3">
+			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+				{#if winnerID === socket.id}
+					<h2>You Won !!!</h2>
+				{:else}
+					<h2>You lost...</h2>
+				{/if}
+			</div>
+			<div class="p-6 flex justify-center">
+				<button
+					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					on:click={handleLeave}
+				>
+					LEAVE
+				</button>
+				<button
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					on:click={handleRematch}
+				>
+					REMATCH
+				</button>
+			</div>
+		</div>
+	</Modal>
 </div>
