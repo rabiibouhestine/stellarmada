@@ -25,7 +25,7 @@ const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
-    console.log("User connected", socket.id);
+    console.log("Socket connected", socket.id);
     users[socket.id] = {
         socketID: socket.id,
         room: null
@@ -141,7 +141,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", (reason) => {
-        console.log("User disconnected", socket.id, "because", reason);
+        console.log("Socket disconnected", socket.id, "because", reason);
 
         // if user was in a room
         const userRoom = users[socket.id].room;
