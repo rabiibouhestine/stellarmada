@@ -156,7 +156,7 @@ io.on("connection", (socket) => {
 
         // if user was in a room
         const userRoom = users[playerID].room;
-        if (rooms[userRoom]) {
+        if (userRoom !== null) {
             // remove user from room
             delete rooms[userRoom].players[playerID];
 
