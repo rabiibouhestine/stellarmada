@@ -12,7 +12,7 @@ import layout from './assets/images/brownMattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor({ canvasRef, socket, gameState }) {
+    constructor({ canvasRef, gameState }) {
         this.playerID = localStorage.getItem("playerID");
 
         this.app = new PIXI.Application({

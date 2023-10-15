@@ -17,7 +17,6 @@
 		socket.on('gameStateResponse', (data) => {
 			game = new Game({
 				canvasRef: document.getElementById('pixi-container'),
-				socket: socket,
 				gameState: data.gameState
 			});
 			game.onConfirmButton(() => handleConfirmButton());
