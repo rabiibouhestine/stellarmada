@@ -170,7 +170,7 @@ io.on("connection", (socket) => {
                     if (Object.keys(rooms[userRoom].players).length == 0) {
                         delete rooms[userRoom];
                     }
-                }, 300000);
+                }, 2000);
             }
             // remove user from users
             delete users[playerID];
