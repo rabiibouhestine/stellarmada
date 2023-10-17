@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
     
     if (users.hasOwnProperty(playerID)) {
         users[playerID].socketID = socket.id;
-        if (!socket.rooms.has(users[playerID].room)) {
+        if (users[playerID].room !== null) {
             socket.join(users[playerID].room);
         }
     } else {
@@ -141,6 +141,9 @@ io.on("connection", (socket) => {
         if (userRoom !== null) {
             // remove user from room
             delete rooms[userRoom].players[playerID];
+
+            // update user room
+            users[playerID].room = null;
 
             // emit room update event
             io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
