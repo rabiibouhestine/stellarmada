@@ -59,16 +59,16 @@
 </script>
 
 <div class="flex flex-row justify-center w-full h-screen">
-	<div class="flex flex-col min-w-[300px] pl-5 py-5">
+	<div class="flex flex-col min-w-[300px] p-5">
 		<div class="bg-slate-400 w-full h-14 rounded-lg mb-5" />
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />
-	<div class="flex flex-col min-w-[300px] pr-5 py-5">
+	<div class="flex flex-col min-w-[300px] p-5">
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
-		<div class="flex flex-row w-full mt-5">
-			<div class="bg-slate-400 w-4/6 h-14 rounded-lg mr-5" />
-			<div class="bg-slate-400 w-2/6 h-14 rounded-lg" />
+		<div class="flex flex-row space-x-4 w-full mt-5">
+			<div class="bg-slate-400 w-48 h-14 rounded-lg" />
+			<div class="bg-slate-400 w-14 h-14 rounded-lg" />
 		</div>
 	</div>
 	<Modal bind:showModal={isGameOver}>
