@@ -26,19 +26,15 @@ const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
-    console.log("Socket connected", socket.id);
-    console.log("PlayerID:", socket.handshake.query.playerID);
-
     const playerID = socket.handshake.query.playerID;
+    console.log("Player connected:", playerID);
     
     if (users.hasOwnProperty(playerID)) {
-        users[playerID].socketID = socket.id;
         if (users[playerID].room !== null) {
             socket.join(users[playerID].room);
         }
     } else {
         users[playerID] = {
-            socketID: socket.id,
             room: null
         }
     }
@@ -75,7 +71,6 @@ io.on("connection", (socket) => {
         users[playerID].room = roomID;
         // add user to room
         rooms[roomID].players[playerID] = {
-            socketID: socket.id,
             isReady: false
         };
 
@@ -156,7 +151,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", (reason) => {
-        console.log("Socket disconnected", socket.id, "because", reason);
+        console.log("Player disconnected:", playerID, "- reason:", reason);
 
         // if user was in a room
         const userRoom = users[playerID].room;
