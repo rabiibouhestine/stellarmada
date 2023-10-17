@@ -66,10 +66,12 @@
 	<div id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] p-5">
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
-		<div class="flex flex-row space-x-4 w-full mt-5">
-			<div class="bg-slate-400 w-48 h-14 rounded-lg" />
-			<div class="bg-slate-400 w-14 h-14 rounded-lg" />
+		<div class="flex flex-row space-x-5 h-14 w-full mt-5">
+			<div class="bg-slate-400 w-full rounded-lg" />
+			<div class="bg-slate-400 w-full rounded-lg" />
+			<div class="bg-slate-400 w-full rounded-lg" />
 		</div>
+		<div class="bg-slate-400 w-full h-14 rounded-lg mt-5" />
 	</div>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
