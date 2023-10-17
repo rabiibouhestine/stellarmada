@@ -29,15 +29,16 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("Player connected:", playerID);
     
-    if (users.hasOwnProperty(playerID)) {
-        if (users[playerID].room !== null) {
-            socket.join(users[playerID].room);
-        }
-    } else {
+    if (!users.hasOwnProperty(playerID)) {
         users[playerID] = {
             room: null
         }
     }
+
+    if (users[playerID].room !== null) {
+        socket.join(users[playerID].room);
+    }
+
 
     socket.on("createRoom", () => {
         const roomID = new ShortUniqueId().rnd();
