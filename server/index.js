@@ -53,6 +53,12 @@ io.on("connection", (socket) => {
     })
 
     socket.on("joinRoom", (data) => {
+        // if user already in a room
+        if (users[playerID].room !== null) {
+            socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
+            return;
+        }
+
         const roomID = data.roomID;
         const room = rooms[roomID];
     
@@ -154,30 +160,28 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("Player disconnected:", playerID, "- reason:", reason);
 
-        if (users.hasOwnProperty(playerID)) {
-            // if user was in a room
-            const userRoom = users[playerID].room;
-            if (userRoom !== null) {
-                // remove user from room
-                delete rooms[userRoom].players[playerID];
+        // if user was in a room
+        const userRoom = users[playerID].room;
+        if (userRoom !== null) {
+            // remove user from room
+            delete rooms[userRoom].players[playerID];
 
-                // emit room update event
-                io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+            // emit room update event
+            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
 
-                // if room empty after 10 seconds of someone leaving, delete room
-                // sometimes server drops all sockets at once and if we check and delete immediately players will reconnect and not find their room
-                setTimeout(() => {
-                    if (rooms.hasOwnProperty(userRoom)) {
-                        const nbPlayers = Object.keys(rooms[userRoom].players).length;
-                        if (nbPlayers == 0) {
-                            delete rooms[userRoom];
-                        }
+            // if room empty after 10 seconds of someone leaving, delete room
+            // sometimes server drops all sockets at once and if we check and delete immediately players will reconnect and not find their room
+            setTimeout(() => {
+                if (rooms.hasOwnProperty(userRoom)) {
+                    const nbPlayers = Object.keys(rooms[userRoom].players).length;
+                    if (nbPlayers == 0) {
+                        delete rooms[userRoom];
                     }
-                }, 10000);
-            }
-            // remove user from users
-            delete users[playerID];
+                }
+            }, 10000);
         }
+        // remove user from users
+        delete users[playerID];
     })
 })
 
