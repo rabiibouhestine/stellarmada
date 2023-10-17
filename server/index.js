@@ -154,22 +154,24 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("Player disconnected:", playerID, "- reason:", reason);
 
-        // if user was in a room
-        const userRoom = users[playerID].room;
-        if (userRoom !== null) {
-            // remove user from room
-            delete rooms[userRoom].players[playerID];
+        if (users.hasOwnProperty(playerID)) {
+            // if user was in a room
+            const userRoom = users[playerID].room;
+            if (userRoom !== null) {
+                // remove user from room
+                delete rooms[userRoom].players[playerID];
 
-            // emit room update event
-            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+                // emit room update event
+                io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
 
-            // delete room if empty
-            if (Object.keys(rooms[userRoom].players).length == 0) {
-                delete rooms[userRoom];
+                // delete room if empty
+                if (Object.keys(rooms[userRoom].players).length == 0) {
+                    delete rooms[userRoom];
+                }
             }
+            // remove user from users
+            delete users[playerID];
         }
-        // remove user from users
-        delete users[playerID];
     })
 })
 
