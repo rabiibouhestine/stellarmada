@@ -51,7 +51,7 @@ export class Game {
         }
 
         this.resize = () => {
-            const windowWidth = window.innerWidth;
+            const windowWidth = canvasRef.offsetWidth;
             const windowHeight = window.innerHeight;
             const stageScale = Math.min(windowWidth / 800, windowHeight / 720);
     

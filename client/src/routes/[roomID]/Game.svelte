@@ -58,7 +58,19 @@
 	}
 </script>
 
-<div id="pixi-container">
+<div class="flex flex-row w-full h-screen">
+	<div class="flex h-screen flex-col w-1/5 p-5">
+		<div class="bg-slate-400 w-full h-10 rounded-lg mb-5" />
+		<div class="bg-slate-400 w-full h-full rounded-xl" />
+	</div>
+	<div id="pixi-container" class="w-3/5" />
+	<div class="flex h-screen flex-col w-1/5 p-5">
+		<div class="bg-slate-400 w-full h-full rounded-xl" />
+		<div class="flex flex-row w-full mt-5">
+			<div class="bg-slate-400 w-4/5 h-10 rounded-lg mr-5" />
+			<div class="bg-slate-400 w-1/5 h-10 rounded-lg" />
+		</div>
+	</div>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
