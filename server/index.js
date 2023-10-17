@@ -164,13 +164,16 @@ io.on("connection", (socket) => {
                 // emit room update event
                 io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
 
-                // if room empty after 5 minutes of someone leaving, delete room
+                // if room empty after 10 seconds of someone leaving, delete room
                 // sometimes server drops all sockets at once and if we check and delete immediately players will reconnect and not find their room
                 setTimeout(() => {
-                    if (Object.keys(rooms[userRoom].players).length == 0) {
-                        delete rooms[userRoom];
+                    if (rooms.hasOwnProperty(userRoom)) {
+                        const nbPlayers = Object.keys(rooms[userRoom].players).length;
+                        if (nbPlayers == 0) {
+                            delete rooms[userRoom];
+                        }
                     }
-                }, 2000);
+                }, 10000);
             }
             // remove user from users
             delete users[playerID];
