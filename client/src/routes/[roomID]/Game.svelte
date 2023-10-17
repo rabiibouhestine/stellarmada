@@ -58,12 +58,12 @@
 	}
 </script>
 
-<div class="flex flex-row w-full h-screen">
+<div class="flex flex-row justify-center w-full h-screen">
 	<div class="flex flex-col min-w-[300px] pl-5 py-5">
 		<div class="bg-slate-400 w-full h-14 rounded-lg mb-5" />
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 	</div>
-	<div id="pixi-container" class="min-w-0 grow" />
+	<div id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] pr-5 py-5">
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 		<div class="flex flex-row w-full mt-5">
