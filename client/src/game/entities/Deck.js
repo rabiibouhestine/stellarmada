@@ -32,14 +32,14 @@ export class Deck {
         // Define text background
         this.textBG = new PIXI.Graphics();
         this.textBG.beginFill(0x000000, 0.4);
-        this.textBG.drawCircle(0, 0, 20);
+        this.textBG.drawCircle(0, 0, 14);
         this.textBG.endFill();
         this.container.addChild(this.textBG);
 
         // Define deck text
         this.text = new PIXI.Text(this.size, {
             fontFamily: 'Arial',
-            fontSize: 20,
+            fontSize: 14,
             fill: 0xffffff,
             align: 'center'
         });
