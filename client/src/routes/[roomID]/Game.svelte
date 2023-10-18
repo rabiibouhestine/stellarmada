@@ -59,15 +59,15 @@
 </script>
 
 <div class="flex flex-row justify-center w-full h-screen">
-	<div class="flex flex-col min-w-[300px] p-5">
-		<div class="bg-slate-400 w-full h-14 rounded-lg mb-5" />
+	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
+		<div class="bg-slate-400 w-full h-14 rounded-lg" />
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />
-	<div class="flex flex-col min-w-[300px] p-5">
+	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 		<div
-			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-6 h-20 w-full mt-5"
+			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-6 h-20 w-full"
 		>
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
