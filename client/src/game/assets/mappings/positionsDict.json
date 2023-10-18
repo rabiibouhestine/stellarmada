@@ -87,7 +87,7 @@
     ],
     "mattress": [
         {
-            "label": "Scrapyard",
+            "label": "Repairyard",
             "width": 200,
             "x": 55,
             "y": 537.5
@@ -99,25 +99,25 @@
             "y": 537.5
         },
         {
-            "label": "Anomalies",
+            "label": "Shields",
             "width": 164,
             "x": 282,
             "y": 537.5
         },
         {
-            "label": "Home Base",
+            "label": "Scrapyard",
             "width": 200,
             "x": 415,
             "y": 537.5
         },
         {
-            "label": "Hideout",
+            "label": "Stealth Zone",
             "width": 242,
             "x": 587,
             "y": 537.5
         },
         {
-            "label": "Scrapyard",
+            "label": "Repairyard",
             "width": 200,
             "x": 665,
             "y": 181.5
@@ -129,19 +129,19 @@
             "y": 181.5
         },
         {
-            "label": "Anomalies",
+            "label": "Shields",
             "width": 164,
             "x": 438,
             "y": 181.5
         },
         {
-            "label": "Home Base",
+            "label": "Scrapyard",
             "width": 200,
             "x": 305,
             "y": 181.5
         },
         {
-            "label": "Hideout",
+            "label": "Stealth Zone",
             "width": 242,
             "x": 133,
             "y": 181.5
