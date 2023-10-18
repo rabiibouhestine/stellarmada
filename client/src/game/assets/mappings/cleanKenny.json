@@ -80,7 +80,7 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":140,"h":190},
 	"sourceSize": {"w":140,"h":190}
 },
-"tile012":
+"J2":
 {
 	"frame": {"x":1400,"y":0,"w":140,"h":190},
 	"rotated": false,
