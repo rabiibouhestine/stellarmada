@@ -73,7 +73,7 @@
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 		</div>
-		<div class="bg-slate-400 w-full h-14 rounded-lg mt-5" />
+		<div class="bg-slate-400 w-full h-14 rounded-lg" />
 	</div>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
