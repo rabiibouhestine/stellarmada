@@ -60,20 +60,23 @@
 
 <div class="flex flex-row justify-center w-full h-screen">
 	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
-		<div class="bg-slate-400 w-full h-14 rounded-lg" />
+		<div class="bg-slate-400 w-full min-h-[50px] rounded-lg" />
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
+		{#if true}
+			<div class="bg-slate-400 w-full min-h-[260px] rounded-lg" />
+		{/if}
 		<div class="bg-slate-400 w-full h-full rounded-xl" />
 		<div
-			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-6 h-20 w-full"
+			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-6 min-h-[60px] w-full"
 		>
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
 		</div>
-		<div class="bg-slate-400 w-full h-14 rounded-lg" />
+		<div class="bg-slate-400 w-full min-h-[50px] rounded-lg" />
 	</div>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
