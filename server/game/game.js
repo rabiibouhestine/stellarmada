@@ -114,35 +114,62 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (gamestate.turn.stance === "attacking") {
         const playerCards = gamestate.players[playerID].cards
         const playerHandSelection = playerSelection.hand;
+        const playerRearguardSelection = playerSelection.rearguard;
 
-        // If player selection does not make sense we exit
+        // If player hand selection does not make sense we exit
         if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
+        // If player rearguard selection does not make sense we exit
+        if (playerRearguardSelection.some(card => !playerCards.rearguard.includes(card)))
+            return;
+
         // Check selection suits and calculate selection value
-        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
-        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
-        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
-        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
-        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
+        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C") || playerRearguardSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S") || playerRearguardSelection.some(card => cardsMapping[card].suit === "S");
+        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H") || playerRearguardSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D") || playerRearguardSelection.some(card => cardsMapping[card].suit === "D");
+        const playerHandSelectionSum = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
+        const playerRearguardSelectionSum = playerRearguardSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const playerSelectionSum = playerHandSelectionSum + playerRearguardSelectionSum;
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to frontline
-        playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
-        playerCards.handCount = playerCards.hand.length;
-        playerCards.frontline = playerHandSelection;
+        if (playerHandSelection.length > 0) {
+            playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
+            playerCards.handCount = playerCards.hand.length;
+            playerCards.frontline.push(...playerHandSelection);
+    
+            // Add move to game action
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: playerHandSelection,
+                    nCards: playerHandSelection.length,
+                    location: "hand",
+                    destination: "frontline"
+                }
+            );
+        }
 
-        // Add move to game action
-        gameAction.moves[playerID].push(
-            {
-                cardsNames: playerHandSelection,
-                nCards: playerHandSelection.length,
-                location: "hand",
-                destination: "frontline"
-            }
-        );
+        // Move selected cards from rearguard to frontline
+        if (playerRearguardSelection.length > 0) {
+            playerCards.rearguard = playerCards.rearguard.filter(card => !playerRearguardSelection.includes(card));
+            playerCards.frontline.push(...playerRearguardSelection);
+    
+            // Add move to game action
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: playerRearguardSelection,
+                    nCards: playerRearguardSelection.length,
+                    location: "rearguard",
+                    destination: "frontline"
+                }
+            );
+        }
 
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
