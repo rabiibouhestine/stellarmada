@@ -8,7 +8,7 @@ import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
-import layout from './assets/images/squareMattress.png';
+import layout from './assets/images/mattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
