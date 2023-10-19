@@ -27,14 +27,24 @@ export class Card {
         this.container.y = this.position.y;
 
         // Define card glow
-        this.glow = PIXI.Sprite.from(glow);
-        this.glow.anchor.set(0.5);
-        this.glow.width = 140;
-        this.glow.height = 190;
+        this.glow = new PIXI.Graphics();
+        this.glow.beginFill(0xffffff, 1);
+        this.glow.drawRoundedRect(-39, -51.5, 78, 103, 4);
+        this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
         this.glow.tint = 0x0096FF; //0xD22B2B
         this.container.addChild(this.glow);
+
+        // Animate the glow alpha
+        let time = 0;
+        const ticker = new PIXI.Ticker();
+        ticker.add(() =>
+        {
+            time += 0.075;
+            this.glow.alpha = Math.sin(time) * 0.25 + 0.75;
+        });
+        ticker.start();
 
         // Define card frame
         this.frame = new PIXI.Graphics();
