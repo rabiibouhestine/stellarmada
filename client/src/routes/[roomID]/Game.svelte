@@ -52,6 +52,13 @@
 			}
 		});
 
+		socket.on('surrenderResponse', (data) => {
+			isGameOver = true;
+			winnerID = data.winnerID;
+			playerTimer.stop();
+			opponentTimer.stop();
+		});
+
 		return () => {
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');

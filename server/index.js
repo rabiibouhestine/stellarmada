@@ -133,7 +133,22 @@ io.on("connection", (socket) => {
     })
 
     socket.on("surrenderRequest", (data) => {
-        // TODO
+        rooms[data.roomID].gameStarted = false;
+        Object.keys(rooms[data.roomID].players).forEach(playerID => {
+            rooms[data.roomID].players[playerID].isReady = false;
+        });
+
+        // Get gamestate
+        const gameState = rooms[data.roomID].gameState;
+        // Get the players ids
+        const playersIDS = Object.keys(gameState.players);
+        // Get the second player id
+        const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
+        gameState.isGameOver = true;
+        gameState.winnerID = secondPlayerID;
+
+        io.to(data.roomID).emit("surrenderResponse", { winnerID:secondPlayerID, success: true });
     })
 
     socket.on("goBackLobbyRequest", (data) => {
