@@ -132,6 +132,10 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
+    socket.on("surrenderRequest", (data) => {
+        // TODO
+    })
+
     socket.on("goBackLobbyRequest", (data) => {
         socket.emit("goBackLobbyResponse");
         socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })

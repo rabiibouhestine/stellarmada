@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { Icon, Home, Flag, QuestionMarkCircle } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { socket } from '$lib/modules/socket.js';
@@ -10,6 +11,9 @@
 	let game;
 	let winnerID;
 	let isGameOver = false;
+	let showRulesModal = false;
+	let showSurrenderModal = false;
+	let showQuitModal = false;
 	let playerTimeLeft = 0;
 	let opponentTimeLeft = 0;
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -80,6 +84,11 @@
 		});
 	}
 
+	function handleSurrender() {
+		showSurrenderModal = false;
+		socket.emit('surrenderRequest', { roomID: $page.params.roomID });
+	}
+
 	function handleRematch() {
 		socket.emit('goBackLobbyRequest', { roomID: $page.params.roomID });
 	}
@@ -109,14 +118,84 @@
 		<div
 			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-6 min-h-[60px] w-full"
 		>
-			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
-			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
-			<div class="bg-slate-500 h-10 w-14 rounded-lg" />
+			<button
+				on:click={() => {
+					showRulesModal = true;
+				}}
+				class="flex items-center justify-center bg-slate-500 h-10 w-14 rounded-lg hover:bg-blue-500"
+			>
+				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
+			</button>
+			<button
+				on:click={() => {
+					showSurrenderModal = true;
+				}}
+				class="flex items-center justify-center bg-slate-500 h-10 w-14 rounded-lg hover:bg-red-500"
+			>
+				<Icon src={Flag} class="h-8 w-8 text-white" />
+			</button>
+			<button
+				on:click={() => {
+					showQuitModal = true;
+				}}
+				class="flex items-center justify-center bg-slate-500 h-10 w-14 rounded-lg hover:bg-yellow-500"
+			>
+				<Icon src={Home} class="h-8 w-8 text-white" />
+			</button>
 		</div>
 		<div class="flex items-center justify-center bg-slate-400 w-full min-h-[50px] rounded-lg">
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(playerTimeLeft)}</h1>
 		</div>
 	</div>
+	<Modal bind:showModal={showRulesModal}>
+		<div class="grid justify-items-center w-2/3">RULES HERE</div>
+	</Modal>
+	<Modal bind:showModal={showSurrenderModal}>
+		<div class="grid justify-items-center w-2/3">
+			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+				ARE YOU SURE YOU WANT TO SURRENDER?
+			</div>
+			<div class="p-6 flex justify-center">
+				<button
+					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					on:click={() => {
+						showSurrenderModal = false;
+					}}
+				>
+					CANCEL
+				</button>
+				<button
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					on:click={handleSurrender}
+				>
+					CONFIRM
+				</button>
+			</div>
+		</div>
+	</Modal>
+	<Modal bind:showModal={showQuitModal}>
+		<div class="grid justify-items-center w-2/3">
+			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+				ARE YOU SURE YOU WANT TO QUIT?
+			</div>
+			<div class="p-6 flex justify-center">
+				<button
+					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					on:click={() => {
+						showQuitModal = false;
+					}}
+				>
+					CANCEL
+				</button>
+				<button
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					on:click={handleLeave}
+				>
+					CONFIRM
+				</button>
+			</div>
+		</div>
+	</Modal>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-2/3">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
