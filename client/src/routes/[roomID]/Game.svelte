@@ -155,10 +155,10 @@
 		</div>
 	</div>
 	<Modal bind:showModal={showRulesModal}>
-		<div class="grid justify-items-center w-2/3">RULES HERE</div>
+		<div class="grid justify-items-center w-full">RULES HERE</div>
 	</Modal>
 	<Modal bind:showModal={showSurrenderModal}>
-		<div class="grid justify-items-center w-2/3">
+		<div class="grid justify-items-center w-full">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO SURRENDER?
 			</div>
@@ -181,7 +181,7 @@
 		</div>
 	</Modal>
 	<Modal bind:showModal={showQuitModal}>
-		<div class="grid justify-items-center w-2/3">
+		<div class="grid justify-items-center w-full">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO QUIT?
 			</div>
