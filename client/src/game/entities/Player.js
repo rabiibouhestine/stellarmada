@@ -283,12 +283,6 @@ export class Player {
             this.tavern.setSize(this.tavern.size + nCards);
         }
 
-        if (location === "frontline" && destination === "rearguard") {
-            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
-            this.rearguard.push(...cards);
-            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-        }
-
         if (location === "hand" && destination === "tavern") {
             this.handCount -= nCards;
             this.tavern.setSize(this.tavern.size + nCards);
