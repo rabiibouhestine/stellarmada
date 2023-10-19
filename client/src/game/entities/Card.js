@@ -1,8 +1,6 @@
 import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
-
 import cardsDict from '../assets/mappings/cardsDict.json';
-import glow from '../assets/images/glow.png';
 
 export class Card {
     constructor(cardsContainer, sheet, name, position) {
