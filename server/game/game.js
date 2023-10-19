@@ -208,7 +208,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (hasSpades && playerCards.tavern.length !== 0) {
             const nCardsToMove = Math.min(
                 outpostCapacity - playerCards.rearguard.length,
-                playerHandSelection.length,
+                playerHandSelection.length + playerRearguardSelection.length,
                 playerCards.tavern.length
             );
             if (nCardsToMove > 0) {
