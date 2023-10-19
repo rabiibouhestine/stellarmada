@@ -25,7 +25,7 @@ export class Button {
                 color: 0x000000,
                 colorHover: 0x000000,
                 icon: PIXI.Texture.from(hourImage),
-                text: "Opponent's turn"
+                text: "Enemy's turn"
             }
         };
 
