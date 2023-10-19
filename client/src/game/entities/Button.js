@@ -3,7 +3,6 @@ import * as PIXI from "pixi.js";
 import swordImage from '../assets/images/sword.png';
 import skullImage from '../assets/images/skull.png';
 import hourImage from '../assets/images/hourglass.png';
-import glow from '../assets/images/buttonGlow.png';
 
 export class Button {
     constructor(app, position) {
@@ -36,16 +35,6 @@ export class Button {
         this.button.cursor = this.enabled? 'pointer' : 'default';
         this.button.x = position.x;
         this.button.y = position.y;
-
-        // Define button glow
-        this.glow = PIXI.Sprite.from(glow);
-        this.glow.anchor.set(0.5);
-        this.glow.width = 120;
-        this.glow.height = 120;
-        this.glow.visible = false;
-        this.glow.tint = this.states[this.state].color;
-        this.glow.eventMode = 'none';
-        this.button.addChild(this.glow);
 
         // Define button graphic
         this.graphic = new PIXI.Graphics();
@@ -135,8 +124,6 @@ export class Button {
         this.button.eventMode = 'static';
         this.button.cursor = 'pointer';
         this.setColor(this.states[this.state].color, 1);
-        this.glow.visible = true;
-        this.glow.tint = this.states[this.state].color;
     }
 
     disable() {
@@ -144,7 +131,5 @@ export class Button {
         this.button.eventMode = 'none';
         this.button.cursor = 'default';
         this.setColor(0x000000, 0.25);
-        this.glow.visible = false;
-        this.glow.tint = this.states[this.state].color;
     }
 }
