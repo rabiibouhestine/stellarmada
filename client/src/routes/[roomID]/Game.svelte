@@ -204,7 +204,7 @@
 		</div>
 	</Modal>
 	<Modal bind:showModal={isGameOver}>
-		<div class="grid justify-items-center w-2/3">
+		<div class="grid justify-items-center w-full">
 			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
 				{#if winnerID === playerID}
 					<h2>You Won !!!</h2>
