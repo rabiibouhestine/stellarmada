@@ -119,7 +119,7 @@ export class Player {
 
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsRearguard = this.rearguard.filter(card => !cardSelection.includes(card));
-        const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsRearguard];
+        const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsRearguard];
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : true, this.stance === "attacking"); });
 
         // Update confirm button
@@ -156,7 +156,7 @@ export class Player {
     
         this.rearguard.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(this.isPlayer && isDiscarding, false);
+            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
         });
 
         if (this.isPlayer) {
