@@ -343,5 +343,11 @@ export class Player {
                 }
             }
         }
+
+        if (location === "rearguard" && destination === "frontline") {
+            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
+            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
+            this.frontline.push(...cards);
+        }
     }
 }
