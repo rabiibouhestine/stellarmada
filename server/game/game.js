@@ -121,6 +121,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // Check selection suits and calculate selection value
         const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
         const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
         const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
         const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
@@ -174,6 +175,28 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     destination: "hand"
                 }
             );
+        }
+
+        // If Spades in selection, move cards from tavern to rearguard
+        if (hasSpades && playerCards.tavern.length !== 0) {
+            const nCardsToMove = Math.min(
+                outpostCapacity - playerCards.rearguard.length,
+                playerHandSelection.length,
+                playerCards.tavern.length
+            );
+            if (nCardsToMove > 0) {
+                const cardsToMove = playerCards.tavern.splice(0, nCardsToMove);
+                playerCards.rearguard.push(...cardsToMove);
+    
+                gameAction.moves[playerID].push(
+                    {
+                        cardsNames: cardsToMove,
+                        nCards: nCardsToMove,
+                        location: "tavern",
+                        destination: "rearguard"
+                    }
+                );
+            }
         }
 
         // If player hand empty after attack, and still has towers, reset

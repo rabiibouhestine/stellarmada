@@ -240,6 +240,14 @@ export class Player {
             }
         }
 
+        if (location === "tavern" && destination === "rearguard") {
+            this.tavern.setSize(this.tavern.size - nCards);
+            for (const index in cardsNames) {
+                const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern);
+                this.rearguard.push(card);
+            }
+        }
+
         if (location === "frontline" && destination === "graveyard") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
