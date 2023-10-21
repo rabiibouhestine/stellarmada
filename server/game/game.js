@@ -359,13 +359,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // If hand and rearguard are empty after discard, reset
-        if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
-            const resetAction = resetState(playerID, gamestate, handMax);
-            gameAction.jokers[playerID] = resetAction.jokers;
-            gameAction.moves[playerID].push(...resetAction.moves);
-        }
-
         // Clear second player attack
         const clearAttackMoves = clearAttack(secondPlayerID, gamestate, outpostCapacity);
         gameAction.moves[secondPlayerID].push(...clearAttackMoves);
@@ -377,14 +370,22 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // If current player has no cards in hand and rearguard after discard, secondPlayer wins
-        const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
-        const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
-        const playerJokersDead = !playerJokerLeft && !playerJokerRight;
-
-        if (gamestate.players[playerID].cards.hand.length === 0 && gamestate.players[playerID].cards.rearguard.length === 0 &&  playerJokersDead) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = secondPlayerID;
+        // Handle empty fleet (hand and rearguard both empty after discard)
+        if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
+            // Check jokers
+            const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
+            const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
+            const playerJokersDead = !playerJokerLeft && !playerJokerRight;
+    
+            // If both jokers dead, enemy wins, otherwise reset player
+            if (playerJokersDead) {
+                gameAction.isGameOver = true;
+                gameAction.winnerID = secondPlayerID;
+            } else {
+                const resetAction = resetState(playerID, gamestate, handMax);
+                gameAction.jokers[playerID] = resetAction.jokers;
+                gameAction.moves[playerID].push(...resetAction.moves);
+            }
         }
     }
 
