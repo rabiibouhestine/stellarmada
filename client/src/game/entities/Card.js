@@ -1,15 +1,14 @@
 import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
-
 import cardsDict from '../assets/mappings/cardsDict.json';
-import glow from '../assets/images/glow.png';
 
 export class Card {
-    constructor(cardsContainer, sheet, name, position) {
+    constructor(cardsContainer, sheet, name, position, isPlayer) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.name = name;
         this.position = position;
+        this.isPlayer = isPlayer;
 
         this.value = cardsDict[name].value;
         this.suit = cardsDict[name].suit;
@@ -27,28 +26,36 @@ export class Card {
         this.container.y = this.position.y;
 
         // Define card glow
-        this.glow = PIXI.Sprite.from(glow);
-        this.glow.anchor.set(0.5);
-        this.glow.width = 140;
-        this.glow.height = 190;
+        this.glow = new PIXI.Graphics();
+        this.glow.beginFill(0xffffff, 1);
+        this.glow.drawRoundedRect(-37.5, -50, 75, 100, 8);
+        this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
         this.glow.tint = 0x0096FF; //0xD22B2B
         this.container.addChild(this.glow);
 
-        // Define card frame
-        this.frame = new PIXI.Graphics();
-        this.frame.beginFill(0xffffff, 1);
-        this.frame.drawRoundedRect(-35, -47.5, 70, 95, 4);
-        this.frame.endFill();
-        this.container.addChild(this.frame);
+        // Animate the glow alpha
+        let time = 0;
+        const ticker = new PIXI.Ticker();
+        ticker.add(() =>
+        {
+            time += 0.075;
+            this.glow.alpha = Math.sin(time) * 0.25 + 0.75;
+        });
+        ticker.start();
 
         // Define card sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
-        this.sprite.width = 65;
-        this.sprite.height = 90;
+        this.sprite.width = 70;
+        this.sprite.height = 95;
         this.container.addChild(this.sprite);
+
+        // Mirror sprite if not player
+        if (!isPlayer) {
+            this.sprite.angle = 180;
+        }
 
         // Add card to cards container
         this.cardsContainer.addChild(this.container);
@@ -89,7 +96,7 @@ export class Card {
         this.selectable = selectable;
         this.container.cursor = selectable? 'pointer' : 'default';
         this.glow.visible = selectable;
-        this.glow.tint = isAttack? 0x0096FF : 0xD22B2B;
+        this.glow.tint = isAttack? 0x4f8fba : 0xcf573c;
     }
 
     moveTo(position, isHand, reveal, destroy) {

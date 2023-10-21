@@ -112,36 +112,64 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
-        const playerCards = gamestate.players[playerID].cards
+        const playerCards = gamestate.players[playerID].cards;
         const playerHandSelection = playerSelection.hand;
+        const playerRearguardSelection = playerSelection.rearguard;
 
-        // If player selection does not make sense we exit
+        // If player hand selection does not make sense we exit
         if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
+        // If player rearguard selection does not make sense we exit
+        if (playerRearguardSelection.some(card => !playerCards.rearguard.includes(card)))
+            return;
+
         // Check selection suits and calculate selection value
-        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
-        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
-        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
-        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
+        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C") || playerRearguardSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S") || playerRearguardSelection.some(card => cardsMapping[card].suit === "S");
+        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H") || playerRearguardSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D") || playerRearguardSelection.some(card => cardsMapping[card].suit === "D");
+        const playerHandSelectionSum = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
+        const playerRearguardSelectionSum = playerRearguardSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].value;
+        }, 0);
+        const playerSelectionSum = playerHandSelectionSum + playerRearguardSelectionSum;
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to frontline
-        playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
-        playerCards.handCount = playerCards.hand.length;
-        playerCards.frontline = playerHandSelection;
+        if (playerHandSelection.length > 0) {
+            playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
+            playerCards.handCount = playerCards.hand.length;
+            playerCards.frontline.push(...playerHandSelection);
+    
+            // Add move to game action
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: playerHandSelection,
+                    nCards: playerHandSelection.length,
+                    location: "hand",
+                    destination: "frontline"
+                }
+            );
+        }
 
-        // Add move to game action
-        gameAction.moves[playerID].push(
-            {
-                cardsNames: playerHandSelection,
-                nCards: playerHandSelection.length,
-                location: "hand",
-                destination: "frontline"
-            }
-        );
+        // Move selected cards from rearguard to frontline
+        if (playerRearguardSelection.length > 0) {
+            playerCards.rearguard = playerCards.rearguard.filter(card => !playerRearguardSelection.includes(card));
+            playerCards.frontline.push(...playerRearguardSelection);
+    
+            // Add move to game action
+            gameAction.moves[playerID].push(
+                {
+                    cardsNames: playerRearguardSelection,
+                    nCards: playerRearguardSelection.length,
+                    location: "rearguard",
+                    destination: "frontline"
+                }
+            );
+        }
 
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
@@ -174,6 +202,28 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     destination: "hand"
                 }
             );
+        }
+
+        // If Spades in selection, move cards from tavern to rearguard
+        if (hasSpades && playerCards.tavern.length !== 0) {
+            const nCardsToMove = Math.min(
+                outpostCapacity - playerCards.rearguard.length,
+                playerHandSelection.length + playerRearguardSelection.length,
+                playerCards.tavern.length
+            );
+            if (nCardsToMove > 0) {
+                const cardsToMove = playerCards.tavern.splice(0, nCardsToMove);
+                playerCards.rearguard.push(...cardsToMove);
+    
+                gameAction.moves[playerID].push(
+                    {
+                        cardsNames: cardsToMove,
+                        nCards: nCardsToMove,
+                        location: "tavern",
+                        destination: "rearguard"
+                    }
+                );
+            }
         }
 
         // If player hand empty after attack, and still has towers, reset
@@ -352,107 +402,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     gamestate.isGameOver = gameAction.isGameOver;
     gamestate.winnerID = gameAction.winnerID;
     gamestate.turn = gameAction.turn;
-
-    return gameAction;
-}
-
-const handleJokerRequest = (playerID, joker, gamestate) => {
-    // If not player turn exit
-    if (playerID !== gamestate.turn.playerID)
-        return;
-
-    // If requested Joker is already dead exit
-    if (joker === "left" && !gamestate.players[playerID].cards.jokerLeft) {
-        return;
-    }
-    if (joker === "right" && !gamestate.players[playerID].cards.jokerRight) {
-        return;
-    }
-
-    // Update joker in gamestate
-    if (joker === "left") {
-        gamestate.players[playerID].cards.jokerLeft = false;
-    }
-    if (joker === "right") {
-        gamestate.players[playerID].cards.jokerRight = false;
-    }
-
-    // Get the players ids
-    const playersIDS = Object.keys(gamestate.players);
-
-    // Get the second player id
-    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
-
-    // Initialise game action
-    const gameAction = {
-        isGameOver: gamestate.isGameOver,
-        winnerID: gamestate.winnerID,
-        turn: gamestate.turn,
-        jokers: {},
-        moves: {}
-    };
-    for (const id of playersIDS) {
-        gameAction.jokers[id] = {
-            jokerLeft: gamestate.players[id].cards.jokerLeft,
-            jokerRight: gamestate.players[id].cards.jokerRight
-        };
-    }
-    for (const id of playersIDS) {
-        gameAction.moves[id] = [];
-    }
-
-    // Return hand to tavern
-    const hand = gamestate.players[playerID].cards.hand;
-    const tavern = gamestate.players[playerID].cards.tavern;
-    const oldHand = [...hand];
-    tavern.push(...oldHand);
-    hand.splice(0, hand.length);
-    gameAction.moves[playerID].push(
-        {
-            cardsNames: oldHand,
-            nCards: oldHand.length,
-            location: "hand",
-            destination: "tavern"
-        }
-    );
-
-    // Shuffle tavern and draw handMax cards
-    const oldTavern = [...tavern];
-    const shuffledDeck =  shuffleDeck(oldTavern);
-    gamestate.players[playerID].cards.hand = shuffledDeck.slice(-handMax);
-    gamestate.players[playerID].cards.tavern = shuffledDeck.slice(0, -handMax);
-    const newHand = gamestate.players[playerID].cards.hand;
-    gameAction.moves[playerID].push(
-        {
-            cardsNames: newHand,
-            nCards: newHand.length,
-            location: "tavern",
-            destination: "hand"
-        }
-    );
-
-    // If player still can't answer attack after both jokers die, second player wins
-    if (gamestate.turn.stance === "discarding") {
-        const playerHandValue = gamestate.players[playerID].cards.hand.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const playerRearguardValue = gamestate.players[playerID].cards.rearguard.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const playerMaxDiscardValue = playerHandValue + playerRearguardValue;
-        const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
-        const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
-        const playerJokersDead = !playerJokerLeft && !playerJokerRight;
-
-        if (playerMaxDiscardValue < gamestate.turn.damage &&  playerJokersDead) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = secondPlayerID;
-        }
-    }
-
-    // Update gameAction
-    gamestate.isGameOver = gameAction.isGameOver;
-    gamestate.winnerID = gameAction.winnerID;
 
     return gameAction;
 }

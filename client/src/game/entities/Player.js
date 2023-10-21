@@ -17,14 +17,14 @@ export class Player {
         this.app.stage.addChild(this.cardsContainer);
         
         this.handCount = state.cards.handCount;
-        this.tavern = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, state.cards.tavern);
-        this.graveyard = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, state.cards.graveyard);
-        this.castle = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.castle, state.cards.castle);
-        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true);
-        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false);
-        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false);
-        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", state.cards.jokerLeft, this.positions.jokerLeft);
-        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer? "B1" : "B2", state.cards.jokerRight, this.positions.jokerRight);
+        this.tavern = new Deck(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
+        this.graveyard = new Deck(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
+        this.castle = new Deck(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
+        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
+        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
+        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false, this.isPlayer);
+        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
+        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J2", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
 
         this.stance = "waiting";
 
@@ -40,19 +40,19 @@ export class Player {
         this.damageIndicator.setValue(value);
     }
 
-    createCards(locationState, isPlayer, startPosition, isHand) {
+    createCards(locationState, isHidden, startPosition, isHand, isPlayer) {
         const cards = [];
-        for (let index = 0; index < (isPlayer ? locationState.length : this.handCount); index++) {
-            const cardName = isPlayer ? locationState[index] : "B2";
-            const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition);
+        for (let index = 0; index < (isHidden ? locationState.length : this.handCount); index++) {
+            const cardName = isHidden ? locationState[index] : "B2";
+            const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition, isPlayer);
             cards.push(card);
         }
         this.repositionCards(cards, startPosition, isHand);
         return cards;
     }
 
-    createCard(cardsContainer, sheet, cardName, startPosition) {
-        const card = new Card(cardsContainer, sheet, cardName, startPosition);
+    createCard(cardsContainer, sheet, cardName, startPosition, isPlayer) {
+        const card = new Card(cardsContainer, sheet, cardName, startPosition, isPlayer);
         card.container.on('pointerdown', () => this.onPointerDown(card));
         return card;
     }
@@ -60,7 +60,7 @@ export class Player {
     repositionCards(array, centerPosition, isHand) {
         // Calculate the total width of the cards in the array
         const cardWidth = isHand? 84 : 70;
-        const cardGap = isHand? 10 : 8;
+        const cardGap = isHand? 12 : 8;
 
         // Calculate the starting position to center the cards
         const startX = centerPosition.x - ((cardWidth + cardGap)/2) * (array.length - 1);
@@ -119,7 +119,7 @@ export class Player {
 
         const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
         const notSelectedCardsRearguard = this.rearguard.filter(card => !cardSelection.includes(card));
-        const notSelectedCards = this.stance === "attacking"? notSelectedCardsHand : [...notSelectedCardsHand, ...notSelectedCardsRearguard];
+        const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsRearguard];
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : true, this.stance === "attacking"); });
 
         // Update confirm button
@@ -156,7 +156,7 @@ export class Player {
     
         this.rearguard.forEach(card => {
             card.setSelected(false);
-            card.setSelectable(this.isPlayer && isDiscarding, false);
+            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
         });
 
         if (this.isPlayer) {
@@ -218,7 +218,7 @@ export class Player {
     moveCards(cardsNames, nCards, location, destination) {
 
         if (location === "graveyard" && destination === "tavern") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard);
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, this.isPlayer);
             this.tavern.cardsToGet.push(card);
             this.graveyard.setSize(this.graveyard.size - nCards);
             this.tavern.setSize(this.tavern.size + nCards);
@@ -229,14 +229,22 @@ export class Player {
             this.handCount += nCards;
             if (this.isPlayer) {
                 for (const index in cardsNames) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern);
+                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
                     this.hand.push(card);
                 }
             } else {
                 for (let step = 0; step < nCards; step++) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.tavern);
+                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.tavern, this.isPlayer);
                     this.hand.push(card);
                 }
+            }
+        }
+
+        if (location === "tavern" && destination === "rearguard") {
+            this.tavern.setSize(this.tavern.size - nCards);
+            for (const index in cardsNames) {
+                const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
+                this.rearguard.push(card);
             }
         }
 
@@ -273,12 +281,6 @@ export class Player {
             this.tavern.cardsToGet.push(...cards);
             this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
             this.tavern.setSize(this.tavern.size + nCards);
-        }
-
-        if (location === "frontline" && destination === "rearguard") {
-            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
-            this.rearguard.push(...cards);
-            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
         }
 
         if (location === "hand" && destination === "tavern") {
@@ -340,6 +342,12 @@ export class Player {
                     this.frontline.push(cards[card]);
                 }
             }
+        }
+
+        if (location === "rearguard" && destination === "frontline") {
+            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
+            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
+            this.frontline.push(...cards);
         }
     }
 }

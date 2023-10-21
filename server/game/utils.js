@@ -134,31 +134,6 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
     // Get player cards
     const playerCards = gamestate.players[playerID].cards;
 
-    // Move cards from frontline to rearguard
-    const isRearguardFull = playerCards.rearguard.length == outpostCapacity;
-    const frontlineHasSpades = playerCards.frontline.some(card => cardsMapping[card].suit === "S");
-    if (!isRearguardFull && frontlineHasSpades) {
-        // Sort the frontline array by value in descending order
-        playerCards.frontline.sort((a, b) => cardsMapping[a].value - cardsMapping[b].value);
-
-        // Calculate how many cards can be moved to the rearguard
-        const nCardsToMove = Math.min(outpostCapacity - playerCards.rearguard.length, playerCards.frontline.length);
-        const cardsToMove = playerCards.frontline.slice(-nCardsToMove);
-
-        // Move the cards from the frontline to the rearguard
-        playerCards.rearguard.push(...cardsToMove);
-        playerCards.frontline = playerCards.frontline.filter(card => !cardsToMove.includes(card));
-
-        clearAttackMoves.push(
-            {
-                cardsNames: cardsToMove,
-                nCards: cardsToMove.length,
-                location: "frontline",
-                destination: "rearguard"
-            }
-        );
-    }
-
     // Discard player Royals from Frontline
     const frontlineHasRoyals = playerCards.frontline.some(card => cardsMapping[card].isCastle === true);
     if (frontlineHasRoyals) {

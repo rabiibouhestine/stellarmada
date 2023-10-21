@@ -1,14 +1,14 @@
 import * as PIXI from "pixi.js";
 
-import cardsImage from './assets/images/coloredShips.jpg';
-import cardsSheet from './assets/mappings/cleanKenny.json';
+import cardsImage from './assets/images/cardsSpritesheet.png';
+import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
 
-import layout from './assets/images/brownMattress.png';
+import layout from './assets/images/mattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
@@ -17,7 +17,7 @@ export class Game {
 
         this.app = new PIXI.Application({
             // resizeTo: window,
-            width: 800,
+            width: 720,
             height: 720,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
@@ -51,9 +51,9 @@ export class Game {
         }
 
         this.resize = () => {
-            const windowWidth = window.innerWidth;
+            const windowWidth = canvasRef.offsetWidth;
             const windowHeight = window.innerHeight;
-            const stageScale = Math.min(windowWidth / 800, windowHeight / 720);
+            const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
     
             // Update renderer dimensions
             this.app.renderer.resize(windowWidth, windowHeight);
@@ -62,7 +62,7 @@ export class Game {
             this.app.stage.scale.set(stageScale);
 
             // Center the stage
-            this.app.stage.x = (windowWidth - 800 * stageScale ) / 2;
+            this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
             this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
         }
 
