@@ -22,6 +22,11 @@ export class Deck {
         this.sprite.anchor.set(0.5);
         this.container.addChild(this.sprite);
 
+        // Mirror sprite if not player
+        if (!isPlayer) {
+            this.sprite.angle = 180;
+        }
+
         // Define text background
         this.textBG = new PIXI.Graphics();
         this.textBG.beginFill(0x000000, 0.4);
@@ -38,11 +43,6 @@ export class Deck {
         });
         this.text.anchor.set(0.5);
         this.container.addChild(this.text);
-
-        // Mirror deck if not player
-        if (!isPlayer) {
-            this.container.angle = 180;
-        }
 
         // Add deck to app stage
         this.app.stage.addChild(this.container);

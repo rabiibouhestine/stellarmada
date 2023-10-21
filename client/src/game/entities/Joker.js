@@ -22,9 +22,9 @@ export class Joker {
         this.sprite.height = 95;
         this.card.addChild(this.sprite);
 
-        // Mirror Card if not player
+        // Mirror sprite if not player
         if (!isPlayer) {
-            this.card.angle = 180;
+            this.sprite.angle = 180;
         }
 
         // Add card to cards container

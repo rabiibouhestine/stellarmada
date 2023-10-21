@@ -3,11 +3,12 @@ import * as TWEEN from '@tweenjs/tween.js';
 import cardsDict from '../assets/mappings/cardsDict.json';
 
 export class Card {
-    constructor(cardsContainer, sheet, name, position) {
+    constructor(cardsContainer, sheet, name, position, isPlayer) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.name = name;
         this.position = position;
+        this.isPlayer = isPlayer;
 
         this.value = cardsDict[name].value;
         this.suit = cardsDict[name].suit;
@@ -50,6 +51,11 @@ export class Card {
         this.sprite.width = 70;
         this.sprite.height = 95;
         this.container.addChild(this.sprite);
+
+        // Mirror sprite if not player
+        if (!isPlayer) {
+            this.sprite.angle = 180;
+        }
 
         // Add card to cards container
         this.cardsContainer.addChild(this.container);
