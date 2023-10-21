@@ -28,7 +28,7 @@ export class Card {
         // Define card glow
         this.glow = new PIXI.Graphics();
         this.glow.beginFill(0xffffff, 1);
-        this.glow.drawRoundedRect(-39, -51.5, 78, 103, 8);
+        this.glow.drawRoundedRect(-37.5, -50, 75, 100, 8);
         this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
