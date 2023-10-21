@@ -8,11 +8,6 @@ const deck = [
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
 ];
 
-// const deck = [
-//     'AH', '2H', '3H', '4H',
-//     'AC', '2C', '3C', '4C',
-// ];
-
 const handMax = 7;
 const outpostCapacity = 3;
 
