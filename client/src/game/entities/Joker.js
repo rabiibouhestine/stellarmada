@@ -2,11 +2,11 @@ import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js'
 
 export class Joker {
-    constructor(cardsContainer, sheet, frontName, backName, isAlive, position) {
+    constructor(cardsContainer, sheet, frontName, isPlayer, isAlive, position) {
         this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.frontName = frontName;
-        this.backName = backName;
+        this.backName = isPlayer? "B1" : "B2";
         this.isAlive = isAlive;
         this.position = position;
 
@@ -16,13 +16,18 @@ export class Joker {
         this.card.y = this.position.y;
 
         // Define tower sprite
-        this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? frontName : backName]);
+        this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? frontName : this.backName]);
         this.sprite.anchor.set(0.5);
         this.sprite.width = 70;
         this.sprite.height = 95;
         this.card.addChild(this.sprite);
 
-        // Add tower to cards container
+        // Mirror Card if not player
+        if (!isPlayer) {
+            this.card.angle = 180;
+        }
+
+        // Add card to cards container
         this.cardsContainer.addChild(this.card);
     }
 
