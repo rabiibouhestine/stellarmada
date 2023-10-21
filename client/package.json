@@ -27,7 +27,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@pixi/sound": "^5.2.2",
 		"@tweenjs/tween.js": "^21.0.0",
 		"pixi.js": "^7.3.1",
 		"socket.io-client": "^4.7.2",
