@@ -1,8 +1,10 @@
 import * as PIXI from "pixi.js";
+import {Howl, Howler} from 'howler';
 
 import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
+import twoTone from './assets/audio/sfx_twoTone.ogg';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -68,6 +70,10 @@ export class Game {
 
         this.resize();
         window.addEventListener('resize', this.resize, this);
+
+        this.sound = new Howl({
+            src: [twoTone]
+        });
     }
 
     parseSheet = async () => {
@@ -75,6 +81,7 @@ export class Game {
     }
 
     update(data) {
+        this.sound.play();
         this.damageIndicator.setValue(data.turn.damage);
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
