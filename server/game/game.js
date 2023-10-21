@@ -112,7 +112,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
-        const opponentCards = gamestate.players[secondPlayerID].cards
         const playerCards = gamestate.players[playerID].cards;
         const playerHandSelection = playerSelection.hand;
         const playerRearguardSelection = playerSelection.rearguard;
@@ -130,7 +129,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S") || playerRearguardSelection.some(card => cardsMapping[card].suit === "S");
         const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H") || playerRearguardSelection.some(card => cardsMapping[card].suit === "H");
         const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D") || playerRearguardSelection.some(card => cardsMapping[card].suit === "D");
-        const hasElites = playerHandSelection.some(card => cardsMapping[card].isCastle) || playerRearguardSelection.some(card => cardsMapping[card].isCastle);
         const playerHandSelectionSum = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
@@ -226,45 +224,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     }
                 );
             }
-        }
-
-        // If Elites in selection, destroy opponent's stealth zone
-        if (hasElites && opponentCards.rearguard.length > 0) {
-
-            // Discard Opponent Royals from Rearguard
-            const rearguardHasRoyals = opponentCards.rearguard.some(card => cardsMapping[card].isCastle);
-            if (rearguardHasRoyals) {
-                const opponentRearguardElites = opponentCards.rearguard.filter(card => cardsMapping[card].isCastle);
-                opponentCards.rearguard = opponentCards.rearguard.filter(card => !opponentRearguardElites.includes(card));
-                opponentCards.castle.push(...opponentRearguardElites);
-
-                gameAction.moves[secondPlayerID].push(
-                    {
-                        cardsNames: opponentRearguardElites,
-                        nCards: opponentRearguardElites.length,
-                        location: "rearguard",
-                        destination: "castle"
-                    }
-                );
-            }
-
-            // Discard Opponent non Royals from Rearguard
-            const rearguardHasStandards = opponentCards.rearguard.some(card => !cardsMapping[card].isCastle);
-            if (rearguardHasStandards) {
-                const opponentRearguardStandards = opponentCards.rearguard.filter(card => !cardsMapping[card].isCastle);
-                opponentCards.rearguard = opponentCards.rearguard.filter(card => !opponentRearguardStandards.includes(card));
-                opponentCards.graveyard.push(...opponentRearguardStandards);
-
-                gameAction.moves[secondPlayerID].push(
-                    {
-                        cardsNames: opponentRearguardStandards,
-                        nCards: opponentRearguardStandards.length,
-                        location: "rearguard",
-                        destination: "graveyard"
-                    }
-                );
-            }
-
         }
 
         // If player hand empty after attack, and still has towers, reset
