@@ -17,9 +17,9 @@ export class Player {
         this.app.stage.addChild(this.cardsContainer);
         
         this.handCount = state.cards.handCount;
-        this.tavern = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, state.cards.tavern);
-        this.graveyard = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, state.cards.graveyard);
-        this.castle = new Deck(app, sheet, this.isPlayer? "B1" : "B2", this.positions.castle, state.cards.castle);
+        this.tavern = new Deck(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
+        this.graveyard = new Deck(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
+        this.castle = new Deck(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false);
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false);

@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js";
 
 export class Deck {
-    constructor(app, sheet, name, position, size) {
+    constructor(app, sheet, isPlayer, position, size) {
         this.app = app;
         this.sheet = sheet;
-        this.name = name;
+        this.name = isPlayer? "B1" : "B2";
         this.position = position;
         this.size = size;
 
@@ -38,6 +38,11 @@ export class Deck {
         });
         this.text.anchor.set(0.5);
         this.container.addChild(this.text);
+
+        // Mirror deck if not player
+        if (!isPlayer) {
+            this.container.angle = 180;
+        }
 
         // Add deck to app stage
         this.app.stage.addChild(this.container);
