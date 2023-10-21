@@ -16,7 +16,7 @@ export class Joker {
         this.card.y = this.position.y;
 
         // Define tower sprite
-        this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? frontName : this.backName]);
+        this.sprite = new PIXI.Sprite(this.sheet.textures[isAlive? this.backName : this.frontName]);
         this.sprite.anchor.set(0.5);
         this.sprite.width = 70;
         this.sprite.height = 95;
@@ -46,7 +46,7 @@ export class Joker {
                 this.card.scale.set(propreties.x, propreties.y);
             })
             .onComplete(() => {
-                this.sprite.texture = this.sheet.textures[this.backName];
+                this.sprite.texture = this.sheet.textures[this.frontName];
             });
 
         const tweenDown = new TWEEN.Tween(propreties, false)
