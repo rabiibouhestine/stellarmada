@@ -226,16 +226,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             }
         }
 
-        // If player hand empty after attack, and still has towers, reset
-        const jokerLeft = gamestate.players[playerID].cards.jokerLeft;
-        const jokerRight = gamestate.players[playerID].cards.jokerRight;
-        const stillHasJokers = jokerLeft || jokerRight;
-        if (playerCards.hand.length === 0 && stillHasJokers) {
-            const resetAction = resetState(playerID, gamestate, handMax);
-            gameAction.jokers[playerID] = resetAction.jokers;
-            gameAction.moves[playerID].push(...resetAction.moves);
-        }
-
         // Update gameAction turn
         gameAction.turn = {
             playerID: secondPlayerID,
@@ -369,8 +359,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // If hand empty after discard, reset
-        if (playerCards.hand.length === 0) {
+        // If hand and rearguard are empty after discard, reset
+        if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
             const resetAction = resetState(playerID, gamestate, handMax);
             gameAction.jokers[playerID] = resetAction.jokers;
             gameAction.moves[playerID].push(...resetAction.moves);
@@ -392,7 +382,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
         const playerJokersDead = !playerJokerLeft && !playerJokerRight;
 
-        if (gamestate.players[playerID].cards.hand.length === 0 &&  playerJokersDead) {
+        if (gamestate.players[playerID].cards.hand.length === 0 && gamestate.players[playerID].cards.rearguard.length === 0 &&  playerJokersDead) {
             gameAction.isGameOver = true;
             gameAction.winnerID = secondPlayerID;
         }
