@@ -10,14 +10,14 @@ export class Button {
         this.state = "waiting";
         this.states = {
             attacking: {
-                color: 0x0096FF,
-                colorHover: 0x33ABFF,
+                color: 0x73bed3,
+                colorHover: 0x4f8fba,
                 icon: PIXI.Texture.from(swordImage),
                 text: "Attack"
             },
             discarding: {
-                color: 0xD22B2B,
-                colorHover: 0xd83f3f,
+                color: 0xde9e41,
+                colorHover: 0xbe772b,
                 icon: PIXI.Texture.from(skullImage),
                 text: "Discard"
             },
