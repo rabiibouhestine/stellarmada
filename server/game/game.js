@@ -377,7 +377,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // If current player has no cards in hand after discard, secondPlayer wins
+        // If current player has no cards in hand and rearguard after discard, secondPlayer wins
         const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
         const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
         const playerJokersDead = !playerJokerLeft && !playerJokerRight;
