@@ -15,17 +15,10 @@ export class Deck {
         this.container.position = this.position;
         this.container.visible = this.size > 0;
 
-        // Define card frame
-        this.frame = new PIXI.Graphics();
-        this.frame.beginFill(0xffffff, 1);
-        this.frame.drawRoundedRect(-35, -47.5, 70, 95, 4);
-        this.frame.endFill();
-        this.container.addChild(this.frame);
-
         // Define deck sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
-        this.sprite.width = 65;
-        this.sprite.height = 90;
+        this.sprite.width = 70;
+        this.sprite.height = 95;
         this.sprite.anchor.set(0.5);
         this.container.addChild(this.sprite);
 
