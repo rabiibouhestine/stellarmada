@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 
 import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
