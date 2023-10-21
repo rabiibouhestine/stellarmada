@@ -90,7 +90,7 @@ export class Card {
         this.selectable = selectable;
         this.container.cursor = selectable? 'pointer' : 'default';
         this.glow.visible = selectable;
-        this.glow.tint = isAttack? 0x0096FF : 0xD22B2B;
+        this.glow.tint = isAttack? 0x4f8fba : 0xcf573c;
     }
 
     moveTo(position, isHand, reveal, destroy) {
