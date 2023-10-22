@@ -37,7 +37,7 @@
 		<input
 			type="text"
 			placeholder="Write your message!"
-			class="w-full focus:outline-none focus:placeholder-gray-400 placeholder-white px-4 py-2 bg-white bg-opacity-10 text-sm text-white rounded-md"
+			class="w-full focus:outline-none focus:placeholder-gray-400 placeholder-white px-4 py-2 bg-black bg-opacity-10 text-sm text-white rounded-md"
 		/>
 		<button
 			type="button"
