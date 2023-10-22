@@ -111,7 +111,9 @@
 	}
 </script>
 
-<div class="flex flex-row justify-center w-full h-screen">
+<div
+	class="flex flex-row justify-center w-full h-screen bg-gradient-to-t from-[#253a5e] to-[#602c2c]"
+>
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div class="flex items-center justify-center bg-slate-400 w-full min-h-[50px] rounded-lg">
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
