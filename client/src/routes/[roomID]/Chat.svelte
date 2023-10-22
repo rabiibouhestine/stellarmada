@@ -37,11 +37,11 @@
 		<input
 			type="text"
 			placeholder="Write your message!"
-			class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 px-4 py-2 bg-gray-200 text-xs rounded-md"
+			class="w-full focus:outline-none focus:placeholder-gray-400 placeholder-white px-4 py-2 bg-white bg-opacity-10 text-sm text-white rounded-md"
 		/>
 		<button
 			type="button"
-			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-[#4f8fba] hover:bg-[#73bed3] focus:outline-none"
+			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-[#253a5e] hover:bg-[#3c5e8b] focus:outline-none"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -65,14 +65,14 @@
 
 	.scrollbar-track-blue-lighter::-webkit-scrollbar-track {
 		--bg-opacity: 1;
-		background-color: #f7fafc;
-		background-color: rgba(247, 250, 252, var(--bg-opacity));
+		background-color: #696969;
+		background-color: rgba(0, 0, 0, 0.2);
 	}
 
 	.scrollbar-thumb-blue::-webkit-scrollbar-thumb {
 		--bg-opacity: 1;
-		background-color: #edf2f7;
-		background-color: rgba(237, 242, 247, var(--bg-opacity));
+		background-color: #2a2a2a;
+		background-color: rgba(0, 0, 0, 0.5);
 	}
 
 	.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
