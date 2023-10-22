@@ -95,16 +95,6 @@ export class Game {
                 player.repositionBoard();
             }
 
-            // Update joker left
-            if (!data.jokers[key].jokerLeft && player.jokerLeft.isAlive) {
-                player.jokerLeft.flipCard();
-            }
-
-            // Update joker right
-            if (!data.jokers[key].jokerRight && player.jokerRight.isAlive) {
-                player.jokerRight.flipCard();
-            }
-
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
             const stance = data.turn.stance;

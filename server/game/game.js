@@ -1,5 +1,5 @@
 const cardsMapping = require('./cardsDict.json');
-const { shuffleDeck, resetState, clearAttack } = require('./utils.js');
+const { shuffleDeck, clearAttack } = require('./utils.js');
 
 const deck = [
     'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
@@ -66,9 +66,7 @@ const initPlayerState = (deck) => {
             rearguard: [],
             tavern: tavern,
             graveyard: [],
-            castle: [],
-            jokerLeft: true,
-            jokerRight: true
+            castle: []
         }
     };
 
@@ -92,15 +90,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         isGameOver: gamestate.isGameOver,
         winnerID: gamestate.winnerID,
         turn: gamestate.turn,
-        jokers: {},
         moves: {}
     };
-    for (const id of playersIDS) {
-        gameAction.jokers[id] = {
-            jokerLeft: gamestate.players[id].cards.jokerLeft,
-            jokerRight: gamestate.players[id].cards.jokerRight
-        };
-    }
     for (const id of playersIDS) {
         gameAction.moves[id] = [];
     }
@@ -229,7 +220,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: playerSelectionValue
         }
 
-        // If second player can't discard the attack, check towers
+        // If enemy does not have enough to discard attack, player wins
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
@@ -237,33 +228,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
         const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerRearguardValue;
-        const secondPlayerJokerLeft = gamestate.players[secondPlayerID].cards.jokerLeft;
-        const secondPlayerJokerRight = gamestate.players[secondPlayerID].cards.jokerRight;
-        const secondPlayerJokersDead = !secondPlayerJokerLeft && !secondPlayerJokerRight;
 
-        // If second player does not have enough to discard attack
         if (secondPlayerMaxDiscardValue < playerSelectionValue) {
-            // If second player both towers destroyed, curren player wins
-            if (secondPlayerJokersDead) {
-                gameAction.isGameOver = true;
-                gameAction.winnerID = playerID;
-            } else {
-            // Id second player still has towers, attack is cleared, and second player resets
-                const resetAction = resetState(secondPlayerID, gamestate, handMax);
-                gameAction.jokers[secondPlayerID] = resetAction.jokers;
-                gameAction.moves[secondPlayerID].push(...resetAction.moves);
-
-                // Clear second player attack
-                const clearAttackMoves = clearAttack(playerID, gamestate, outpostCapacity);
-                gameAction.moves[playerID].push(...clearAttackMoves);
-
-                // Update gameAction turn
-                gameAction.turn = {
-                    playerID: secondPlayerID,
-                    stance: "attacking",
-                    damage: 0
-                }
-            }
+            gameAction.isGameOver = true;
+            gameAction.winnerID = playerID;
         }
     }
 
@@ -366,22 +334,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // Handle empty fleet (hand and rearguard both empty after discard)
+        // If empty fleet (hand and rearguard both empty after discard), enemy wins
         if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
-            // Check jokers
-            const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
-            const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
-            const playerJokersDead = !playerJokerLeft && !playerJokerRight;
-    
-            // If both jokers dead, enemy wins, otherwise reset player
-            if (playerJokersDead) {
-                gameAction.isGameOver = true;
-                gameAction.winnerID = secondPlayerID;
-            } else {
-                const resetAction = resetState(playerID, gamestate, handMax);
-                gameAction.jokers[playerID] = resetAction.jokers;
-                gameAction.moves[playerID].push(...resetAction.moves);
-            }
+            gameAction.isGameOver = true;
+            gameAction.winnerID = secondPlayerID;
         }
     }
 

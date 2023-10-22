@@ -28,105 +28,6 @@ const processGameState = (gameState, playerID) => {
     return processedState;
 }
 
-const resetState = (playerID, gamestate, handMax) => {
-
-    // Initialise reset action
-    const resetAction = {
-        jokers: {
-            jokerLeft: gamestate.players[playerID].cards.jokerLeft,
-            jokerRight: gamestate.players[playerID].cards.jokerRight
-        },
-        moves: []
-    };
-
-    const playerJokerLeft = gamestate.players[playerID].cards.jokerLeft;
-    const playerJokerRight = gamestate.players[playerID].cards.jokerRight;
-    const playerJokersDead = !playerJokerLeft && !playerJokerRight;
-
-    // If both towers dead, abort reset
-    if (playerJokersDead) return resetAction;
-
-    // Destory one tower, starting with left
-    if (playerJokerLeft) {
-        gamestate.players[playerID].cards.jokerLeft = false;
-        resetAction.jokers.jokerLeft = false;
-    } else {
-        gamestate.players[playerID].cards.jokerRight = false;
-        resetAction.jokers.jokerRight = false;
-    }
-
-    // Put outpost cards in Barracks
-    if (gamestate.players[playerID].cards.rearguard.length) {
-        const currentRearguard = [...gamestate.players[playerID].cards.rearguard];
-        gamestate.players[playerID].cards.tavern.push(...currentRearguard);
-        gamestate.players[playerID].cards.rearguard = [];
-        resetAction.moves.push(
-            {
-                cardsNames: currentRearguard,
-                nCards: currentRearguard.length,
-                location: "rearguard",
-                destination: "tavern"
-            }
-        );
-    }
-
-    // Put hospice cards in Barracks
-    if (gamestate.players[playerID].cards.graveyard.length) {
-        const currentGraveyard = [...gamestate.players[playerID].cards.graveyard];
-        gamestate.players[playerID].cards.tavern.push(...currentGraveyard);
-        gamestate.players[playerID].cards.graveyard = [];
-        resetAction.moves.push(
-            {
-                cardsNames: currentGraveyard,
-                nCards: currentGraveyard.length,
-                location: "graveyard",
-                destination: "tavern"
-            }
-        );
-    }
-
-    // Put hand cards in Barracks
-    if (gamestate.players[playerID].cards.hand.length) {
-        const currentHand = [...gamestate.players[playerID].cards.hand];
-        gamestate.players[playerID].cards.tavern.push(...currentHand);
-        gamestate.players[playerID].cards.hand = [];
-        resetAction.moves.push(
-            {
-                cardsNames: currentHand,
-                nCards: currentHand.length,
-                location: "hand",
-                destination: "tavern"
-            }
-        );
-    }
-
-    // Remove Ace of Diamonds from barracks
-    const currentTavern = [...gamestate.players[playerID].cards.tavern];
-    const indexToRemove = currentTavern.indexOf("AD");
-    currentTavern.splice(indexToRemove, 1);
-    // Add the Ace of Diamonds to hand
-    gamestate.players[playerID].cards.hand = ["AD"];
-    // Shuffle barracks
-    const shuffledTavern =  shuffleDeck(currentTavern);
-    // Draw handMax - 1 cards from the shuffled deck
-    const cardsToDraw = shuffledTavern.splice(0, handMax - 1); 
-    gamestate.players[playerID].cards.hand.push(...cardsToDraw);
-    // Put the remaining cards in the barracks
-    gamestate.players[playerID].cards.tavern = shuffledTavern;
-    // Add move
-    resetAction.moves.push(
-        {
-            cardsNames: gamestate.players[playerID].cards.hand,
-            nCards: gamestate.players[playerID].cards.hand.length,
-            location: "tavern",
-            destination: "hand"
-        }
-    );
-
-    // Return reset action
-    return resetAction;
-}
-
 const clearAttack = (playerID, gamestate, outpostCapacity) => {
     // Define clear attack moves
     const clearAttackMoves = [];
@@ -172,4 +73,4 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
     return clearAttackMoves;
 }
 
-module.exports = { shuffleDeck, processGameState, resetState, clearAttack }
+module.exports = { shuffleDeck, processGameState, clearAttack }
