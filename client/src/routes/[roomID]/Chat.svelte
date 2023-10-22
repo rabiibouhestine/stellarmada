@@ -33,7 +33,7 @@
 			</div>
 		{/each}
 	</div>
-	<div class="flex space-x-2 border-t-2 border-gray-200 px-2 py-2">
+	<div class="flex space-x-2 border-t-2 border-black border-opacity-50 px-2 py-2">
 		<input
 			type="text"
 			placeholder="Write your message!"
