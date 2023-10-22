@@ -23,7 +23,7 @@
 			<div class="chat-message">
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-1 items-end">
 					<div>
-						<span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white"
+						<span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-[#4f8fba] text-white"
 							>We will see about that. I have a very good hand. Prepare yourslef to be humiliated
 							and destroyed.</span
 						>
@@ -40,7 +40,7 @@
 		/>
 		<button
 			type="button"
-			class="inline-flex items-center justify-center rounded-lg px-4 py-2 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
+			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-[#4f8fba] hover:bg-[#73bed3] focus:outline-none"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
