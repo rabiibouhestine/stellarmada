@@ -119,7 +119,7 @@
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
-		{#if true}
+		{#if false}
 			<div class="bg-slate-400 w-full min-h-[260px] rounded-lg" />
 		{/if}
 		<div class="bg-slate-400 w-full h-full rounded-xl overflow-y-auto">
