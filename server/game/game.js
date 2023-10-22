@@ -201,19 +201,20 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If Spades in selection, move cards from tavern to rearguard
         if (hasSpades && playerCards.tavern.length !== 0) {
-            const nCardsToMove = Math.min(
+            const nCardsToDraw = Math.min(
                 outpostCapacity - playerCards.rearguard.length,
                 playerHandSelection.length + playerRearguardSelection.length,
                 playerCards.tavern.length
             );
-            if (nCardsToMove > 0) {
-                const cardsToMove = playerCards.tavern.splice(0, nCardsToMove);
-                playerCards.rearguard.push(...cardsToMove);
+            if (nCardsToDraw > 0) {
+                const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
+                playerCards.tavern.splice(-nCardsToDraw);
+                playerCards.rearguard.push(...cardsToDraw);
     
                 gameAction.moves[playerID].push(
                     {
-                        cardsNames: cardsToMove,
-                        nCards: nCardsToMove,
+                        cardsNames: cardsToDraw,
+                        nCards: nCardsToDraw,
                         location: "tavern",
                         destination: "rearguard"
                     }
