@@ -14,7 +14,7 @@
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-2 items-start">
 					<div>
 						<span
-							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600"
+							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-[#be772b] bg-opacity-40 text-sm text-white"
 							>I am gonna win this game eaaaaaaasy!!</span
 						>
 					</div>
@@ -23,7 +23,8 @@
 			<div class="chat-message">
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-1 items-end">
 					<div>
-						<span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-[#4f8fba] text-white"
+						<span
+							class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-[#3c5e8b] bg-opacity-40 text-sm text-white"
 							>We will see about that. I have a very good hand. Prepare yourslef to be humiliated
 							and destroyed.</span
 						>
