@@ -11,7 +11,7 @@
 	>
 		{#each playerMessages as playerMessage}
 			<div class="chat-message">
-				<div class="flex flex-col space-y-2 text-xs max-w-xs order-2 items-start">
+				<div class="flex flex-col space-y-2 text-sm max-w-xs order-2 items-start">
 					<div>
 						<span
 							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600"
@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<div class="chat-message">
-				<div class="flex flex-col space-y-2 text-xs max-w-xs order-1 items-end">
+				<div class="flex flex-col space-y-2 text-sm max-w-xs order-1 items-end">
 					<div>
 						<span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white"
 							>We will see about that. I have a very good hand. Prepare yourslef to be humiliated
