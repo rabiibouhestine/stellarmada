@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 
 import { Deck } from "./Deck";
 import { Card } from "./Card";
+import { Joker } from "./Joker";
 
 export class Player {
     constructor(app, sheet, state, positions, damageIndicator, confirmButton, isPlayer) {
@@ -22,6 +23,7 @@ export class Player {
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false, this.isPlayer);
+        this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
         this.stance = "waiting";
 
