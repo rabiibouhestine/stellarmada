@@ -133,7 +133,7 @@
 				on:click={() => {
 					showRulesModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-blue-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-blue-500"
 			>
 				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
 			</button>
@@ -141,7 +141,7 @@
 				on:click={() => {
 					showSurrenderModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-red-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-red-500"
 			>
 				<Icon src={Flag} class="h-8 w-8 text-white" />
 			</button>
@@ -149,12 +149,12 @@
 				on:click={() => {
 					showQuitModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-yellow-500"
 			>
 				<Icon src={Home} class="h-8 w-8 text-white" />
 			</button>
 			<button
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-yellow-500"
 			>
 				<Icon src={Cog6Tooth} class="h-8 w-8 text-white" />
 			</button>
