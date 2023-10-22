@@ -159,7 +159,12 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
-            const revivedCards = playerCards.graveyard.splice(0, playerSelectionSum);
+            // shuffle graveyard
+            playerCards.graveyard = shuffleDeck(playerCards.graveyard);
+            // pick playerSelectionSum from top of graveyard
+            const revivedCards = playerCards.graveyard.slice(-playerSelectionSum);
+            // move them to bottom of tavern
+            playerCards.graveyard.splice(-playerSelectionSum);
             playerCards.tavern.unshift(...revivedCards);
 
             gameAction.moves[playerID].push(
