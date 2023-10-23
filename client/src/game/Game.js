@@ -90,7 +90,7 @@ export class Game {
             if (data.moves[key].length > 0) {
                 for (const moveIndex in data.moves[key]) {
                     const move = data.moves[key][moveIndex];
-                    player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
+                    player.moveCards(move.cardsNames, move.location, move.destination);
                 }
                 player.repositionBoard();
             }

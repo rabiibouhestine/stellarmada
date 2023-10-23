@@ -45,7 +45,6 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
         clearAttackMoves.push(
             {
                 cardsNames: frontlineRoyals,
-                nCards: frontlineRoyals.length,
                 location: "frontline",
                 destination: "castle"
             }
@@ -62,7 +61,6 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
         clearAttackMoves.push(
             {
                 cardsNames: frontlineStandards,
-                nCards: frontlineStandards.length,
                 location: "frontline",
                 destination: "graveyard"
             }

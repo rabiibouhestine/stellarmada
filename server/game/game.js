@@ -134,7 +134,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: playerHandSelection,
-                    nCards: playerHandSelection.length,
                     location: "hand",
                     destination: "frontline"
                 }
@@ -150,7 +149,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: playerRearguardSelection,
-                    nCards: playerRearguardSelection.length,
                     location: "rearguard",
                     destination: "frontline"
                 }
@@ -169,8 +167,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
             gameAction.moves[playerID].push(
                 {
-                    cardsNames: [],
-                    nCards: revivedCards.length,
+                    cardsNames: Array.from({ length: revivedCards.length }, () => 0),
                     location: "graveyard",
                     destination: "tavern"
                 }
@@ -188,7 +185,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: cardsToDraw,
-                    nCards: nCardsToDraw,
                     location: "tavern",
                     destination: "hand"
                 }
@@ -210,7 +206,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 gameAction.moves[playerID].push(
                     {
                         cardsNames: cardsToDraw,
-                        nCards: nCardsToDraw,
                         location: "tavern",
                         destination: "rearguard"
                     }
@@ -270,7 +265,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: rearguardSelectedRoyals,
-                    nCards: rearguardSelectedRoyals.length,
                     location: "rearguard",
                     destination: "castle"
                 }
@@ -287,7 +281,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: rearguardSelectedStandards,
-                    nCards: rearguardSelectedStandards.length,
                     location: "rearguard",
                     destination: "graveyard"
                 }
@@ -304,7 +297,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: handSelectedRoyals,
-                    nCards: handSelectedRoyals.length,
                     location: "hand",
                     destination: "castle"
                 }
@@ -321,7 +313,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves[playerID].push(
                 {
                     cardsNames: handSelectedStandards,
-                    nCards: handSelectedStandards.length,
                     location: "hand",
                     destination: "graveyard"
                 }
