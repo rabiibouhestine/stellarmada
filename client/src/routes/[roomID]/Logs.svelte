@@ -12,13 +12,13 @@
 		{#each actionLogs as actionLog}
 			<div class="chat-message">
 				<span
-					class="px-4 py-2 w-full rounded-lg inline-block bg-[#3c5e8b] bg-opacity-40 text-sm text-white"
+					class="px-4 py-2 w-full rounded-lg inline-block bg-apollo-blue-400 bg-opacity-40 text-sm text-white"
 					>You played 4 cards.</span
 				>
 			</div>
 			<div class="chat-message">
 				<span
-					class="px-4 py-2 w-full rounded-lg inline-block bg-[#be772b] bg-opacity-40 text-sm text-white"
+					class="px-4 py-2 w-full rounded-lg inline-block bg-apollo-yellow-300 bg-opacity-40 text-sm text-white"
 					>Enemy discarded 3 cards.</span
 				>
 			</div>

@@ -112,7 +112,7 @@
 </script>
 
 <div
-	class="flex flex-row justify-center w-full h-screen bg-gradient-to-t from-[#253a5e] to-[#602c2c]"
+	class="flex flex-row justify-center w-full h-screen bg-gradient-to-t from-apollo-blue-500 to-apollo-yellow-500"
 >
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div

@@ -19,7 +19,7 @@
 </script>
 
 <div
-	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-[#000000]"
+	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-black"
 >
 	<div class="grid justify-items-center">
 		<div class="mb-15 p-6">

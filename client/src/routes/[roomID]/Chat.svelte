@@ -14,7 +14,7 @@
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-2 items-start">
 					<div>
 						<span
-							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-[#be772b] bg-opacity-40 text-sm text-white"
+							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-apollo-yellow-300 bg-opacity-40 text-sm text-white"
 							>I am gonna win this game eaaaaaaasy!!</span
 						>
 					</div>
@@ -24,7 +24,7 @@
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-1 items-end">
 					<div>
 						<span
-							class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-[#3c5e8b] bg-opacity-40 text-sm text-white"
+							class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-apollo-blue-400 bg-opacity-40 text-sm text-white"
 							>We will see about that. I have a very good hand. Prepare yourslef to be humiliated
 							and destroyed.</span
 						>
@@ -41,7 +41,7 @@
 		/>
 		<button
 			type="button"
-			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-[#253a5e] hover:bg-[#3c5e8b] focus:outline-none"
+			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-apollo-blue-500 hover:bg-apollo-blue-400 focus:outline-none"
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
