@@ -33,6 +33,35 @@
 				return 'bg-apollo-grey-200 text-apollo-grey-500';
 		}
 	};
+
+	const getMoveName = (move) => {
+		switch (move.location + '-' + move.destination) {
+			case 'graveyard-tavern':
+				return 'revived';
+			case 'tavern-hand':
+				return 'drew';
+			case 'tavern-rearguard':
+				return 'stealthed';
+			case 'frontline-graveyard':
+				return 'retreated';
+			case 'frontline-castle':
+				return 'retreated and lost';
+			case 'rearguard-graveyard':
+				return 'stealth countered with';
+			case 'rearguard-castle':
+				return 'stealth countered and lost';
+			case 'hand-graveyard':
+				return 'countered with';
+			case 'hand-castle':
+				return 'countered and lost';
+			case 'hand-frontline':
+				return 'attacked with';
+			case 'rearguard-frontline':
+				return 'stealth attacked with';
+			default:
+				return 'played';
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
@@ -49,9 +78,9 @@
 			>
 				<div class="text-sm text-white">
 					{#if move.playerID === playerID}
-						You played {move.cardsNames.length} cards
+						You {getMoveName(move)} {move.cardsNames.length} ships!
 					{:else}
-						Enemy played {move.cardsNames.length} cards
+						Enemy {getMoveName(move)} {move.cardsNames.length} ships!
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-bold">

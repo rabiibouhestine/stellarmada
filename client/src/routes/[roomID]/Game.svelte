@@ -44,13 +44,6 @@
 			game.update(data.gameAction);
 			isGameOver = data.gameAction.isGameOver;
 			winnerID = data.gameAction.winnerID;
-			const move = {
-				id: playerID,
-				cardsNames: ['6C'],
-				ncards: 2,
-				location: 'hand',
-				destination: 'frontline'
-			};
 			moves = [...moves, ...data.gameAction.moves];
 
 			if (data.gameAction.turn.stance === 'discarding') {
