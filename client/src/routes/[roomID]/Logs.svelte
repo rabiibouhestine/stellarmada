@@ -4,7 +4,7 @@
 
 	const playerID = localStorage.getItem('playerID');
 
-	const moves = [
+	export let moves = [
 		{
 			id: playerID,
 			cardsNames: ['6C'],
