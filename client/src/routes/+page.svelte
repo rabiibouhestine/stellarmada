@@ -18,7 +18,7 @@
 	});
 </script>
 
-<div class="flex items-center justify-center h-screen bg-slate-600">
+<div class="flex items-center justify-center h-screen bg-gradient-to-t from-[#253a5e] to-[#000000]">
 	<div class="grid justify-items-center">
 		<div class="mb-15 p-6">
 			<h1 class="text-6xl text-center text-slate-100 font-black drop-shadow-md">FLEET GAMBIT</h1>

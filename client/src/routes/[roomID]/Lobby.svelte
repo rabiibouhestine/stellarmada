@@ -42,7 +42,7 @@
 	});
 </script>
 
-<div class="flex items-center justify-center h-screen bg-slate-600">
+<div class="flex items-center justify-center h-screen bg-gradient-to-t from-[#253a5e] to-[#602c2c]">
 	<div class="grid justify-items-center w-2/3">
 		<div class="flex items-center justify-between w-1/3">
 			<div class="flex justify-center items-center rounded-full w-16 h-16 bg-sky-600">
