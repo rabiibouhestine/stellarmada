@@ -88,8 +88,8 @@
 	>
 		{#each moves as move}
 			<div
-				class="px-4 py-2 space-y-2 w-full rounded-lg
-				{getLogColorClass(move.playerID, playerID)} bg-opacity-40"
+				class="px-4 py-2 space-y-2 w-full rounded-lg bg-opacity-40
+				{getLogColorClass(move.playerID, playerID)}"
 			>
 				<div class="text-sm text-white">
 					{#if move.playerID === playerID}
