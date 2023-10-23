@@ -4,29 +4,31 @@
 
 	const playerID = localStorage.getItem('playerID');
 
-	export let moves = [
-		{
-			id: playerID,
-			cardsNames: ['6C'],
-			ncards: 2,
-			location: 'hand',
-			destination: 'frontline'
-		},
-		{
-			id: 'id2',
-			cardsNames: ['6C', '7H'],
-			ncards: 1,
-			location: 'hand',
-			destination: 'frontline'
-		},
-		{
-			id: playerID,
-			cardsNames: ['6C', '5H', '2C', '4C', '9S', '4H'],
-			ncards: 6,
-			location: 'hand',
-			destination: 'frontline'
-		}
-	];
+	export let moves;
+
+	// let moves = [
+	// 	{
+	// 		id: playerID,
+	// 		cardsNames: ['6C'],
+	// 		ncards: 2,
+	// 		location: 'hand',
+	// 		destination: 'frontline'
+	// 	},
+	// 	{
+	// 		id: 'id2',
+	// 		cardsNames: ['6C', '7H'],
+	// 		ncards: 1,
+	// 		location: 'hand',
+	// 		destination: 'frontline'
+	// 	},
+	// 	{
+	// 		id: playerID,
+	// 		cardsNames: ['6C', '5H', '2C', '4C', '9S', '4H'],
+	// 		ncards: 6,
+	// 		location: 'hand',
+	// 		destination: 'frontline'
+	// 	}
+	// ];
 
 	const getLogColorClass = (id, playerID) => {
 		if (id === playerID) {
