@@ -62,6 +62,23 @@
 				return 'played';
 		}
 	};
+
+	const getCardSuit = (cardName) => {
+		const value = cardName[0];
+		const suit = cardName[1];
+		switch (suit) {
+			case 'H':
+				return value + '♥';
+			case 'S':
+				return value + '♠';
+			case 'C':
+				return value + '♣';
+			case 'D':
+				return value + '♦';
+			default:
+				return cardName;
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
@@ -83,13 +100,13 @@
 						Enemy {getMoveName(move)} {move.cardsNames.length} ships!
 					{/if}
 				</div>
-				<div class="flex flex-column space-x-1 text-xs font-bold">
-					{#each move.cardsNames as card}
+				<div class="flex flex-column space-x-1 text-xs font-extrabold">
+					{#each move.cardsNames as cardName}
 						<div
 							class="flex px-1 py-2 w-full justify-center content-center rounded-lg
-							{getCardColorClass(card)} bg-opacity-80"
+							{getCardColorClass(cardName)} bg-opacity-80"
 						>
-							{card}
+							{getCardSuit(cardName)}
 						</div>
 					{/each}
 				</div>
