@@ -5,8 +5,9 @@
 
 	export let moves;
 
+	let messagesDiv;
+
 	afterUpdate(() => {
-		const messagesDiv = document.getElementById('messages');
 		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
 	});
 
@@ -89,6 +90,7 @@
 	<div
 		id="messages"
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+		bind:this={messagesDiv}
 	>
 		{#each moves as move}
 			<div
