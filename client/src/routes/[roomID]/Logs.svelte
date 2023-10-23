@@ -1,10 +1,14 @@
 <script>
-	// const el = document.getElementById('messages');
-	// el.scrollTop = el.scrollHeight;
+	import { afterUpdate } from 'svelte';
 
 	const playerID = localStorage.getItem('playerID');
 
 	export let moves;
+
+	afterUpdate(() => {
+		const messagesDiv = document.getElementById('messages');
+		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
+	});
 
 	const getLogColorClass = (id, playerID) => {
 		if (id === playerID) {
