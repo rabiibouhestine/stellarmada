@@ -11,10 +11,10 @@
 
 	$: if (isReady) {
 		readyBtnClass =
-			'w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-amber-600 hover:bg-amber-500';
+			'w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-brown-300 hover:bg-apollo-brown-400';
 	} else {
 		readyBtnClass =
-			'w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-600 hover:bg-emerald-500';
+			'w-2/5 mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500';
 	}
 
 	function handleCopy() {
@@ -45,12 +45,12 @@
 <div class="flex items-center justify-center h-screen bg-gradient-to-t from-[#253a5e] to-[#602c2c]">
 	<div class="grid justify-items-center w-2/3">
 		<div class="flex items-center justify-between w-1/3">
-			<div class="flex justify-center items-center rounded-full w-16 h-16 bg-sky-600">
+			<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-blue-300">
 				<Icon src={User} class="h-12 w-12 text-white" />
 			</div>
 			<h1 class="text-xl text-center text-slate-100 font-black">VS</h1>
 			{#if playersNb === 2}
-				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-rose-600">
+				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
 					<Icon src={User} class="h-12 w-12 text-white" />
 				</div>
 			{:else}
@@ -67,22 +67,22 @@
 			</h1>
 		</div>
 		<div class="my-6 flex justify-center items-center w-full">
-			<h1
-				class="px-4 py-2 rounded-l-lg text-md text-center text-slate-100 font-medium bg-slate-400"
-			>
-				{$page.url}
-			</h1>
 			<button
-				class="px-4 py-2 inline-flex items-center justify-center rounded-r-lg bg-slate-500 hover:bg-slate-400 font-black text-md text-white"
+				class="p-4 inline-flex space-x-2 items-center justify-center rounded-xl bg-black bg-opacity-40 hover:bg-opacity-80 font-black text-md text-white"
 				on:click={handleCopy}
 			>
-				<Icon src={Clipboard} class="h-6 w-6 mr-2" />
-				<span>COPY INVITE LINK</span>
+				<Icon src={Clipboard} class="h-6 w-6" />
+				<div class="flex flex-row space-x-4">
+					<span>COPY INVITE LINK :</span>
+					<h1 class="rounded-l-lg text-md text-center text-slate-100 font-medium">
+						{$page.url}
+					</h1>
+				</div>
 			</button>
 		</div>
 		<div class="p-6 flex justify-center w-2/3">
 			<button
-				class="w-1/5 mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-400 font-black text-lg text-white"
+				class="w-1/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 				on:click={handleLeave}
 			>
 				LEAVE

@@ -18,7 +18,9 @@
 	});
 </script>
 
-<div class="flex items-center justify-center h-screen bg-gradient-to-t from-[#253a5e] to-[#000000]">
+<div
+	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-[#000000]"
+>
 	<div class="grid justify-items-center">
 		<div class="mb-15 p-6">
 			<h1 class="text-6xl text-center text-slate-100 font-black drop-shadow-md">FLEET GAMBIT</h1>
@@ -29,7 +31,7 @@
 			PLAY AGAINST AI
 		</button> -->
 		<button
-			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 font-black text-lg text-white"
+			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-apollo-green-400 hover:bg-apollo-green-500 font-black text-lg text-white"
 			on:click={createRoom}
 		>
 			CREATE A ROOM
