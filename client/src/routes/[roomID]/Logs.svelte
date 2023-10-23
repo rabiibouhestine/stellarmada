@@ -6,30 +6,6 @@
 
 	export let moves;
 
-	// let moves = [
-	// 	{
-	// 		id: playerID,
-	// 		cardsNames: ['6C'],
-	// 		ncards: 2,
-	// 		location: 'hand',
-	// 		destination: 'frontline'
-	// 	},
-	// 	{
-	// 		id: 'id2',
-	// 		cardsNames: ['6C', '7H'],
-	// 		ncards: 1,
-	// 		location: 'hand',
-	// 		destination: 'frontline'
-	// 	},
-	// 	{
-	// 		id: playerID,
-	// 		cardsNames: ['6C', '5H', '2C', '4C', '9S', '4H'],
-	// 		ncards: 6,
-	// 		location: 'hand',
-	// 		destination: 'frontline'
-	// 	}
-	// ];
-
 	const getLogColorClass = (id, playerID) => {
 		if (id === playerID) {
 			return 'bg-apollo-blue-400';
@@ -67,15 +43,15 @@
 		{#each moves as move}
 			<div
 				class="px-4 py-2 space-y-2 w-full rounded-lg {getLogColorClass(
-					move.id,
+					move.playerID,
 					playerID
 				)} bg-opacity-40"
 			>
 				<div class="text-sm text-white">
-					{#if move.id === 'id1'}
-						You played {move.ncards} cards
+					{#if move.playerID === playerID}
+						You played {move.cardsNames.length} cards
 					{:else}
-						Enemy played {move.ncards} cards
+						Enemy played {move.cardsNames.length} cards
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-bold">

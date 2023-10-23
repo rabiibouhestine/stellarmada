@@ -28,7 +28,7 @@ const processGameState = (gameState, playerID) => {
     return processedState;
 }
 
-const clearAttack = (playerID, gamestate, outpostCapacity) => {
+const clearAttack = (playerID, gamestate) => {
     // Define clear attack moves
     const clearAttackMoves = [];
 
@@ -44,6 +44,7 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
 
         clearAttackMoves.push(
             {
+                playerID: playerID,
                 cardsNames: frontlineRoyals,
                 location: "frontline",
                 destination: "castle"
@@ -60,6 +61,7 @@ const clearAttack = (playerID, gamestate, outpostCapacity) => {
 
         clearAttackMoves.push(
             {
+                playerID: playerID,
                 cardsNames: frontlineStandards,
                 location: "frontline",
                 destination: "graveyard"

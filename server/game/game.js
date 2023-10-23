@@ -90,11 +90,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         isGameOver: gamestate.isGameOver,
         winnerID: gamestate.winnerID,
         turn: gamestate.turn,
-        moves: {}
+        moves: []
     };
-    for (const id of playersIDS) {
-        gameAction.moves[id] = [];
-    }
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
@@ -131,8 +128,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.frontline.push(...playerHandSelection);
     
             // Add move to game action
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: playerHandSelection,
                     location: "hand",
                     destination: "frontline"
@@ -146,8 +144,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.frontline.push(...playerRearguardSelection);
     
             // Add move to game action
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: playerRearguardSelection,
                     location: "rearguard",
                     destination: "frontline"
@@ -165,8 +164,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.graveyard.splice(-playerSelectionSum);
             playerCards.tavern.unshift(...revivedCards);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: Array.from({ length: revivedCards.length }, () => 0),
                     location: "graveyard",
                     destination: "tavern"
@@ -182,8 +182,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.tavern.splice(-nCardsToDraw);
             playerCards.hand.push(...cardsToDraw);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: cardsToDraw,
                     location: "tavern",
                     destination: "hand"
@@ -203,8 +204,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 playerCards.tavern.splice(-nCardsToDraw);
                 playerCards.rearguard.push(...cardsToDraw);
     
-                gameAction.moves[playerID].push(
+                gameAction.moves.push(
                     {
+                        playerID: playerID,
                         cardsNames: cardsToDraw,
                         location: "tavern",
                         destination: "rearguard"
@@ -262,8 +264,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedRoyals.includes(card));
             playerCards.castle.push(...rearguardSelectedRoyals);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: rearguardSelectedRoyals,
                     location: "rearguard",
                     destination: "castle"
@@ -278,8 +281,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedStandards.includes(card));
             playerCards.graveyard.push(...rearguardSelectedStandards);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: rearguardSelectedStandards,
                     location: "rearguard",
                     destination: "graveyard"
@@ -294,8 +298,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
             playerCards.castle.push(...handSelectedRoyals);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: handSelectedRoyals,
                     location: "hand",
                     destination: "castle"
@@ -310,8 +315,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
             playerCards.graveyard.push(...handSelectedStandards);
 
-            gameAction.moves[playerID].push(
+            gameAction.moves.push(
                 {
+                    playerID: playerID,
                     cardsNames: handSelectedStandards,
                     location: "hand",
                     destination: "graveyard"
@@ -320,8 +326,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }
 
         // Clear second player attack
-        const clearAttackMoves = clearAttack(secondPlayerID, gamestate, outpostCapacity);
-        gameAction.moves[secondPlayerID].push(...clearAttackMoves);
+        const clearAttackMoves = clearAttack(secondPlayerID, gamestate);
+        gameAction.moves.push(...clearAttackMoves);
 
         // Update gameAction turn
         gameAction.turn = {

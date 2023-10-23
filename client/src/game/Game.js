@@ -83,17 +83,19 @@ export class Game {
     update(data) {
         this.sound.play();
         this.damageIndicator.setValue(data.turn.damage);
+
+        // Perform moves
+        if (data.moves) {
+            for (const move of data.moves) {
+                this.players[move.playerID].moveCards(move.cardsNames, move.location, move.destination);
+            };
+        }
+
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
-            // Perform player moves
-            if (data.moves[key].length > 0) {
-                for (const moveIndex in data.moves[key]) {
-                    const move = data.moves[key][moveIndex];
-                    player.moveCards(move.cardsNames, move.location, move.destination);
-                }
-                player.repositionBoard();
-            }
+            // Reposition player cards
+            player.repositionBoard();
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;

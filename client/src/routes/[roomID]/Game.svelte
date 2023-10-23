@@ -51,7 +51,7 @@
 				location: 'hand',
 				destination: 'frontline'
 			};
-			moves = [...moves, move];
+			moves = [...moves, ...data.gameAction.moves];
 
 			if (data.gameAction.turn.stance === 'discarding') {
 				if (data.gameAction.turn.playerID === playerID) {
