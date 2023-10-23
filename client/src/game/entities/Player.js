@@ -274,28 +274,6 @@ export class Player {
             this.castle.setSize(this.castle.size + cardsNames.length);
         }
 
-        if (location === "rearguard" && destination === "tavern") {
-            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
-            this.tavern.cardsToGet.push(...cards);
-            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.tavern.setSize(this.tavern.size + cardsNames.length);
-        }
-
-        if (location === "hand" && destination === "tavern") {
-            this.handCount -= cardsNames.length;
-            this.tavern.setSize(this.tavern.size + cardsNames.length);
-
-            if (this.isPlayer) {
-                const cards = this.hand.filter(card => cardsNames.includes(card.name));
-                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.tavern.cardsToGet.push(...cards);
-            } else {
-                const cards = this.hand.slice(-cardsNames.length);
-                this.hand.splice(-cardsNames.length);
-                this.tavern.cardsToGet.push(...cards);
-            }
-        }
-
         if (location === "hand" && destination === "castle") {
             this.handCount -= cardsNames.length;
             this.castle.setSize(this.castle.size + cardsNames.length);
