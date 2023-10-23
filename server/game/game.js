@@ -1,5 +1,5 @@
 const cardsMapping = require('./cardsDict.json');
-const { shuffleDeck, clearAttack } = require('./utils.js');
+const { shuffleDeck, clearAttack, makeUnknownCardsArray } = require('./utils.js');
 
 const deck = [
     'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
@@ -167,7 +167,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             gameAction.moves.push(
                 {
                     playerID: playerID,
-                    cardsNames: Array.from({ length: revivedCards.length }, () => 0),
+                    cardsNames: makeUnknownCardsArray(revivedCards),
                     location: "graveyard",
                     destination: "tavern"
                 }

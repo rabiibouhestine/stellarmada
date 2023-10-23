@@ -73,4 +73,8 @@ const clearAttack = (playerID, gamestate) => {
     return clearAttackMoves;
 }
 
-module.exports = { shuffleDeck, processGameState, clearAttack }
+const makeUnknownCardsArray = (array) => {
+    return Array.from({ length: array.length }, () => '?');
+}
+
+module.exports = { shuffleDeck, processGameState, clearAttack, makeUnknownCardsArray }
