@@ -1,7 +1,33 @@
 <script>
 	// const el = document.getElementById('messages');
 	// el.scrollTop = el.scrollHeight;
-	const actionLogs = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+	const playerID = localStorage.getItem('playerID');
+
+	const moves = [
+		{
+			id: playerID,
+			cardsNames: ['6C'],
+			ncards: 2,
+			location: 'hand',
+			destination: 'frontline'
+		},
+		{
+			id: 'id2',
+			cardsNames: ['6C', '7H'],
+			ncards: 1,
+			location: 'hand',
+			destination: 'frontline'
+		}
+	];
+
+	const getLogColor = (id, playerID) => {
+		if (id === playerID) {
+			return 'bg-apollo-blue-400';
+		} else {
+			return 'bg-apollo-yellow-300';
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
@@ -9,85 +35,25 @@
 		id="messages"
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 	>
-		{#each actionLogs as actionLog}
-			<div class="px-4 py-2 space-y-2 w-full rounded-lg bg-apollo-blue-400 bg-opacity-40">
-				<div class="text-sm text-white">You played 4 cards</div>
-				<div class="flex flex-column space-x-1 text-xs font-bold">
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
+		{#each moves as move}
+			<div
+				class="px-4 py-2 space-y-2 w-full rounded-lg {getLogColor(move.id, playerID)} bg-opacity-40"
+			>
+				<div class="text-sm text-white">
+					{#if move.id === 'id1'}
+						You played {move.ncards} cards
+					{:else}
+						Enemy played {move.ncards} cards
+					{/if}
 				</div>
-			</div>
-			<div class="px-4 py-2 space-y-2 w-full rounded-lg bg-apollo-yellow-300 bg-opacity-40">
-				<div class="text-sm text-white">Enemy discarded 6 cards</div>
 				<div class="flex flex-column space-x-1 text-xs font-bold">
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
-					<div
-						class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
-					>
-						4H
-					</div>
+					{#each move.cardsNames as card}
+						<div
+							class="flex px-1 py-2 w-full justify-center content-center rounded-lg bg-apollo-blue-200 text-white"
+						>
+							{card}
+						</div>
+					{/each}
 				</div>
 			</div>
 		{/each}
