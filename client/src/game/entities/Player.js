@@ -33,10 +33,6 @@ export class Player {
         this.setStance(state.stance);
     }
 
-    setDamageValue(value) {
-        this.damageIndicator.setValue(value);
-    }
-
     createCards(locationState, isHidden, startPosition, isHand, isPlayer) {
         const cards = [];
         for (let index = 0; index < (isHidden ? locationState.length : this.handCount); index++) {
@@ -103,14 +99,14 @@ export class Player {
                 return accumulator + card.value;
             }, 0);
             const hasClubs = cardSelection.some(card => card.suit === "C");
-            this.setDamageValue(hasClubs? 2*sum : sum);
+            this.damageIndicator.setValue(hasClubs? 2*sum : sum);
         }
 
         if (this.stance === "discarding") {
             if (card.selected) {
-                this.setDamageValue(this.damageIndicator.value - card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value - card.value);
             } else {
-                this.setDamageValue(this.damageIndicator.value + card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value + card.value);
             }
         }
 
