@@ -41,28 +41,28 @@
 
 	const getMoveName = (move) => {
 		switch (move.location + '-' + move.destination) {
-			case 'graveyard-tavern':
-				return 'revived';
-			case 'tavern-hand':
-				return 'drew';
-			case 'tavern-rearguard':
-				return 'stealthed';
-			case 'frontline-graveyard':
-				return 'retreated';
-			case 'frontline-castle':
-				return 'retreated and lost';
+			// case 'graveyard-tavern':
+			// 	return 'revived';
+			// case 'tavern-hand':
+			// 	return 'drew';
+			// case 'tavern-rearguard':
+			// 	return 'stealthed';
+			// case 'frontline-graveyard':
+			// 	return 'retreated';
+			// case 'frontline-castle':
+			// 	return 'retreated and lost';
 			case 'rearguard-graveyard':
-				return 'stealth countered with';
+				return 'countered from scout zone!';
 			case 'rearguard-castle':
-				return 'stealth countered and lost';
+				return 'countered from scout zone!';
 			case 'hand-graveyard':
-				return 'countered with';
+				return 'countered from base!';
 			case 'hand-castle':
-				return 'countered and lost';
+				return 'countered from base!';
 			case 'hand-frontline':
-				return 'attacked with';
+				return 'attacked from base!';
 			case 'rearguard-frontline':
-				return 'stealth attacked with';
+				return 'attacked from scout zone!';
 			default:
 				return 'played';
 		}
@@ -99,9 +99,9 @@
 			>
 				<div class="text-sm text-white">
 					{#if move.playerID === playerID}
-						You {getMoveName(move)} {move.cardsNames.length} ships!
+						You {getMoveName(move)}
 					{:else}
-						Enemy {getMoveName(move)} {move.cardsNames.length} ships!
+						Enemy {getMoveName(move)}
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-extrabold">
