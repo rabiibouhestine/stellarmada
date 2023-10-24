@@ -10,6 +10,7 @@ export class Player {
         this.sheet = sheet;
         this.positions = positions;
         this.damageIndicator = damageIndicator;
+        this.confirmButton = confirmButton;
         this.isPlayer = isPlayer;
         
         this.cardsContainer = new PIXI.Container();
@@ -25,13 +26,10 @@ export class Player {
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false, this.isPlayer);
         this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
-        this.stance = "waiting";
-
-        this.confirmButton = confirmButton;
-
         this.attackSelection = [];
         this.discardSelection = [];
-
+        
+        this.stance = "waiting";
         this.setStance(state.stance);
     }
 
