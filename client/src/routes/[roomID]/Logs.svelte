@@ -52,17 +52,17 @@
 			// case 'frontline-castle':
 			// 	return 'retreated and lost';
 			case 'rearguard-graveyard':
-				return 'countered from scout zone!';
+				return 'countered';
 			case 'rearguard-castle':
-				return 'countered from scout zone!';
+				return 'countered';
 			case 'hand-graveyard':
-				return 'countered from base!';
+				return 'countered';
 			case 'hand-castle':
-				return 'countered from base!';
+				return 'countered';
 			case 'hand-frontline':
-				return 'attacked from base!';
+				return 'attacked';
 			case 'rearguard-frontline':
-				return 'attacked from scout zone!';
+				return 'attacked';
 			default:
 				return 'played';
 		}
@@ -84,6 +84,14 @@
 				return cardName;
 		}
 	};
+
+	const handlePlural = (text, number) => {
+		if (number > 1) {
+			return text + 's';
+		} else {
+			return text;
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
@@ -99,9 +107,11 @@
 			>
 				<div class="text-sm text-white">
 					{#if move.playerID === playerID}
-						You {getMoveName(move)}
+						You {getMoveName(move)} with {move.cardsNames.length}
+						{handlePlural('card', move.cardsNames.length)}:
 					{:else}
-						Enemy {getMoveName(move)}
+						Enemy {getMoveName(move)} with {move.cardsNames.length}
+						{handlePlural('card', move.cardsNames.length)}:
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-extrabold">
