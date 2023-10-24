@@ -28,6 +28,34 @@ const processGameState = (gameState, playerID) => {
     return processedState;
 }
 
+const processGameAction = (gameAction, playerID, isCurrentPlayer) => {
+    const processedMoves = [];
+
+    for (let i = 0; i < gameAction.moves.length; i++) {
+        const move = gameAction.moves[i];
+        const isPlayer = move.playerID === playerID;
+        const isDrawing = (move.location === "tavern") && (move.destination === "hand");
+        if (isDrawing && ((isPlayer && !isCurrentPlayer) || (!isPlayer && isCurrentPlayer))) {
+            const processedMove = {
+                playerID: move.playerID,
+                cardsNames: makeUnknownCardsArray(move.cardsNames),
+                location: move.location,
+                destination: move.destination,
+            };
+            processedMoves.push(processedMove);
+        } else {
+            processedMoves.push(move);
+        }
+    }
+
+    return {
+        isGameOver: gameAction.isGameOver,
+        winnerID: gameAction.winnerID,
+        turn: gameAction.turn,
+        moves: processedMoves
+    };
+}
+
 const clearAttack = (playerID, gamestate) => {
     // Define clear attack moves
     const clearAttackMoves = [];
@@ -77,4 +105,4 @@ const makeUnknownCardsArray = (array) => {
     return Array.from({ length: array.length }, () => '?');
 }
 
-module.exports = { shuffleDeck, processGameState, clearAttack, makeUnknownCardsArray }
+module.exports = { shuffleDeck, processGameState, processGameAction, clearAttack, makeUnknownCardsArray }
