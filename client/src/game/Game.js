@@ -4,7 +4,9 @@ import {Howl} from 'howler';
 import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
-import twoTone from './assets/audio/sfx_twoTone.ogg';
+
+import sfxShipsAttacked from './assets/audio/laserLarge_000.ogg';
+import sfxShipsDiscarded from './assets/audio/forceField_000.ogg';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -71,8 +73,11 @@ export class Game {
         this.resize();
         window.addEventListener('resize', this.resize, this);
 
-        this.sound = new Howl({
-            src: [twoTone]
+        this.soundShipsAttacked = new Howl({
+            src: [sfxShipsAttacked]
+        });
+        this.soundShipsDiscarded = new Howl({
+            src: [sfxShipsDiscarded]
         });
     }
 
@@ -81,7 +86,11 @@ export class Game {
     }
 
     update(data) {
-        this.sound.play();
+        if (data.turn.stance === 'discarding') {
+            this.soundShipsAttacked.play();
+        } else {
+            this.soundShipsDiscarded.play();
+        }
         this.damageIndicator.setValue(data.turn.damage);
 
         // Perform moves
