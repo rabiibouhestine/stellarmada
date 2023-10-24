@@ -135,8 +135,6 @@ io.on("connection", (socket) => {
 
         socket.emit("gameActionResponse", { gameAction:playerGameAction, success: true });
         socket.to(data.roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
-
-        // io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
     })
 
     socket.on("surrenderRequest", (data) => {
