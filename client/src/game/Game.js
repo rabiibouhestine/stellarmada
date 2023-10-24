@@ -84,7 +84,7 @@ export class Game {
             src: [bgMusic],
             autoplay: true,
             loop: true,
-            volume: 0.5
+            volume: 0.25
         });
     }
 
