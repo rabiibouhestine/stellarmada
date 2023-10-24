@@ -7,6 +7,7 @@ import positions from './assets/mappings/positionsDict.json';
 
 import sfxShipsAttacked from './assets/audio/laserLarge_000.ogg';
 import sfxShipsDiscarded from './assets/audio/forceField_000.ogg';
+import bgMusic from './assets/audio/bgMusic.flac';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -78,6 +79,12 @@ export class Game {
         });
         this.soundShipsDiscarded = new Howl({
             src: [sfxShipsDiscarded]
+        });
+        this.soundBgMusic = new Howl({
+            src: [bgMusic],
+            autoplay: true,
+            loop: true,
+            volume: 0.5
         });
     }
 
