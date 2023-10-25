@@ -129,10 +129,10 @@
 				<div class="text-sm text-white">
 					{#if move.playerID === playerID}
 						You {getMoveName(move)} with {move.cardsNames.length}
-						{handlePlural('card', move.cardsNames.length)}:
+						{handlePlural('ship', move.cardsNames.length)}:
 					{:else}
 						Enemy {getMoveName(move)} with {move.cardsNames.length}
-						{handlePlural('card', move.cardsNames.length)}:
+						{handlePlural('ship', move.cardsNames.length)}:
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-extrabold">
