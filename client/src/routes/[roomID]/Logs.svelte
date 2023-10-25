@@ -5,12 +5,12 @@
 
 	const playerID = localStorage.getItem('playerID');
 
-	let messagesDiv;
+	let logsDiv;
 
 	$: processedMoves = processMoves(moves);
 
 	afterUpdate(() => {
-		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
+		logsDiv.scrollTo(0, logsDiv.scrollHeight);
 	});
 
 	const processMoves = (moves) => {
@@ -119,7 +119,7 @@
 	<div
 		id="messages"
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
-		bind:this={messagesDiv}
+		bind:this={logsDiv}
 	>
 		{#each processedMoves as move}
 			<div

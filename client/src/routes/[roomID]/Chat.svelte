@@ -1,33 +1,49 @@
 <script>
-	// const el = document.getElementById('messages');
-	// el.scrollTop = el.scrollHeight;
-	const playerMessages = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+	import { afterUpdate } from 'svelte';
+
+	const playerID = localStorage.getItem('playerID');
+
+	let messages = [
+		{
+			playerID: playerID,
+			content: 'I am gonna win this game eaaaaaaasy!!'
+		},
+		{
+			playerID: 'id2',
+			content: 'We will see about that. I have a very good hand.'
+		}
+	];
+
+	let messagesDiv;
+
+	afterUpdate(() => {
+		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
+	});
+
+	const getMessageClass = (id) => {
+		if (id === playerID) {
+			return 'rounded-br-none bg-apollo-blue-400';
+		} else {
+			return 'rounded-bl-none bg-apollo-yellow-300';
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
 	<div
-		id="messages"
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+		bind:this={messagesDiv}
 	>
-		{#each playerMessages as playerMessage}
+		{#each messages as message}
 			<div class="chat-message">
 				<div class="flex flex-col space-y-2 text-sm max-w-xs order-2 items-start">
 					<div>
 						<span
-							class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-apollo-yellow-300 bg-opacity-40 text-sm text-white"
-							>I am gonna win this game eaaaaaaasy!!</span
+							class="px-4 py-2 rounded-lg inline-block
+							{getMessageClass(message.playerID)} bg-opacity-40 text-sm text-white"
 						>
-					</div>
-				</div>
-			</div>
-			<div class="chat-message">
-				<div class="flex flex-col space-y-2 text-sm max-w-xs order-1 items-end">
-					<div>
-						<span
-							class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-apollo-blue-400 bg-opacity-40 text-sm text-white"
-							>We will see about that. I have a very good hand. Prepare yourslef to be humiliated
-							and destroyed.</span
-						>
+							{message.content}
+						</span>
 					</div>
 				</div>
 			</div>
