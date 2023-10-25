@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import * as TWEEN from '@tweenjs/tween.js';
 
 export class Deck {
     constructor(app, sheet, isPlayer, position, size) {
@@ -52,10 +53,40 @@ export class Deck {
         this.size = x;
         this.text.text = this.size;
         this.container.visible = this.size > 0;
+        if (this.size > 0) {
+            this.pulse();
+        }
     }
 
     repositionCards() {
         this.cardsToGet.forEach(card => card.moveTo(this.position, false, false, true));
         this.cardsToGet = [];
+    }
+
+    pulse() {
+        const propreties = {
+            textBgScale: 2,
+            textScale: 2
+        };
+
+        const tween = new TWEEN.Tween(propreties, false)
+            .to({
+                textBgScale: 1,
+                textScale: 1
+            }, 1000)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .onUpdate(() => {
+                this.textBG.scale.set(propreties.textBgScale);
+                this.text.scale.set(propreties.textScale);
+            })
+            .start()
+
+        const updateScale = (delta) => {
+            if (!tween.isPlaying()) return;
+            tween.update(delta);
+            requestAnimationFrame(updateScale);
+        };
+    
+        requestAnimationFrame(updateScale);
     }
 }
