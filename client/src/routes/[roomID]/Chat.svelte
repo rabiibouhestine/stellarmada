@@ -8,11 +8,11 @@
 	let messages = [
 		{
 			playerID: '',
-			content: 'We will see about that. I have a very good hand.'
+			content: 'I am gonna win this battle!!'
 		},
 		{
 			playerID: playerID,
-			content: 'I am gonna win this game eaaaaaaasy!!'
+			content: 'We will see about that..'
 		}
 	];
 
