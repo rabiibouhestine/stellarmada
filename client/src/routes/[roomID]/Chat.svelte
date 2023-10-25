@@ -52,6 +52,14 @@
 			return 'rounded-bl-none bg-apollo-yellow-300';
 		}
 	};
+
+	const getMessageContainerClass = (id) => {
+		if (id === playerID) {
+			return 'items-end';
+		} else {
+			return 'items-start';
+		}
+	};
 </script>
 
 <div class="justify-between flex flex-col h-full overflow-y-auto">
@@ -61,7 +69,10 @@
 	>
 		{#each messages as message}
 			<div class="chat-message">
-				<div class="flex flex-col space-y-2 text-sm max-w-xs order-2 items-start">
+				<div
+					class="flex flex-col space-y-2 text-sm max-w-xs order-2
+					{getMessageContainerClass(message.playerID)}"
+				>
 					<div>
 						<span
 							class="px-4 py-2 rounded-lg inline-block
