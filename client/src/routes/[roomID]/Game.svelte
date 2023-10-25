@@ -136,7 +136,7 @@
 				on:click={() => {
 					showRulesModal = true;
 				}}
-				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-blue-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
 			>
 				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
 			</button>
@@ -144,7 +144,7 @@
 				on:click={() => {
 					showSurrenderModal = true;
 				}}
-				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-red-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-red-300"
 			>
 				<Icon src={Flag} class="h-8 w-8 text-white" />
 			</button>
@@ -152,12 +152,12 @@
 				on:click={() => {
 					showQuitModal = true;
 				}}
-				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-blue-300"
 			>
 				<Icon src={Home} class="h-8 w-8 text-white" />
 			</button>
 			<button
-				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
 			>
 				<Icon src={Cog6Tooth} class="h-8 w-8 text-white" />
 			</button>
@@ -175,16 +175,16 @@
 		</div>
 	</div>
 	<Modal bind:showModal={showRulesModal}>
-		<div class="grid justify-items-center w-full">RULES HERE</div>
+		<div class="grid justify-items-center w-full text-slate-200">RULES HERE</div>
 	</Modal>
 	<Modal bind:showModal={showSurrenderModal}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO SURRENDER?
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={() => {
 						showSurrenderModal = false;
 					}}
@@ -192,7 +192,7 @@
 					CANCEL
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleSurrender}
 				>
 					CONFIRM
@@ -202,12 +202,12 @@
 	</Modal>
 	<Modal bind:showModal={showQuitModal}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO QUIT?
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={() => {
 						showQuitModal = false;
 					}}
@@ -215,7 +215,7 @@
 					CANCEL
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleLeave}
 				>
 					CONFIRM
@@ -225,7 +225,7 @@
 	</Modal>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				{#if winnerID === playerID}
 					<h2>You Won !!!</h2>
 				{:else}
@@ -234,13 +234,13 @@
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={handleLeave}
 				>
 					LEAVE
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleRematch}
 				>
 					REMATCH
