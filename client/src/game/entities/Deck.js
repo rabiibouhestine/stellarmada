@@ -76,7 +76,6 @@ export class Deck {
             }, 800)
             .easing(TWEEN.Easing.Elastic.Out)
             .onUpdate(() => {
-                console.log(propreties.textBgScale);
                 this.textBG.scale.set(propreties.textBgScale);
                 this.text.scale.set(propreties.textScale);
             })
