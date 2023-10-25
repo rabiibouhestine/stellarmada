@@ -6,6 +6,6 @@
 
 <style lang="postcss">
 	:global(html) {
-		@apply bg-slate-600;
+		@apply bg-black;
 	}
 </style>

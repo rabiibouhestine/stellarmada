@@ -10,6 +10,7 @@ export class Player {
         this.sheet = sheet;
         this.positions = positions;
         this.damageIndicator = damageIndicator;
+        this.confirmButton = confirmButton;
         this.isPlayer = isPlayer;
         
         this.cardsContainer = new PIXI.Container();
@@ -23,21 +24,13 @@ export class Player {
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
         this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false, this.isPlayer);
-        this.jokerLeft = new Joker(this.cardsContainer, this.sheet, "J1", this.isPlayer, state.cards.jokerLeft, this.positions.jokerLeft);
-        this.jokerRight = new Joker(this.cardsContainer, this.sheet, "J2", this.isPlayer, state.cards.jokerRight, this.positions.jokerRight);
-
-        this.stance = "waiting";
-
-        this.confirmButton = confirmButton;
+        this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
         this.attackSelection = [];
         this.discardSelection = [];
-
+        
+        this.stance = "waiting";
         this.setStance(state.stance);
-    }
-
-    setDamageValue(value) {
-        this.damageIndicator.setValue(value);
     }
 
     createCards(locationState, isHidden, startPosition, isHand, isPlayer) {
@@ -106,14 +99,14 @@ export class Player {
                 return accumulator + card.value;
             }, 0);
             const hasClubs = cardSelection.some(card => card.suit === "C");
-            this.setDamageValue(hasClubs? 2*sum : sum);
+            this.damageIndicator.setValue(hasClubs? 2*sum : sum);
         }
 
         if (this.stance === "discarding") {
             if (card.selected) {
-                this.setDamageValue(this.damageIndicator.value - card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value - card.value);
             } else {
-                this.setDamageValue(this.damageIndicator.value + card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value + card.value);
             }
         }
 
@@ -209,31 +202,30 @@ export class Player {
     /**
    * This is a description of your method.
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
-   * @param {number} nCards - The number of cards to move.
    * @param {string} location - The current location of cards.
    * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
    * @param {string} destination - The destination to where the cards should move.
    * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
    */
-    moveCards(cardsNames, nCards, location, destination) {
+    moveCards(cardsNames, location, destination) {
 
         if (location === "graveyard" && destination === "tavern") {
             const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, this.isPlayer);
             this.tavern.cardsToGet.push(card);
-            this.graveyard.setSize(this.graveyard.size - nCards);
-            this.tavern.setSize(this.tavern.size + nCards);
+            this.graveyard.setSize(this.graveyard.size - cardsNames.length);
+            this.tavern.setSize(this.tavern.size + cardsNames.length);
         }
 
         if (location === "tavern" && destination === "hand") {
-            this.tavern.setSize(this.tavern.size - nCards);
-            this.handCount += nCards;
+            this.tavern.setSize(this.tavern.size - cardsNames.length);
+            this.handCount += cardsNames.length;
             if (this.isPlayer) {
                 for (const index in cardsNames) {
                     const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
                     this.hand.push(card);
                 }
             } else {
-                for (let step = 0; step < nCards; step++) {
+                for (let step = 0; step < cardsNames.length; step++) {
                     const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.tavern, this.isPlayer);
                     this.hand.push(card);
                 }
@@ -241,7 +233,7 @@ export class Player {
         }
 
         if (location === "tavern" && destination === "rearguard") {
-            this.tavern.setSize(this.tavern.size - nCards);
+            this.tavern.setSize(this.tavern.size - cardsNames.length);
             for (const index in cardsNames) {
                 const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
                 this.rearguard.push(card);
@@ -252,91 +244,69 @@ export class Player {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
             this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-            this.graveyard.setSize(this.graveyard.size + nCards);
+            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
         }
 
         if (location === "frontline" && destination === "castle") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
             this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-            this.castle.setSize(this.castle.size + nCards);
+            this.castle.setSize(this.castle.size + cardsNames.length);
         }
 
         if (location === "rearguard" && destination === "graveyard") {
             const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
             this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.graveyard.setSize(this.graveyard.size + nCards);
+            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
         }
 
         if (location === "rearguard" && destination === "castle") {
             const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
             this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.castle.setSize(this.castle.size + nCards);
-        }
-
-        if (location === "rearguard" && destination === "tavern") {
-            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
-            this.tavern.cardsToGet.push(...cards);
-            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.tavern.setSize(this.tavern.size + nCards);
-        }
-
-        if (location === "hand" && destination === "tavern") {
-            this.handCount -= nCards;
-            this.tavern.setSize(this.tavern.size + nCards);
-
-            if (this.isPlayer) {
-                const cards = this.hand.filter(card => cardsNames.includes(card.name));
-                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.tavern.cardsToGet.push(...cards);
-            } else {
-                const cards = this.hand.slice(-nCards);
-                this.hand.splice(-nCards);
-                this.tavern.cardsToGet.push(...cards);
-            }
+            this.castle.setSize(this.castle.size + cardsNames.length);
         }
 
         if (location === "hand" && destination === "castle") {
-            this.handCount -= nCards;
-            this.castle.setSize(this.castle.size + nCards);
+            this.handCount -= cardsNames.length;
+            this.castle.setSize(this.castle.size + cardsNames.length);
 
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
                 this.castle.cardsToGet.push(...cards);
             } else {
-                const cards = this.hand.slice(-nCards);
-                this.hand.splice(-nCards);
+                const cards = this.hand.slice(-cardsNames.length);
+                this.hand.splice(-cardsNames.length);
                 this.castle.cardsToGet.push(...cards);
             }
         }
 
         if (location === "hand" && destination === "graveyard") {
-            this.handCount -= nCards;
-            this.graveyard.setSize(this.graveyard.size + nCards);
+            this.handCount -= cardsNames.length;
+            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
 
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
                 this.graveyard.cardsToGet.push(...cards);
             } else {
-                const cards = this.hand.slice(-nCards);
-                this.hand.splice(-nCards);
+                const cards = this.hand.slice(-cardsNames.length);
+                this.hand.splice(-cardsNames.length);
                 this.graveyard.cardsToGet.push(...cards);
             }
         }
 
         if (location === "hand" && destination === "frontline") {
-            this.handCount -= nCards;
+            this.handCount -= cardsNames.length;
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
                 this.frontline.push(...cards);
             } else {
-                const cards = this.hand.slice(-nCards);
-                this.hand.splice(-nCards);
+                const cards = this.hand.slice(-cardsNames.length);
+                this.hand.splice(-cardsNames.length);
                 for (const card in cards) {
                     cards[card].reveal(cardsNames[card]);
                     this.frontline.push(cards[card]);

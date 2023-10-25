@@ -19,13 +19,13 @@ export class Button {
                 color: 0xde9e41,
                 colorHover: 0xbe772b,
                 icon: PIXI.Texture.from(skullImage),
-                text: "Discard"
+                text: "Counter"
             },
             waiting: {
                 color: 0x000000,
                 colorHover: 0x000000,
                 icon: PIXI.Texture.from(hourImage),
-                text: "Enemy's turn"
+                text: "Enemy turn"
             }
         };
 

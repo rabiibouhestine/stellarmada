@@ -25,10 +25,7 @@
 		max-width: 32em;
 		border: none;
 		padding: 0;
-		@apply bg-slate-300 rounded-lg;
-	}
-	dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
+		@apply bg-black bg-opacity-50 rounded-xl backdrop-blur-sm;
 	}
 	dialog > div {
 		padding: 1em;

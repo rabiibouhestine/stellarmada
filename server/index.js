@@ -1,3 +1,6 @@
+const { initGameState, handleActionRequest } = require("./game/game.js");
+const { processGameState, processGameAction } = require("./game/utils.js");
+
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -20,9 +23,6 @@ const io = new Server(server, {
 
 const rooms = {};
 const users = {};
-
-const { initGameState, handleActionRequest } = require("./game/game.js");
-const { processGameState } = require("./game/utils.js");
 
 io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
@@ -128,7 +128,12 @@ io.on("connection", (socket) => {
                 rooms[data.roomID].players[playerID].isReady = false;
             });
         }
-        io.to(data.roomID).emit("gameActionResponse", { gameAction:gameAction, success: true });
+
+        const playerGameAction = processGameAction(gameAction, playerID, true);
+        const enemyGameAction = processGameAction(gameAction, playerID, false);
+
+        socket.emit("gameActionResponse", { gameAction:playerGameAction, success: true });
+        socket.to(data.roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
     })
 
     socket.on("surrenderRequest", (data) => {
@@ -173,6 +178,10 @@ io.on("connection", (socket) => {
                 delete rooms[userRoom];
             }
         }
+    })
+
+    socket.on("messageRequest", (data) => {
+        io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
     socket.on("disconnect", (reason) => {

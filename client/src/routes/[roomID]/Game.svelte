@@ -7,6 +7,8 @@
 	import { Game } from '../../game/Game.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Timer from '$lib/modules/Timer.js';
+	import Chat from './Chat.svelte';
+	import Logs from './Logs.svelte';
 
 	let game;
 	let winnerID;
@@ -19,6 +21,8 @@
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const playerID = localStorage.getItem('playerID');
+
+	let moves = [];
 
 	onMount(() => {
 		setInterval(() => {
@@ -40,6 +44,7 @@
 			game.update(data.gameAction);
 			isGameOver = data.gameAction.isGameOver;
 			winnerID = data.gameAction.winnerID;
+			moves = [...moves, ...data.gameAction.moves];
 
 			if (data.gameAction.turn.stance === 'discarding') {
 				if (data.gameAction.turn.playerID === playerID) {
@@ -109,27 +114,29 @@
 	}
 </script>
 
-<div class="flex flex-row justify-center w-full h-screen">
-	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
-		<div class="flex items-center justify-center bg-slate-400 w-full min-h-[50px] rounded-lg">
+<div
+	class="flex flex-row justify-center w-full h-screen bg-gradient-to-t from-apollo-blue-500 to-apollo-yellow-500"
+>
+	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
+		<div
+			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
+		>
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
 		</div>
-		<div class="bg-slate-400 w-full h-full rounded-xl" />
+		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
+			<Logs {moves} />
+		</div>
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />
-	<div class="flex flex-col min-w-[300px] p-5 space-y-5">
-		{#if true}
-			<div class="bg-slate-400 w-full min-h-[260px] rounded-lg" />
-		{/if}
-		<div class="bg-slate-400 w-full h-full rounded-xl" />
+	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div
-			class="flex flex-row items-center justify-center bg-slate-400 rounded-lg space-x-4 min-h-[60px] w-full"
+			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
 		>
 			<button
 				on:click={() => {
 					showRulesModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-blue-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
 			>
 				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
 			</button>
@@ -137,7 +144,7 @@
 				on:click={() => {
 					showSurrenderModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-red-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-red-300"
 			>
 				<Icon src={Flag} class="h-8 w-8 text-white" />
 			</button>
@@ -145,31 +152,39 @@
 				on:click={() => {
 					showQuitModal = true;
 				}}
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-blue-300"
 			>
 				<Icon src={Home} class="h-8 w-8 text-white" />
 			</button>
 			<button
-				class="flex items-center justify-center bg-slate-500 h-10 w-12 rounded-lg hover:bg-yellow-500"
+				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
 			>
 				<Icon src={Cog6Tooth} class="h-8 w-8 text-white" />
 			</button>
 		</div>
-		<div class="flex items-center justify-center bg-slate-400 w-full min-h-[50px] rounded-lg">
+		{#if false}
+			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
+		{/if}
+		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
+			<Chat />
+		</div>
+		<div
+			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
+		>
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(playerTimeLeft)}</h1>
 		</div>
 	</div>
 	<Modal bind:showModal={showRulesModal}>
-		<div class="grid justify-items-center w-full">RULES HERE</div>
+		<div class="grid justify-items-center w-full text-slate-200">RULES HERE</div>
 	</Modal>
 	<Modal bind:showModal={showSurrenderModal}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO SURRENDER?
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={() => {
 						showSurrenderModal = false;
 					}}
@@ -177,7 +192,7 @@
 					CANCEL
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleSurrender}
 				>
 					CONFIRM
@@ -187,12 +202,12 @@
 	</Modal>
 	<Modal bind:showModal={showQuitModal}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				ARE YOU SURE YOU WANT TO QUIT?
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={() => {
 						showQuitModal = false;
 					}}
@@ -200,7 +215,7 @@
 					CANCEL
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleLeave}
 				>
 					CONFIRM
@@ -210,7 +225,7 @@
 	</Modal>
 	<Modal bind:showModal={isGameOver}>
 		<div class="grid justify-items-center w-full">
-			<div class="text-4xl text-center text-slate-500 font-black drop-shadow-md">
+			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
 				{#if winnerID === playerID}
 					<h2>You Won !!!</h2>
 				{:else}
@@ -219,13 +234,13 @@
 			</div>
 			<div class="p-6 flex justify-center">
 				<button
-					class="mx-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 font-black text-lg text-white"
+					class="mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 					on:click={handleLeave}
 				>
 					LEAVE
 				</button>
 				<button
-					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-emerald-500 hover:bg-emerald-700"
+					class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-green-400 hover:bg-apollo-green-500"
 					on:click={handleRematch}
 				>
 					REMATCH

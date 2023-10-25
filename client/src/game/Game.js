@@ -4,7 +4,10 @@ import {Howl} from 'howler';
 import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
-import twoTone from './assets/audio/sfx_twoTone.ogg';
+
+import sfxShipsAttacked from './assets/audio/laserLarge_000.ogg';
+import sfxShipsDiscarded from './assets/audio/forceField_000.ogg';
+import bgMusic from './assets/audio/bgMusic.flac';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -71,8 +74,17 @@ export class Game {
         this.resize();
         window.addEventListener('resize', this.resize, this);
 
-        this.sound = new Howl({
-            src: [twoTone]
+        this.soundShipsAttacked = new Howl({
+            src: [sfxShipsAttacked]
+        });
+        this.soundShipsDiscarded = new Howl({
+            src: [sfxShipsDiscarded]
+        });
+        this.soundBgMusic = new Howl({
+            src: [bgMusic],
+            autoplay: true,
+            loop: true,
+            volume: 0.25
         });
     }
 
@@ -81,29 +93,25 @@ export class Game {
     }
 
     update(data) {
-        this.sound.play();
+        if (data.turn.stance === 'discarding') {
+            this.soundShipsAttacked.play();
+        } else {
+            this.soundShipsDiscarded.play();
+        }
         this.damageIndicator.setValue(data.turn.damage);
+
+        // Perform moves
+        if (data.moves) {
+            for (const move of data.moves) {
+                this.players[move.playerID].moveCards(move.cardsNames, move.location, move.destination);
+            };
+        }
+
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
-            // Perform player moves
-            if (data.moves[key].length > 0) {
-                for (const moveIndex in data.moves[key]) {
-                    const move = data.moves[key][moveIndex];
-                    player.moveCards(move.cardsNames, move.nCards, move.location, move.destination);
-                }
-                player.repositionBoard();
-            }
-
-            // Update joker left
-            if (!data.jokers[key].jokerLeft && player.jokerLeft.isAlive) {
-                player.jokerLeft.flipCard();
-            }
-
-            // Update joker right
-            if (!data.jokers[key].jokerRight && player.jokerRight.isAlive) {
-                player.jokerRight.flipCard();
-            }
+            // Reposition player cards
+            player.repositionBoard();
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
