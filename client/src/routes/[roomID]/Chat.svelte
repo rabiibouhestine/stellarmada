@@ -7,12 +7,12 @@
 
 	let messages = [
 		{
-			playerID: playerID,
-			content: 'I am gonna win this game eaaaaaaasy!!'
+			playerID: '',
+			content: 'We will see about that. I have a very good hand.'
 		},
 		{
-			playerID: 'id2',
-			content: 'We will see about that. I have a very good hand.'
+			playerID: playerID,
+			content: 'I am gonna win this game eaaaaaaasy!!'
 		}
 	];
 
