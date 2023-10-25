@@ -44,11 +44,10 @@ export class Indicator {
     }
 
     setValue(value) {
-        if (this.value !== value) {
-            this.pulse();
-        }
+        if (this.value === value) return;
         this.value = value;
         this.text.text = Math.max(0, value);
+        this.pulse();
     }
 
     pulse() {
