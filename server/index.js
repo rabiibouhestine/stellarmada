@@ -181,6 +181,10 @@ io.on("connection", (socket) => {
         }
     })
 
+    socket.on("messageRequest", (data) => {
+        io.to(data.roomID).emit("messageResponse", {message: data.message});
+    })
+
     socket.on("disconnect", (reason) => {
         console.log("Player disconnected:", playerID, "- reason:", reason);
 

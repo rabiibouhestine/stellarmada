@@ -1,5 +1,7 @@
 <script>
-	import { afterUpdate } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
+	import { socket } from '$lib/modules/socket.js';
+	import { page } from '$app/stores';
 
 	const playerID = localStorage.getItem('playerID');
 
@@ -15,10 +17,33 @@
 	];
 
 	let messagesDiv;
+	let messageInput = '';
+
+	onMount(() => {
+		socket.on('messageResponse', (data) => {
+			messages = [...messages, data.message];
+		});
+	});
 
 	afterUpdate(() => {
 		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
 	});
+
+	const sendMessage = () => {
+		if (messageInput !== '') {
+			socket.emit('messageRequest', {
+				roomID: $page.params.roomID,
+				message: { playerID: playerID, content: messageInput }
+			});
+			messageInput = '';
+		}
+	};
+
+	const handleKeydown = (event) => {
+		if (event.key === 'Enter' && event.target.value) {
+			sendMessage();
+		}
+	};
 
 	const getMessageClass = (id) => {
 		if (id === playerID) {
@@ -54,10 +79,13 @@
 			type="text"
 			placeholder="Write your message!"
 			class="w-full focus:outline-none focus:placeholder-gray-400 placeholder-white px-4 py-2 bg-black bg-opacity-10 text-sm text-white rounded-md"
+			bind:value={messageInput}
+			on:keydown={handleKeydown}
 		/>
 		<button
 			type="button"
 			class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-white bg-apollo-blue-500 hover:bg-apollo-blue-400 focus:outline-none"
+			on:click={sendMessage}
 		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
