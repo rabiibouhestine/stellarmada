@@ -1,15 +1,36 @@
 <script>
 	import { afterUpdate } from 'svelte';
 
-	const playerID = localStorage.getItem('playerID');
-
 	export let moves;
 
+	const playerID = localStorage.getItem('playerID');
+
 	let messagesDiv;
+
+	$: processedMoves = processMoves(moves);
 
 	afterUpdate(() => {
 		messagesDiv.scrollTo(0, messagesDiv.scrollHeight);
 	});
+
+	const processMoves = (moves) => {
+		const processedMoves = [];
+		const movesToLog = [
+			'rearguard-graveyard',
+			'rearguard-castle',
+			'hand-graveyard',
+			'hand-castle',
+			'hand-frontline',
+			'rearguard-frontline'
+		];
+		for (const move of moves) {
+			const fullMove = move.location + '-' + move.destination;
+			if (movesToLog.includes(fullMove)) {
+				processedMoves.push(move);
+			}
+		}
+		return processedMoves;
+	};
 
 	const getLogColorClass = (id, playerID) => {
 		if (id === playerID) {
@@ -68,7 +89,7 @@
 		}
 	};
 
-	const getCardSuit = (cardName) => {
+	const processCardName = (cardName) => {
 		const value = cardName[0];
 		const suit = cardName[1];
 		switch (suit) {
@@ -100,7 +121,7 @@
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 		bind:this={messagesDiv}
 	>
-		{#each moves as move}
+		{#each processedMoves as move}
 			<div
 				class="px-4 py-2 space-y-2 w-full rounded-lg bg-opacity-40
 				{getLogColorClass(move.playerID, playerID)}"
@@ -120,7 +141,7 @@
 							class="flex px-1 py-2 w-full justify-center content-center rounded-lg
 							{getCardColorClass(cardName)} bg-opacity-80"
 						>
-							{getCardSuit(cardName)}
+							{processCardName(cardName)}
 						</div>
 					{/each}
 				</div>
