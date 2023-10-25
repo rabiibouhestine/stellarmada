@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import * as TWEEN from '@tweenjs/tween.js';
 
 export class Indicator {
     constructor(app, position, value) {
@@ -43,7 +44,34 @@ export class Indicator {
     }
 
     setValue(value) {
+        if (this.value !== value) {
+            this.pulse();
+        }
         this.value = value;
         this.text.text = Math.max(0, value);
+    }
+
+    pulse() {
+        const propreties = {
+            textScale: 1.5
+        };
+
+        const tween = new TWEEN.Tween(propreties, false)
+            .to({
+                textScale: 1
+            }, 1000)
+            .easing(TWEEN.Easing.Elastic.Out)
+            .onUpdate(() => {
+                this.text.scale.set(propreties.textScale);
+            })
+            .start()
+
+        const updateScale = (delta) => {
+            if (!tween.isPlaying()) return;
+            tween.update(delta);
+            requestAnimationFrame(updateScale);
+        };
+    
+        requestAnimationFrame(updateScale);
     }
 }
