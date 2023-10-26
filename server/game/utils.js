@@ -18,7 +18,7 @@ const processGameState = (gameState, playerID) => {
             processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
             processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
         } else {
-            processedState.players[id].cards.hand = [];
+            processedState.players[id].cards.hand = makeUnknownCardsArray(gameState.players[id].cards.hand);
             processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
             processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
             processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;

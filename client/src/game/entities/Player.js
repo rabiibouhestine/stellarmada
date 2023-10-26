@@ -17,7 +17,6 @@ export class Player {
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
         
-        this.handCount = state.cards.handCount;
         this.tavern = new Deck(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
         this.graveyard = new Deck(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
         this.castle = new Deck(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
@@ -34,7 +33,7 @@ export class Player {
 
     createCards(locationState, isHidden, startPosition, isHand, isPlayer) {
         const cards = [];
-        for (let index = 0; index < (isHidden ? locationState.length : this.handCount); index++) {
+        for (let index = 0; index < locationState.length; index++) {
             const cardName = isHidden ? locationState[index] : "B2";
             const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition, isPlayer);
             cards.push(card);
@@ -216,7 +215,6 @@ export class Player {
 
         if (location === "tavern" && destination === "hand") {
             this.tavern.setSize(this.tavern.size - cardsNames.length);
-            this.handCount += cardsNames.length;
             if (this.isPlayer) {
                 for (const index in cardsNames) {
                     const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
@@ -245,7 +243,6 @@ export class Player {
         }
 
         if (location === "hand" && destination === "castle") {
-            this.handCount -= cardsNames.length;
             this.castle.setSize(this.castle.size + cardsNames.length);
 
             if (this.isPlayer) {
@@ -260,7 +257,6 @@ export class Player {
         }
 
         if (location === "hand" && destination === "graveyard") {
-            this.handCount -= cardsNames.length;
             this.graveyard.setSize(this.graveyard.size + cardsNames.length);
 
             if (this.isPlayer) {
@@ -275,7 +271,6 @@ export class Player {
         }
 
         if (location === "hand" && destination === "frontline") {
-            this.handCount -= cardsNames.length;
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
