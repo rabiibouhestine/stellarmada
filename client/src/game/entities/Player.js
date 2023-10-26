@@ -216,6 +216,13 @@ export class Player {
             this.tavern.setSize(this.tavern.size + cardsNames.length);
         }
 
+        if (location === "tavern" && destination === "graveyard") {
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, this.isPlayer);
+            this.graveyard.cardsToGet.push(card);
+            this.tavern.setSize(this.tavern.size - cardsNames.length);
+            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
+        }
+
         if (location === "tavern" && destination === "hand") {
             this.tavern.setSize(this.tavern.size - cardsNames.length);
             this.handCount += cardsNames.length;
