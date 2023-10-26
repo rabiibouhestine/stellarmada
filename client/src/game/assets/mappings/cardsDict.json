@@ -1,7 +1,7 @@
 {
     "J1":
     {
-        "value": 0,
+        "offensivePower": 0,
         "suit": "J",
         "isCastle": false,
         "isJoker": true,
@@ -9,7 +9,7 @@
     },
     "AS":
     {
-        "value": 1,
+        "offensivePower": 1,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -17,7 +17,7 @@
     },
     "2S":
     {
-        "value": 2,
+        "offensivePower": 2,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -25,7 +25,7 @@
     },
     "3S":
     {
-        "value": 3,
+        "offensivePower": 3,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -33,7 +33,7 @@
     },
     "4S":
     {
-        "value": 4,
+        "offensivePower": 4,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -41,7 +41,7 @@
     },
     "5S":
     {
-        "value": 5,
+        "offensivePower": 5,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -49,7 +49,7 @@
     },
     "6S":
     {
-        "value": 6,
+        "offensivePower": 6,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -57,7 +57,7 @@
     },
     "7S":
     {
-        "value": 7,
+        "offensivePower": 7,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -65,7 +65,7 @@
     },
     "8S":
     {
-        "value": 8,
+        "offensivePower": 8,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -73,7 +73,7 @@
     },
     "9S":
     {
-        "value": 9,
+        "offensivePower": 9,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -81,7 +81,7 @@
     },
     "TS":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "S",
         "isCastle": false,
         "isJoker": false,
@@ -89,7 +89,7 @@
     },
     "JS":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "S",
         "isCastle": true,
         "isJoker": false,
@@ -97,7 +97,7 @@
     },
     "QS":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "S",
         "isCastle": true,
         "isJoker": false,
@@ -105,7 +105,7 @@
     },
     "KS":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "S",
         "isCastle": true,
         "isJoker": false,
@@ -113,7 +113,7 @@
     },
     "J2":
     {
-        "value": 0,
+        "offensivePower": 0,
         "suit": "J",
         "isCastle": false,
         "isJoker": true,
@@ -121,7 +121,7 @@
     },
     "AH":
     {
-        "value": 1,
+        "offensivePower": 1,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -129,7 +129,7 @@
     },
     "2H":
     {
-        "value": 2,
+        "offensivePower": 2,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -137,7 +137,7 @@
     },
     "3H":
     {
-        "value": 3,
+        "offensivePower": 3,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -145,7 +145,7 @@
     },
     "4H":
     {
-        "value": 4,
+        "offensivePower": 4,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -153,7 +153,7 @@
     },
     "5H":
     {
-        "value": 5,
+        "offensivePower": 5,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -161,7 +161,7 @@
     },
     "6H":
     {
-        "value": 6,
+        "offensivePower": 6,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -169,7 +169,7 @@
     },
     "7H":
     {
-        "value": 7,
+        "offensivePower": 7,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -177,7 +177,7 @@
     },
     "8H":
     {
-        "value": 8,
+        "offensivePower": 8,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -185,7 +185,7 @@
     },
     "9H":
     {
-        "value": 9,
+        "offensivePower": 9,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -193,7 +193,7 @@
     },
     "TH":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "H",
         "isCastle": false,
         "isJoker": false,
@@ -201,7 +201,7 @@
     },
     "JH":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "H",
         "isCastle": true,
         "isJoker": false,
@@ -209,7 +209,7 @@
     },
     "QH":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "H",
         "isCastle": true,
         "isJoker": false,
@@ -217,7 +217,7 @@
     },
     "KH":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "H",
         "isCastle": true,
         "isJoker": false,
@@ -225,7 +225,7 @@
     },
     "B1":
     {
-        "value": 0,
+        "offensivePower": 0,
         "suit": "B",
         "isCastle": false,
         "isJoker": false,
@@ -233,7 +233,7 @@
     },
     "AC":
     {
-        "value": 1,
+        "offensivePower": 1,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -241,7 +241,7 @@
     },
     "2C":
     {
-        "value": 2,
+        "offensivePower": 2,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -249,7 +249,7 @@
     },
     "3C":
     {
-        "value": 3,
+        "offensivePower": 3,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -257,7 +257,7 @@
     },
     "4C":
     {
-        "value": 4,
+        "offensivePower": 4,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -265,7 +265,7 @@
     },
     "5C":
     {
-        "value": 5,
+        "offensivePower": 5,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -273,7 +273,7 @@
     },
     "6C":
     {
-        "value": 6,
+        "offensivePower": 6,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -281,7 +281,7 @@
     },
     "7C":
     {
-        "value": 7,
+        "offensivePower": 7,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -289,7 +289,7 @@
     },
     "8C":
     {
-        "value": 8,
+        "offensivePower": 8,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -297,7 +297,7 @@
     },
     "9C":
     {
-        "value": 9,
+        "offensivePower": 9,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -305,7 +305,7 @@
     },
     "TC":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "C",
         "isCastle": false,
         "isJoker": false,
@@ -313,7 +313,7 @@
     },
     "JC":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "C",
         "isCastle": true,
         "isJoker": false,
@@ -321,7 +321,7 @@
     },
     "QC":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "C",
         "isCastle": true,
         "isJoker": false,
@@ -329,7 +329,7 @@
     },
     "KC":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "C",
         "isCastle": true,
         "isJoker": false,
@@ -337,7 +337,7 @@
     },
     "B2":
     {
-        "value": 0,
+        "offensivePower": 0,
         "suit": "B",
         "isCastle": false,
         "isJoker": false,
@@ -345,7 +345,7 @@
     },
     "AD":
     {
-        "value": 1,
+        "offensivePower": 1,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -353,7 +353,7 @@
     },
     "2D":
     {
-        "value": 2,
+        "offensivePower": 2,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -361,7 +361,7 @@
     },
     "3D":
     {
-        "value": 3,
+        "offensivePower": 3,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -369,7 +369,7 @@
     },
     "4D":
     {
-        "value": 4,
+        "offensivePower": 4,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -377,7 +377,7 @@
     },
     "5D":
     {
-        "value": 5,
+        "offensivePower": 5,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -385,7 +385,7 @@
     },
     "6D":
     {
-        "value": 6,
+        "offensivePower": 6,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -393,7 +393,7 @@
     },
     "7D":
     {
-        "value": 7,
+        "offensivePower": 7,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -401,7 +401,7 @@
     },
     "8D":
     {
-        "value": 8,
+        "offensivePower": 8,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -409,7 +409,7 @@
     },
     "9D":
     {
-        "value": 9,
+        "offensivePower": 9,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -417,7 +417,7 @@
     },
     "TD":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "D",
         "isCastle": false,
         "isJoker": false,
@@ -425,7 +425,7 @@
     },
     "JD":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "D",
         "isCastle": true,
         "isJoker": false,
@@ -433,7 +433,7 @@
     },
     "QD":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "D",
         "isCastle": true,
         "isJoker": false,
@@ -441,7 +441,7 @@
     },
     "KD":
     {
-        "value": 10,
+        "offensivePower": 10,
         "suit": "D",
         "isCastle": true,
         "isJoker": false,

@@ -102,13 +102,13 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (playerSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
-        // Check selection suits and calculate selection value
+        // Check selection suits and calculate selection offensive power
         const hasClubs = playerSelection.some(card => cardsMapping[card].suit === "C");
         const hasSpades = playerSelection.some(card => cardsMapping[card].suit === "S");
         const hasHearts = playerSelection.some(card => cardsMapping[card].suit === "H");
         const hasDiamonds = playerSelection.some(card => cardsMapping[card].suit === "D");
         const playerSelectionSum = playerSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+            return accumulator + cardsMapping[card].offensivePower;
         }, 0);
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
@@ -213,7 +213,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If enemy does not have enough to discard attack, player wins
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+            return accumulator + cardsMapping[card].offensivePower;
         }, 0);
 
         if (secondPlayerHandValue < playerSelectionValue) {
@@ -229,7 +229,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // If player selection does not make sense we exit
         const isHandSelectionScam = playerSelection.some(card => !playerCards.hand.includes(card));
         const selectionDamage = playerSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+            return accumulator + cardsMapping[card].offensivePower;
         }, 0);
         const isDamageEnough = selectionDamage >= gamestate.turn.damage;
         if (isHandSelectionScam || !isDamageEnough)

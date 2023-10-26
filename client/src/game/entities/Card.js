@@ -10,7 +10,7 @@ export class Card {
         this.position = position;
         this.isPlayer = isPlayer;
 
-        this.value = cardsDict[name].value;
+        this.offensivePower = cardsDict[name].offensivePower;
         this.suit = cardsDict[name].suit;
         this.isCastle = cardsDict[name].isCastle;
 

@@ -93,7 +93,7 @@ export class Player {
     
         if (this.stance === "attacking") {
             const sum = cardSelection.reduce((accumulator, card) => {
-                return accumulator + card.value;
+                return accumulator + card.offensivePower;
             }, 0);
             const hasClubs = cardSelection.some(card => card.suit === "C");
             this.damageIndicator.setValue(hasClubs? 2*sum : sum);
@@ -101,9 +101,9 @@ export class Player {
 
         if (this.stance === "discarding") {
             if (card.selected) {
-                this.damageIndicator.setValue(this.damageIndicator.value - card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value - card.offensivePower);
             } else {
-                this.damageIndicator.setValue(this.damageIndicator.value + card.value);
+                this.damageIndicator.setValue(this.damageIndicator.value + card.offensivePower);
             }
         }
 
@@ -164,7 +164,7 @@ export class Player {
         };
     
         for (const selectedCard of updatedSelection) {
-            valueCounts[selectedCard.value]++;
+            valueCounts[selectedCard.offensivePower]++;
         }
     
         // Check if the updated selection satisfies only one of the specified conditions
