@@ -101,9 +101,9 @@ export class Player {
 
         if (this.stance === "discarding") {
             if (card.selected) {
-                this.damageIndicator.setValue(this.damageIndicator.value - card.offensivePower);
+                this.damageIndicator.setValue(this.damageIndicator.value - card.defensivePower);
             } else {
-                this.damageIndicator.setValue(this.damageIndicator.value + card.offensivePower);
+                this.damageIndicator.setValue(this.damageIndicator.value + card.defensivePower);
             }
         }
 
@@ -153,39 +153,22 @@ export class Player {
     canCardAttack(card) {
         // Clone the attackSelection array and add the current card to it for checking the conditions
         const updatedSelection = [...this.attackSelection, card];
-    
-        // Count the number of cards with values 1 to 5 in the updated selection
-        const valueCounts = {
-            1: 0,
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0,
-        };
-    
-        for (const selectedCard of updatedSelection) {
-            valueCounts[selectedCard.offensivePower]++;
-        }
-    
-        // Check if the updated selection satisfies only one of the specified conditions
-        const singleCard = updatedSelection.length === 1;
-        const cardAndOne = updatedSelection.length === 2 && valueCounts[1] === 1;
-        const maxFourOnes = updatedSelection.length === valueCounts[1] && valueCounts[1] <= 4;
-        const maxFourTwos = updatedSelection.length === valueCounts[2] && valueCounts[2] <= 4;
-        const maxThreeThrees = updatedSelection.length === valueCounts[3] && valueCounts[3] <= 3;
-        const maxTwoFours = updatedSelection.length === valueCounts[4] && valueCounts[4] <= 2;
-        const maxTwoFives = updatedSelection.length === valueCounts[5] && valueCounts[5] <= 2;
-    
-        const conditionsMet = (
-            singleCard ||
-            cardAndOne ||
-            maxFourOnes ||
-            maxFourTwos ||
-            maxThreeThrees ||
-            maxTwoFours ||
-            maxTwoFives
-        );
 
+        // Check if the updated selection has missiles
+        const hasMissiles = updatedSelection.some(card => card.isMissile === true);
+
+        // Check if the updated selection has ships
+        const hasShips = updatedSelection.some(card => card.isMissile === false);
+
+        // Check allowed selections
+        const singleCard = updatedSelection.length === 1;
+        const shipAndMissile = updatedSelection.length === 2 && hasMissiles;
+        const allMissiles = updatedSelection.length > 2 && !hasShips;
+    
+        // Check if selection allowed
+        const conditionsMet = (singleCard || shipAndMissile || allMissiles);
+
+        // Return conditionsMet check
         return conditionsMet;
     }
 

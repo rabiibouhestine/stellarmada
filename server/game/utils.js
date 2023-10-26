@@ -64,9 +64,9 @@ const clearAttack = (playerID, gamestate) => {
     const playerCards = gamestate.players[playerID].cards;
 
     // Discard player Royals from Frontline
-    const frontlineHasRoyals = playerCards.frontline.some(card => cardsMapping[card].isCastle === true);
+    const frontlineHasRoyals = playerCards.frontline.some(card => cardsMapping[card].isMissile === true);
     if (frontlineHasRoyals) {
-        const frontlineRoyals = playerCards.frontline.filter(card => cardsMapping[card].isCastle === true);
+        const frontlineRoyals = playerCards.frontline.filter(card => cardsMapping[card].isMissile === true);
         playerCards.frontline = playerCards.frontline.filter(card => !frontlineRoyals.includes(card));
         playerCards.castle.push(...frontlineRoyals);
 
@@ -81,9 +81,9 @@ const clearAttack = (playerID, gamestate) => {
     }
     
     // Discard player non Royals from Frontline
-    const frontlineHasStandards = playerCards.frontline.some(card => cardsMapping[card].isCastle === false);
+    const frontlineHasStandards = playerCards.frontline.some(card => cardsMapping[card].isMissile === false);
     if (frontlineHasStandards) {
-        const frontlineStandards = playerCards.frontline.filter(card => cardsMapping[card].isCastle === false);
+        const frontlineStandards = playerCards.frontline.filter(card => cardsMapping[card].isMissile === false);
         playerCards.frontline = playerCards.frontline.filter(card => !frontlineStandards.includes(card));
         playerCards.graveyard.push(...frontlineStandards);
 

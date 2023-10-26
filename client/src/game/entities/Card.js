@@ -11,8 +11,9 @@ export class Card {
         this.isPlayer = isPlayer;
 
         this.offensivePower = cardsDict[name].offensivePower;
+        this.defensivePower = cardsDict[name].defensivePower;
         this.suit = cardsDict[name].suit;
-        this.isCastle = cardsDict[name].isCastle;
+        this.isMissile = cardsDict[name].isMissile;
 
         this.selectable = false;
         this.selected = false;

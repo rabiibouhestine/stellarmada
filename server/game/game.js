@@ -110,7 +110,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const playerSelectionSum = playerSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].offensivePower;
         }, 0);
-        const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
+        const selectionOffensivePower = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to frontline
         if (playerSelection.length > 0) {
@@ -189,7 +189,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         gameAction.turn = {
             playerID: secondPlayerID,
             stance: "discarding",
-            damage: playerSelectionValue
+            damage: selectionOffensivePower
         }
 
         // Get current time
@@ -212,11 +212,11 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }
 
         // If enemy does not have enough to discard attack, player wins
-        const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].offensivePower;
+        const secondPlayerDefensivePower = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].defensivePower;
         }, 0);
 
-        if (secondPlayerHandValue < playerSelectionValue) {
+        if (secondPlayerDefensivePower < selectionOffensivePower) {
             gameAction.isGameOver = true;
             gameAction.winnerID = playerID;
         }
@@ -228,18 +228,18 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If player selection does not make sense we exit
         const isHandSelectionScam = playerSelection.some(card => !playerCards.hand.includes(card));
-        const selectionDamage = playerSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].offensivePower;
+        const selectionDefensivePower = playerSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].defensivePower;
         }, 0);
-        const isDamageEnough = selectionDamage >= gamestate.turn.damage;
+        const isDamageEnough = selectionDefensivePower >= gamestate.turn.damage;
         if (isHandSelectionScam || !isDamageEnough)
             return;
 
 
         // Discard Royals from Hand
-        const handHasRoyals = playerSelection.some(card => cardsMapping[card].isCastle === true);
+        const handHasRoyals = playerSelection.some(card => cardsMapping[card].isMissile === true);
         if (handHasRoyals) {
-            const handSelectedRoyals = playerSelection.filter(card => cardsMapping[card].isCastle === true);
+            const handSelectedRoyals = playerSelection.filter(card => cardsMapping[card].isMissile === true);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
             playerCards.castle.push(...handSelectedRoyals);
 
@@ -254,9 +254,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }
 
         // Discard non Royals from Hand
-        const handHasStandards = playerSelection.some(card => cardsMapping[card].isCastle === false);
+        const handHasStandards = playerSelection.some(card => cardsMapping[card].isMissile === false);
         if (handHasStandards) {
-            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isCastle === false);
+            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
             playerCards.graveyard.push(...handSelectedStandards);
 

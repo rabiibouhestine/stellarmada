@@ -4,503 +4,391 @@
         "offensivePower": 0,
         "defensivePower": 0,
         "suit": "J",
-        "isCastle": false,
-        "isJoker": true,
-        "isCompanion": false
+        "isMissile": false
     },
     "AS":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "S",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "2S":
     {
         "offensivePower": 2,
         "defensivePower": 2,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "3S":
     {
         "offensivePower": 3,
         "defensivePower": 3,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "4S":
     {
         "offensivePower": 4,
         "defensivePower": 4,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "5S":
     {
         "offensivePower": 5,
         "defensivePower": 5,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "6S":
     {
         "offensivePower": 6,
         "defensivePower": 6,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "7S":
     {
         "offensivePower": 7,
         "defensivePower": 7,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "8S":
     {
         "offensivePower": 8,
         "defensivePower": 8,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "9S":
     {
         "offensivePower": 9,
         "defensivePower": 9,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "TS":
     {
         "offensivePower": 10,
         "defensivePower": 10,
         "suit": "S",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "JS":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "S",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "QS":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "S",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "KS":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "S",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "J2":
     {
         "offensivePower": 0,
         "defensivePower": 0,
         "suit": "J",
-        "isCastle": false,
-        "isJoker": true,
-        "isCompanion": false
+        "isMissile": false
     },
     "AH":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "H",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "2H":
     {
         "offensivePower": 2,
         "defensivePower": 2,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "3H":
     {
         "offensivePower": 3,
         "defensivePower": 3,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "4H":
     {
         "offensivePower": 4,
         "defensivePower": 4,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "5H":
     {
         "offensivePower": 5,
         "defensivePower": 5,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "6H":
     {
         "offensivePower": 6,
         "defensivePower": 6,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "7H":
     {
         "offensivePower": 7,
         "defensivePower": 7,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "8H":
     {
         "offensivePower": 8,
         "defensivePower": 8,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "9H":
     {
         "offensivePower": 9,
         "defensivePower": 9,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "TH":
     {
         "offensivePower": 10,
         "defensivePower": 10,
         "suit": "H",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "JH":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "H",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "QH":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "H",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "KH":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "H",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "B1":
     {
         "offensivePower": 0,
         "defensivePower": 0,
         "suit": "B",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "AC":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "C",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "2C":
     {
         "offensivePower": 2,
         "defensivePower": 2,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "3C":
     {
         "offensivePower": 3,
         "defensivePower": 3,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "4C":
     {
         "offensivePower": 4,
         "defensivePower": 4,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "5C":
     {
         "offensivePower": 5,
         "defensivePower": 5,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "6C":
     {
         "offensivePower": 6,
         "defensivePower": 6,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "7C":
     {
         "offensivePower": 7,
         "defensivePower": 7,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "8C":
     {
         "offensivePower": 8,
         "defensivePower": 8,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "9C":
     {
         "offensivePower": 9,
         "defensivePower": 9,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "TC":
     {
         "offensivePower": 10,
         "defensivePower": 10,
         "suit": "C",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "JC":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "C",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "QC":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "C",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "KC":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "C",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "B2":
     {
         "offensivePower": 0,
         "defensivePower": 0,
         "suit": "B",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "AD":
     {
         "offensivePower": 1,
-        "defensivePower": 1,
+        "defensivePower": 10,
         "suit": "D",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "2D":
     {
         "offensivePower": 2,
         "defensivePower": 2,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "3D":
     {
         "offensivePower": 3,
         "defensivePower": 3,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "4D":
     {
         "offensivePower": 4,
         "defensivePower": 4,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "5D":
     {
         "offensivePower": 5,
         "defensivePower": 5,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "6D":
     {
         "offensivePower": 6,
         "defensivePower": 6,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "7D":
     {
         "offensivePower": 7,
         "defensivePower": 7,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "8D":
     {
         "offensivePower": 8,
         "defensivePower": 8,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "9D":
     {
         "offensivePower": 9,
         "defensivePower": 9,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "TD":
     {
         "offensivePower": 10,
         "defensivePower": 10,
         "suit": "D",
-        "isCastle": false,
-        "isJoker": false,
-        "isCompanion": false
+        "isMissile": false
     },
     "JD":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "D",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "QD":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "D",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     },
     "KD":
     {
         "offensivePower": 1,
         "defensivePower": 10,
         "suit": "D",
-        "isCastle": true,
-        "isJoker": false,
-        "isCompanion": true
+        "isMissile": true
     }
 }
