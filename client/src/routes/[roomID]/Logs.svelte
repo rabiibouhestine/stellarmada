@@ -15,14 +15,7 @@
 
 	const processMoves = (moves) => {
 		const processedMoves = [];
-		const movesToLog = [
-			'rearguard-graveyard',
-			'rearguard-castle',
-			'hand-graveyard',
-			'hand-castle',
-			'hand-frontline',
-			'rearguard-frontline'
-		];
+		const movesToLog = ['hand-graveyard', 'hand-castle', 'hand-frontline'];
 		for (const move of moves) {
 			const fullMove = move.location + '-' + move.destination;
 			if (movesToLog.includes(fullMove)) {
@@ -62,27 +55,11 @@
 
 	const getMoveName = (move) => {
 		switch (move.location + '-' + move.destination) {
-			// case 'graveyard-tavern':
-			// 	return 'revived';
-			// case 'tavern-hand':
-			// 	return 'drew';
-			// case 'tavern-rearguard':
-			// 	return 'stealthed';
-			// case 'frontline-graveyard':
-			// 	return 'retreated';
-			// case 'frontline-castle':
-			// 	return 'retreated and lost';
-			case 'rearguard-graveyard':
-				return 'countered';
-			case 'rearguard-castle':
-				return 'countered';
 			case 'hand-graveyard':
 				return 'countered';
 			case 'hand-castle':
 				return 'countered';
 			case 'hand-frontline':
-				return 'attacked';
-			case 'rearguard-frontline':
 				return 'attacked';
 			default:
 				return 'played';

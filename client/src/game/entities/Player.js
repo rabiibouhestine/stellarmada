@@ -23,7 +23,6 @@ export class Player {
         this.castle = new Deck(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
-        this.rearguard = this.createCards(state.cards.rearguard, true, this.positions.rearguard, false, this.isPlayer);
         this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
         this.attackSelection = [];
@@ -53,7 +52,7 @@ export class Player {
     repositionCards(array, centerPosition, isHand) {
         // Calculate the total width of the cards in the array
         const cardWidth = isHand? 84 : 70;
-        const cardGap = isHand? 12 : 8;
+        const cardGap = isHand? 6 : 8;
 
         // Calculate the starting position to center the cards
         const startX = centerPosition.x - ((cardWidth + cardGap)/2) * (array.length - 1);
@@ -73,7 +72,6 @@ export class Player {
 
     repositionBoard() {
         this.repositionCards(this.frontline, this.positions.frontline, false);
-        this.repositionCards(this.rearguard, this.positions.rearguard, false);
         this.repositionCards(this.hand, this.positions.hand, true);
         this.graveyard.repositionCards();
         this.tavern.repositionCards();
@@ -110,9 +108,7 @@ export class Player {
             }
         }
 
-        const notSelectedCardsHand = this.hand.filter(card => !cardSelection.includes(card));
-        const notSelectedCardsRearguard = this.rearguard.filter(card => !cardSelection.includes(card));
-        const notSelectedCards = [...notSelectedCardsHand, ...notSelectedCardsRearguard];
+        const notSelectedCards = this.hand.filter(card => !cardSelection.includes(card));
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : true, this.stance === "attacking"); });
 
         // Update confirm button
@@ -143,11 +139,6 @@ export class Player {
         });
 
         this.hand.forEach(card => {
-            card.setSelected(false);
-            card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
-        });
-    
-        this.rearguard.forEach(card => {
             card.setSelected(false);
             card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
         });
@@ -203,9 +194,9 @@ export class Player {
    * This is a description of your method.
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
    * @param {string} location - The current location of cards.
-   * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "graveyard", "tavern", "castle".
    * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "frontline", "rearguard", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "graveyard", "tavern", "castle".
    */
     moveCards(cardsNames, location, destination) {
 
@@ -239,14 +230,6 @@ export class Player {
             }
         }
 
-        if (location === "tavern" && destination === "rearguard") {
-            this.tavern.setSize(this.tavern.size - cardsNames.length);
-            for (const index in cardsNames) {
-                const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
-                this.rearguard.push(card);
-            }
-        }
-
         if (location === "frontline" && destination === "graveyard") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.graveyard.cardsToGet.push(...cards);
@@ -258,20 +241,6 @@ export class Player {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
             this.castle.cardsToGet.push(...cards);
             this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-            this.castle.setSize(this.castle.size + cardsNames.length);
-        }
-
-        if (location === "rearguard" && destination === "graveyard") {
-            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
-            this.graveyard.cardsToGet.push(...cards);
-            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
-        }
-
-        if (location === "rearguard" && destination === "castle") {
-            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
-            this.castle.cardsToGet.push(...cards);
-            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
             this.castle.setSize(this.castle.size + cardsNames.length);
         }
 
@@ -319,12 +288,6 @@ export class Player {
                     this.frontline.push(cards[card]);
                 }
             }
-        }
-
-        if (location === "rearguard" && destination === "frontline") {
-            const cards = this.rearguard.filter(card => cardsNames.includes(card.name));
-            this.rearguard = this.rearguard.filter(card => !cardsNames.includes(card.name));
-            this.frontline.push(...cards);
         }
     }
 }

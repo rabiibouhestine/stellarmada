@@ -84,10 +84,7 @@
 
 	function handleConfirmButton() {
 		const selectedCards = {
-			hand: game.players[playerID].hand.filter((card) => card.selected).map((card) => card.name),
-			rearguard: game.players[playerID].rearguard
-				.filter((card) => card.selected)
-				.map((card) => card.name)
+			hand: game.players[playerID].hand.filter((card) => card.selected).map((card) => card.name)
 		};
 
 		socket.emit('gameActionRequest', {
