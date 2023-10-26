@@ -59,6 +59,8 @@ const initPlayerState = (deck) => {
 
     // Define playerState
     const playerState = {
+        timeLeft: 600000,
+        turnStartTime: null,
         cards: {
             hand: hand,
             handCount: handMax,
@@ -95,6 +97,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
+
+        // Player selection
         const playerCards = gamestate.players[playerID].cards;
         const playerHandSelection = playerSelection.hand;
         const playerRearguardSelection = playerSelection.rearguard;
@@ -220,6 +224,25 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             playerID: secondPlayerID,
             stance: "discarding",
             damage: playerSelectionValue
+        }
+
+        // Get current time
+        const currentDate = new Date();
+        const currentTime = currentDate.getTime();
+
+        // Update enemy turn start time
+        gamestate.players[secondPlayerID].turnStartTime = currentTime;
+
+        // Update player turn start time if first attack
+        if (gamestate.players[playerID].turnStartTime === null) {
+            gamestate.players[playerID].turnStartTime = currentTime;
+        }
+
+        // If player has no time left, enemy wins
+        gamestate.players[playerID].timeLeft -= currentTime - gamestate.players[playerID].turnStartTime;
+        if (gamestate.players[playerID].timeLeft < 0) {
+            gameAction.isGameOver = true;
+            gameAction.winnerID = secondPlayerID;
         }
 
         // If enemy does not have enough to discard attack, player wins
