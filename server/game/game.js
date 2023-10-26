@@ -65,7 +65,6 @@ const initPlayerState = (deck) => {
             hand: hand,
             handCount: handMax,
             frontline: [],
-            rearguard: [],
             tavern: tavern,
             graveyard: [],
             castle: []
@@ -101,28 +100,19 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // Player selection
         const playerCards = gamestate.players[playerID].cards;
         const playerHandSelection = playerSelection.hand;
-        const playerRearguardSelection = playerSelection.rearguard;
 
         // If player hand selection does not make sense we exit
         if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
-        // If player rearguard selection does not make sense we exit
-        if (playerRearguardSelection.some(card => !playerCards.rearguard.includes(card)))
-            return;
-
         // Check selection suits and calculate selection value
-        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C") || playerRearguardSelection.some(card => cardsMapping[card].suit === "C");
-        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S") || playerRearguardSelection.some(card => cardsMapping[card].suit === "S");
-        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H") || playerRearguardSelection.some(card => cardsMapping[card].suit === "H");
-        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D") || playerRearguardSelection.some(card => cardsMapping[card].suit === "D");
-        const playerHandSelectionSum = playerHandSelection.reduce((accumulator, card) => {
+        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
+        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
+        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const playerRearguardSelectionSum = playerRearguardSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const playerSelectionSum = playerHandSelectionSum + playerRearguardSelectionSum;
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to frontline
@@ -137,22 +127,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     playerID: playerID,
                     cardsNames: playerHandSelection,
                     location: "hand",
-                    destination: "frontline"
-                }
-            );
-        }
-
-        // Move selected cards from rearguard to frontline
-        if (playerRearguardSelection.length > 0) {
-            playerCards.rearguard = playerCards.rearguard.filter(card => !playerRearguardSelection.includes(card));
-            playerCards.frontline.push(...playerRearguardSelection);
-    
-            // Add move to game action
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: playerRearguardSelection,
-                    location: "rearguard",
                     destination: "frontline"
                 }
             );
@@ -245,12 +219,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const secondPlayerRearguardValue = gamestate.players[secondPlayerID].cards.rearguard.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerRearguardValue;
 
-        if (secondPlayerMaxDiscardValue < playerSelectionValue) {
+        if (secondPlayerHandValue < playerSelectionValue) {
             gameAction.isGameOver = true;
             gameAction.winnerID = playerID;
         }
@@ -260,55 +230,16 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     if (gamestate.turn.stance === "discarding") {
         const playerCards = gamestate.players[playerID].cards
         const playerHandSelection = playerSelection.hand;
-        const playerRearguardSelection = playerSelection.rearguard;
 
         // If player selection does not make sense we exit
         const isHandSelectionScam = playerHandSelection.some(card => !playerCards.hand.includes(card));
-        const isRearguardSelectionScam = playerRearguardSelection.some(card => !playerCards.rearguard.includes(card));
-        const handSelectionDamage = playerHandSelection.reduce((accumulator, card) => {
+        const selectionDamage = playerHandSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
-        const rearguardSelectionDamage = playerRearguardSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const selectionDamage = handSelectionDamage + rearguardSelectionDamage;
         const isDamageEnough = selectionDamage >= gamestate.turn.damage;
-        if (isHandSelectionScam || isRearguardSelectionScam || !isDamageEnough)
+        if (isHandSelectionScam || !isDamageEnough)
             return;
 
-        // Discard Royals from Rearguard
-        const rearguardHasRoyals = playerRearguardSelection.some(card => cardsMapping[card].isCastle === true);
-        if (rearguardHasRoyals) {
-            const rearguardSelectedRoyals = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === true);
-            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedRoyals.includes(card));
-            playerCards.castle.push(...rearguardSelectedRoyals);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: rearguardSelectedRoyals,
-                    location: "rearguard",
-                    destination: "castle"
-                }
-            );
-        }
-
-        // Discard non Royals from Rearguard
-        const rearguardHasStandards = playerRearguardSelection.some(card => cardsMapping[card].isCastle === false);
-        if (rearguardHasStandards) {
-            const rearguardSelectedStandards = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === false);
-            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedStandards.includes(card));
-            playerCards.graveyard.push(...rearguardSelectedStandards);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: rearguardSelectedStandards,
-                    location: "rearguard",
-                    destination: "graveyard"
-                }
-            );
-        }
 
         // Discard Royals from Hand
         const handHasRoyals = playerHandSelection.some(card => cardsMapping[card].isCastle === true);
@@ -355,8 +286,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // If empty fleet (hand and rearguard both empty after discard), enemy wins
-        if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
+        // If empty fleet (hand empty after discard), enemy wins
+        if (playerCards.hand.length === 0) {
             gameAction.isGameOver = true;
             gameAction.winnerID = secondPlayerID;
         }
