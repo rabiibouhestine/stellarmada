@@ -62,7 +62,6 @@ const initPlayerState = (deck) => {
         turnStartTime: null,
         cards: {
             hand: hand,
-            handCount: handMax,
             frontline: [],
             tavern: tavern,
             graveyard: [],
@@ -116,7 +115,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // Move selected cards from hand to frontline
         if (playerSelection.length > 0) {
             playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
-            playerCards.handCount = playerCards.hand.length;
             playerCards.frontline.push(...playerSelection);
     
             // Add move to game action
