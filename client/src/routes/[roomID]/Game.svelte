@@ -83,9 +83,9 @@
 	}
 
 	function handleConfirmButton() {
-		const selectedCards = {
-			hand: game.players[playerID].hand.filter((card) => card.selected).map((card) => card.name)
-		};
+		const selectedCards = game.players[playerID].hand
+			.filter((card) => card.selected)
+			.map((card) => card.name);
 
 		socket.emit('gameActionRequest', {
 			roomID: $page.params.roomID,

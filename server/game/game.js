@@ -96,35 +96,34 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
 
-        // Player selection
+        // Player cards
         const playerCards = gamestate.players[playerID].cards;
-        const playerHandSelection = playerSelection.hand;
 
         // If player hand selection does not make sense we exit
-        if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
+        if (playerSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
         // Check selection suits and calculate selection value
-        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C");
-        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S");
-        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H");
-        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D");
-        const playerSelectionSum = playerHandSelection.reduce((accumulator, card) => {
+        const hasClubs = playerSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerSelection.some(card => cardsMapping[card].suit === "S");
+        const hasHearts = playerSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerSelection.some(card => cardsMapping[card].suit === "D");
+        const playerSelectionSum = playerSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
         const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
         // Move selected cards from hand to frontline
-        if (playerHandSelection.length > 0) {
-            playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
+        if (playerSelection.length > 0) {
+            playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
             playerCards.handCount = playerCards.hand.length;
-            playerCards.frontline.push(...playerHandSelection);
+            playerCards.frontline.push(...playerSelection);
     
             // Add move to game action
             gameAction.moves.push(
                 {
                     playerID: playerID,
-                    cardsNames: playerHandSelection,
+                    cardsNames: playerSelection,
                     location: "hand",
                     destination: "frontline"
                 }
@@ -134,10 +133,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // If Spades in selection, move enemy cards from tavern to graveyard
         const enemyCards = gamestate.players[secondPlayerID].cards;
         if (hasSpades && enemyCards.tavern.length !== 0) {
-            // pick playerHandSelection.length from top of enemy tavern
-            const brokenCards = enemyCards.tavern.slice(-playerHandSelection.length);
+            // pick playerSelection.length from top of enemy tavern
+            const brokenCards = enemyCards.tavern.slice(-playerSelection.length);
             // move them to graveyard
-            enemyCards.tavern.splice(-playerHandSelection.length);
+            enemyCards.tavern.splice(-playerSelection.length);
             enemyCards.graveyard.push(...brokenCards);
 
             gameAction.moves.push(
@@ -228,11 +227,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // If player is discarding
     if (gamestate.turn.stance === "discarding") {
         const playerCards = gamestate.players[playerID].cards
-        const playerHandSelection = playerSelection.hand;
 
         // If player selection does not make sense we exit
-        const isHandSelectionScam = playerHandSelection.some(card => !playerCards.hand.includes(card));
-        const selectionDamage = playerHandSelection.reduce((accumulator, card) => {
+        const isHandSelectionScam = playerSelection.some(card => !playerCards.hand.includes(card));
+        const selectionDamage = playerSelection.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].value;
         }, 0);
         const isDamageEnough = selectionDamage >= gamestate.turn.damage;
@@ -241,9 +239,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
 
         // Discard Royals from Hand
-        const handHasRoyals = playerHandSelection.some(card => cardsMapping[card].isCastle === true);
+        const handHasRoyals = playerSelection.some(card => cardsMapping[card].isCastle === true);
         if (handHasRoyals) {
-            const handSelectedRoyals = playerHandSelection.filter(card => cardsMapping[card].isCastle === true);
+            const handSelectedRoyals = playerSelection.filter(card => cardsMapping[card].isCastle === true);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
             playerCards.castle.push(...handSelectedRoyals);
 
@@ -258,9 +256,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }
 
         // Discard non Royals from Hand
-        const handHasStandards = playerHandSelection.some(card => cardsMapping[card].isCastle === false);
+        const handHasStandards = playerSelection.some(card => cardsMapping[card].isCastle === false);
         if (handHasStandards) {
-            const handSelectedStandards = playerHandSelection.filter(card => cardsMapping[card].isCastle === false);
+            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isCastle === false);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
             playerCards.graveyard.push(...handSelectedStandards);
 
