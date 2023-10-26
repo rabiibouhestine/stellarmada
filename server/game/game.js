@@ -158,6 +158,25 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
+        // If Spades in selection, move enemy cards from tavern to graveyard
+        const enemyCards = gamestate.players[secondPlayerID].cards;
+        if (hasSpades && enemyCards.tavern.length !== 0) {
+            // pick playerHandSelection.length from top of enemy tavern
+            const brokenCards = enemyCards.tavern.slice(-playerHandSelection.length);
+            // move them to graveyard
+            enemyCards.tavern.splice(-playerHandSelection.length);
+            enemyCards.graveyard.push(...brokenCards);
+
+            gameAction.moves.push(
+                {
+                    playerID: secondPlayerID,
+                    cardsNames: makeUnknownCardsArray(brokenCards),
+                    location: "tavern",
+                    destination: "graveyard"
+                }
+            );
+        }
+
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
             // shuffle graveyard
@@ -194,29 +213,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     destination: "hand"
                 }
             );
-        }
-
-        // If Spades in selection, move cards from tavern to rearguard
-        if (hasSpades && playerCards.tavern.length !== 0) {
-            const nCardsToDraw = Math.min(
-                outpostCapacity - playerCards.rearguard.length,
-                playerHandSelection.length + playerRearguardSelection.length,
-                playerCards.tavern.length
-            );
-            if (nCardsToDraw > 0) {
-                const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
-                playerCards.tavern.splice(-nCardsToDraw);
-                playerCards.rearguard.push(...cardsToDraw);
-    
-                gameAction.moves.push(
-                    {
-                        playerID: playerID,
-                        cardsNames: cardsToDraw,
-                        location: "tavern",
-                        destination: "rearguard"
-                    }
-                );
-            }
         }
 
         // Update gameAction turn

@@ -93,6 +93,7 @@ export class Game {
     }
 
     update(data) {
+        console.log(data.moves);
         if (data.turn.stance === 'discarding') {
             this.soundShipsAttacked.play();
         } else {
