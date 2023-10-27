@@ -75,7 +75,7 @@ export class Card {
     }
 
     hide() {
-        this.sprite.texture = this.sheet.textures["B1"];
+        this.sprite.texture = this.sheet.textures[this.isPlayer? "B1": "B2"];
     }
 
     onPointerOver() {
