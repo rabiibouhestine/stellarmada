@@ -27,7 +27,8 @@ const initGameState = (room) => {
             stance: "attacking", // "discarding", "attacking" or "waiting"
             damage: 0 // only set when state discarding
         },
-        players: players
+        players: players,
+        logs: []
     };
 
     // Pick a random player index
@@ -89,7 +90,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         isGameOver: gamestate.isGameOver,
         winnerID: gamestate.winnerID,
         turn: gamestate.turn,
-        moves: []
+        moves: [],
+        logs: []
     };
 
     // If player is attacking
@@ -124,6 +126,22 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     cardsNames: playerSelection,
                     location: "hand",
                     destination: "frontline"
+                }
+            );
+
+            // Add attack to logs
+            gamestate.logs.push(
+                {
+                    playerID: playerID,
+                    cardsNames: playerSelection,
+                    move: "attack"
+                }
+            );
+            gameAction.logs.push(
+                {
+                    playerID: playerID,
+                    cardsNames: playerSelection,
+                    move: "attack"
                 }
             );
         }
@@ -269,6 +287,22 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                 }
             );
         }
+
+        // Add counter to logs
+        gamestate.logs.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                move: "counter"
+            }
+        );
+        gameAction.logs.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                move: "counter"
+            }
+        );
 
         // Clear second player attack
         const clearAttackMoves = clearAttack(secondPlayerID, gamestate);
