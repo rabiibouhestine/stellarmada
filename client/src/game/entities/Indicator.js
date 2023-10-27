@@ -28,7 +28,7 @@ export class Indicator {
         this.container.addChild(this.text);
 
         // Define indicator label
-        this.label = new PIXI.Text("Damage", {
+        this.label = new PIXI.Text("Power", {
             fontFamily: 'Arial',
             fontWeight: 'bold',
             fontSize: 12,
