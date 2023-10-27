@@ -38,6 +38,7 @@
 				gameState: data.gameState
 			});
 			game.onConfirmButton(() => handleConfirmButton());
+			logs = data.gameState.logs;
 		});
 
 		socket.on('gameActionResponse', (data) => {
