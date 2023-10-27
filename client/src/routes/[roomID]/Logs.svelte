@@ -79,10 +79,10 @@
 				<div class="text-sm text-white">
 					{#if log.playerID === playerID}
 						You {log.move}ed with {log.cardsNames.length}
-						{handlePlural('ship', log.cardsNames.length)}:
+						{handlePlural('card', log.cardsNames.length)}:
 					{:else}
 						Enemy {log.move}ed with {log.cardsNames.length}
-						{handlePlural('ship', log.cardsNames.length)}:
+						{handlePlural('card', log.cardsNames.length)}:
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-extrabold">
