@@ -22,7 +22,7 @@
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const playerID = localStorage.getItem('playerID');
 
-	let moves = [];
+	let logs = [];
 
 	onMount(() => {
 		setInterval(() => {
@@ -44,7 +44,7 @@
 			game.update(data.gameAction);
 			isGameOver = data.gameAction.isGameOver;
 			winnerID = data.gameAction.winnerID;
-			moves = [...moves, ...data.gameAction.moves];
+			logs = [...logs, ...data.gameAction.logs];
 
 			if (data.gameAction.turn.stance === 'discarding') {
 				if (data.gameAction.turn.playerID === playerID) {
@@ -121,7 +121,7 @@
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
 		</div>
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Logs {moves} />
+			<Logs {logs} />
 		</div>
 	</div>
 	<div id="pixi-container" class="min-w-0 aspect-square" />

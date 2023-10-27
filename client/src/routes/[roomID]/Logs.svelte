@@ -1,29 +1,15 @@
 <script>
 	import { afterUpdate } from 'svelte';
 
-	export let moves;
+	export let logs;
 
 	const playerID = localStorage.getItem('playerID');
 
 	let logsDiv;
 
-	$: processedMoves = processMoves(moves);
-
 	afterUpdate(() => {
 		logsDiv.scrollTo(0, logsDiv.scrollHeight);
 	});
-
-	const processMoves = (moves) => {
-		const processedMoves = [];
-		const movesToLog = ['hand-graveyard', 'hand-castle', 'hand-frontline'];
-		for (const move of moves) {
-			const fullMove = move.location + '-' + move.destination;
-			if (movesToLog.includes(fullMove)) {
-				processedMoves.push(move);
-			}
-		}
-		return processedMoves;
-	};
 
 	const getLogColorClass = (id, playerID) => {
 		if (id === playerID) {
@@ -50,19 +36,6 @@
 				break;
 			default:
 				return 'bg-apollo-grey-200 text-apollo-grey-500';
-		}
-	};
-
-	const getMoveName = (move) => {
-		switch (move.location + '-' + move.destination) {
-			case 'hand-graveyard':
-				return 'countered';
-			case 'hand-castle':
-				return 'countered';
-			case 'hand-frontline':
-				return 'attacked';
-			default:
-				return 'played';
 		}
 	};
 
@@ -98,22 +71,22 @@
 		class="flex flex-col space-y-2 p-2 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
 		bind:this={logsDiv}
 	>
-		{#each processedMoves as move}
+		{#each logs as log}
 			<div
 				class="px-4 py-2 space-y-2 w-full rounded-lg bg-opacity-40
-				{getLogColorClass(move.playerID, playerID)}"
+				{getLogColorClass(log.playerID, playerID)}"
 			>
 				<div class="text-sm text-white">
-					{#if move.playerID === playerID}
-						You {getMoveName(move)} with {move.cardsNames.length}
-						{handlePlural('ship', move.cardsNames.length)}:
+					{#if log.playerID === playerID}
+						You {log.move}ed with {log.cardsNames.length}
+						{handlePlural('ship', log.cardsNames.length)}:
 					{:else}
-						Enemy {getMoveName(move)} with {move.cardsNames.length}
-						{handlePlural('ship', move.cardsNames.length)}:
+						Enemy {log.move}ed with {log.cardsNames.length}
+						{handlePlural('ship', log.cardsNames.length)}:
 					{/if}
 				</div>
 				<div class="flex flex-column space-x-1 text-xs font-extrabold">
-					{#each move.cardsNames as cardName}
+					{#each log.cardsNames as cardName}
 						<div
 							class="flex px-1 py-2 w-full justify-center content-center rounded-lg
 							{getCardColorClass(cardName)} bg-opacity-80"
