@@ -87,8 +87,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // Get the players ids
     const playersIDS = Object.keys(gamestate.players);
 
-    // Get the second player id
-    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+    // Get the enemy id
+    const enemyID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
 
     // Initialise game action
     const gameAction = {
@@ -152,7 +152,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }
 
         // If Spades in selection, move enemy cards from drawPile to discardPile
-        const enemyCards = gamestate.players[secondPlayerID].cards;
+        const enemyCards = gamestate.players[enemyID].cards;
         if (hasSpades && enemyCards.drawPile.length !== 0) {
             // pick playerSelection.length from top of enemy drawPile
             const brokenCards = enemyCards.drawPile.slice(-playerSelection.length);
@@ -162,7 +162,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
             gameAction.moves.push(
                 {
-                    playerID: secondPlayerID,
+                    playerID: enemyID,
                     cardsNames: makeUnknownCardsArray(brokenCards),
                     location: "drawPile",
                     destination: "discardPile"
@@ -210,7 +210,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // Update gameAction turn
         gameAction.turn = {
-            playerID: secondPlayerID,
+            playerID: enemyID,
             stance: "discarding",
             damage: selectionOffensivePower
         }
@@ -220,7 +220,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         const currentTime = currentDate.getTime();
 
         // Update enemy turn start time
-        gamestate.players[secondPlayerID].turnStartTime = currentTime;
+        gamestate.players[enemyID].turnStartTime = currentTime;
 
         // Update player turn start time if first attack
         if (gamestate.players[playerID].turnStartTime === null) {
@@ -231,15 +231,15 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         gamestate.players[playerID].timeLeft -= currentTime - gamestate.players[playerID].turnStartTime;
         if (gamestate.players[playerID].timeLeft < 0) {
             gameAction.isGameOver = true;
-            gameAction.winnerID = secondPlayerID;
+            gameAction.winnerID = enemyID;
         }
 
         // If enemy does not have enough to discard attack, player wins
-        const secondPlayerDefensivePower = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
+        const enemyDefensivePower = gamestate.players[enemyID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].defensivePower;
         }, 0);
 
-        if (secondPlayerDefensivePower < selectionOffensivePower) {
+        if (enemyDefensivePower < selectionOffensivePower) {
             gameAction.isGameOver = true;
             gameAction.winnerID = playerID;
         }
@@ -259,24 +259,24 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             return;
 
 
-        // Discard Royals from Hand
-        const handHasRoyals = playerSelection.some(card => cardsMapping[card].isMissile === true);
-        if (handHasRoyals) {
-            const handSelectedRoyals = playerSelection.filter(card => cardsMapping[card].isMissile === true);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
-            playerCards.destroyPile.push(...handSelectedRoyals);
+        // Discard Missiles from Hand
+        const handHasMissiles = playerSelection.some(card => cardsMapping[card].isMissile === true);
+        if (handHasMissiles) {
+            const handSelectedMissiles = playerSelection.filter(card => cardsMapping[card].isMissile === true);
+            playerCards.hand = playerCards.hand.filter(card => !handSelectedMissiles.includes(card));
+            playerCards.destroyPile.push(...handSelectedMissiles);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
-                    cardsNames: handSelectedRoyals,
+                    cardsNames: handSelectedMissiles,
                     location: "hand",
                     destination: "destroyPile"
                 }
             );
         }
 
-        // Discard non Royals from Hand
+        // Discard non Missiles from Hand
         const handHasStandards = playerSelection.some(card => cardsMapping[card].isMissile === false);
         if (handHasStandards) {
             const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
@@ -309,8 +309,8 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             }
         );
 
-        // Clear second player attack
-        const clearAttackMoves = clearAttack(secondPlayerID, gamestate);
+        // Clear enemy attack
+        const clearAttackMoves = clearAttack(enemyID, gamestate);
         gameAction.moves.push(...clearAttackMoves);
 
         // Update gameAction turn
@@ -323,7 +323,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // If empty fleet (hand empty after discard), enemy wins
         if (playerCards.hand.length === 0) {
             gameAction.isGameOver = true;
-            gameAction.winnerID = secondPlayerID;
+            gameAction.winnerID = enemyID;
         }
     }
 

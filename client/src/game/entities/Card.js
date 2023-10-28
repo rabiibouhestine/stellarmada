@@ -33,7 +33,7 @@ export class Card {
         this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
-        this.glow.tint = 0x0096FF; //0xD22B2B
+        this.glow.tint = 0x0096FF;
         this.container.addChild(this.glow);
 
         // Animate the glow alpha

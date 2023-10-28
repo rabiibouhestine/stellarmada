@@ -64,34 +64,34 @@ const clearAttack = (playerID, gamestate) => {
     // Get player cards
     const playerCards = gamestate.players[playerID].cards;
 
-    // Discard player Royals from Frontline
-    const frontlineHasRoyals = playerCards.battleField.some(card => cardsMapping[card].isMissile === true);
-    if (frontlineHasRoyals) {
-        const frontlineRoyals = playerCards.battleField.filter(card => cardsMapping[card].isMissile === true);
-        playerCards.battleField = playerCards.battleField.filter(card => !frontlineRoyals.includes(card));
-        playerCards.destroyPile.push(...frontlineRoyals);
+    // Discard player Missiles from battleField
+    const battleFieldHasMissiles = playerCards.battleField.some(card => cardsMapping[card].isMissile === true);
+    if (battleFieldHasMissiles) {
+        const battleFieldMissiles = playerCards.battleField.filter(card => cardsMapping[card].isMissile === true);
+        playerCards.battleField = playerCards.battleField.filter(card => !battleFieldMissiles.includes(card));
+        playerCards.destroyPile.push(...battleFieldMissiles);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
-                cardsNames: frontlineRoyals,
+                cardsNames: battleFieldMissiles,
                 location: "battleField",
                 destination: "destroyPile"
             }
         );
     }
     
-    // Discard player non Royals from Frontline
-    const frontlineHasStandards = playerCards.battleField.some(card => cardsMapping[card].isMissile === false);
-    if (frontlineHasStandards) {
-        const frontlineStandards = playerCards.battleField.filter(card => cardsMapping[card].isMissile === false);
-        playerCards.battleField = playerCards.battleField.filter(card => !frontlineStandards.includes(card));
-        playerCards.discardPile.push(...frontlineStandards);
+    // Discard player non Missiles from battleField
+    const battleFieldHasStandards = playerCards.battleField.some(card => cardsMapping[card].isMissile === false);
+    if (battleFieldHasStandards) {
+        const battleFieldStandards = playerCards.battleField.filter(card => cardsMapping[card].isMissile === false);
+        playerCards.battleField = playerCards.battleField.filter(card => !battleFieldStandards.includes(card));
+        playerCards.discardPile.push(...battleFieldStandards);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
-                cardsNames: frontlineStandards,
+                cardsNames: battleFieldStandards,
                 location: "battleField",
                 destination: "discardPile"
             }
