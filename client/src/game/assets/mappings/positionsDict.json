@@ -1,7 +1,7 @@
 {
     "top": {
         "hand": {"x": 360, "y": 78},
-        "frontline": {"x": 360, "y": 359.5},
+        "frontline": {"x": 360, "y": 358},
         "tavern": {"x": 663, "y": 233},
         "graveyard": {"x": 583, "y": 233},
         "castle": {"x": 97, "y": 233},
@@ -9,7 +9,7 @@
     },
     "bottom": {
         "hand": {"x": 360, "y": 637},
-        "frontline": {"x": 360, "y": 359.5},
+        "frontline": {"x": 360, "y": 358},
         "tavern": {"x": 57, "y": 482},
         "graveyard": {"x": 137, "y": 482},
         "castle": {"x": 623, "y": 482},
