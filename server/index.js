@@ -2,13 +2,13 @@ const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
 
 const express = require("express");
-const app = express();
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const ShortUniqueId = require('short-unique-id');
-const port = process.env.PORT || 3001;
 
+const port = process.env.PORT || 3001;
+const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
