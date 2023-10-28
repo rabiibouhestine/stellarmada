@@ -1,7 +1,7 @@
 {
 	"top": {
 		"hand": { "x": 360, "y": 78 },
-		"frontline": { "x": 360, "y": 357.5 },
+		"battleField": { "x": 360, "y": 357.5 },
 		"drawPile": { "x": 663, "y": 233 },
 		"discardPile": { "x": 583, "y": 233 },
 		"destroyPile": { "x": 97, "y": 233 },
@@ -9,13 +9,13 @@
 	},
 	"bottom": {
 		"hand": { "x": 360, "y": 637 },
-		"frontline": { "x": 360, "y": 357.5 },
+		"battleField": { "x": 360, "y": 357.5 },
 		"drawPile": { "x": 57, "y": 482 },
 		"discardPile": { "x": 137, "y": 482 },
 		"destroyPile": { "x": 623, "y": 482 },
 		"joker": { "x": 360, "y": 482 }
 	},
-	"frontline": {
+	"battleField": {
 		"damageIndicator": { "x": 70, "y": 358 },
 		"confirmButton": { "x": 650, "y": 358 }
 	},

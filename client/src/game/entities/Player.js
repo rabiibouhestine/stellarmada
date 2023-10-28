@@ -21,7 +21,7 @@ export class Player {
         this.discardPile = new Pile(app, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
         this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
-        this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
+        this.battleField = this.createCards(state.cards.battleField, true, this.positions.battleField, false, this.isPlayer);
         this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
         this.attackSelection = [];
@@ -70,7 +70,7 @@ export class Player {
     }
 
     repositionBoard() {
-        this.repositionCards(this.frontline, this.positions.frontline, false);
+        this.repositionCards(this.battleField, this.positions.battleField, false);
         this.repositionCards(this.hand, this.positions.hand, true);
         this.discardPile.repositionCards();
         this.drawPile.repositionCards();
@@ -131,7 +131,7 @@ export class Player {
         const isAttacking = this.stance === "attacking";
         const isDiscarding = this.stance === "discarding";
     
-        this.frontline.forEach(card => {
+        this.battleField.forEach(card => {
             card.setSelected(false);
             card.setSelectable(false, false);
         });
@@ -175,9 +175,9 @@ export class Player {
    * This is a description of your method.
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
    * @param {string} location - The current location of cards.
-   * Must be one of "hand", "frontline", "discardPile", "drawPile", "destroyPile".
+   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
    * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "frontline", "discardPile", "drawPile", "destroyPile".
+   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
    */
     moveCards(cardsNames, location, destination) {
 
@@ -210,17 +210,17 @@ export class Player {
             }
         }
 
-        if (location === "frontline" && destination === "discardPile") {
-            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
+        if (location === "battleField" && destination === "discardPile") {
+            const cards = this.battleField.filter(card => cardsNames.includes(card.name));
             this.discardPile.cardsToGet.push(...cards);
-            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
+            this.battleField = this.battleField.filter(card => !cardsNames.includes(card.name));
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
-        if (location === "frontline" && destination === "destroyPile") {
-            const cards = this.frontline.filter(card => cardsNames.includes(card.name));
+        if (location === "battleField" && destination === "destroyPile") {
+            const cards = this.battleField.filter(card => cardsNames.includes(card.name));
             this.destroyPile.cardsToGet.push(...cards);
-            this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
+            this.battleField = this.battleField.filter(card => !cardsNames.includes(card.name));
             this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
         }
 
@@ -252,17 +252,17 @@ export class Player {
             }
         }
 
-        if (location === "hand" && destination === "frontline") {
+        if (location === "hand" && destination === "battleField") {
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.frontline.push(...cards);
+                this.battleField.push(...cards);
             } else {
                 const cards = this.hand.slice(-cardsNames.length);
                 this.hand.splice(-cardsNames.length);
                 for (const card in cards) {
                     cards[card].reveal(cardsNames[card]);
-                    this.frontline.push(cards[card]);
+                    this.battleField.push(cards[card]);
                 }
             }
         }

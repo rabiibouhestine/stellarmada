@@ -65,34 +65,34 @@ const clearAttack = (playerID, gamestate) => {
     const playerCards = gamestate.players[playerID].cards;
 
     // Discard player Royals from Frontline
-    const frontlineHasRoyals = playerCards.frontline.some(card => cardsMapping[card].isMissile === true);
+    const frontlineHasRoyals = playerCards.battleField.some(card => cardsMapping[card].isMissile === true);
     if (frontlineHasRoyals) {
-        const frontlineRoyals = playerCards.frontline.filter(card => cardsMapping[card].isMissile === true);
-        playerCards.frontline = playerCards.frontline.filter(card => !frontlineRoyals.includes(card));
+        const frontlineRoyals = playerCards.battleField.filter(card => cardsMapping[card].isMissile === true);
+        playerCards.battleField = playerCards.battleField.filter(card => !frontlineRoyals.includes(card));
         playerCards.destroyPile.push(...frontlineRoyals);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
                 cardsNames: frontlineRoyals,
-                location: "frontline",
+                location: "battleField",
                 destination: "destroyPile"
             }
         );
     }
     
     // Discard player non Royals from Frontline
-    const frontlineHasStandards = playerCards.frontline.some(card => cardsMapping[card].isMissile === false);
+    const frontlineHasStandards = playerCards.battleField.some(card => cardsMapping[card].isMissile === false);
     if (frontlineHasStandards) {
-        const frontlineStandards = playerCards.frontline.filter(card => cardsMapping[card].isMissile === false);
-        playerCards.frontline = playerCards.frontline.filter(card => !frontlineStandards.includes(card));
+        const frontlineStandards = playerCards.battleField.filter(card => cardsMapping[card].isMissile === false);
+        playerCards.battleField = playerCards.battleField.filter(card => !frontlineStandards.includes(card));
         playerCards.discardPile.push(...frontlineStandards);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
                 cardsNames: frontlineStandards,
-                location: "frontline",
+                location: "battleField",
                 destination: "discardPile"
             }
         );

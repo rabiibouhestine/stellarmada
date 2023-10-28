@@ -40,8 +40,8 @@ export class Game {
         canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress, layout);
-        this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
-        this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
+        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, gameState.turn.damage);
+        this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 
         for (const key of Object.keys(this.players)) {

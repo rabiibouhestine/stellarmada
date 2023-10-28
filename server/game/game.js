@@ -68,7 +68,7 @@ const initPlayerState = () => {
         turnStartTime: null,
         cards: {
             hand: hand,
-            frontline: [],
+            battleField: [],
             drawPile: drawPile,
             discardPile: [],
             destroyPile: []
@@ -119,10 +119,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         }, 0);
         const selectionOffensivePower = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
-        // Move selected cards from hand to frontline
+        // Move selected cards from hand to battleField
         if (playerSelection.length > 0) {
             playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
-            playerCards.frontline.push(...playerSelection);
+            playerCards.battleField.push(...playerSelection);
     
             // Add move to game action
             gameAction.moves.push(
@@ -130,7 +130,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
                     playerID: playerID,
                     cardsNames: playerSelection,
                     location: "hand",
-                    destination: "frontline"
+                    destination: "battleField"
                 }
             );
 
