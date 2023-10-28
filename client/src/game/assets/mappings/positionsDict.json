@@ -1,54 +1,54 @@
 {
-    "top": {
-        "hand": {"x": 360, "y": 78},
-        "frontline": {"x": 360, "y": 357.5},
-        "tavern": {"x": 663, "y": 233},
-        "graveyard": {"x": 583, "y": 233},
-        "castle": {"x": 97, "y": 233},
-        "joker": {"x": 360, "y": 233}
-    },
-    "bottom": {
-        "hand": {"x": 360, "y": 637},
-        "frontline": {"x": 360, "y": 357.5},
-        "tavern": {"x": 57, "y": 482},
-        "graveyard": {"x": 137, "y": 482},
-        "castle": {"x": 623, "y": 482},
-        "joker": {"x": 360, "y": 482}
-    },
-    "frontline": {
-        "damageIndicator": {"x":70, "y":358},
-        "confirmButton": {"x":650, "y":358}
-    },
-    "mattress": [
-        {
-            "label": "Hangar Bay",
-            "x": 57,
-            "y": 541
-        },
-        {
-            "label": "Repair Yard",
-            "x": 137,
-            "y": 541
-        },
-        {
-            "label": "Space Junk",
-            "x": 623,
-            "y": 541
-        },
-        {
-            "label": "Hangar Bay",
-            "x": 663,
-            "y": 174
-        },
-        {
-            "label": "Repair Yard",
-            "x": 583,
-            "y": 174
-        },
-        {
-            "label": "Space Junk",
-            "x": 97,
-            "y": 174
-        }
-    ]
+	"top": {
+		"hand": { "x": 360, "y": 78 },
+		"frontline": { "x": 360, "y": 357.5 },
+		"drawPile": { "x": 663, "y": 233 },
+		"discardPile": { "x": 583, "y": 233 },
+		"destroyPile": { "x": 97, "y": 233 },
+		"joker": { "x": 360, "y": 233 }
+	},
+	"bottom": {
+		"hand": { "x": 360, "y": 637 },
+		"frontline": { "x": 360, "y": 357.5 },
+		"drawPile": { "x": 57, "y": 482 },
+		"discardPile": { "x": 137, "y": 482 },
+		"destroyPile": { "x": 623, "y": 482 },
+		"joker": { "x": 360, "y": 482 }
+	},
+	"frontline": {
+		"damageIndicator": { "x": 70, "y": 358 },
+		"confirmButton": { "x": 650, "y": 358 }
+	},
+	"mattress": [
+		{
+			"label": "Hangar Bay",
+			"x": 57,
+			"y": 541
+		},
+		{
+			"label": "Repair Yard",
+			"x": 137,
+			"y": 541
+		},
+		{
+			"label": "Space Junk",
+			"x": 623,
+			"y": 541
+		},
+		{
+			"label": "Hangar Bay",
+			"x": 663,
+			"y": 174
+		},
+		{
+			"label": "Repair Yard",
+			"x": 583,
+			"y": 174
+		},
+		{
+			"label": "Space Junk",
+			"x": 97,
+			"y": 174
+		}
+	]
 }

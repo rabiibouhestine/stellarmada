@@ -69,9 +69,9 @@ const initPlayerState = () => {
         cards: {
             hand: hand,
             frontline: [],
-            tavern: drawPile,
-            graveyard: [],
-            castle: []
+            drawPile: drawPile,
+            discardPile: [],
+            destroyPile: []
         }
     };
 
@@ -151,58 +151,58 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             );
         }
 
-        // If Spades in selection, move enemy cards from tavern to graveyard
+        // If Spades in selection, move enemy cards from drawPile to discardPile
         const enemyCards = gamestate.players[secondPlayerID].cards;
-        if (hasSpades && enemyCards.tavern.length !== 0) {
-            // pick playerSelection.length from top of enemy tavern
-            const brokenCards = enemyCards.tavern.slice(-playerSelection.length);
-            // move them to graveyard
-            enemyCards.tavern.splice(-playerSelection.length);
-            enemyCards.graveyard.push(...brokenCards);
+        if (hasSpades && enemyCards.drawPile.length !== 0) {
+            // pick playerSelection.length from top of enemy drawPile
+            const brokenCards = enemyCards.drawPile.slice(-playerSelection.length);
+            // move them to discardPile
+            enemyCards.drawPile.splice(-playerSelection.length);
+            enemyCards.discardPile.push(...brokenCards);
 
             gameAction.moves.push(
                 {
                     playerID: secondPlayerID,
                     cardsNames: makeUnknownCardsArray(brokenCards),
-                    location: "tavern",
-                    destination: "graveyard"
+                    location: "drawPile",
+                    destination: "discardPile"
                 }
             );
         }
 
-        // If Hearts in selection, move cards from graveyard to tavern
-        if (hasHearts && playerCards.graveyard.length !== 0) {
-            // shuffle graveyard
-            playerCards.graveyard = shuffleArray(playerCards.graveyard);
-            // pick playerSelectionSum from top of graveyard
-            const revivedCards = playerCards.graveyard.slice(-playerSelectionSum);
-            // move them to bottom of tavern
-            playerCards.graveyard.splice(-playerSelectionSum);
-            playerCards.tavern.unshift(...revivedCards);
+        // If Hearts in selection, move cards from discardPile to drawPile
+        if (hasHearts && playerCards.discardPile.length !== 0) {
+            // shuffle discardPile
+            playerCards.discardPile = shuffleArray(playerCards.discardPile);
+            // pick playerSelectionSum from top of discardPile
+            const revivedCards = playerCards.discardPile.slice(-playerSelectionSum);
+            // move them to bottom of drawPile
+            playerCards.discardPile.splice(-playerSelectionSum);
+            playerCards.drawPile.unshift(...revivedCards);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: makeUnknownCardsArray(revivedCards),
-                    location: "graveyard",
-                    destination: "tavern"
+                    location: "discardPile",
+                    destination: "drawPile"
                 }
             );
         }
 
-        // If Diamonds in selection, move cards from tavern to hand
-        if (hasDiamonds && playerCards.tavern.length !== 0) {
+        // If Diamonds in selection, move cards from drawPile to hand
+        if (hasDiamonds && playerCards.drawPile.length !== 0) {
             const nCardsMissingFromHand = handMax - playerCards.hand.length;
             const nCardsToDraw = Math.min(playerSelectionSum, nCardsMissingFromHand);
-            const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
-            playerCards.tavern.splice(-nCardsToDraw);
+            const cardsToDraw = playerCards.drawPile.slice(-nCardsToDraw);
+            playerCards.drawPile.splice(-nCardsToDraw);
             playerCards.hand.push(...cardsToDraw.reverse());
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: cardsToDraw,
-                    location: "tavern",
+                    location: "drawPile",
                     destination: "hand"
                 }
             );
@@ -264,14 +264,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (handHasRoyals) {
             const handSelectedRoyals = playerSelection.filter(card => cardsMapping[card].isMissile === true);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
-            playerCards.castle.push(...handSelectedRoyals);
+            playerCards.destroyPile.push(...handSelectedRoyals);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: handSelectedRoyals,
                     location: "hand",
-                    destination: "castle"
+                    destination: "destroyPile"
                 }
             );
         }
@@ -281,14 +281,14 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         if (handHasStandards) {
             const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
-            playerCards.graveyard.push(...handSelectedStandards);
+            playerCards.discardPile.push(...handSelectedStandards);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: handSelectedStandards,
                     location: "hand",
-                    destination: "graveyard"
+                    destination: "discardPile"
                 }
             );
         }

@@ -14,14 +14,14 @@ const processGameState = (gameState, playerID) => {
     const playersIDs = Object.keys(processedState.players);
     for (const id of playersIDs) {
         if (id === playerID) {
-            processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
-            processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
-            processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
+            processedState.players[id].cards.drawPile = gameState.players[id].cards.drawPile.length;
+            processedState.players[id].cards.discardPile = gameState.players[id].cards.discardPile.length;
+            processedState.players[id].cards.destroyPile = gameState.players[id].cards.destroyPile.length;
         } else {
             processedState.players[id].cards.hand = makeUnknownCardsArray(gameState.players[id].cards.hand);
-            processedState.players[id].cards.tavern = gameState.players[id].cards.tavern.length;
-            processedState.players[id].cards.graveyard = gameState.players[id].cards.graveyard.length;
-            processedState.players[id].cards.castle = gameState.players[id].cards.castle.length;
+            processedState.players[id].cards.drawPile = gameState.players[id].cards.drawPile.length;
+            processedState.players[id].cards.discardPile = gameState.players[id].cards.discardPile.length;
+            processedState.players[id].cards.destroyPile = gameState.players[id].cards.destroyPile.length;
         }
     }
 
@@ -34,7 +34,7 @@ const processGameAction = (gameAction, playerID, isCurrentPlayer) => {
     for (let i = 0; i < gameAction.moves.length; i++) {
         const move = gameAction.moves[i];
         const isPlayer = move.playerID === playerID;
-        const isDrawing = (move.location === "tavern") && (move.destination === "hand");
+        const isDrawing = (move.location === "drawPile") && (move.destination === "hand");
         if (isDrawing && ((isPlayer && !isCurrentPlayer) || (!isPlayer && isCurrentPlayer))) {
             const processedMove = {
                 playerID: move.playerID,
@@ -69,14 +69,14 @@ const clearAttack = (playerID, gamestate) => {
     if (frontlineHasRoyals) {
         const frontlineRoyals = playerCards.frontline.filter(card => cardsMapping[card].isMissile === true);
         playerCards.frontline = playerCards.frontline.filter(card => !frontlineRoyals.includes(card));
-        playerCards.castle.push(...frontlineRoyals);
+        playerCards.destroyPile.push(...frontlineRoyals);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
                 cardsNames: frontlineRoyals,
                 location: "frontline",
-                destination: "castle"
+                destination: "destroyPile"
             }
         );
     }
@@ -86,14 +86,14 @@ const clearAttack = (playerID, gamestate) => {
     if (frontlineHasStandards) {
         const frontlineStandards = playerCards.frontline.filter(card => cardsMapping[card].isMissile === false);
         playerCards.frontline = playerCards.frontline.filter(card => !frontlineStandards.includes(card));
-        playerCards.graveyard.push(...frontlineStandards);
+        playerCards.discardPile.push(...frontlineStandards);
 
         clearAttackMoves.push(
             {
                 playerID: playerID,
                 cardsNames: frontlineStandards,
                 location: "frontline",
-                destination: "graveyard"
+                destination: "discardPile"
             }
         );
     }

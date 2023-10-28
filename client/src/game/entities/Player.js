@@ -17,9 +17,9 @@ export class Player {
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
         
-        this.tavern = new Pile(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
-        this.graveyard = new Pile(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
-        this.castle = new Pile(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
+        this.drawPile = new Pile(app, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
+        this.discardPile = new Pile(app, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
+        this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
         this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
@@ -72,9 +72,9 @@ export class Player {
     repositionBoard() {
         this.repositionCards(this.frontline, this.positions.frontline, false);
         this.repositionCards(this.hand, this.positions.hand, true);
-        this.graveyard.repositionCards();
-        this.tavern.repositionCards();
-        this.castle.repositionCards();
+        this.discardPile.repositionCards();
+        this.drawPile.repositionCards();
+        this.destroyPile.repositionCards();
     }
 
     onPointerDown(card) {
@@ -175,80 +175,80 @@ export class Player {
    * This is a description of your method.
    * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
    * @param {string} location - The current location of cards.
-   * Must be one of "hand", "frontline", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "discardPile", "drawPile", "destroyPile".
    * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "frontline", "graveyard", "tavern", "castle".
+   * Must be one of "hand", "frontline", "discardPile", "drawPile", "destroyPile".
    */
     moveCards(cardsNames, location, destination) {
 
-        if (location === "graveyard" && destination === "tavern") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.graveyard, this.isPlayer);
-            this.tavern.cardsToGet.push(card);
-            this.graveyard.setSize(this.graveyard.size - cardsNames.length);
-            this.tavern.setSize(this.tavern.size + cardsNames.length);
+        if (location === "discardPile" && destination === "drawPile") {
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
+            this.drawPile.cardsToGet.push(card);
+            this.discardPile.setSize(this.discardPile.size - cardsNames.length);
+            this.drawPile.setSize(this.drawPile.size + cardsNames.length);
         }
 
-        if (location === "tavern" && destination === "graveyard") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.tavern, this.isPlayer);
-            this.graveyard.cardsToGet.push(card);
-            this.tavern.setSize(this.tavern.size - cardsNames.length);
-            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
+        if (location === "drawPile" && destination === "discardPile") {
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.drawPile, this.isPlayer);
+            this.discardPile.cardsToGet.push(card);
+            this.drawPile.setSize(this.drawPile.size - cardsNames.length);
+            this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
-        if (location === "tavern" && destination === "hand") {
-            this.tavern.setSize(this.tavern.size - cardsNames.length);
+        if (location === "drawPile" && destination === "hand") {
+            this.drawPile.setSize(this.drawPile.size - cardsNames.length);
             if (this.isPlayer) {
                 for (const index in cardsNames) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.tavern, this.isPlayer);
+                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.drawPile, this.isPlayer);
                     this.hand.push(card);
                 }
             } else {
                 for (let step = 0; step < cardsNames.length; step++) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.tavern, this.isPlayer);
+                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.drawPile, this.isPlayer);
                     this.hand.push(card);
                 }
             }
         }
 
-        if (location === "frontline" && destination === "graveyard") {
+        if (location === "frontline" && destination === "discardPile") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
-            this.graveyard.cardsToGet.push(...cards);
+            this.discardPile.cardsToGet.push(...cards);
             this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
+            this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
-        if (location === "frontline" && destination === "castle") {
+        if (location === "frontline" && destination === "destroyPile") {
             const cards = this.frontline.filter(card => cardsNames.includes(card.name));
-            this.castle.cardsToGet.push(...cards);
+            this.destroyPile.cardsToGet.push(...cards);
             this.frontline = this.frontline.filter(card => !cardsNames.includes(card.name));
-            this.castle.setSize(this.castle.size + cardsNames.length);
+            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
         }
 
-        if (location === "hand" && destination === "castle") {
-            this.castle.setSize(this.castle.size + cardsNames.length);
+        if (location === "hand" && destination === "destroyPile") {
+            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
 
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.castle.cardsToGet.push(...cards);
+                this.destroyPile.cardsToGet.push(...cards);
             } else {
                 const cards = this.hand.slice(-cardsNames.length);
                 this.hand.splice(-cardsNames.length);
-                this.castle.cardsToGet.push(...cards);
+                this.destroyPile.cardsToGet.push(...cards);
             }
         }
 
-        if (location === "hand" && destination === "graveyard") {
-            this.graveyard.setSize(this.graveyard.size + cardsNames.length);
+        if (location === "hand" && destination === "discardPile") {
+            this.discardPile.setSize(this.discardPile.size + cardsNames.length);
 
             if (this.isPlayer) {
                 const cards = this.hand.filter(card => cardsNames.includes(card.name));
                 this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.graveyard.cardsToGet.push(...cards);
+                this.discardPile.cardsToGet.push(...cards);
             } else {
                 const cards = this.hand.slice(-cardsNames.length);
                 this.hand.splice(-cardsNames.length);
-                this.graveyard.cardsToGet.push(...cards);
+                this.discardPile.cardsToGet.push(...cards);
             }
         }
 
