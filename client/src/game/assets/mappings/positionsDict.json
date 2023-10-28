@@ -16,8 +16,8 @@
         "joker": {"x": 360, "y": 482}
     },
     "frontline": {
-        "damageIndicator": {"x":70, "y":360},
-        "confirmButton": {"x":650, "y":360}
+        "damageIndicator": {"x":70, "y":358},
+        "confirmButton": {"x":650, "y":358}
     },
     "mattress": [
         {
