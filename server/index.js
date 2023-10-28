@@ -31,8 +31,11 @@ io.on("connection", (socket) => {
     
     if (!users.hasOwnProperty(playerID)) {
         users[playerID] = {
-            room: null
+            room: null,
+            sockets: [socket.id]
         }
+    } else {
+        users[playerID].sockets.push(socket.id);
     }
 
     if (users[playerID].room !== null) {
@@ -54,7 +57,7 @@ io.on("connection", (socket) => {
 
     socket.on("joinRoom", (data) => {
         // if user already in a room
-        if (users[playerID].room !== null) {
+        if (users[playerID].room !== null && users[playerID].room !== data.roomID) {
             socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
             return;
         }
@@ -69,7 +72,7 @@ io.on("connection", (socket) => {
         }
 
         // if room is full we return error
-        if (Object.keys(room.players).length >= 2) {
+        if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
             socket.emit("joinRoomResponse", { error: "Room is full." });
             return;
         }
@@ -186,30 +189,31 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", (reason) => {
-        console.log("Player disconnected:", playerID, "- reason:", reason);
+        console.log("Player socket disconnected:", playerID, "- reason:", reason);
 
-        // if user was in a room
-        const userRoom = users[playerID].room;
-        if (userRoom !== null) {
-            // remove user from room
-            delete rooms[userRoom].players[playerID];
+        // remove socket from player sockets
+        delete users[playerID].sockets[socket.id];
 
-            // emit room update event
-            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+        // If player has no sockets:
+        if (users[playerID].sockets.length === 0) {
+            // get player room
+            const userRoom = users[playerID].room;
 
-            // if room empty after 10 seconds of someone leaving, delete room
-            // sometimes server drops all sockets at once and if we check and delete immediately players will reconnect and not find their room
-            setTimeout(() => {
-                if (rooms.hasOwnProperty(userRoom)) {
-                    const nbPlayers = Object.keys(rooms[userRoom].players).length;
-                    if (nbPlayers == 0) {
-                        delete rooms[userRoom];
-                    }
+            // if user was in a room that still exists
+            if (userRoom !== null && rooms.hasOwnProperty(userRoom)) {
+                // remove user from room
+                delete rooms[userRoom].players[playerID];
+                // emit room update event
+                io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+                // if room empty after player leaves we delete it
+                if (rooms[userRoom].players.length === 0) {
+                    delete rooms[userRoom];
                 }
-            }, 10000);
+            }
+
+            // remove user from users
+            delete users[playerID];
         }
-        // remove user from users
-        delete users[playerID];
     })
 })
 
