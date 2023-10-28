@@ -21,32 +21,32 @@
     },
     "mattress": [
         {
-            "label": "Repairyard",
+            "label": "Hangar Bay",
             "x": 57,
             "y": 541
         },
         {
-            "label": "Shipyard",
+            "label": "Repair Yard",
             "x": 137,
             "y": 541
         },
         {
-            "label": "Scrapyard",
+            "label": "Space Junk",
             "x": 623,
             "y": 541
         },
         {
-            "label": "Repairyard",
+            "label": "Hangar Bay",
             "x": 663,
             "y": 174
         },
         {
-            "label": "Shipyard",
+            "label": "Repair Yard",
             "x": 583,
             "y": 174
         },
         {
-            "label": "Scrapyard",
+            "label": "Space Junk",
             "x": 97,
             "y": 174
         }
