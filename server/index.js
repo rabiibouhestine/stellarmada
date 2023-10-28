@@ -58,8 +58,7 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         // if user already in a room
         if (users[playerID].room !== null && users[playerID].room !== data.roomID) {
-            socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
-            return;
+            rooms[users[playerID].room].players[playerID].isPresent = false;
         }
 
         const roomID = data.roomID;
@@ -81,7 +80,8 @@ io.on("connection", (socket) => {
         users[playerID].room = roomID;
         // add user to room
         rooms[roomID].players[playerID] = {
-            isReady: false
+            isReady: false,
+            isPresent: true
         };
 
         // if socket is not already in room we join
@@ -168,17 +168,16 @@ io.on("connection", (socket) => {
         // if user was in a room
         const userRoom = users[playerID].room;
         if (userRoom !== null) {
-            // remove user from room
-            delete rooms[userRoom].players[playerID];
-
-            // update user room
-            users[playerID].room = null;
-
-            // emit room update event
-            io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
-
-            // delete room if empty
-            if (Object.keys(rooms[userRoom].players).length == 0) {
+            // set room player status
+            rooms[userRoom].players[playerID].isPresent = false;
+            // if room empty after player leaves we delete it
+            let playersPresent = 0;
+            for (const player of rooms[userRoom].players) {
+                if (player.isPresent) {
+                    playersPresent++;
+                }
+            }
+            if (playersPresent === 0) {
                 delete rooms[userRoom];
             }
         }
@@ -201,12 +200,16 @@ io.on("connection", (socket) => {
 
             // if user was in a room that still exists
             if (userRoom !== null && rooms.hasOwnProperty(userRoom)) {
-                // remove user from room
-                delete rooms[userRoom].players[playerID];
-                // emit room update event
-                io.to(userRoom).emit("roomUpdate", { playersNb: Object.keys(rooms[userRoom].players).length })
+                // set room player status
+                rooms[userRoom].players[playerID].isPresent = false;
                 // if room empty after player leaves we delete it
-                if (rooms[userRoom].players.length === 0) {
+                let playersPresent = 0;
+                for (const player of rooms[userRoom].players) {
+                    if (player.isPresent) {
+                        playersPresent++;
+                    }
+                }
+                if (playersPresent === 0) {
                     delete rooms[userRoom];
                 }
             }
