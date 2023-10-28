@@ -22,51 +22,33 @@
     "mattress": [
         {
             "label": "Repairyard",
-            "width": 200,
-            "x": 55,
-            "y": 537.5
+            "x": 57,
+            "y": 541
         },
         {
             "label": "Shipyard",
-            "width": 200,
-            "x": 133,
-            "y": 537.5
+            "x": 137,
+            "y": 541
         },
         {
             "label": "Scrapyard",
-            "width": 200,
-            "x": 211,
-            "y": 537.5
-        },
-        {
-            "label": "Space Junk",
-            "width": 242,
-            "x": 587,
-            "y": 537.5
+            "x": 623,
+            "y": 541
         },
         {
             "label": "Repairyard",
-            "width": 200,
-            "x": 665,
-            "y": 181.5
+            "x": 663,
+            "y": 174
         },
         {
             "label": "Shipyard",
-            "width": 200,
-            "x": 587,
-            "y": 181.5
+            "x": 583,
+            "y": 174
         },
         {
             "label": "Scrapyard",
-            "width": 200,
-            "x": 509,
-            "y": 181.5
-        },
-        {
-            "label": "Space Junk",
-            "width": 242,
-            "x": 133,
-            "y": 181.5
+            "x": 97,
+            "y": 174
         }
     ]
 }
