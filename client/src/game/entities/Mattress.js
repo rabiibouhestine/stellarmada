@@ -15,7 +15,7 @@ export class Mattress {
             const labelContainer = new PIXI.Container();
             labelContainer.x = item.x;
             labelContainer.y = item.y;
-            labelContainer.height = 23;
+            labelContainer.height = 20;
             labelContainer.width = item.width;
 
             const label = new PIXI.Text(item.label, {

@@ -50,8 +50,8 @@ export class Player {
 
     repositionCards(array, centerPosition, isHand) {
         // Calculate the total width of the cards in the array
-        const cardWidth = isHand? 84 : 70;
-        const cardGap = isHand? 6 : 8;
+        const cardWidth = isHand? 80 : 70;
+        const cardGap = isHand? 10 : 7;
 
         // Calculate the starting position to center the cards
         const startX = centerPosition.x - ((cardWidth + cardGap)/2) * (array.length - 1);

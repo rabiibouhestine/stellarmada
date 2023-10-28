@@ -19,7 +19,7 @@ export class Deck {
         // Define deck sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
         this.sprite.width = 70;
-        this.sprite.height = 95;
+        this.sprite.height = 98;
         this.sprite.anchor.set(0.5);
         this.container.addChild(this.sprite);
 

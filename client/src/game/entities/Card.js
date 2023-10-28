@@ -29,7 +29,7 @@ export class Card {
         // Define card glow
         this.glow = new PIXI.Graphics();
         this.glow.beginFill(0xffffff, 1);
-        this.glow.drawRoundedRect(-37.5, -50, 75, 100, 8);
+        this.glow.drawRoundedRect(-38, -52, 76, 104, 8);
         this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
@@ -50,7 +50,7 @@ export class Card {
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
         this.sprite.width = 70;
-        this.sprite.height = 95;
+        this.sprite.height = 98;
         this.container.addChild(this.sprite);
 
         // Mirror sprite if not player
@@ -107,7 +107,7 @@ export class Card {
             scale: this.scale
         };
 
-        const targetScale = isHand? 1.2 : 1;
+        const targetScale = isHand? 1.14 : 1;
 
         const tween = new TWEEN.Tween(propreties, false)
             .to({

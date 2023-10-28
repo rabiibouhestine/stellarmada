@@ -18,7 +18,7 @@ export class Joker {
         this.spriteLeft.anchor.set(0.5);
         this.spriteLeft.x = -36;
         this.spriteLeft.width = 70;
-        this.spriteLeft.height = 95;
+        this.spriteLeft.height = 98;
         this.container.addChild(this.spriteLeft);
 
         // Define right joker sprite
@@ -26,7 +26,7 @@ export class Joker {
         this.spriteRight.anchor.set(0.5);
         this.spriteRight.x = 36;
         this.spriteRight.width = 70;
-        this.spriteRight.height = 95;
+        this.spriteRight.height = 98;
         this.container.addChild(this.spriteRight);
 
         // Mirror sprite if not player
