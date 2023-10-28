@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
 
-export class Deck {
+export class Pile {
     constructor(app, sheet, isPlayer, position, size) {
         this.app = app;
         this.sheet = sheet;
@@ -11,12 +11,12 @@ export class Deck {
 
         this.cardsToGet = [];
 
-        // Define deck container
+        // Define pile container
         this.container = new PIXI.Container();
         this.container.position = this.position;
         this.container.visible = this.size > 0;
 
-        // Define deck sprite
+        // Define pile sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
         this.sprite.width = 70;
         this.sprite.height = 98;
@@ -35,7 +35,7 @@ export class Deck {
         this.textBG.endFill();
         this.container.addChild(this.textBG);
 
-        // Define deck text
+        // Define pile size text
         this.text = new PIXI.Text(this.size, {
             fontFamily: 'Arial',
             fontSize: 14,
@@ -45,7 +45,7 @@ export class Deck {
         this.text.anchor.set(0.5);
         this.container.addChild(this.text);
 
-        // Add deck to app stage
+        // Add pile to app stage
         this.app.stage.addChild(this.container);
     }
 

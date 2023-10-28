@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-import { Deck } from "./Deck";
+import { Pile } from "./Pile";
 import { Card } from "./Card";
 import { Joker } from "./Joker";
 
@@ -17,9 +17,9 @@ export class Player {
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
         
-        this.tavern = new Deck(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
-        this.graveyard = new Deck(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
-        this.castle = new Deck(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
+        this.tavern = new Pile(app, sheet, this.isPlayer, this.positions.tavern, state.cards.tavern);
+        this.graveyard = new Pile(app, sheet, this.isPlayer, this.positions.graveyard, state.cards.graveyard);
+        this.castle = new Pile(app, sheet, this.isPlayer, this.positions.castle, state.cards.castle);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.frontline = this.createCards(state.cards.frontline, true, this.positions.frontline, false, this.isPlayer);
         this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
