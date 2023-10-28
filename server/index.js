@@ -21,7 +21,6 @@ const io = new Server(server, {
     }
 });
 
-
 const rooms = {};
 const users = {};
 
