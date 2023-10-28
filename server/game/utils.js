@@ -1,6 +1,6 @@
 const cardsMapping = require('./cardsDict.json');
 
-const shuffleDeck = (deck) => {
+const shuffleArray = (deck) => {
     const shuffled = [...deck];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -106,4 +106,4 @@ const makeUnknownCardsArray = (array) => {
     return Array.from({ length: array.length }, () => '?');
 }
 
-module.exports = { shuffleDeck, processGameState, processGameAction, clearAttack, makeUnknownCardsArray }
+module.exports = { shuffleArray, processGameState, processGameAction, clearAttack, makeUnknownCardsArray }

@@ -1,12 +1,5 @@
 const cardsMapping = require('./cardsDict.json');
-const { shuffleDeck, clearAttack, makeUnknownCardsArray } = require('./utils.js');
-
-const deck = [
-    'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
-    'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD',
-    'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC',
-    'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
-];
+const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js');
 
 const handMax = 8;
 
@@ -15,7 +8,7 @@ const initGameState = (room) => {
     const players = {};
     const playersIDs = Object.keys(room.players);
     for (const id of playersIDs) {
-        players[id] = initPlayerState(deck);
+        players[id] = initPlayerState();
     }
 
     // Define gameState
@@ -41,21 +34,33 @@ const initGameState = (room) => {
     return gameState;
 }
 
-const initPlayerState = (deck) => {
-    // Make a player deck
-    const playerDeck = deck.slice();
-    // Remove Ace of Diamonds from player deck
-    const indexToRemove = playerDeck.indexOf("AD");
-    playerDeck.splice(indexToRemove, 1);
-    // Add the Ace of Diamonds to hand
-    const hand = ["AD"];
-    // Shuffle player deck
-    const shuffledPlayerDeck =  shuffleDeck(playerDeck);
-    // Draw handMax - 1 cards from the shuffled deck
-    const cardsToDraw = shuffledPlayerDeck.splice(0, handMax - 1); 
-    hand.push(...cardsToDraw);
-    // Put the remaining cards in the tavern
-    const tavern = shuffledPlayerDeck;
+const initPlayerState = () => {
+    // Define a standard playing cards deck split into diamonds and non diamonds
+    const schPile = [
+        'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
+        'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC',
+        'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
+    ];
+    const dPile = [
+        'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD'
+    ];
+
+    // Shuffle diamonds pile and non diamonds pile separately
+    const schPileShuffled = shuffleArray(schPile);
+    const dPileShuffled = shuffleArray(dPile);
+
+    // Define drawpile and hand
+    const drawPile = [];
+    const hand = [];
+
+    // Draw all cards from shuffled diamonds pile and shuffled non diamnds pile into the draw pile
+    while (dPileShuffled.length > 0) {
+        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
+        drawPile.push(...schPileShuffled.splice(-3)); // Take three cards from schPileShuffled
+    }
+
+    // Draw handMax cards from the draw pile to hand
+    hand.push(...drawPile.splice(-handMax).reverse());
 
     // Define playerState
     const playerState = {
@@ -64,7 +69,7 @@ const initPlayerState = (deck) => {
         cards: {
             hand: hand,
             frontline: [],
-            tavern: tavern,
+            tavern: drawPile,
             graveyard: [],
             castle: []
         }
@@ -168,7 +173,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
         // If Hearts in selection, move cards from graveyard to tavern
         if (hasHearts && playerCards.graveyard.length !== 0) {
             // shuffle graveyard
-            playerCards.graveyard = shuffleDeck(playerCards.graveyard);
+            playerCards.graveyard = shuffleArray(playerCards.graveyard);
             // pick playerSelectionSum from top of graveyard
             const revivedCards = playerCards.graveyard.slice(-playerSelectionSum);
             // move them to bottom of tavern
@@ -191,7 +196,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             const nCardsToDraw = Math.min(playerSelectionSum, nCardsMissingFromHand);
             const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
             playerCards.tavern.splice(-nCardsToDraw);
-            playerCards.hand.push(...cardsToDraw);
+            playerCards.hand.push(...cardsToDraw.reverse());
 
             gameAction.moves.push(
                 {
