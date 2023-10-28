@@ -5,7 +5,7 @@
         "tavern": {"x": 663, "y": 233},
         "graveyard": {"x": 583, "y": 233},
         "castle": {"x": 97, "y": 233},
-        "joker": {"x": 360, "y": 230.5}
+        "joker": {"x": 360, "y": 233}
     },
     "bottom": {
         "hand": {"x": 360, "y": 637},
@@ -13,7 +13,7 @@
         "tavern": {"x": 57, "y": 482},
         "graveyard": {"x": 137, "y": 482},
         "castle": {"x": 623, "y": 482},
-        "joker": {"x": 360, "y": 483.5}
+        "joker": {"x": 360, "y": 482}
     },
     "frontline": {
         "damageIndicator": {"x":70, "y":360},
