@@ -15,13 +15,13 @@ export class Mattress {
             const labelContainer = new PIXI.Container();
             labelContainer.x = item.x;
             labelContainer.y = item.y;
-            labelContainer.height = 23;
-            labelContainer.width = item.width;
+            labelContainer.height = 20;
+            labelContainer.width = 70;
 
             const label = new PIXI.Text(item.label, {
                 fontFamily: 'Arial',
                 fontWeight: 'bold',
-                fontSize: 12,
+                fontSize: 10,
                 fill: 0xFFFFFF,
                 align: 'center'
             });

@@ -16,17 +16,19 @@ export class Joker {
         // Define left joker sprite
         this.spriteLeft = new PIXI.Sprite(this.sheet.textures["J1"]);
         this.spriteLeft.anchor.set(0.5);
-        this.spriteLeft.x = -36;
+        this.spriteLeft.angle = 90;
+        this.spriteLeft.x = -49;
         this.spriteLeft.width = 70;
-        this.spriteLeft.height = 95;
+        this.spriteLeft.height = 98;
         this.container.addChild(this.spriteLeft);
 
         // Define right joker sprite
         this.spriteRight = new PIXI.Sprite(this.sheet.textures["J2"]);
         this.spriteRight.anchor.set(0.5);
-        this.spriteRight.x = 36;
+        this.spriteRight.angle = 90;
+        this.spriteRight.x = 49;
         this.spriteRight.width = 70;
-        this.spriteRight.height = 95;
+        this.spriteRight.height = 98;
         this.container.addChild(this.spriteRight);
 
         // Mirror sprite if not player

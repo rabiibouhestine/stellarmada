@@ -18,7 +18,8 @@ if (browser) {
         "https://cowards-castle-server.onrender.com",
         {
             query: {
-                playerID: playerID
+                playerID: playerID,
+                roomID: localStorage.getItem("roomID")
               }
         }    
     );

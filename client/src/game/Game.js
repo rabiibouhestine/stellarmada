@@ -40,8 +40,8 @@ export class Game {
         canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress, layout);
-        this.damageIndicator = new Indicator(this.app, positions.frontline.damageIndicator, gameState.turn.damage);
-        this.confirmButton = new Button(this.app, positions.frontline.confirmButton);
+        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, gameState.turn.damage);
+        this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 
         for (const key of Object.keys(this.players)) {
@@ -84,7 +84,7 @@ export class Game {
             src: [bgMusic],
             autoplay: true,
             loop: true,
-            volume: 0.25
+            volume: 0.05
         });
     }
 
@@ -141,17 +141,17 @@ export class Game {
         }
       
         const firstPlayerKey = keys[0];
-        const secondPlayerKey = keys[1];
+        const enemyKey = keys[1];
       
         if (firstPlayerKey === playerID) {
           players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, confirmButton, false);
-        } else if (secondPlayerKey === playerID) {
+          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.top, damageIndicator, confirmButton, false);
+        } else if (enemyKey === playerID) {
           players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
+          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, true);
         } else {
           players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, false);
+          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, false);
         }
       
         return players;

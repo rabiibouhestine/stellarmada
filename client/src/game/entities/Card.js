@@ -10,9 +10,10 @@ export class Card {
         this.position = position;
         this.isPlayer = isPlayer;
 
-        this.value = cardsDict[name].value;
+        this.offensivePower = cardsDict[name].offensivePower;
+        this.defensivePower = cardsDict[name].defensivePower;
         this.suit = cardsDict[name].suit;
-        this.isCastle = cardsDict[name].isCastle;
+        this.isMissile = cardsDict[name].isMissile;
 
         this.selectable = false;
         this.selected = false;
@@ -28,11 +29,11 @@ export class Card {
         // Define card glow
         this.glow = new PIXI.Graphics();
         this.glow.beginFill(0xffffff, 1);
-        this.glow.drawRoundedRect(-37.5, -50, 75, 100, 8);
+        this.glow.drawRoundedRect(-38, -52, 76, 104, 8);
         this.glow.endFill();
         this.glow.visible = false;
         this.glow.eventMode = 'none';
-        this.glow.tint = 0x0096FF; //0xD22B2B
+        this.glow.tint = 0x0096FF;
         this.container.addChild(this.glow);
 
         // Animate the glow alpha
@@ -49,7 +50,7 @@ export class Card {
         this.sprite = new PIXI.Sprite(this.sheet.textures[name]);
         this.sprite.anchor.set(0.5);
         this.sprite.width = 70;
-        this.sprite.height = 95;
+        this.sprite.height = 98;
         this.container.addChild(this.sprite);
 
         // Mirror sprite if not player
@@ -74,7 +75,7 @@ export class Card {
     }
 
     hide() {
-        this.sprite.texture = this.sheet.textures["B1"];
+        this.sprite.texture = this.sheet.textures[this.isPlayer? "B1": "B2"];
     }
 
     onPointerOver() {
@@ -106,7 +107,7 @@ export class Card {
             scale: this.scale
         };
 
-        const targetScale = isHand? 1.2 : 1;
+        const targetScale = isHand? 1.14 : 1;
 
         const tween = new TWEEN.Tween(propreties, false)
             .to({

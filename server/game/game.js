@@ -1,22 +1,14 @@
 const cardsMapping = require('./cardsDict.json');
-const { shuffleDeck, clearAttack, makeUnknownCardsArray } = require('./utils.js');
+const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js');
 
-const deck = [
-    'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
-    'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD',
-    'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC',
-    'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
-];
-
-const handMax = 7;
-const outpostCapacity = 3;
+const handMax = 8;
 
 const initGameState = (room) => {
     // Create players states
     const players = {};
     const playersIDs = Object.keys(room.players);
     for (const id of playersIDs) {
-        players[id] = initPlayerState(deck);
+        players[id] = initPlayerState();
     }
 
     // Define gameState
@@ -28,7 +20,8 @@ const initGameState = (room) => {
             stance: "attacking", // "discarding", "attacking" or "waiting"
             damage: 0 // only set when state discarding
         },
-        players: players
+        players: players,
+        logs: []
     };
 
     // Pick a random player index
@@ -41,32 +34,44 @@ const initGameState = (room) => {
     return gameState;
 }
 
-const initPlayerState = (deck) => {
-    // Make a player deck
-    const playerDeck = deck.slice();
-    // Remove Ace of Diamonds from player deck
-    const indexToRemove = playerDeck.indexOf("AD");
-    playerDeck.splice(indexToRemove, 1);
-    // Add the Ace of Diamonds to hand
-    const hand = ["AD"];
-    // Shuffle player deck
-    const shuffledPlayerDeck =  shuffleDeck(playerDeck);
-    // Draw handMax - 1 cards from the shuffled deck
-    const cardsToDraw = shuffledPlayerDeck.splice(0, handMax - 1); 
-    hand.push(...cardsToDraw);
-    // Put the remaining cards in the tavern
-    const tavern = shuffledPlayerDeck;
+const initPlayerState = () => {
+    // Define a standard playing cards deck split into diamonds and non diamonds
+    const schPile = [
+        'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
+        'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC',
+        'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH'
+    ];
+    const dPile = [
+        'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD'
+    ];
+
+    // Shuffle diamonds pile and non diamonds pile separately
+    const schPileShuffled = shuffleArray(schPile);
+    const dPileShuffled = shuffleArray(dPile);
+
+    // Define drawpile and hand
+    const drawPile = [];
+    const hand = [];
+
+    // Draw all cards from shuffled diamonds pile and shuffled non diamnds pile into the draw pile
+    while (dPileShuffled.length > 0) {
+        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
+        drawPile.push(...schPileShuffled.splice(-3)); // Take three cards from schPileShuffled
+    }
+
+    // Draw handMax cards from the draw pile to hand
+    hand.push(...drawPile.splice(-handMax).reverse());
 
     // Define playerState
     const playerState = {
+        timeLeft: 600000,
+        turnStartTime: null,
         cards: {
             hand: hand,
-            handCount: handMax,
-            frontline: [],
-            rearguard: [],
-            tavern: tavern,
-            graveyard: [],
-            castle: []
+            battleField: [],
+            drawPile: drawPile,
+            discardPile: [],
+            destroyPile: []
         }
     };
 
@@ -82,156 +87,159 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // Get the players ids
     const playersIDS = Object.keys(gamestate.players);
 
-    // Get the second player id
-    const secondPlayerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+    // Get the enemy id
+    const enemyID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
 
     // Initialise game action
     const gameAction = {
         isGameOver: gamestate.isGameOver,
         winnerID: gamestate.winnerID,
         turn: gamestate.turn,
-        moves: []
+        moves: [],
+        logs: []
     };
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
+
+        // Player cards
         const playerCards = gamestate.players[playerID].cards;
-        const playerHandSelection = playerSelection.hand;
-        const playerRearguardSelection = playerSelection.rearguard;
 
         // If player hand selection does not make sense we exit
-        if (playerHandSelection.some(card => !playerCards.hand.includes(card)))
+        if (playerSelection.some(card => !playerCards.hand.includes(card)))
             return;
 
-        // If player rearguard selection does not make sense we exit
-        if (playerRearguardSelection.some(card => !playerCards.rearguard.includes(card)))
-            return;
-
-        // Check selection suits and calculate selection value
-        const hasClubs = playerHandSelection.some(card => cardsMapping[card].suit === "C") || playerRearguardSelection.some(card => cardsMapping[card].suit === "C");
-        const hasSpades = playerHandSelection.some(card => cardsMapping[card].suit === "S") || playerRearguardSelection.some(card => cardsMapping[card].suit === "S");
-        const hasHearts = playerHandSelection.some(card => cardsMapping[card].suit === "H") || playerRearguardSelection.some(card => cardsMapping[card].suit === "H");
-        const hasDiamonds = playerHandSelection.some(card => cardsMapping[card].suit === "D") || playerRearguardSelection.some(card => cardsMapping[card].suit === "D");
-        const playerHandSelectionSum = playerHandSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+        // Check selection suits and calculate selection offensive power
+        const hasClubs = playerSelection.some(card => cardsMapping[card].suit === "C");
+        const hasSpades = playerSelection.some(card => cardsMapping[card].suit === "S");
+        const hasHearts = playerSelection.some(card => cardsMapping[card].suit === "H");
+        const hasDiamonds = playerSelection.some(card => cardsMapping[card].suit === "D");
+        const playerSelectionSum = playerSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].offensivePower;
         }, 0);
-        const playerRearguardSelectionSum = playerRearguardSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const playerSelectionSum = playerHandSelectionSum + playerRearguardSelectionSum;
-        const playerSelectionValue = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
+        const selectionOffensivePower = hasClubs? 2 * playerSelectionSum : playerSelectionSum;
 
-        // Move selected cards from hand to frontline
-        if (playerHandSelection.length > 0) {
-            playerCards.hand = playerCards.hand.filter(card => !playerHandSelection.includes(card));
-            playerCards.handCount = playerCards.hand.length;
-            playerCards.frontline.push(...playerHandSelection);
+        // Move selected cards from hand to battleField
+        if (playerSelection.length > 0) {
+            playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
+            playerCards.battleField.push(...playerSelection);
     
             // Add move to game action
             gameAction.moves.push(
                 {
                     playerID: playerID,
-                    cardsNames: playerHandSelection,
+                    cardsNames: playerSelection,
                     location: "hand",
-                    destination: "frontline"
+                    destination: "battleField"
                 }
             );
-        }
 
-        // Move selected cards from rearguard to frontline
-        if (playerRearguardSelection.length > 0) {
-            playerCards.rearguard = playerCards.rearguard.filter(card => !playerRearguardSelection.includes(card));
-            playerCards.frontline.push(...playerRearguardSelection);
-    
-            // Add move to game action
-            gameAction.moves.push(
+            // Add attack to logs
+            gamestate.logs.push(
                 {
                     playerID: playerID,
-                    cardsNames: playerRearguardSelection,
-                    location: "rearguard",
-                    destination: "frontline"
+                    cardsNames: playerSelection,
+                    move: "attack"
+                }
+            );
+            gameAction.logs.push(
+                {
+                    playerID: playerID,
+                    cardsNames: playerSelection,
+                    move: "attack"
                 }
             );
         }
 
-        // If Hearts in selection, move cards from graveyard to tavern
-        if (hasHearts && playerCards.graveyard.length !== 0) {
-            // shuffle graveyard
-            playerCards.graveyard = shuffleDeck(playerCards.graveyard);
-            // pick playerSelectionSum from top of graveyard
-            const revivedCards = playerCards.graveyard.slice(-playerSelectionSum);
-            // move them to bottom of tavern
-            playerCards.graveyard.splice(-playerSelectionSum);
-            playerCards.tavern.unshift(...revivedCards);
+        // If Spades in selection, move enemy cards from drawPile to discardPile
+        const enemyCards = gamestate.players[enemyID].cards;
+        if (hasSpades && enemyCards.drawPile.length !== 0) {
+            // pick playerSelection.length from top of enemy drawPile
+            const brokenCards = enemyCards.drawPile.slice(-playerSelection.length);
+            // move them to discardPile
+            enemyCards.drawPile.splice(-playerSelection.length);
+            enemyCards.discardPile.push(...brokenCards);
+
+            gameAction.moves.push(
+                {
+                    playerID: enemyID,
+                    cardsNames: makeUnknownCardsArray(brokenCards),
+                    location: "drawPile",
+                    destination: "discardPile"
+                }
+            );
+        }
+
+        // If Hearts in selection, move cards from discardPile to drawPile
+        if (hasHearts && playerCards.discardPile.length !== 0) {
+            // shuffle discardPile
+            playerCards.discardPile = shuffleArray(playerCards.discardPile);
+            // pick playerSelectionSum from top of discardPile
+            const revivedCards = playerCards.discardPile.slice(-playerSelectionSum);
+            // move them to bottom of drawPile
+            playerCards.discardPile.splice(-playerSelectionSum);
+            playerCards.drawPile.unshift(...revivedCards);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: makeUnknownCardsArray(revivedCards),
-                    location: "graveyard",
-                    destination: "tavern"
+                    location: "discardPile",
+                    destination: "drawPile"
                 }
             );
         }
 
-        // If Diamonds in selection, move cards from tavern to hand
-        if (hasDiamonds && playerCards.tavern.length !== 0) {
+        // If Diamonds in selection, move cards from drawPile to hand
+        if (hasDiamonds && playerCards.drawPile.length !== 0) {
             const nCardsMissingFromHand = handMax - playerCards.hand.length;
             const nCardsToDraw = Math.min(playerSelectionSum, nCardsMissingFromHand);
-            const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
-            playerCards.tavern.splice(-nCardsToDraw);
-            playerCards.hand.push(...cardsToDraw);
+            const cardsToDraw = playerCards.drawPile.slice(-nCardsToDraw);
+            playerCards.drawPile.splice(-nCardsToDraw);
+            playerCards.hand.push(...cardsToDraw.reverse());
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: cardsToDraw,
-                    location: "tavern",
+                    location: "drawPile",
                     destination: "hand"
                 }
             );
         }
 
-        // If Spades in selection, move cards from tavern to rearguard
-        if (hasSpades && playerCards.tavern.length !== 0) {
-            const nCardsToDraw = Math.min(
-                outpostCapacity - playerCards.rearguard.length,
-                playerHandSelection.length + playerRearguardSelection.length,
-                playerCards.tavern.length
-            );
-            if (nCardsToDraw > 0) {
-                const cardsToDraw = playerCards.tavern.slice(-nCardsToDraw);
-                playerCards.tavern.splice(-nCardsToDraw);
-                playerCards.rearguard.push(...cardsToDraw);
-    
-                gameAction.moves.push(
-                    {
-                        playerID: playerID,
-                        cardsNames: cardsToDraw,
-                        location: "tavern",
-                        destination: "rearguard"
-                    }
-                );
-            }
-        }
-
         // Update gameAction turn
         gameAction.turn = {
-            playerID: secondPlayerID,
+            playerID: enemyID,
             stance: "discarding",
-            damage: playerSelectionValue
+            damage: selectionOffensivePower
+        }
+
+        // Get current time
+        const currentDate = new Date();
+        const currentTime = currentDate.getTime();
+
+        // Update enemy turn start time
+        gamestate.players[enemyID].turnStartTime = currentTime;
+
+        // Update player turn start time if first attack
+        if (gamestate.players[playerID].turnStartTime === null) {
+            gamestate.players[playerID].turnStartTime = currentTime;
+        }
+
+        // If player has no time left, enemy wins
+        gamestate.players[playerID].timeLeft -= currentTime - gamestate.players[playerID].turnStartTime;
+        if (gamestate.players[playerID].timeLeft < 0) {
+            gameAction.isGameOver = true;
+            gameAction.winnerID = enemyID;
         }
 
         // If enemy does not have enough to discard attack, player wins
-        const secondPlayerHandValue = gamestate.players[secondPlayerID].cards.hand.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+        const enemyDefensivePower = gamestate.players[enemyID].cards.hand.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].defensivePower;
         }, 0);
-        const secondPlayerRearguardValue = gamestate.players[secondPlayerID].cards.rearguard.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const secondPlayerMaxDiscardValue = secondPlayerHandValue + secondPlayerRearguardValue;
 
-        if (secondPlayerMaxDiscardValue < playerSelectionValue) {
+        if (enemyDefensivePower < selectionOffensivePower) {
             gameAction.isGameOver = true;
             gameAction.winnerID = playerID;
         }
@@ -240,93 +248,69 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
     // If player is discarding
     if (gamestate.turn.stance === "discarding") {
         const playerCards = gamestate.players[playerID].cards
-        const playerHandSelection = playerSelection.hand;
-        const playerRearguardSelection = playerSelection.rearguard;
 
         // If player selection does not make sense we exit
-        const isHandSelectionScam = playerHandSelection.some(card => !playerCards.hand.includes(card));
-        const isRearguardSelectionScam = playerRearguardSelection.some(card => !playerCards.rearguard.includes(card));
-        const handSelectionDamage = playerHandSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
+        const isHandSelectionScam = playerSelection.some(card => !playerCards.hand.includes(card));
+        const selectionDefensivePower = playerSelection.reduce((accumulator, card) => {
+            return accumulator + cardsMapping[card].defensivePower;
         }, 0);
-        const rearguardSelectionDamage = playerRearguardSelection.reduce((accumulator, card) => {
-            return accumulator + cardsMapping[card].value;
-        }, 0);
-        const selectionDamage = handSelectionDamage + rearguardSelectionDamage;
-        const isDamageEnough = selectionDamage >= gamestate.turn.damage;
-        if (isHandSelectionScam || isRearguardSelectionScam || !isDamageEnough)
+        const isDamageEnough = selectionDefensivePower >= gamestate.turn.damage;
+        if (isHandSelectionScam || !isDamageEnough)
             return;
 
-        // Discard Royals from Rearguard
-        const rearguardHasRoyals = playerRearguardSelection.some(card => cardsMapping[card].isCastle === true);
-        if (rearguardHasRoyals) {
-            const rearguardSelectedRoyals = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === true);
-            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedRoyals.includes(card));
-            playerCards.castle.push(...rearguardSelectedRoyals);
+
+        // Discard Missiles from Hand
+        const handHasMissiles = playerSelection.some(card => cardsMapping[card].isMissile === true);
+        if (handHasMissiles) {
+            const handSelectedMissiles = playerSelection.filter(card => cardsMapping[card].isMissile === true);
+            playerCards.hand = playerCards.hand.filter(card => !handSelectedMissiles.includes(card));
+            playerCards.destroyPile.push(...handSelectedMissiles);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
-                    cardsNames: rearguardSelectedRoyals,
-                    location: "rearguard",
-                    destination: "castle"
-                }
-            );
-        }
-
-        // Discard non Royals from Rearguard
-        const rearguardHasStandards = playerRearguardSelection.some(card => cardsMapping[card].isCastle === false);
-        if (rearguardHasStandards) {
-            const rearguardSelectedStandards = playerRearguardSelection.filter(card => cardsMapping[card].isCastle === false);
-            playerCards.rearguard = playerCards.rearguard.filter(card => !rearguardSelectedStandards.includes(card));
-            playerCards.graveyard.push(...rearguardSelectedStandards);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: rearguardSelectedStandards,
-                    location: "rearguard",
-                    destination: "graveyard"
-                }
-            );
-        }
-
-        // Discard Royals from Hand
-        const handHasRoyals = playerHandSelection.some(card => cardsMapping[card].isCastle === true);
-        if (handHasRoyals) {
-            const handSelectedRoyals = playerHandSelection.filter(card => cardsMapping[card].isCastle === true);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedRoyals.includes(card));
-            playerCards.castle.push(...handSelectedRoyals);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: handSelectedRoyals,
+                    cardsNames: handSelectedMissiles,
                     location: "hand",
-                    destination: "castle"
+                    destination: "destroyPile"
                 }
             );
         }
 
-        // Discard non Royals from Hand
-        const handHasStandards = playerHandSelection.some(card => cardsMapping[card].isCastle === false);
+        // Discard non Missiles from Hand
+        const handHasStandards = playerSelection.some(card => cardsMapping[card].isMissile === false);
         if (handHasStandards) {
-            const handSelectedStandards = playerHandSelection.filter(card => cardsMapping[card].isCastle === false);
+            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
             playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
-            playerCards.graveyard.push(...handSelectedStandards);
+            playerCards.discardPile.push(...handSelectedStandards);
 
             gameAction.moves.push(
                 {
                     playerID: playerID,
                     cardsNames: handSelectedStandards,
                     location: "hand",
-                    destination: "graveyard"
+                    destination: "discardPile"
                 }
             );
         }
 
-        // Clear second player attack
-        const clearAttackMoves = clearAttack(secondPlayerID, gamestate);
+        // Add counter to logs
+        gamestate.logs.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                move: "counter"
+            }
+        );
+        gameAction.logs.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                move: "counter"
+            }
+        );
+
+        // Clear enemy attack
+        const clearAttackMoves = clearAttack(enemyID, gamestate);
         gameAction.moves.push(...clearAttackMoves);
 
         // Update gameAction turn
@@ -336,10 +320,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // If empty fleet (hand and rearguard both empty after discard), enemy wins
-        if (playerCards.hand.length === 0 && playerCards.rearguard.length === 0) {
+        // If empty fleet (hand empty after discard), enemy wins
+        if (playerCards.hand.length === 0) {
             gameAction.isGameOver = true;
-            gameAction.winnerID = secondPlayerID;
+            gameAction.winnerID = enemyID;
         }
     }
 
