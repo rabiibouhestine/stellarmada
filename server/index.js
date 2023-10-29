@@ -26,19 +26,16 @@ const users = {};
 
 io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
+    const clientRoomID = socket.handshake.query.roomID;
     console.log("Player connected:", playerID);
     
     if (!users.hasOwnProperty(playerID)) {
         users[playerID] = {
-            room: null,
+            room: clientRoomID,
             sockets: [socket.id]
         }
     } else {
         users[playerID].sockets.push(socket.id);
-    }
-
-    if (users[playerID].room !== null) {
-        socket.join(users[playerID].room);
     }
 
 
@@ -55,33 +52,44 @@ io.on("connection", (socket) => {
     })
 
     socket.on("joinRoom", (data) => {
-        // if user already in a room
-        if (users[playerID].room !== null && users[playerID].room !== data.roomID) {
-            rooms[users[playerID].room].players[playerID].isPresent = false;
-        }
-
         const roomID = data.roomID;
         const room = rooms[roomID];
     
         // if room does not exist or roomID is not in data we return error
         if (!rooms.hasOwnProperty(roomID)) {
           socket.emit("joinRoomResponse", { error: "Room does not exist." });
+          console.log("Room does not exist.");
           return;
         }
 
-        // if room is full we return error
+        // if room is full and no seat belongs to user we return error
         if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
             socket.emit("joinRoomResponse", { error: "Room is full." });
+            console.log("Room is full.");
+            return;
+        }
+
+        // if user already present in an existing room we return error
+        const hasRoom = clientRoomID !== null;
+        const clientRoomExists = rooms.hasOwnProperty(clientRoomID);
+        const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
+        if (hasRoom && clientRoomExists && isPresent) {
+            socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
+            console.log("Can't be in multiple rooms");
             return;
         }
 
         // update user
         users[playerID].room = roomID;
-        // add user to room
-        rooms[roomID].players[playerID] = {
-            isReady: false,
-            isPresent: true
-        };
+        // update room
+        if (room.players.hasOwnProperty(playerID)) {
+            rooms[roomID].players[playerID].isPresent = true;
+        } else {
+            rooms[roomID].players[playerID] = {
+                isReady: false,
+                isPresent: true
+            };
+        }
 
         // if socket is not already in room we join
         if (!socket.rooms.has(roomID)) {
@@ -190,7 +198,10 @@ io.on("connection", (socket) => {
         console.log("Player socket disconnected:", playerID, "- reason:", reason);
 
         // remove socket from player sockets
-        delete users[playerID].sockets[socket.id];
+        const socketIndex = users[playerID].sockets.indexOf(socket.id);
+        if (socketIndex !== -1) {
+            users[playerID].sockets.splice(socketIndex, 1);
+        }
 
         // If player has no sockets:
         if (users[playerID].sockets.length === 0) {
@@ -203,7 +214,8 @@ io.on("connection", (socket) => {
                 rooms[userRoom].players[playerID].isPresent = false;
                 // if room empty after player leaves we delete it
                 let playersPresent = 0;
-                for (const player of rooms[userRoom].players) {
+                for (const key in rooms[userRoom].players) {
+                    const player = rooms[userRoom].players[key];
                     if (player.isPresent) {
                         playersPresent++;
                     }

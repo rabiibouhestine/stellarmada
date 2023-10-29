@@ -19,6 +19,7 @@
 			}
 			// if response is success we proceed
 			gameStarted = data.room.gameStarted;
+			localStorage.setItem('roomID', $page.params.roomID);
 		});
 
 		socket.on('handleReadyResponse', () => {
