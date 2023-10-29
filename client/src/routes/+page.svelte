@@ -5,6 +5,9 @@
 
 	onMount(() => {
 		socket.on('createRoomResponse', (data) => {
+			if ('error' in data) {
+				return;
+			}
 			goto(`/${data.room.roomID}`);
 		});
 

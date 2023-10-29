@@ -40,6 +40,15 @@ io.on("connection", (socket) => {
 
 
     socket.on("createRoom", () => {
+        // if user already present in an existing room we return error
+        const hasRoom = clientRoomID !== null;
+        const clientRoomExists = rooms.hasOwnProperty(clientRoomID);
+        const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
+        if (hasRoom && clientRoomExists && isPresent) {
+            socket.emit("createRoomResponse", { error: "Can't be in multiple rooms" });
+            console.log("Can't be in multiple rooms");
+            return;
+        }
         const roomID = new ShortUniqueId().rnd();
         const room = {
             roomID: roomID,
