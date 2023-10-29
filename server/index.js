@@ -46,7 +46,6 @@ io.on("connection", (socket) => {
         const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
         if (hasRoom && clientRoomExists && isPresent) {
             socket.emit("createRoomResponse", { error: "Can't be in multiple rooms" });
-            console.log("Can't be in multiple rooms");
             return;
         }
         const roomID = new ShortUniqueId().rnd();
@@ -67,14 +66,12 @@ io.on("connection", (socket) => {
         // if room does not exist or roomID is not in data we return error
         if (!rooms.hasOwnProperty(roomID)) {
           socket.emit("joinRoomResponse", { error: "Room does not exist." });
-          console.log("Room does not exist.");
           return;
         }
 
         // if room is full and no seat belongs to user we return error
         if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
             socket.emit("joinRoomResponse", { error: "Room is full." });
-            console.log("Room is full.");
             return;
         }
 
@@ -84,7 +81,6 @@ io.on("connection", (socket) => {
         const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
         if (hasRoom && clientRoomExists && isPresent) {
             socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
-            console.log("Can't be in multiple rooms");
             return;
         }
 
