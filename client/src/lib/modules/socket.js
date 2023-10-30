@@ -15,7 +15,7 @@ if (browser) {
 
     socketConnection = io.connect(
         // "http://localhost:3001",
-        "https://cowards-castle-server.onrender.com",
+        "http://148.113.173.243",
         {
             query: {
                 playerID: playerID,
