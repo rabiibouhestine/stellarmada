@@ -15,7 +15,7 @@ if (browser) {
 
     socketConnection = io.connect(
         // "http://localhost:3001",
-        "http://148.113.173.243",
+        "http://localhost:3001",
         {
             query: {
                 playerID: playerID,
