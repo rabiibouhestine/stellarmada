@@ -15,7 +15,6 @@ if (browser) {
 
     socketConnection = io.connect(
         "http://localhost:3001",
-        // "https://cowards-destroyPile-server.onrender.com",
         {
             query: {
                 playerID: playerID,
