@@ -184,7 +184,8 @@ io.on("connection", (socket) => {
             rooms[userRoom].players[playerID].isPresent = false;
             // if room empty after player leaves we delete it
             let playersPresent = 0;
-            for (const player of rooms[userRoom].players) {
+            for (const key in rooms[userRoom].players) {
+                const player = rooms[userRoom].players[key];
                 if (player.isPresent) {
                     playersPresent++;
                 }
