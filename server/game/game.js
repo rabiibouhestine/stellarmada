@@ -320,7 +320,7 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: 0
         }
 
-        // If empty fleet (hand empty after discard), enemy wins
+        // If hand empty after discard, enemy wins
         if (playerCards.hand.length === 0) {
             gameAction.isGameOver = true;
             gameAction.winnerID = enemyID;
