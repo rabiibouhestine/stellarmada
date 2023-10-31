@@ -32,12 +32,6 @@ export class Player {
         this.setStance(state.stance);
     }
 
-    createCard(cardsContainer, sheet, cardName, startPosition, isPlayer) {
-        const card = new Card(cardsContainer, sheet, cardName, startPosition, isPlayer);
-        card.container.on('pointerdown', () => this.onCardSelection(card));
-        return card;
-    }
-
     adjustBoard() {
         this.battleField.adjust();
         this.hand.adjust();
@@ -151,14 +145,14 @@ export class Player {
     moveCards(cardsNames, location, destination) {
 
         if (location === "destroyPile" && destination === "discardPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
             this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
         if (location === "discardPile" && destination === "drawPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
             this.drawPile.cardsToGet.push(card);
             this.discardPile.setSize(this.discardPile.size - cardsNames.length);
             this.drawPile.setSize(this.drawPile.size + cardsNames.length);
@@ -168,12 +162,13 @@ export class Player {
             this.drawPile.setSize(this.drawPile.size - cardsNames.length);
             if (this.isPlayer) {
                 for (const index in cardsNames) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.drawPile, this.isPlayer);
+                    const card = new Card(this.cardsContainer, this.sheet, cardsNames[index], this.positions.drawPile, this.isPlayer);
+                    card.container.on('pointerdown', () => this.onCardSelection(card));
                     this.hand.cards.push(card);
                 }
             } else {
                 for (let step = 0; step < cardsNames.length; step++) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.drawPile, this.isPlayer);
+                    const card = new Card(this.cardsContainer, this.sheet, "B2", this.positions.drawPile, this.isPlayer);
                     this.hand.cards.push(card);
                 }
             }
