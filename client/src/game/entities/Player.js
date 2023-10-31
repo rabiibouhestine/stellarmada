@@ -2,7 +2,6 @@ import * as PIXI from "pixi.js";
 
 import { Pile } from "./Pile";
 import { Card } from "./Card";
-import { Joker } from "./Joker";
 
 export class Player {
     constructor(app, sheet, state, positions, damageIndicator, confirmButton, isPlayer) {
@@ -22,7 +21,6 @@ export class Player {
         this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
         this.battleField = this.createCards(state.cards.battleField, true, this.positions.battleField, false, this.isPlayer);
-        this.joker = new Joker(app, sheet, this.positions.joker, this.isPlayer);
 
         this.attackSelection = [];
         this.discardSelection = [];
@@ -188,10 +186,10 @@ export class Player {
             this.drawPile.setSize(this.drawPile.size + cardsNames.length);
         }
 
-        if (location === "drawPile" && destination === "discardPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.drawPile, this.isPlayer);
+        if (location === "destroyPile" && destination === "discardPile") {
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
-            this.drawPile.setSize(this.drawPile.size - cardsNames.length);
+            this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
