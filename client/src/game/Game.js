@@ -120,6 +120,8 @@ export class Game {
     }
 
     end() {
+        Howler.stop();
+        Howler.unload();
         this.sheet.destroy(true);
         this.app.stop();
         this.app.destroy(true, true);
