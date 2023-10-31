@@ -12,8 +12,6 @@ import bgMusic from './assets/audio/bgMusic.flac';
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
 import { Button } from "./entities/Button";
-
-import layout from './assets/images/mattress.png';
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
@@ -39,7 +37,7 @@ export class Game {
 
         canvasRef.appendChild(this.app.view);
 
-        this.mattress = new Mattress(this.app, positions.mattress, layout);
+        this.mattress = new Mattress(this.app, positions.mattress);
         this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
