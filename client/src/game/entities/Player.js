@@ -134,14 +134,6 @@ export class Player {
         return conditionsMet;
     }
 
-    /**
-   * This is a description of your method.
-   * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
-   * @param {string} location - The current location of cards.
-   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
-   * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
-   */
     moveCards(cardsNames, location, destination) {
 
         if (location === "destroyPile" && destination === "discardPile") {
