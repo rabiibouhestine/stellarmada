@@ -1,3 +1,4 @@
+import { Card } from "./Card";
 
 export class Field {
     constructor(cardsContainer, sheet, cardsNames, centerPosition) {
@@ -5,7 +6,7 @@ export class Field {
         this.cards = [];
         for (let index = 0; index < cardsNames.length; index++) {
             const cardName = cardsNames[index];
-            const card = this.createCard(cardsContainer, sheet, cardName, centerPosition, true);
+            const card = new Card(cardsContainer, sheet, cardName, centerPosition, true);
             this.cards.push(card);
         }
         this.adjust();
