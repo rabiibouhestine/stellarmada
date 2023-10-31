@@ -21,9 +21,9 @@ export class Player {
         this.drawPile = new Pile(app, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
         this.discardPile = new Pile(app, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
         this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
+        this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
         this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
         this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
-        this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
 
         this.attackSelection = [];
         this.discardSelection = [];
@@ -150,18 +150,18 @@ export class Player {
    */
     moveCards(cardsNames, location, destination) {
 
-        if (location === "discardPile" && destination === "drawPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
-            this.drawPile.cardsToGet.push(card);
-            this.discardPile.setSize(this.discardPile.size - cardsNames.length);
-            this.drawPile.setSize(this.drawPile.size + cardsNames.length);
-        }
-
         if (location === "destroyPile" && destination === "discardPile") {
             const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
             this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
+        }
+
+        if (location === "discardPile" && destination === "drawPile") {
+            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
+            this.drawPile.cardsToGet.push(card);
+            this.discardPile.setSize(this.discardPile.size - cardsNames.length);
+            this.drawPile.setSize(this.drawPile.size + cardsNames.length);
         }
 
         if (location === "drawPile" && destination === "hand") {

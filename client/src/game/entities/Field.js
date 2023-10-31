@@ -28,7 +28,7 @@ export class Field {
                 x: startX + (index * (cardWidth + cardGap)),
                 y: startY
             };
-            this.cards[index].moveTo(newPosition, false, true, false);
+            this.cards[index].moveTo(newPosition, 1, 0, true, false);
         }
     }
 }

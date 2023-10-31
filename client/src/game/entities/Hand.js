@@ -29,7 +29,7 @@ export class Hand {
                 x: startX + (index * (cardWidth + cardGap)),
                 y: startY
             };
-            this.cards[index].moveTo(newPosition, true, true, false);
+            this.cards[index].moveTo(newPosition, 1.14, 0, true, false);
         }
     }
 }
