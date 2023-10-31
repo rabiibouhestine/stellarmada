@@ -30,7 +30,9 @@
 >
 	<div class="grid justify-items-center">
 		<div class="mb-15 p-6">
-			<h1 class="text-6xl text-center text-slate-100 font-black drop-shadow-md">FLEET GAMBIT</h1>
+			<h1 class="text-6xl text-center text-slate-100 font-black drop-shadow-md">
+				<span>STELL</span><span class="text-slate-400">AR</span><span>MADA</span>
+			</h1>
 		</div>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white"
