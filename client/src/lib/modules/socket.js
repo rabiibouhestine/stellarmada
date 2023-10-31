@@ -14,7 +14,6 @@ if (browser) {
     }
 
     socketConnection = io.connect(
-        // "http://localhost:3001",
         "http://localhost:3001",
         {
             query: {
