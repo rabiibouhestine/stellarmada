@@ -4,14 +4,13 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { socket } from '$lib/modules/socket.js';
-	import { Game } from '../../game/Game.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Timer from '$lib/modules/Timer.js';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 
+	export let game;
 	let canvas;
-	let game;
 	let winnerID;
 	let isGameOver = false;
 	let showRulesModal = false;
@@ -34,10 +33,7 @@
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game({
-				canvasRef: canvas,
-				gameState: data.gameState
-			});
+			game.initGame(canvas, data.gameState);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});

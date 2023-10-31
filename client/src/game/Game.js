@@ -15,9 +15,8 @@ import { Button } from "./entities/Button";
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor({ canvasRef, gameState }) {
+    constructor() {
         this.playerID = localStorage.getItem("playerID");
-
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 720,
@@ -27,14 +26,18 @@ export class Game {
             backgroundColor: 0x475569,
             backgroundAlpha: 0
         });
-        globalThis.__PIXI_APP__ = this.app;
-        
         this.sheet = new PIXI.Spritesheet(
             PIXI.BaseTexture.from(cardsImage),
             cardsSheet
         );
         this.parseSheet();
+    }
 
+    async parseSheet() {
+        await this.sheet.parse();
+    }
+
+    initGame(canvasRef, gameState) {
         canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress);
@@ -84,10 +87,6 @@ export class Game {
             loop: true,
             volume: 0.05
         });
-    }
-
-    parseSheet = async () => {
-        await this.sheet.parse();
     }
 
     update(data) {
