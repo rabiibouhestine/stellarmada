@@ -66,7 +66,7 @@ export class Pile {
         }
     }
 
-    repositionCards() {
+    adjust() {
         this.cardsToGet.forEach(card => card.moveTo(this.position, false, false, true));
         this.cardsToGet = [];
     }

@@ -84,7 +84,7 @@
 	}
 
 	function handleConfirmButton() {
-		const selectedCards = game.players[playerID].hand
+		const selectedCards = game.players[playerID].hand.cards
 			.filter((card) => card.selected)
 			.map((card) => card.name);
 

@@ -111,7 +111,7 @@ export class Game {
             const player = this.players[key];
 
             // Reposition player cards
-            player.repositionBoard();
+            player.adjustBoard();
 
             // Get game turn state
             const turnPlayerID = data.turn.playerID;
