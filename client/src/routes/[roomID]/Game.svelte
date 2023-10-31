@@ -10,6 +10,7 @@
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 
+	let canvas;
 	let game;
 	let winnerID;
 	let isGameOver = false;
@@ -34,7 +35,7 @@
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game({
-				canvasRef: document.getElementById('pixi-container'),
+				canvasRef: canvas,
 				gameState: data.gameState
 			});
 			game.onConfirmButton(() => handleConfirmButton());
@@ -125,7 +126,7 @@
 			<Logs {logs} />
 		</div>
 	</div>
-	<div id="pixi-container" class="min-w-0 aspect-square" />
+	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
