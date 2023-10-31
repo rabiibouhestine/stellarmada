@@ -1,23 +1,17 @@
 import * as PIXI from "pixi.js";
 
 export class Mattress {
-    constructor(app, positions, texture) {
+    constructor(app, positions) {
 
-        // Create Mattress Container
-        const container = new PIXI.Container();
-
-        // Add background to mattress
-        const background = PIXI.Sprite.from(texture);
-        container.addChild(background);
+        // Add battlefield to mattress
+        const battlefield = new PIXI.Graphics();
+        battlefield.beginFill(0x000000, 0.25);
+        battlefield.drawRoundedRect(10, 291, 700, 138, 8);
+        battlefield.endFill();
+        app.stage.addChild(battlefield);
 
         // Add labels to mattress
         positions.forEach(function(item) {
-            const labelContainer = new PIXI.Container();
-            labelContainer.x = item.x;
-            labelContainer.y = item.y;
-            labelContainer.height = 20;
-            labelContainer.width = 70;
-
             const label = new PIXI.Text(item.label, {
                 fontFamily: 'Arial',
                 fontWeight: 'bold',
@@ -26,13 +20,11 @@ export class Mattress {
                 align: 'center'
             });
             label.anchor.set(0.5);
+            label.x = item.x;
+            label.y = item.y;
             label.alpha = 0.8;
 
-            labelContainer.addChild(label);
-            container.addChild(labelContainer);
+            app.stage.addChild(label);
         });
-
-        // Add the mattress container to the app
-        app.stage.addChild(container);
     }
 }
