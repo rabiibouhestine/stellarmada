@@ -160,17 +160,11 @@ export class Player {
 
         if (location === "drawPile" && destination === "hand") {
             this.drawPile.setSize(this.drawPile.size - cardsNames.length);
-            if (this.isPlayer) {
-                for (const index in cardsNames) {
-                    const card = new Card(this.cardsContainer, this.sheet, cardsNames[index], this.positions.drawPile, this.isPlayer);
-                    card.container.on('pointerdown', () => this.onCardSelection(card));
-                    this.hand.cards.push(card);
-                }
-            } else {
-                for (let step = 0; step < cardsNames.length; step++) {
-                    const card = new Card(this.cardsContainer, this.sheet, "B2", this.positions.drawPile, this.isPlayer);
-                    this.hand.cards.push(card);
-                }
+            for (const index in cardsNames) {
+                const cardName = this.isPlayer? cardsNames[index] : "B2";
+                const card = new Card(this.cardsContainer, this.sheet, cardName, this.positions.drawPile, this.isPlayer);
+                card.container.on('pointerdown', () => this.onCardSelection(card));
+                this.hand.cards.push(card);
             }
         }
 
