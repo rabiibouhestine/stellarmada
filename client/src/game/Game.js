@@ -15,8 +15,8 @@ import { Button } from "./entities/Button";
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor(canvasRef, gameState) {
-        this.playerID = localStorage.getItem("playerID");
+    constructor(canvasRef, gameState, playerID) {
+        this.playerID = playerID;
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 720,

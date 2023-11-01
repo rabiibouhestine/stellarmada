@@ -20,7 +20,7 @@
 	let opponentTimeLeft = 0;
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const playerID = localStorage.getItem('playerID');
+	const playerID = socket.id;
 
 	let game;
 	let logs = [];
@@ -34,7 +34,7 @@
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game(canvas, data.gameState);
+			game = new Game(canvas, data.gameState, socket.id);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});

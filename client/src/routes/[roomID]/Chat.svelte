@@ -3,7 +3,7 @@
 	import { socket } from '$lib/modules/socket.js';
 	import { page } from '$app/stores';
 
-	const playerID = localStorage.getItem('playerID');
+	const playerID = socket.id;
 
 	let messages = [
 		{

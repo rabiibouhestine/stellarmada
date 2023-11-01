@@ -1,9 +1,10 @@
 <script>
 	import { afterUpdate } from 'svelte';
+	import { socket } from '$lib/modules/socket.js';
 
 	export let logs;
 
-	const playerID = localStorage.getItem('playerID');
+	const playerID = socket.id;
 
 	let logsDiv;
 
