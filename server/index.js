@@ -88,9 +88,6 @@ io.on("connection", (socket) => {
             socket.join(roomID);
         }
 
-        // emit response event
-        socket.emit("joinRoomResponse", { room: room, success: true });
-
         // emit room update event
         io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(room.players).length })
     })
