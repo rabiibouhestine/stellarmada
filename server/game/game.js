@@ -156,9 +156,9 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             // shuffle destroyPile
             playerCards.destroyPile = shuffleArray(playerCards.destroyPile);
             // pick one card from top of destroyPile
-            const revivedCard = playerCards.destroyPile.slice(-1);
+            const revivedCard = playerCards.destroyPile.slice(-playerSelection.length);
             // move them to bottom of discardPile
-            playerCards.destroyPile.splice(-1);
+            playerCards.destroyPile.splice(-playerSelection.length);
             playerCards.discardPile.unshift(...revivedCard);
 
             gameAction.moves.push(
