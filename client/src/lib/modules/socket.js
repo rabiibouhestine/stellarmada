@@ -14,7 +14,7 @@ if (browser) {
     }
 
     socketConnection = io.connect(
-        "http://localhost:3001",
+        "http://server.stellarmada.com",
         {
             query: {
                 playerID: playerID,
