@@ -155,8 +155,8 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("surrenderResponse", { winnerID:enemyID, success: true });
     })
 
-    socket.on("goBackLobbyRequest", (data) => {
-        socket.emit("goBackLobbyResponse");
+    socket.on("rematchRequest", (data) => {
+        socket.emit("rematchResponse");
         socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
     })
 

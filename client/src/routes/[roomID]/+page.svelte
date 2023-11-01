@@ -14,14 +14,14 @@
 			gameStarted = true;
 		});
 
-		socket.on('goBackLobbyResponse', () => {
+		socket.on('rematchResponse', () => {
 			gameStarted = false;
 		});
 
 		return () => {
 			socket.off('joinRoomResponse');
 			socket.off('handleReadyResponse');
-			socket.off('goBackLobbyResponse');
+			socket.off('rematchResponse');
 		};
 	});
 </script>

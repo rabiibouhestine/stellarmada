@@ -98,7 +98,7 @@
 	}
 
 	function handleRematch() {
-		socket.emit('goBackLobbyRequest', { roomID: $page.params.roomID });
+		socket.emit('rematchRequest', { roomID: $page.params.roomID });
 	}
 
 	function handleLeave() {
