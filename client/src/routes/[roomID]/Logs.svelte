@@ -1,7 +1,7 @@
 <script>
 	import { afterUpdate } from 'svelte';
-	import { socket } from '$lib/modules/socket.js';
 
+	export let socket;
 	export let logs;
 
 	const playerID = socket.id;

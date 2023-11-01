@@ -1,12 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { socket } from '$lib/modules/socket.js';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 
-	let gameStarted = false;
 	export let data;
+
+	const socket = data.socket;
+	let gameStarted = false;
 
 	onMount(() => {
 		console.log(data.socket.id);
@@ -28,7 +29,7 @@
 </script>
 
 {#if gameStarted}
-	<Game />
+	<Game {socket} />
 {:else}
-	<Lobby />
+	<Lobby {socket} />
 {/if}

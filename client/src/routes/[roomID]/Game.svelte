@@ -3,12 +3,13 @@
 	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socket } from '$lib/modules/socket.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Timer from '$lib/modules/Timer.js';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
+
+	export let socket;
 
 	let canvas;
 	let winnerID;
@@ -121,7 +122,7 @@
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
 		</div>
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Logs {logs} />
+			<Logs {logs} {socket} />
 		</div>
 	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
@@ -163,7 +164,7 @@
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat />
+			<Chat {socket} />
 		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
