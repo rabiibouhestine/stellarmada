@@ -8,8 +8,8 @@
 	import Timer from '$lib/modules/Timer.js';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
+	import { Game } from '../../game/Game.js';
 
-	export let game;
 	let canvas;
 	let winnerID;
 	let isGameOver = false;
@@ -22,6 +22,7 @@
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const playerID = localStorage.getItem('playerID');
 
+	let game;
 	let logs = [];
 
 	onMount(() => {
@@ -33,7 +34,7 @@
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game.initGame(canvas, data.gameState);
+			game = new Game(canvas, data.gameState);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});

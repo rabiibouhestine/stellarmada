@@ -22,6 +22,10 @@ const io = new Server(server, {
 const rooms = {};
 const users = {};
 
+app.get('/api/users', (req, res) => {
+    res.json({ playersOnline: Object.keys(users).length });
+});
+
 io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     const clientRoomID = socket.handshake.query.roomID;
