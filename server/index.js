@@ -5,7 +5,6 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
-const ShortUniqueId = require('short-unique-id');
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -33,27 +32,28 @@ io.on("connection", (socket) => {
         room: null
     }
 
-    socket.on("createRoom", () => {
-        const roomID = new ShortUniqueId().rnd();
-        const room = {
-            roomID: roomID,
-            gameStarted: false,
-            players: {},
-            gameState: {}
-        };
-        rooms[roomID] = room;
-        socket.emit("createRoomResponse", { room: room, success: true });
-    })
-
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
-        const room = rooms[roomID];
     
-        // if room does not exist or roomID is not in data we return error
-        if (!rooms.hasOwnProperty(roomID)) {
-          socket.emit("joinRoomResponse", { error: "Room does not exist." });
-          return;
+        // if roomID is not in data we return error
+        if (!roomID) {
+            socket.emit("joinRoomResponse", { error: "roomID undefined or null" });
+            return;
         }
+
+        // if room does not exist we create it
+        if (!rooms.hasOwnProperty(roomID)) {
+            const room = {
+                roomID: roomID,
+                gameStarted: false,
+                players: {},
+                gameState: {}
+            };
+            rooms[roomID] = room;
+        }
+
+        // get room
+        const room = rooms[roomID];
 
         // if room is full we return error
         if (Object.keys(room.players).length >= 2) {
