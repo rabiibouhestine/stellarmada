@@ -1,7 +1,9 @@
 import * as PIXI from "pixi.js";
 
-import { Pile } from "./Pile";
 import { Card } from "./Card";
+import { Pile } from "./Pile";
+import { Hand } from "./Hand";
+import { Field } from "./Field";
 
 export class Player {
     constructor(app, sheet, state, positions, damageIndicator, confirmButton, isPlayer) {
@@ -19,8 +21,9 @@ export class Player {
         this.drawPile = new Pile(app, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
         this.discardPile = new Pile(app, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
         this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
-        this.hand = this.createCards(state.cards.hand, this.isPlayer, this.positions.hand, true, this.isPlayer);
-        this.battleField = this.createCards(state.cards.battleField, true, this.positions.battleField, false, this.isPlayer);
+        this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
+        this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
+        this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
 
         this.attackSelection = [];
         this.discardSelection = [];
@@ -29,53 +32,15 @@ export class Player {
         this.setStance(state.stance);
     }
 
-    createCards(locationState, isHidden, startPosition, isHand, isPlayer) {
-        const cards = [];
-        for (let index = 0; index < locationState.length; index++) {
-            const cardName = isHidden ? locationState[index] : "B2";
-            const card = this.createCard(this.cardsContainer, this.sheet, cardName, startPosition, isPlayer);
-            cards.push(card);
-        }
-        this.repositionCards(cards, startPosition, isHand);
-        return cards;
+    adjustBoard() {
+        this.battleField.adjust();
+        this.hand.adjust();
+        this.discardPile.adjust();
+        this.drawPile.adjust();
+        this.destroyPile.adjust();
     }
 
-    createCard(cardsContainer, sheet, cardName, startPosition, isPlayer) {
-        const card = new Card(cardsContainer, sheet, cardName, startPosition, isPlayer);
-        card.container.on('pointerdown', () => this.onPointerDown(card));
-        return card;
-    }
-
-    repositionCards(array, centerPosition, isHand) {
-        // Calculate the total width of the cards in the array
-        const cardWidth = isHand? 80 : 70;
-        const cardGap = isHand? 9 : 7;
-
-        // Calculate the starting position to center the cards
-        const startX = centerPosition.x - ((cardWidth + cardGap)/2) * (array.length - 1);
-     
-        // Set the y-coordinate of the centerPosition
-        const startY = centerPosition.y;
-    
-        // Reposition the cards
-        for (let index = 0; index < array.length; index++) {
-            const newPosition = {
-                x: startX + (index * (cardWidth + cardGap)),
-                y: startY
-            };
-            array[index].moveTo(newPosition, isHand, true, false);
-        }
-    }
-
-    repositionBoard() {
-        this.repositionCards(this.battleField, this.positions.battleField, false);
-        this.repositionCards(this.hand, this.positions.hand, true);
-        this.discardPile.repositionCards();
-        this.drawPile.repositionCards();
-        this.destroyPile.repositionCards();
-    }
-
-    onPointerDown(card) {
+    onCardSelection(card) {
         if (!card.selectable || !["attacking", "discarding"].includes(this.stance)) return;
     
         const cardSelection = this.stance === "attacking" ? this.attackSelection : this.discardSelection;
@@ -104,7 +69,7 @@ export class Player {
             }
         }
 
-        const notSelectedCards = this.hand.filter(card => !cardSelection.includes(card));
+        const notSelectedCards = this.hand.cards.filter(card => !cardSelection.includes(card));
         notSelectedCards.forEach(card => { card.setSelectable(this.stance === "attacking" ? this.canCardAttack(card) : true, this.stance === "attacking"); });
 
         // Update confirm button
@@ -129,12 +94,12 @@ export class Player {
         const isAttacking = this.stance === "attacking";
         const isDiscarding = this.stance === "discarding";
     
-        this.battleField.forEach(card => {
+        this.battleField.cards.forEach(card => {
             card.setSelected(false);
             card.setSelectable(false, false);
         });
 
-        this.hand.forEach(card => {
+        this.hand.cards.forEach(card => {
             card.setSelected(false);
             card.setSelectable(this.isPlayer && (isAttacking || isDiscarding), isAttacking);
         });
@@ -169,56 +134,43 @@ export class Player {
         return conditionsMet;
     }
 
-    /**
-   * This is a description of your method.
-   * @param {[string]} cardsNames - The names of the cards to move. Ex: ["2H", "8D", "5S"]
-   * @param {string} location - The current location of cards.
-   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
-   * @param {string} destination - The destination to where the cards should move.
-   * Must be one of "hand", "battleField", "discardPile", "drawPile", "destroyPile".
-   */
     moveCards(cardsNames, location, destination) {
 
-        if (location === "discardPile" && destination === "drawPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
-            this.drawPile.cardsToGet.push(card);
-            this.discardPile.setSize(this.discardPile.size - cardsNames.length);
-            this.drawPile.setSize(this.drawPile.size + cardsNames.length);
-        }
-
         if (location === "destroyPile" && destination === "discardPile") {
-            const card = this.createCard(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
             this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
+        if (location === "discardPile" && destination === "drawPile") {
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.discardPile, this.isPlayer);
+            this.drawPile.cardsToGet.push(card);
+            this.discardPile.setSize(this.discardPile.size - cardsNames.length);
+            this.drawPile.setSize(this.drawPile.size + cardsNames.length);
+        }
+
         if (location === "drawPile" && destination === "hand") {
             this.drawPile.setSize(this.drawPile.size - cardsNames.length);
-            if (this.isPlayer) {
-                for (const index in cardsNames) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, cardsNames[index], this.positions.drawPile, this.isPlayer);
-                    this.hand.push(card);
-                }
-            } else {
-                for (let step = 0; step < cardsNames.length; step++) {
-                    const card = this.createCard(this.cardsContainer, this.sheet, "B2", this.positions.drawPile, this.isPlayer);
-                    this.hand.push(card);
-                }
+            for (const index in cardsNames) {
+                const cardName = this.isPlayer? cardsNames[index] : "B2";
+                const card = new Card(this.cardsContainer, this.sheet, cardName, this.positions.drawPile, this.isPlayer);
+                card.container.on('pointerdown', () => this.onCardSelection(card));
+                this.hand.cards.push(card);
             }
         }
 
         if (location === "battleField" && destination === "discardPile") {
-            const cards = this.battleField.filter(card => cardsNames.includes(card.name));
+            const cards = this.battleField.cards.filter(card => cardsNames.includes(card.name));
             this.discardPile.cardsToGet.push(...cards);
-            this.battleField = this.battleField.filter(card => !cardsNames.includes(card.name));
+            this.battleField.cards = this.battleField.cards.filter(card => !cardsNames.includes(card.name));
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
         if (location === "battleField" && destination === "destroyPile") {
-            const cards = this.battleField.filter(card => cardsNames.includes(card.name));
+            const cards = this.battleField.cards.filter(card => cardsNames.includes(card.name));
             this.destroyPile.cardsToGet.push(...cards);
-            this.battleField = this.battleField.filter(card => !cardsNames.includes(card.name));
+            this.battleField.cards = this.battleField.cards.filter(card => !cardsNames.includes(card.name));
             this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
         }
 
@@ -226,12 +178,12 @@ export class Player {
             this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
 
             if (this.isPlayer) {
-                const cards = this.hand.filter(card => cardsNames.includes(card.name));
-                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                const cards = this.hand.cards.filter(card => cardsNames.includes(card.name));
+                this.hand.cards = this.hand.cards.filter(card => !cardsNames.includes(card.name));
                 this.destroyPile.cardsToGet.push(...cards);
             } else {
-                const cards = this.hand.slice(-cardsNames.length);
-                this.hand.splice(-cardsNames.length);
+                const cards = this.hand.cards.slice(-cardsNames.length);
+                this.hand.cards.splice(-cardsNames.length);
                 this.destroyPile.cardsToGet.push(...cards);
             }
         }
@@ -240,27 +192,27 @@ export class Player {
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
 
             if (this.isPlayer) {
-                const cards = this.hand.filter(card => cardsNames.includes(card.name));
-                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
+                const cards = this.hand.cards.filter(card => cardsNames.includes(card.name));
+                this.hand.cards = this.hand.cards.filter(card => !cardsNames.includes(card.name));
                 this.discardPile.cardsToGet.push(...cards);
             } else {
-                const cards = this.hand.slice(-cardsNames.length);
-                this.hand.splice(-cardsNames.length);
+                const cards = this.hand.cards.slice(-cardsNames.length);
+                this.hand.cards.splice(-cardsNames.length);
                 this.discardPile.cardsToGet.push(...cards);
             }
         }
 
         if (location === "hand" && destination === "battleField") {
             if (this.isPlayer) {
-                const cards = this.hand.filter(card => cardsNames.includes(card.name));
-                this.hand = this.hand.filter(card => !cardsNames.includes(card.name));
-                this.battleField.push(...cards);
+                const cards = this.hand.cards.filter(card => cardsNames.includes(card.name));
+                this.hand.cards = this.hand.cards.filter(card => !cardsNames.includes(card.name));
+                this.battleField.cards.push(...cards);
             } else {
-                const cards = this.hand.slice(-cardsNames.length);
-                this.hand.splice(-cardsNames.length);
+                const cards = this.hand.cards.slice(-cardsNames.length);
+                this.hand.cards.splice(-cardsNames.length);
                 for (const card in cards) {
                     cards[card].reveal(cardsNames[card]);
-                    this.battleField.push(cards[card]);
+                    this.battleField.cards.push(cards[card]);
                 }
             }
         }

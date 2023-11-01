@@ -4,13 +4,13 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { socket } from '$lib/modules/socket.js';
-	import { Game } from '../../game/Game.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Timer from '$lib/modules/Timer.js';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 
-	let game;
+	export let game;
+	let canvas;
 	let winnerID;
 	let isGameOver = false;
 	let showRulesModal = false;
@@ -33,10 +33,7 @@
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game({
-				canvasRef: document.getElementById('pixi-container'),
-				gameState: data.gameState
-			});
+			game.initGame(canvas, data.gameState);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});
@@ -84,7 +81,7 @@
 	}
 
 	function handleConfirmButton() {
-		const selectedCards = game.players[playerID].hand
+		const selectedCards = game.players[playerID].hand.cards
 			.filter((card) => card.selected)
 			.map((card) => card.name);
 
@@ -125,7 +122,7 @@
 			<Logs {logs} />
 		</div>
 	</div>
-	<div id="pixi-container" class="min-w-0 aspect-square" />
+	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"

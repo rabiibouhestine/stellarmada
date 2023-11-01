@@ -100,24 +100,24 @@ export class Card {
         this.glow.tint = isAttack? 0x4f8fba : 0xcf573c;
     }
 
-    moveTo(position, isHand, reveal, destroy) {
+    moveTo(toPosition, toScale, visible, destroy) {
+        this.setSelectable(false, false);
+
         const propreties = {
             x: this.container.x,
             y: this.container.y,
             scale: this.scale
         };
 
-        const targetScale = isHand? 1.14 : 1;
-
         const tween = new TWEEN.Tween(propreties, false)
             .to({
-                x: position.x,
-                y: position.y,
-                scale: targetScale
+                x: toPosition.x,
+                y: toPosition.y,
+                scale: toScale
             }, 600)
             .easing(TWEEN.Easing.Exponential.Out)
             .onStart(() => {
-                if (reveal) {
+                if (visible) {
                     this.reveal();
                 } else {
                     this.hide();
@@ -126,13 +126,13 @@ export class Card {
             .onUpdate(() => {
                 this.container.x = propreties.x;
                 this.container.y = propreties.y;
-                if (this.scale !== targetScale) {
+                if (this.scale !== toScale) {
                     this.container.scale.set(propreties.scale);
                 }
             })
             .onComplete(() => {
-                this.position = position;
-                this.scale = targetScale;
+                this.position = toPosition;
+                this.scale = toScale;
                 if (destroy) {
                     this.container.destroy();
                 }

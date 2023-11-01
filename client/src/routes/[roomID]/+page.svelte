@@ -5,8 +5,10 @@
 	import { socket } from '$lib/modules/socket.js';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
+	import { Game as PIXIGAME } from '../../game/Game.js';
 
 	let gameStarted = false;
+	let game;
 
 	onMount(() => {
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
@@ -18,6 +20,7 @@
 				return;
 			}
 			// if response is success we proceed
+			game = new PIXIGAME();
 			gameStarted = data.room.gameStarted;
 			localStorage.setItem('roomID', $page.params.roomID);
 		});
@@ -39,7 +42,7 @@
 </script>
 
 {#if gameStarted}
-	<Game />
+	<Game {game} />
 {:else}
 	<Lobby />
 {/if}
