@@ -23,6 +23,10 @@
 		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});
+
+		return () => {
+			socket.off('messageResponse');
+		};
 	});
 
 	afterUpdate(() => {

@@ -19,7 +19,6 @@
 		});
 
 		return () => {
-			socket.off('joinRoomResponse');
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
 		};
