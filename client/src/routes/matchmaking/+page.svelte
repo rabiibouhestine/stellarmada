@@ -1,21 +1,9 @@
 <script>
-	import { socket } from '$lib/modules/socket.js';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	const goHome = () => {
 		goto('/');
 	};
-
-	onMount(() => {
-		socket.on('createRoomResponse', (data) => {
-			goto(`/${data.room.roomID}`);
-		});
-
-		return () => {
-			socket.off('createRoomResponse');
-		};
-	});
 </script>
 
 <div
