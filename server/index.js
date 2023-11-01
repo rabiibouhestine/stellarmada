@@ -25,6 +25,44 @@ app.get('/api/users', (req, res) => {
     res.json({ playersOnline: Object.keys(users).length });
 });
 
+app.get('/join', (req, res) => {
+    const roomID = req.query.roomID;
+
+    // if roomID is not in data we return error
+    if (!roomID) {
+        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        return;
+    }
+
+    // if room does not exist we create it
+    if (!rooms.hasOwnProperty(roomID)) {
+        const room = {
+            roomID: roomID,
+            gameStarted: false,
+            players: {},
+            gameState: {}
+        };
+        rooms[roomID] = room;
+    }
+
+    // get room
+    const room = rooms[roomID];
+
+    // if room is full we return error
+    if (Object.keys(room.players).length >= 2) {
+        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        return;
+    }
+
+    // if game started we return error
+    if (room.gameStarted) {
+        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        return;
+    }
+
+    res.json({ gameStarted: room.gameStarted });
+});
+
 io.on("connection", (socket) => {
     const playerID = socket.id;
     console.log("Player connected:", playerID);
@@ -41,31 +79,8 @@ io.on("connection", (socket) => {
             return;
         }
 
-        // if room does not exist we create it
-        if (!rooms.hasOwnProperty(roomID)) {
-            const room = {
-                roomID: roomID,
-                gameStarted: false,
-                players: {},
-                gameState: {}
-            };
-            rooms[roomID] = room;
-        }
-
         // get room
         const room = rooms[roomID];
-
-        // if room is full we return error
-        if (Object.keys(room.players).length >= 2) {
-            socket.emit("joinRoomResponse", { error: "Room is full." });
-            return;
-        }
-
-        // if game started we return error
-        if (room.gameStarted) {
-            socket.emit("joinRoomResponse", { error: "Cant join game in progress" });
-            return;
-        }
 
         // update user
         users[playerID].room = roomID;
