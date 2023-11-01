@@ -100,22 +100,20 @@ export class Card {
         this.glow.tint = isAttack? 0x4f8fba : 0xcf573c;
     }
 
-    moveTo(toPosition, toScale, toAngle, visible, destroy) {
+    moveTo(toPosition, toScale, visible, destroy) {
         this.setSelectable(false, false);
 
         const propreties = {
             x: this.container.x,
             y: this.container.y,
-            scale: this.scale,
-            angle: this.container.angle
+            scale: this.scale
         };
 
         const tween = new TWEEN.Tween(propreties, false)
             .to({
                 x: toPosition.x,
                 y: toPosition.y,
-                scale: toScale,
-                angle: toAngle
+                scale: toScale
             }, 600)
             .easing(TWEEN.Easing.Exponential.Out)
             .onStart(() => {
@@ -128,7 +126,6 @@ export class Card {
             .onUpdate(() => {
                 this.container.x = propreties.x;
                 this.container.y = propreties.y;
-                this.container.angle = propreties.angle;
                 if (this.scale !== toScale) {
                     this.container.scale.set(propreties.scale);
                 }
