@@ -15,7 +15,7 @@ import { Button } from "./entities/Button";
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor() {
+    constructor(canvasRef, gameState) {
         this.playerID = localStorage.getItem("playerID");
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -31,13 +31,7 @@ export class Game {
             cardsSheet
         );
         this.parseSheet();
-    }
 
-    async parseSheet() {
-        await this.sheet.parse();
-    }
-
-    initGame(canvasRef, gameState) {
         canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress);
@@ -87,6 +81,10 @@ export class Game {
             loop: true,
             volume: 0.05
         });
+    }
+
+    async parseSheet() {
+        await this.sheet.parse();
     }
 
     update(data) {
