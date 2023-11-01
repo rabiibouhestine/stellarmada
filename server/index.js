@@ -28,7 +28,7 @@ app.get('/api/users', (req, res) => {
 app.get('/join', (req, res) => {
     const roomID = req.query.roomID;
 
-    // if roomID is not in data we return error
+    // if roomID is not in query params we return error
     if (!roomID) {
         res.status(500).json({ error: 'An error occurred while processing the request.' });
         return;
