@@ -12,12 +12,6 @@
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
 
 		socket.on('joinRoomResponse', (data) => {
-			// if response has error we redirect user to home page
-			if ('error' in data) {
-				goto('/');
-				return;
-			}
-			// if response is success we proceed
 			gameStarted = data.room.gameStarted;
 		});
 

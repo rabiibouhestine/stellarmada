@@ -72,12 +72,6 @@ io.on("connection", (socket) => {
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
-    
-        // if roomID is not in data we return error
-        if (!roomID) {
-            socket.emit("joinRoomResponse", { error: "roomID undefined or null" });
-            return;
-        }
 
         // get room
         const room = rooms[roomID];
