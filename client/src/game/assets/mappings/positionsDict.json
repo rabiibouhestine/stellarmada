@@ -2,17 +2,17 @@
 	"top": {
 		"hand": { "x": 360, "y": 78 },
 		"battleField": { "x": 360, "y": 357.5 },
-		"drawPile": { "x": 210, "y": 236 },
-		"discardPile": { "x": 358, "y": 236 },
-		"destroyPile": { "x": 506, "y": 236 },
+		"drawPile": { "x": 270, "y": 232 },
+		"discardPile": { "x": 360, "y": 232 },
+		"destroyPile": { "x": 450, "y": 232 },
 		"joker": { "x": 360, "y": 233 }
 	},
 	"bottom": {
 		"hand": { "x": 360, "y": 637 },
 		"battleField": { "x": 360, "y": 357.5 },
-		"drawPile": { "x": 506, "y": 484 },
-		"discardPile": { "x": 358, "y": 484 },
-		"destroyPile": { "x": 210, "y": 484 },
+		"drawPile": { "x": 450, "y": 488 },
+		"discardPile": { "x": 360, "y": 488 },
+		"destroyPile": { "x": 270, "y": 488 },
 		"joker": { "x": 360, "y": 482 }
 	},
 	"battleField": {
@@ -22,33 +22,33 @@
 	"mattress": [
 		{
 			"label": "Hangar Bay",
-			"x": 506,
-			"y": 529
+			"x": 450,
+			"y": 547
 		},
 		{
 			"label": "Repair Yard",
-			"x": 359,
-			"y": 529
+			"x": 360,
+			"y": 547
 		},
 		{
 			"label": "Space Junk",
-			"x": 210,
-			"y": 529
+			"x": 270,
+			"y": 547
 		},
 		{
 			"label": "Hangar Bay",
-			"x": 210,
-			"y": 190
+			"x": 270,
+			"y": 173
 		},
 		{
 			"label": "Repair Yard",
-			"x": 359,
-			"y": 190
+			"x": 360,
+			"y": 173
 		},
 		{
 			"label": "Space Junk",
-			"x": 506,
-			"y": 190
+			"x": 450,
+			"y": 173
 		}
 	]
 }

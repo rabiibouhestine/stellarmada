@@ -6,9 +6,23 @@ export class Mattress {
         // Add battlefield to mattress
         const battlefield = new PIXI.Graphics();
         battlefield.beginFill(0x000000, 0.25);
-        battlefield.drawRoundedRect(10, 291, 700, 138, 8);
+        battlefield.drawRoundedRect(10, 301, 700, 118, 8);
         battlefield.endFill();
         app.stage.addChild(battlefield);
+
+        // Add player base to mattress
+        const playerBase = new PIXI.Graphics();
+        playerBase.beginFill(0x000000, 0.25);
+        playerBase.drawRoundedRect(215, 429, 290, 128, 8);
+        playerBase.endFill();
+        app.stage.addChild(playerBase);
+
+        // Add enemy base to mattress
+        const enemyBase = new PIXI.Graphics();
+        enemyBase.beginFill(0x000000, 0.25);
+        enemyBase.drawRoundedRect(215, 163, 290, 128, 8);
+        enemyBase.endFill();
+        app.stage.addChild(enemyBase);
 
         // Add labels to mattress
         positions.forEach(function(item) {

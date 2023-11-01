@@ -18,14 +18,13 @@ export class Pile {
         // Define pile background
         this.background = new PIXI.Graphics();
         this.background.beginFill(0x000000, 0.25);
-        this.background.drawRoundedRect(-49, -35, 98, 70, 8);
+        this.background.drawRoundedRect(-35, -49, 70, 98, 8);
         this.background.endFill();
         this.container.addChild(this.background);
 
         // Define pile sprite
         this.sprite = new PIXI.Sprite(this.sheet.textures[this.name]);
         this.sprite.anchor.set(0.5);
-        this.sprite.angle = 90;
         this.sprite.width = 70;
         this.sprite.height = 98;
         this.sprite.visible = this.size > 0;
@@ -33,7 +32,7 @@ export class Pile {
 
         // Mirror sprite if not player
         if (!isPlayer) {
-            this.sprite.angle = -90;
+            this.sprite.angle = 180;
         }
 
         // Define text background
