@@ -48,26 +48,8 @@ app.get('/join', (req, res) => {
         rooms[roomID] = room;
     }
 
-    // // if player is already present in a room we return error
-    // if (
-    //     users[playerID] &&
-    //     users[playerID].room &&
-    //     rooms[users[playerID].room] &&
-    //     rooms[users[playerID].room].players[playerID] &&
-    //     rooms[users[playerID].room].players[playerID].isPresent
-    // ) {
-    //     res.status(500).json({ error: 'player is already present in a room' });
-    //     return;
-    // }
-
     // get room
     const room = rooms[roomID];
-
-    // // if room is full we return error
-    // if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
-    //     res.status(500).json({ error: 'room is full' });
-    //     return;
-    // }
 
     res.json({ gameStarted: room.gameStarted });
 });
