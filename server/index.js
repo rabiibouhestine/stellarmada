@@ -75,9 +75,6 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
 
-        // get room
-        const room = rooms[roomID];
-
         // update user
         users[playerID].room = roomID;
 
@@ -88,7 +85,7 @@ io.on("connection", (socket) => {
         socket.join(roomID);
 
         // emit room update event
-        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(room.players).length })
+        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
     })
 
     socket.on("handleReady", (data) => {
