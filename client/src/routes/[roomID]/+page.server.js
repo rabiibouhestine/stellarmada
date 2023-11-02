@@ -7,12 +7,14 @@ export async function load({ cookies, params }) {
     });
     const response = await fetch(`http://localhost:3001/join?${joinParams.toString()}`);
     if (response.ok) {
-      const responseData = await response.json();
-      const gameStarted = await responseData.gameStarted;
-      return {
-        gameStarted: gameStarted
-      };
+        const responseData = await response.json();
+        const gameStarted = await responseData.gameStarted;
+        return {
+                gameStarted: gameStarted
+        };
     } else {
-      throw redirect(308, '/');
+        const responseData = await response.json();
+        console.log(responseData);
+        throw redirect(308, '/');
     }
 }
