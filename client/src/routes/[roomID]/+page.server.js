@@ -9,7 +9,7 @@ export async function load({ params }) {
         const responseData = await response.json();
         const gameStarted = await responseData.gameStarted;
         return {
-                gameStarted: gameStarted
+            gameStarted: gameStarted
         };
     } else {
         throw redirect(308, '/');
