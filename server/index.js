@@ -88,10 +88,15 @@ io.on("connection", (socket) => {
         // update user
         users[playerID].room = roomID;
 
-        // add user to room
-        rooms[roomID].players[playerID] = { isReady: false, socket: socket.id };
+        // update room
+        if (rooms[roomID].players[playerID]) {
+            rooms[roomID].players[playerID].isPresent = true;
+            rooms[roomID].players[playerID].socket = socket.id;
+        } else {
+            rooms[roomID].players[playerID] = { isReady: false, isPresent: true, socket: socket.id };
+        }
 
-        // if socket is not already in room we join
+        // join socket to a room with same roomID
         socket.join(roomID);
 
         // emit room update event
@@ -170,8 +175,8 @@ io.on("connection", (socket) => {
         // if user was in a room
         const userRoom = users[playerID].room;
         if (userRoom !== null) {
-            // remove player from room
-            delete rooms[userRoom].players[playerID];
+            // update room
+            rooms[userRoom].players[playerID].isPresent = false;
             // update player
             users[playerID].room = null;
             // if room empty after player leaves we delete it
@@ -195,8 +200,8 @@ io.on("connection", (socket) => {
         if (userRoom !== null) {
             if (rooms.hasOwnProperty(userRoom)) {
                 if (rooms[userRoom].players[playerID].socket === socket.id) {
-                    // remove player from room
-                    delete rooms[userRoom].players[playerID];
+                    // update room
+                    rooms[userRoom].players[playerID].isPresent = false;
                     // update player
                     users[playerID].room = null;
                     // if room empty after player leaves we delete it
