@@ -4,8 +4,9 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	export let socket;
+	export let data;
 
+	const socket = data.socket;
 	let playersNb = 0;
 	let isReady = false;
 	let readyBtnClass = '';

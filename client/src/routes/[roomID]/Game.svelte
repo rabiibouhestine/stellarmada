@@ -9,7 +9,13 @@
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
 
-	export let socket;
+	export let data;
+
+	const socket = data.socket;
+	const playerID = socket.id;
+
+	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
+	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 
 	let canvas;
 	let winnerID;
@@ -19,9 +25,6 @@
 	let showQuitModal = false;
 	let playerTimeLeft = 0;
 	let opponentTimeLeft = 0;
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const playerID = socket.id;
 
 	let game;
 	let logs = [];
@@ -122,7 +125,7 @@
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
 		</div>
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Logs {logs} {socket} />
+			<Logs {logs} {data} />
 		</div>
 	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
@@ -164,7 +167,7 @@
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat {socket} />
+			<Chat {data} />
 		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"

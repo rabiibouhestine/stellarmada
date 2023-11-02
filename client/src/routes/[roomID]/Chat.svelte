@@ -2,8 +2,9 @@
 	import { onMount, afterUpdate } from 'svelte';
 	import { page } from '$app/stores';
 
-	export let socket;
+	export let data;
 
+	const socket = data.socket;
 	const playerID = socket.id;
 
 	let messages = [

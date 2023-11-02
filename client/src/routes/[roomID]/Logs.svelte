@@ -1,9 +1,10 @@
 <script>
 	import { afterUpdate } from 'svelte';
 
-	export let socket;
+	export let data;
 	export let logs;
 
+	const socket = data.socket;
 	const playerID = socket.id;
 
 	let logsDiv;

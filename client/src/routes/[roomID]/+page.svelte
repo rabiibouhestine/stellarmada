@@ -28,7 +28,7 @@
 </script>
 
 {#if gameStarted}
-	<Game {socket} />
+	<Game {data} />
 {:else}
-	<Lobby {socket} />
+	<Lobby {data} />
 {/if}
