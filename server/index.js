@@ -80,15 +80,12 @@ io.on("connection", (socket) => {
 
         // update user
         users[playerID].room = roomID;
+
         // add user to room
-        rooms[roomID].players[playerID] = {
-            isReady: false
-        };
+        rooms[roomID].players[playerID] = { isReady: false };
 
         // if socket is not already in room we join
-        if (!socket.rooms.has(roomID)) {
-            socket.join(roomID);
-        }
+        socket.join(roomID);
 
         // emit room update event
         io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(room.players).length })
