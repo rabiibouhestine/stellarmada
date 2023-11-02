@@ -13,7 +13,6 @@ export async function load({ cookies, params }) {
                 gameStarted: gameStarted
         };
     } else {
-        const responseData = await response.json();
         throw redirect(308, '/');
     }
 }
