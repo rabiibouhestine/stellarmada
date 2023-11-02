@@ -14,7 +14,6 @@ export async function load({ cookies, params }) {
         };
     } else {
         const responseData = await response.json();
-        console.log(responseData);
         throw redirect(308, '/');
     }
 }
