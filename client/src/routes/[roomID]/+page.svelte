@@ -10,7 +10,6 @@
 	let gameStarted = false;
 
 	onMount(() => {
-		console.log(data.socket.id);
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
 
 		socket.on('handleReadyResponse', () => {
