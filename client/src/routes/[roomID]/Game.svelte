@@ -12,7 +12,7 @@
 	export let data;
 
 	const socket = data.socket;
-	const playerID = socket.id;
+	const playerID = data.playerID;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -38,7 +38,7 @@
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game(canvas, data.gameState, socket.id);
+			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});

@@ -5,7 +5,7 @@
 	export let data;
 
 	const socket = data.socket;
-	const playerID = socket.id;
+	const playerID = data.playerID;
 
 	let messages = [
 		{
