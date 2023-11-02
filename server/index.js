@@ -26,6 +26,7 @@ app.get('/api/users', (req, res) => {
 });
 
 app.get('/join', (req, res) => {
+    const playerID = req.query.playerID;
     const roomID = req.query.roomID;
 
     // if roomID is not in query params we return error
@@ -47,6 +48,12 @@ app.get('/join', (req, res) => {
 
     // get room
     const room = rooms[roomID];
+
+    // if player already in room we return error
+    if (users[playerID] && users[playerID].room && rooms[users[playerID].room].players[playerID]) {
+        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        return;
+    }
 
     // if room is full we return error
     if (Object.keys(room.players).length >= 2) {
