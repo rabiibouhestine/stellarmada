@@ -65,8 +65,13 @@ app.get('/join', (req, res) => {
 
 io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
-    users[playerID] = { room: null };
     console.log("Player connected:", playerID);
+
+    if (users[playerID]) {
+        users[playerID].sockets.push(socket.id);
+    } else {
+        users[playerID] = { room: null, sockets: [socket.id] };
+    }
 
 
 
@@ -191,8 +196,13 @@ io.on("connection", (socket) => {
             }
         }
 
-        // remove user from users
-        delete users[playerID];
+        // remove socket from player sockets
+        users[playerID].sockets = users[playerID].sockets.filter(item => item !== socket.id);
+
+        // if user has no sockets, remove user
+        if (users[playerID].sockets.length === 0) {
+            delete users[playerID];
+        }
     })
 })
 
