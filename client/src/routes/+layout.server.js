@@ -5,7 +5,6 @@ export function load({ cookies }) {
         cookies.set('playerID', uuidv4(), { path: '/' });
     }
     return {
-        playerID: cookies.get('playerID'),
-        roomID: cookies.get('roomID')
+        playerID: cookies.get('playerID')
     }
 }

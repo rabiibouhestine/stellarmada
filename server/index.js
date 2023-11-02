@@ -65,7 +65,6 @@ app.get('/join', (req, res) => {
 
 io.on("connection", (socket) => {
     // const playerID = socket.handshake.query.playerID;
-    // const clientRoomID = socket.handshake.query.roomID;
 
     const playerID = socket.id;
     console.log("Player connected:", playerID);
