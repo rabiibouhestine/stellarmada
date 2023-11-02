@@ -46,14 +46,20 @@ app.get('/join', (req, res) => {
         rooms[roomID] = room;
     }
 
-    // get room
-    const room = rooms[roomID];
-
-    // if player already in room we return error
-    if (users[playerID] && users[playerID].room && rooms[users[playerID].room].players[playerID]) {
+    // if player is already present in a room we return error
+    if (
+        users[playerID] &&
+        users[playerID].room &&
+        rooms[users[playerID].room] &&
+        rooms[users[playerID].room].players[playerID] &&
+        rooms[users[playerID].room].players[playerID].isPresent
+    ) {
         res.status(500).json({ error: 'An error occurred while processing the request.' });
         return;
     }
+
+    // get room
+    const room = rooms[roomID];
 
     // if room is full we return error
     if (Object.keys(room.players).length >= 2) {
@@ -180,7 +186,14 @@ io.on("connection", (socket) => {
             // update player
             users[playerID].room = null;
             // if room empty after player leaves we delete it
-            if (rooms[userRoom].players.length === 0) {
+            let playersPresent = 0;
+            for (const key in rooms[userRoom].players) {
+                const player = rooms[userRoom].players[key];
+                if (player.isPresent) {
+                    playersPresent++;
+                }
+            }
+            if (playersPresent === 0) {
                 delete rooms[userRoom];
             }
         }
@@ -205,7 +218,14 @@ io.on("connection", (socket) => {
                     // update player
                     users[playerID].room = null;
                     // if room empty after player leaves we delete it
-                    if (rooms[userRoom].players.length === 0) {
+                    let playersPresent = 0;
+                    for (const key in rooms[userRoom].players) {
+                        const player = rooms[userRoom].players[key];
+                        if (player.isPresent) {
+                            playersPresent++;
+                        }
+                    }
+                    if (playersPresent === 0) {
                         delete rooms[userRoom];
                     }
                 }
