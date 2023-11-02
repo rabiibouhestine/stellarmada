@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
         users[playerID].room = roomID;
 
         // add user to room
-        rooms[roomID].players[playerID] = { isReady: false };
+        rooms[roomID].players[playerID] = { isReady: false, socket: socket.id };
 
         // if socket is not already in room we join
         socket.join(roomID);
