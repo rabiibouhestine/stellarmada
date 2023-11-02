@@ -9,6 +9,7 @@ export async function load({ cookies, params }) {
     if (response.ok) {
       const responseData = await response.json();
       const gameStarted = await responseData.gameStarted;
+      cookies.set('roomID', params.roomID, { path: '/' });
       return {
         gameStarted: gameStarted
       };

@@ -7,7 +7,8 @@ export function load({ data }) {
             "http://localhost:3001",
             {
                 query: {
-                    playerID: data.playerID
+                    playerID: data.playerID,
+                    roomID: data.roomID
                 }
             }    
         );
