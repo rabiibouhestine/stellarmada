@@ -31,7 +31,7 @@ app.get('/join', (req, res) => {
 
     // if roomID is not in query params we return error
     if (!roomID) {
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        res.status(500).json({ error: 'roomID not found' });
         return;
     }
 
@@ -54,7 +54,7 @@ app.get('/join', (req, res) => {
         rooms[users[playerID].room].players[playerID] &&
         rooms[users[playerID].room].players[playerID].isPresent
     ) {
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
+        res.status(500).json({ error: 'player is already present in a room' });
         return;
     }
 
@@ -62,14 +62,8 @@ app.get('/join', (req, res) => {
     const room = rooms[roomID];
 
     // if room is full we return error
-    if (Object.keys(room.players).length >= 2) {
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
-        return;
-    }
-
-    // if game started we return error
-    if (room.gameStarted) {
-        res.status(500).json({ error: 'An error occurred while processing the request.' });
+    if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
+        res.status(500).json({ error: 'room is full' });
         return;
     }
 
