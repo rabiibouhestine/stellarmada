@@ -67,10 +67,10 @@ io.on("connection", (socket) => {
     // const playerID = socket.handshake.query.playerID;
 
     const playerID = socket.id;
+    users[playerID] = { room: null };
     console.log("Player connected:", playerID);
-    users[playerID] = {
-        room: null
-    }
+
+
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
