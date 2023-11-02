@@ -22,6 +22,42 @@ const rooms = {};
 const users = {};
 
 
+
+
+app.get('/api/users', (req, res) => {
+    res.json({ playersOnline: Object.keys(users).length });
+});
+
+app.get('/join', (req, res) => {
+    const roomID = req.query.roomID;
+
+    // if roomID is not in query params we return error
+    if (!roomID) {
+        res.status(500).json({ error: 'roomID not found' });
+        return;
+    }
+
+    // if room does not exist we create it
+    if (!rooms.hasOwnProperty(roomID)) {
+        const room = {
+            roomID: roomID,
+            gameStarted: false,
+            players: {},
+            gameState: {}
+        };
+        rooms[roomID] = room;
+    }
+
+    // get room
+    const room = rooms[roomID];
+
+    res.json({ gameStarted: room.gameStarted });
+});
+
+
+
+
+
 io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("Player connected:", playerID);
@@ -189,35 +225,7 @@ io.on("connection", (socket) => {
 })
 
 
-app.get('/api/users', (req, res) => {
-    res.json({ playersOnline: Object.keys(users).length });
-});
 
-app.get('/join', (req, res) => {
-    const roomID = req.query.roomID;
-
-    // if roomID is not in query params we return error
-    if (!roomID) {
-        res.status(500).json({ error: 'roomID not found' });
-        return;
-    }
-
-    // if room does not exist we create it
-    if (!rooms.hasOwnProperty(roomID)) {
-        const room = {
-            roomID: roomID,
-            gameStarted: false,
-            players: {},
-            gameState: {}
-        };
-        rooms[roomID] = room;
-    }
-
-    // get room
-    const room = rooms[roomID];
-
-    res.json({ gameStarted: room.gameStarted });
-});
 
 
 
