@@ -7,7 +7,7 @@
 	export let data;
 
 	const socket = data.socket;
-	let gameStarted = false;
+	let gameStarted = data.gameStarted;
 
 	onMount(() => {
 		socket.emit('joinRoom', { roomID: $page.params.roomID });

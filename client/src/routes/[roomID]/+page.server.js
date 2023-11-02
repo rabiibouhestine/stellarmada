@@ -7,9 +7,10 @@ export async function load({ cookies, params }) {
     });
     const response = await fetch(`http://localhost:3001/join?${joinParams.toString()}`);
     if (response.ok) {
-      const gameStarted = await response.json();
+      const responseData = await response.json();
+      const gameStarted = await responseData.gameStarted;
       return {
-        gameStarted: { gameStarted }
+        gameStarted: gameStarted
       };
     } else {
       throw redirect(308, '/');
