@@ -1,8 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 
-export async function load({ cookies, params }) {
+export async function load({ params }) {
     const joinParams = new URLSearchParams({
-        playerID: cookies.get('playerID'),
         roomID: params.roomID
     });
     const response = await fetch(`http://localhost:3001/join?${joinParams.toString()}`);
