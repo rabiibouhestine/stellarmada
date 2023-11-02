@@ -1,5 +1,5 @@
-import io from 'socket.io-client';
 import { browser } from "$app/environment"
+import io from 'socket.io-client';
 
 export function load({ data }) {
     if (browser) {
