@@ -184,15 +184,19 @@ io.on("connection", (socket) => {
         // get player room
         const userRoom = users[playerID].room;
 
-        // if user was in a room that still exists
-        if (userRoom !== null && rooms.hasOwnProperty(userRoom)) {
-            // remove player from room
-            delete rooms[userRoom].players[playerID];
-            // update player
-            users[playerID].room = null;
-            // if room empty after player leaves we delete it
-            if (rooms[userRoom].players.length === 0) {
-                delete rooms[userRoom];
+        // if socket was in a room 
+        if (userRoom !== null) {
+            if (rooms.hasOwnProperty(userRoom)) {
+                if (rooms[userRoom].players[playerID].socket === socket.id) {
+                    // remove player from room
+                    delete rooms[userRoom].players[playerID];
+                    // update player
+                    users[playerID].room = null;
+                    // if room empty after player leaves we delete it
+                    if (rooms[userRoom].players.length === 0) {
+                        delete rooms[userRoom];
+                    }
+                }
             }
         }
 
