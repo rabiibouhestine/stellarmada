@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("Player connected:", playerID);
 
+    
     if (users[playerID]) {
         users[playerID].sockets.push(socket.id);
     } else {
