@@ -12,7 +12,8 @@ export function load({ data }) {
             }    
         );
         return {
-            socket: socket
+            socket: socket,
+            playerID: data.playerID
         }
     }
 }
