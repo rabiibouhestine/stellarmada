@@ -94,7 +94,7 @@ io.on("connection", (socket) => {
         }
         const roomGameStarted = rooms[roomID].gameStarted;
         const roomPlayersFull = playersCount == 2;
-        const isSocketGamePlayer = rooms[roomID].gameState.players.hasOwnProperty(playerID);
+        const isSocketGamePlayer = roomGameStarted && rooms[roomID].gameState.players.hasOwnProperty(playerID);
         const isSocketRoomPlayer = (!roomGameStarted && !roomPlayersFull) || (roomGameStarted && !roomPlayersFull && isSocketGamePlayer);
         roomSockets[socket.id] = {
             playerID: playerID,
