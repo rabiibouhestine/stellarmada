@@ -117,7 +117,7 @@ io.on("connection", (socket) => {
                 playersReadyCount++;
             }
         }
-console.log(playersReadyCount);
+
         // if 2 players ready we emit room ready response
         if (playersReadyCount === 2) {
             rooms[roomID].gameStarted = true;
