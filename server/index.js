@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
 
 
     socket.on("joinRoom", (data) => {
-        if (!users[playerID].sockets[socket.id].room) {
+        if (!rooms[data.roomID].sockets[socket.id]) {
             const roomID = data.roomID;
 
             // update user
