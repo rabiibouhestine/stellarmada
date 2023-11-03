@@ -189,7 +189,8 @@ io.on("connection", (socket) => {
         if (roomID) {
             delete rooms[roomID].players[playerID];
             // if room empty after room update, delete room
-            if (rooms[roomID].players.length === 0) {
+            console.log(rooms[roomID].players.length);
+            if (Object.keys(rooms[roomID].players).length === 0) {
                 delete rooms[roomID];
             } 
         }
