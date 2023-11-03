@@ -4,7 +4,6 @@
 	export let data;
 	export let logs;
 
-	const socket = data.socket;
 	const playerID = data.playerID;
 
 	let logsDiv;
