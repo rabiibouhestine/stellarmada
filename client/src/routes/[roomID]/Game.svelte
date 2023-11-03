@@ -10,9 +10,8 @@
 	import { Game } from '../../game/Game.js';
 
 	export let data;
-
-	const socket = data.socket;
-	const playerID = data.playerID;
+	let socket;
+	let playerID;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -30,6 +29,9 @@
 	let logs = [];
 
 	onMount(() => {
+		socket = data.socket;
+		playerID = data.socket.id;
+
 		setInterval(() => {
 			playerTimeLeft = playerTimer.timeLeft;
 			opponentTimeLeft = opponentTimer.timeLeft;

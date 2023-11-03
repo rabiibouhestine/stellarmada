@@ -4,8 +4,8 @@
 
 	export let data;
 
-	const socket = data.socket;
-	const playerID = data.playerID;
+	let socket;
+	let playerID;
 
 	let messages = [
 		{
@@ -22,6 +22,9 @@
 	let messageInput = '';
 
 	onMount(() => {
+		socket = data.socket;
+		playerID = data.socket.id;
+
 		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});

@@ -5,10 +5,12 @@
 
 	export let data;
 
-	const socket = data.socket;
+	let socket;
 	let gameStarted = data.gameStarted;
 
 	onMount(() => {
+		socket = data.socket;
+
 		socket.on('handleReadyResponse', () => {
 			gameStarted = true;
 		});

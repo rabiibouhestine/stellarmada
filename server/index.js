@@ -43,7 +43,7 @@ app.get('/join', (req, res) => {
             roomID: roomID,
             gameStarted: false,
             gameState: null,
-            sockets: {}
+            players: {}
         };
     }
 
@@ -56,58 +56,35 @@ app.get('/join', (req, res) => {
 
 
 io.on("connection", (socket) => {
-    const playerID = socket.handshake.query.playerID;
+    // const playerID = socket.handshake.query.playerID;
+    const playerID = socket.id;
     console.log("Player connected:", playerID);
 
     if (!users[playerID]) {
         users[playerID] = {
-            sockets: {
-                [socket.id]: {
-                    room: null
-                }
-            }
-        };
-    } else {
-        users[playerID].sockets[socket.id] = {
             room: null
         };
+    } else {
+        users[playerID].room = null;
     }
 
 
 
     socket.on("joinRoom", (data) => {
-        if (!rooms[data.roomID].sockets[socket.id]) {
-            const roomID = data.roomID;
-
+        const roomID = data.roomID;
+        if (rooms[roomID] && !rooms[roomID].players[playerID]) {
+    
             // update user
-            users[playerID].sockets[socket.id].room = roomID;
-
-            // update room:
-            // if game did not start and less than 2 sockets are players we add a player socket 
-            // if game started and and less than 2 sockets are players and socket belongs to player in room Gamestate players we add a player socket
-            // otherwise add a spectator socket (isPlayer false)
-            let playersCount = 0;
-            let roomSockets = rooms[roomID].sockets;
-            for (const socketId in roomSockets) {
-                if (roomSockets[socketId].isPlayer) {
-                    playersCount++;
-                }
-            }
-            const roomGameStarted = rooms[roomID].gameStarted;
-            const roomPlayersFull = playersCount == 2;
-            const isSocketGamePlayer = roomGameStarted && rooms[roomID].gameState.players.hasOwnProperty(playerID);
-            const isSocketRoomPlayer = (!roomGameStarted && !roomPlayersFull) || (roomGameStarted && !roomPlayersFull && isSocketGamePlayer);
-            roomSockets[socket.id] = {
-                playerID: playerID,
-                isPlayer: isSocketRoomPlayer,
-                isReady: false
-            }
-
+            users[playerID].room = roomID;
+    
+            // update room
+            rooms[roomID].players[playerID] = { isReady: false };
+    
             // join socket to a socket.io room with same roomID
             socket.join(roomID);
-
+    
             // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].sockets).length })
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
         }
     })
 
@@ -115,13 +92,13 @@ io.on("connection", (socket) => {
         const roomID = data.roomID;
 
         // update player in rooms
-        rooms[roomID].sockets[socket.id].isReady = data.isReady;
+        rooms[roomID].players[playerID].isReady = data.isReady;
 
         // count players who are ready
         let playersReadyCount = 0;
-        let roomSockets = rooms[roomID].sockets;
-        for (const socketId in roomSockets) {
-            if (roomSockets[socketId].isPlayer && roomSockets[socketId].isReady) {
+        let players = rooms[roomID].players;
+        for (const playerID in players) {
+            if (players[playerID].isReady) {
                 playersReadyCount++;
             }
         }
@@ -146,8 +123,8 @@ io.on("connection", (socket) => {
         const gameAction = handleActionRequest(playerID, data.playerSelection, gameState);
         if (gameAction.isGameOver) {
             rooms[roomID].gameStarted = false;
-            Object.keys(rooms[roomID].sockets).forEach(socketID => {
-                rooms[roomID].sockets[socketID].isReady = false;
+            Object.keys(rooms[roomID].players).forEach(playerID => {
+                rooms[roomID].players[playerID].isReady = false;
             });
         }
 
@@ -161,8 +138,8 @@ io.on("connection", (socket) => {
     socket.on("surrenderRequest", (data) => {
         const roomID = data.roomID;
         rooms[roomID].gameStarted = false;
-        Object.keys(rooms[roomID].sockets).forEach(socketID => {
-            rooms[roomID].sockets[socketID].isReady = false;
+        Object.keys(rooms[roomID].players).forEach(playerID => {
+            rooms[roomID].players[playerID].isReady = false;
         });
 
         // Get gamestate
@@ -180,7 +157,7 @@ io.on("connection", (socket) => {
 
     socket.on("rematchRequest", (data) => {
         socket.emit("rematchResponse");
-        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].sockets).length })
+        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
     })
 
     socket.on("messageRequest", (data) => {
@@ -189,14 +166,14 @@ io.on("connection", (socket) => {
 
     socket.on("leftRoom", () => {
         // if user was in a room
-        const userRoom = users[playerID].sockets[socket.id].room;
-        if (userRoom !== null) {
+        const userRoom = users[playerID].room;
+        if (userRoom) {
             // update room
-            delete rooms[userRoom].sockets[socket.id];
+            delete rooms[userRoom].players[playerID];
             // update player
-            users[playerID].sockets[socket.id].room = null;
+            users[playerID].room = null;
             // if room empty after player leaves we delete it
-            if (Object.keys(rooms[userRoom].sockets).length === 0) {
+            if (Object.keys(rooms[userRoom].players).length === 0) {
                 delete rooms[userRoom];
             }
         }
@@ -205,33 +182,20 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("Player socket disconnected:", playerID, "- reason:", reason);
 
-        // get socket room
-        const socketRoom = users[playerID].sockets[socket.id].room;
+        // get player room
+        const roomID = users[playerID].room;
 
-        // update player
-        delete users[playerID].sockets[socket.id];
-
-        // if socket had a room
-        if (socketRoom !== null) {
-            // update room
-            delete rooms[socketRoom].sockets[socket.id];
+        // if player was in a room, update room
+        if (roomID) {
+            delete rooms[roomID].players[playerID];
+            // if room empty after room update, delete room
+            if (rooms[roomID].players.length === 0) {
+                delete rooms[roomID];
+            } 
         }
 
-        setTimeout(
-            () => {           
-                // if room has no sockets we delete it
-                if (socketRoom && rooms[socketRoom] && Object.keys(rooms[socketRoom].sockets).length === 0) {
-                    delete rooms[socketRoom];
-                }
-        
-                // if user has no sockets we delete them
-                if (users[playerID] && users[playerID].sockets.length === 0) {
-                    delete users[playerID];
-                }
-            }
-            ,
-            300000
-        )
+        // delete player
+        delete users[playerID];
     })
 })
 

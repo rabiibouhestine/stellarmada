@@ -6,7 +6,7 @@
 
 	export let data;
 
-	const socket = data.socket;
+	let socket;
 	let playersNb = 0;
 	let isReady = false;
 	let readyBtnClass = '';
@@ -34,6 +34,8 @@
 	}
 
 	onMount(() => {
+		socket = data.socket;
+
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
 
 		socket.on('roomUpdate', (data) => {

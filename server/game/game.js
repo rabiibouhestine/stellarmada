@@ -5,12 +5,11 @@ const handMax = 8;
 
 const initGameState = (room) => {
     // Create players states
-    const players = Object.values(room.sockets)
-        .filter(socket => socket.isPlayer)
-        .reduce((result, socket) => {
-            result[socket.playerID] = initPlayerState();
-            return result;
-        }, {});
+    const players = {};
+    const playersIDs = Object.keys(room.players);
+    for (const id of playersIDs) {
+        players[id] = initPlayerState();
+    }
 
     // Define gameState
     const gameState = {
@@ -25,8 +24,6 @@ const initGameState = (room) => {
         logs: []
     };
 
-    // Get players IDs
-    const playersIDs = Object.keys(players);
     // Pick a random player index
     const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
     // Get the player with the random index
