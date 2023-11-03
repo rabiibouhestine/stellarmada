@@ -1,12 +1,10 @@
 <script>
 	import { page } from '$app/stores';
 	import { Icon, User, Clipboard } from 'svelte-hero-icons';
+	import { socket } from '$lib/modules/stores.js';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	export let data;
-
-	let socket;
 	let playersNb = 0;
 	let isReady = false;
 	let readyBtnClass = '';
@@ -24,26 +22,24 @@
 	}
 
 	function handleLeave() {
-		socket.emit('leftRoom');
+		$socket.emit('leftRoom');
 		goto('/');
 	}
 
 	function handleReady() {
 		isReady = !isReady;
-		socket.emit('handleReady', { roomID: $page.params.roomID, isReady: isReady });
+		$socket.emit('handleReady', { roomID: $page.params.roomID, isReady: isReady });
 	}
 
 	onMount(() => {
-		socket = data.socket;
+		$socket.emit('joinRoom', { roomID: $page.params.roomID });
 
-		socket.emit('joinRoom', { roomID: $page.params.roomID });
-
-		socket.on('roomUpdate', (data) => {
+		$socket.on('roomUpdate', (data) => {
 			playersNb = data.playersNb;
 		});
 
 		return () => {
-			socket.off('roomUpdate');
+			$socket.off('roomUpdate');
 		};
 	});
 </script>
