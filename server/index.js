@@ -113,8 +113,10 @@ io.on("connection", (socket) => {
 
     socket.on("gameStateRequest", (data) => {
         const roomID = data.roomID;
-        const gameState = processGameState(rooms[roomID].gameState, playerID);
-        socket.emit("gameStateResponse", { gameState:gameState,  success: true });
+        if (rooms[roomID]) {
+            const gameState = processGameState(rooms[roomID].gameState, playerID);
+            socket.emit("gameStateResponse", { gameState:gameState,  success: true });
+        }
     })
 
     socket.on("gameActionRequest", (data) => {
