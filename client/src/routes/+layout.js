@@ -7,13 +7,13 @@ export function load({ data }) {
             "http://localhost:3001",
             {
                 query: {
-                    playerID: data.playerID
+                    userID: data.userID
                 }
             }    
         );
         return {
             socket: socket,
-            playerID: data.playerID
+            userID: data.userID
         }
     }
 }
