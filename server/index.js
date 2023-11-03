@@ -58,7 +58,7 @@ app.get('/join', (req, res) => {
 io.on("connection", (socket) => {
     const playerID = socket.id;
     const userID = socket.handshake.query.userID;
-    console.log("Player connected:", playerID, "with userID:", userID);
+    console.log("Player connected:", playerID, "| userID:", userID);
 
     if (!users[playerID]) {
         users[playerID] = {
@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", (reason) => {
-        console.log("Player disconnected:", playerID, "with userID:", userID, "| reason:", reason);
+        console.log("Player disconnected:", playerID, "| userID:", userID, "| reason:", reason);
 
         // get player room
         const roomID = users[playerID].room;
