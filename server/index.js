@@ -42,8 +42,8 @@ app.get('/join', (req, res) => {
         rooms[roomID] = {
             roomID: roomID,
             gameStarted: false,
-            sockets: {},
-            gameState: {}
+            gameState: null,
+            sockets: {}
         };
     }
 
@@ -78,35 +78,37 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
 
-        // update user
-        users[playerID].sockets[socket.id].room = roomID;
+        if (!users[playerID].sockets[socket.id].room) {
+            // update user
+            users[playerID].sockets[socket.id].room = roomID;
 
-        // update room:
-        // if game did not start and less than 2 sockets are players we add a player socket 
-        // if game started and and less than 2 sockets are players and socket belongs to player in room Gamestate players we add a player socket
-        // otherwise add a spectator socket (isPlayer false)
-        let playersCount = 0;
-        let roomSockets = rooms[roomID].sockets;
-        for (const socketId in roomSockets) {
-            if (roomSockets[socketId].isPlayer) {
-                playersCount++;
+            // update room:
+            // if game did not start and less than 2 sockets are players we add a player socket 
+            // if game started and and less than 2 sockets are players and socket belongs to player in room Gamestate players we add a player socket
+            // otherwise add a spectator socket (isPlayer false)
+            let playersCount = 0;
+            let roomSockets = rooms[roomID].sockets;
+            for (const socketId in roomSockets) {
+                if (roomSockets[socketId].isPlayer) {
+                    playersCount++;
+                }
             }
-        }
-        const roomGameStarted = rooms[roomID].gameStarted;
-        const roomPlayersFull = playersCount == 2;
-        const isSocketGamePlayer = roomGameStarted && rooms[roomID].gameState.players.hasOwnProperty(playerID);
-        const isSocketRoomPlayer = (!roomGameStarted && !roomPlayersFull) || (roomGameStarted && !roomPlayersFull && isSocketGamePlayer);
-        roomSockets[socket.id] = {
-            playerID: playerID,
-            isPlayer: isSocketRoomPlayer,
-            isReady: false
-        }
+            const roomGameStarted = rooms[roomID].gameStarted;
+            const roomPlayersFull = playersCount == 2;
+            const isSocketGamePlayer = roomGameStarted && rooms[roomID].gameState.players.hasOwnProperty(playerID);
+            const isSocketRoomPlayer = (!roomGameStarted && !roomPlayersFull) || (roomGameStarted && !roomPlayersFull && isSocketGamePlayer);
+            roomSockets[socket.id] = {
+                playerID: playerID,
+                isPlayer: isSocketRoomPlayer,
+                isReady: false
+            }
 
-        // join socket to a socket.io room with same roomID
-        socket.join(roomID);
+            // join socket to a socket.io room with same roomID
+            socket.join(roomID);
 
-        // emit room update event
-        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].sockets).length })
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].sockets).length })
+        }
     })
 
     socket.on("handleReady", (data) => {
@@ -133,8 +135,9 @@ io.on("connection", (socket) => {
     })
 
     socket.on("gameStateRequest", (data) => {
-        const gameState = processGameState(rooms[data.roomID].gameState, playerID);
-        socket.emit("gameStateResponse", { gameState:gameState, success: true });
+        const roomID = data.roomID;
+        const gameState = processGameState(rooms[roomID].gameState, playerID);
+        socket.emit("gameStateResponse", { gameState:gameState,  success: true });
     })
 
     socket.on("gameActionRequest", (data) => {

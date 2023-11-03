@@ -35,6 +35,7 @@
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
 
+		socket.emit('joinRoom', { roomID: $page.params.roomID });
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {

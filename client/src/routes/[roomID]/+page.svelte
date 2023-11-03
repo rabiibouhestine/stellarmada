@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 
@@ -10,8 +9,6 @@
 	let gameStarted = data.gameStarted;
 
 	onMount(() => {
-		socket.emit('joinRoom', { roomID: $page.params.roomID });
-
 		socket.on('handleReadyResponse', () => {
 			gameStarted = true;
 		});
