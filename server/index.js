@@ -19,13 +19,13 @@ const io = new Server(server, {
 });
 
 const rooms = {};
-const users = {};
+const players = {};
 
 
 
 
 app.get('/api/users', (req, res) => {
-    res.json({ playersOnline: Object.keys(users).length });
+    res.json({ playersOnline: Object.keys(players).length });
 });
 
 app.get('/join', (req, res) => {
@@ -60,12 +60,12 @@ io.on("connection", (socket) => {
     const userID = socket.handshake.query.userID;
     console.log("Player connected:", playerID, "| userID:", userID);
 
-    if (!users[playerID]) {
-        users[playerID] = {
+    if (!players[playerID]) {
+        players[playerID] = {
             room: null
         };
     } else {
-        users[playerID].room = null;
+        players[playerID].room = null;
     }
 
 
@@ -74,8 +74,8 @@ io.on("connection", (socket) => {
         const roomID = data.roomID;
         if (rooms[roomID] && !rooms[roomID].players[playerID]) {
     
-            // update user
-            users[playerID].room = roomID;
+            // update player
+            players[playerID].room = roomID;
     
             // update room
             rooms[roomID].players[playerID] = { isReady: false };
@@ -165,16 +165,16 @@ io.on("connection", (socket) => {
     })
 
     socket.on("leftRoom", () => {
-        // if user was in a room
-        const userRoom = users[playerID].room;
-        if (userRoom) {
+        // if player was in a room
+        const roomID = players[playerID].room;
+        if (roomID) {
             // update room
-            delete rooms[userRoom].players[playerID];
+            delete rooms[roomID].players[playerID];
             // update player
-            users[playerID].room = null;
+            players[playerID].room = null;
             // if room empty after player leaves we delete it
-            if (Object.keys(rooms[userRoom].players).length === 0) {
-                delete rooms[userRoom];
+            if (Object.keys(rooms[roomID].players).length === 0) {
+                delete rooms[roomID];
             }
         }
     })
@@ -183,7 +183,7 @@ io.on("connection", (socket) => {
         console.log("Player disconnected:", playerID, "| userID:", userID, "| reason:", reason);
 
         // get player room
-        const roomID = users[playerID].room;
+        const roomID = players[playerID].room;
 
         // if player was in a room, update room
         if (roomID) {
@@ -195,7 +195,7 @@ io.on("connection", (socket) => {
         }
 
         // delete player
-        delete users[playerID];
+        delete players[playerID];
     })
 })
 
