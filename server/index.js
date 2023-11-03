@@ -202,28 +202,33 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("Player socket disconnected:", playerID, "- reason:", reason);
 
-        // if user was in a room
-        const userRoom = users[playerID].sockets[socket.id].room;
+        // get socket room
+        const socketRoom = users[playerID].sockets[socket.id].room;
 
-        // if socket was in a room 
-        if (userRoom !== null) {
-            // update room
-            delete rooms[userRoom].sockets[socket.id];
-            // update player
-            users[playerID].sockets[socket.id].room = null;
-            // if room empty after player leaves we delete it
-            if (Object.keys(rooms[userRoom].sockets).length === 0) {
-                delete rooms[userRoom];
-            }
-        }
-
-        // remove socket from player sockets
+        // update player
         delete users[playerID].sockets[socket.id];
 
-        // if user has no sockets, remove user
-        if (users[playerID].sockets.length === 0) {
-            delete users[playerID];
+        // if socket had a room
+        if (socketRoom !== null) {
+            // update room
+            delete rooms[socketRoom].sockets[socket.id];
         }
+
+        setTimeout(
+            () => {           
+                // if room has no sockets we delete it
+                if (socketRoom && rooms[socketRoom] && Object.keys(rooms[socketRoom].sockets).length === 0) {
+                    delete rooms[socketRoom];
+                }
+        
+                // if user has no sockets we delete them
+                if (users[playerID] && users[playerID].sockets.length === 0) {
+                    delete users[playerID];
+                }
+            }
+            ,
+            300000
+        )
     })
 })
 
