@@ -82,7 +82,9 @@ io.on("connection", (socket) => {
         users[playerID].sockets[socket.id].room = roomID;
 
         // update room:
-        // if less than 2 sockets are players we add a player socket otherwise add a spectator socket
+        // if game did not start and less than 2 sockets are players we add a player socket 
+        // if game started and and less than 2 sockets are players and socket belongs to player in room Gamestate players we add a player socket
+        // otherwise add a spectator socket (isPlayer false)
         let playersCount = 0;
         let roomSockets = rooms[roomID].sockets;
         for (const socketId in roomSockets) {
@@ -90,9 +92,13 @@ io.on("connection", (socket) => {
                 playersCount++;
             }
         }
+        const roomGameStarted = rooms[roomID].gameStarted;
+        const roomPlayersFull = playersCount == 2;
+        const isSocketGamePlayer = rooms[roomID].gameState.players.hasOwnProperty(playerID);
+        const isSocketRoomPlayer = (!roomGameStarted && !roomPlayersFull) || (roomGameStarted && !roomPlayersFull && isSocketGamePlayer);
         roomSockets[socket.id] = {
             playerID: playerID,
-            isPlayer: playersCount < 2,
+            isPlayer: isSocketRoomPlayer,
             isReady: false
         }
 
