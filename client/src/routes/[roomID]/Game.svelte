@@ -103,10 +103,12 @@
 	}
 
 	function handleRematch() {
+		showSurrenderModal = false;
 		socket.emit('rematchRequest', { roomID: $page.params.roomID });
 	}
 
 	function handleLeave() {
+		showQuitModal = false;
 		goto('/');
 	}
 
