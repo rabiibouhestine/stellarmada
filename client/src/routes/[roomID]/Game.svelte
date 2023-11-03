@@ -10,7 +10,7 @@
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
 
-	const playerID = $socket.id;
+	let playerID;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -28,6 +28,8 @@
 	let logs = [];
 
 	onMount(() => {
+		playerID = $socket.id;
+
 		setInterval(() => {
 			playerTimeLeft = playerTimer.timeLeft;
 			opponentTimeLeft = opponentTimer.timeLeft;

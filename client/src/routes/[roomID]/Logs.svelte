@@ -4,9 +4,12 @@
 
 	export let logs;
 
-	const playerID = $socket.id;
-
+	let playerID;
 	let logsDiv;
+
+	onMount(() => {
+		playerID = $socket.id;
+	});
 
 	afterUpdate(() => {
 		logsDiv.scrollTo(0, logsDiv.scrollHeight);
