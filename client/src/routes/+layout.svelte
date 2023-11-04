@@ -8,7 +8,7 @@
 
 	if (browser) {
 		socketStore.set(
-			io.connect('http://localhost:3001', {
+			io.connect('https://server.stellarmada.com', {
 				query: {
 					userID: data.userID
 				}
