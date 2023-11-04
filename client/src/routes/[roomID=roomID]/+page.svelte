@@ -17,9 +17,14 @@
 			gameStarted = false;
 		});
 
+		$socket.on('gameStatus', (data) => {
+			gameStarted = data.gameStarted;
+		});
+
 		return () => {
 			$socket.off('handleReadyResponse');
 			$socket.off('rematchResponse');
+			$socket.off('gameStatus');
 		};
 	});
 </script>
