@@ -88,6 +88,14 @@ io.on("connection", (socket) => {
         }
     })
 
+    socket.on("gameStateRequest", (data) => {
+        const roomID = data.roomID;
+        if (rooms[roomID]) {
+            const gameState = processGameState(rooms[roomID].gameState, playerID);
+            socket.emit("gameStateResponse", { gameState:gameState,  success: true });
+        }
+    })
+
     socket.on("handleReady", (data) => {
         const roomID = data.roomID;
 
@@ -108,14 +116,6 @@ io.on("connection", (socket) => {
             rooms[roomID].gameStarted = true;
             rooms[roomID].gameState = initGameState(rooms[roomID]);
             io.to(roomID).emit("handleReadyResponse");
-        }
-    })
-
-    socket.on("gameStateRequest", (data) => {
-        const roomID = data.roomID;
-        if (rooms[roomID]) {
-            const gameState = processGameState(rooms[roomID].gameState, playerID);
-            socket.emit("gameStateResponse", { gameState:gameState,  success: true });
         }
     })
 
