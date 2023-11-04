@@ -22,14 +22,14 @@
 		</div>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
-			on:click={createRoom}
 		>
-			CREATE A ROOM
+			PLAY AGAINST AI
 		</button>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+			on:click={createRoom}
 		>
-			PLAY AGAINST AI
+			CREATE A ROOM
 		</button>
 		<a
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
