@@ -3,14 +3,15 @@
 	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socket } from '$lib/modules/stores.js';
+	import { socket as socketStore } from '$lib/modules/stores.js';
 	import Timer from '$lib/modules/Timer.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
 
-	let playerID = $socket.id;
+	const socket = $socketStore;
+	const playerID = socket.id;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -33,16 +34,16 @@
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
 
-		$socket.emit('joinRoom', { roomID: $page.params.roomID });
-		$socket.emit('gameStateRequest', { roomID: $page.params.roomID });
+		socket.emit('joinRoom', { roomID: $page.params.roomID });
+		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
-		$socket.on('gameStateResponse', (data) => {
+		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});
 
-		$socket.on('gameActionResponse', (data) => {
+		socket.on('gameActionResponse', (data) => {
 			game.update(data.gameAction);
 			isGameOver = data.gameAction.isGameOver;
 			winnerID = data.gameAction.winnerID;
@@ -59,7 +60,7 @@
 			}
 		});
 
-		$socket.on('surrenderResponse', (data) => {
+		socket.on('surrenderResponse', (data) => {
 			isGameOver = true;
 			winnerID = data.winnerID;
 			playerTimer.stop();
@@ -67,9 +68,9 @@
 		});
 
 		return () => {
-			$socket.off('gameStateResponse');
-			$socket.off('gameActionResponse');
-			$socket.off('surrenderResponse');
+			socket.off('gameStateResponse');
+			socket.off('gameActionResponse');
+			socket.off('surrenderResponse');
 			game.end();
 		};
 	});
@@ -90,7 +91,7 @@
 			.filter((card) => card.selected)
 			.map((card) => card.name);
 
-		$socket.emit('gameActionRequest', {
+		socket.emit('gameActionRequest', {
 			roomID: $page.params.roomID,
 			playerSelection: selectedCards
 		});
@@ -98,12 +99,12 @@
 
 	function handleSurrender() {
 		showSurrenderModal = false;
-		$socket.emit('surrenderRequest', { roomID: $page.params.roomID });
+		socket.emit('surrenderRequest', { roomID: $page.params.roomID });
 	}
 
 	function handleRematch() {
 		showSurrenderModal = false;
-		$socket.emit('rematchRequest', { roomID: $page.params.roomID });
+		socket.emit('rematchRequest', { roomID: $page.params.roomID });
 	}
 
 	function handleLeave() {
