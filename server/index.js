@@ -167,7 +167,7 @@ io.on("connection", (socket) => {
 
     socket.on("rematchRequest", (data) => {
         socket.emit("rematchResponse");
-        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
+        socket.emit("roomJoined", { playersNb: Object.keys(rooms[data.roomID].players).length })
     })
 
     socket.on("messageRequest", (data) => {

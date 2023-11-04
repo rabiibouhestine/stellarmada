@@ -39,7 +39,7 @@
 		});
 
 		return () => {
-			$socket.off('roomUpdate');
+			$socket.off('roomJoined');
 		};
 	});
 </script>
