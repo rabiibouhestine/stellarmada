@@ -35,12 +35,12 @@
 	onMount(() => {
 		$socket.emit('joinRoom', { roomID: $page.params.roomID });
 
-		$socket.on('roomJoined', (data) => {
+		$socket.on('roomUpdate', (data) => {
 			playersNb = data.playersNb;
 		});
 
 		return () => {
-			$socket.off('roomJoined');
+			$socket.off('roomUpdate');
 		};
 	});
 </script>
