@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { socket } from '$lib/modules/stores.js';
+	import { socket as socketStore } from '$lib/modules/stores.js';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 
@@ -8,19 +8,21 @@
 
 	let gameStarted = data.gameStarted;
 
+	const socket = $socketStore;
+
 	onMount(() => {
-		$socket.on('handleReadyResponse', () => {
+		socket.on('handleReadyResponse', () => {
 			gameStarted = true;
 		});
 
-		$socket.on('rematchResponse', () => {
+		socket.on('rematchResponse', () => {
 			gameStarted = false;
 		});
 
 		return () => {
-			$socket.off('handleReadyResponse');
-			$socket.off('rematchResponse');
-			$socket.off('gameStatus');
+			socket.off('handleReadyResponse');
+			socket.off('rematchResponse');
+			socket.off('gameStatus');
 		};
 	});
 </script>
