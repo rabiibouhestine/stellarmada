@@ -1,13 +1,13 @@
 <script>
 	import '../app.css';
 	import io from 'socket.io-client';
-	import { socket } from '$lib/modules/stores.js';
+	import { socketStore } from '$lib/modules/stores.js';
 	import { browser } from '$app/environment';
 
 	export let data;
 
 	if (browser) {
-		socket.set(
+		socketStore.set(
 			io.connect('http://localhost:3001', {
 				query: {
 					userID: data.userID

@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { Icon, User, Clipboard } from 'svelte-hero-icons';
-	import { socket as socketStore } from '$lib/modules/stores.js';
+	import { socketStore } from '$lib/modules/stores.js';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 

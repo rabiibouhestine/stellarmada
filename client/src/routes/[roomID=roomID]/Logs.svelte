@@ -1,6 +1,6 @@
 <script>
 	import { afterUpdate } from 'svelte';
-	import { socket as socketStore } from '$lib/modules/stores.js';
+	import { socketStore } from '$lib/modules/stores.js';
 
 	export let logs;
 

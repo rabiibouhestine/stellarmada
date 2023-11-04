@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { socket as socketStore } from '$lib/modules/stores.js';
+	import { socketStore } from '$lib/modules/stores.js';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 

@@ -3,7 +3,7 @@
 	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socket as socketStore } from '$lib/modules/stores.js';
+	import { socketStore } from '$lib/modules/stores.js';
 	import Timer from '$lib/modules/Timer.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Chat from './Chat.svelte';
