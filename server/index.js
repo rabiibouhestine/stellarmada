@@ -92,7 +92,7 @@ io.on("connection", (socket) => {
             socket.join(roomID);
     
             // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
+            io.to(roomID).emit("roomJoined", { playersNb: Object.keys(rooms[roomID].players).length })
         }
     })
 

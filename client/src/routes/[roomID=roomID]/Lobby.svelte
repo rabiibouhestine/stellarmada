@@ -34,7 +34,7 @@
 	onMount(() => {
 		$socket.emit('joinRoom', { roomID: $page.params.roomID });
 
-		$socket.on('roomUpdate', (data) => {
+		$socket.on('roomJoined', (data) => {
 			playersNb = data.playersNb;
 		});
 
