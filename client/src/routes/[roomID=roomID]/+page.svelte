@@ -3,10 +3,19 @@
 	import { socketStore } from '$lib/modules/stores.js';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
+	import io from 'socket.io-client';
 
 	export let data;
 
 	let gameStarted = data.gameStarted;
+
+	socketStore.set(
+		io.connect('http://localhost:3001', {
+			query: {
+				userID: data.userID
+			}
+		})
+	);
 
 	const socket = $socketStore;
 

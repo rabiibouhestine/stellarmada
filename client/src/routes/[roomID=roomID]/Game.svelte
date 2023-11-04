@@ -11,12 +11,12 @@
 	import { Game } from '../../game/Game.js';
 
 	const socket = $socketStore;
+	const playerID = socket.id;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 
 	let canvas;
-	let playerID;
 	let winnerID;
 	let isGameOver = false;
 	let showRulesModal = false;
@@ -29,8 +29,6 @@
 	let logs = [];
 
 	onMount(() => {
-		playerID = socket.id;
-
 		setInterval(() => {
 			playerTimeLeft = playerTimer.timeLeft;
 			opponentTimeLeft = opponentTimer.timeLeft;
