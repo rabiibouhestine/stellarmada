@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
 
     socket.on("gameStateRequest", (data) => {
         const roomID = data.roomID;
-        if (rooms[roomID]) {
+        if (rooms[roomID].gameState) {
             const gameState = processGameState(rooms[roomID].gameState, playerID);
             socket.emit("gameStateResponse", { gameState:gameState,  success: true });
         }
