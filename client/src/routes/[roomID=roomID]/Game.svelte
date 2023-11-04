@@ -35,7 +35,6 @@
 		}, 1000);
 
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
-		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
