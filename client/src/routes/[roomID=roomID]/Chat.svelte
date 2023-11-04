@@ -1,9 +1,10 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
 	import { page } from '$app/stores';
-	import { socket } from '$lib/modules/stores.js';
+	import { socket as socketStore } from '$lib/modules/stores.js';
 
-	let playerID = $socket.id;
+	const socket = $socketStore;
+	const playerID = socket.id;
 
 	let messages = [
 		{
@@ -20,12 +21,12 @@
 	let messageInput = '';
 
 	onMount(() => {
-		$socket.on('messageResponse', (data) => {
+		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});
 
 		return () => {
-			$socket.off('messageResponse');
+			socket.off('messageResponse');
 		};
 	});
 
@@ -35,7 +36,7 @@
 
 	const sendMessage = () => {
 		if (messageInput !== '') {
-			$socket.emit('messageRequest', {
+			socket.emit('messageRequest', {
 				roomID: $page.params.roomID,
 				message: { playerID: playerID, content: messageInput }
 			});
