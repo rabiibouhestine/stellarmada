@@ -5,7 +5,6 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
-const ShortUniqueId = require('short-unique-id');
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -20,130 +19,124 @@ const io = new Server(server, {
 });
 
 const rooms = {};
-const users = {};
+const players = {};
+
+
+
 
 app.get('/api/users', (req, res) => {
-    res.json({ playersOnline: Object.keys(users).length });
+    res.json({ playersOnline: Object.keys(players).length });
 });
 
+app.get('/join', (req, res) => {
+    const roomID = req.query.roomID;
+
+    // if roomID is not in query params we return error
+    if (!roomID) {
+        res.status(500).json({ error: 'roomID not found' });
+        return;
+    }
+
+    // return room information
+    let playersNb = 0;
+    let gameStarted = false;
+    if (rooms[roomID]) {
+        playersNb = Object.keys(rooms[roomID].players).length + 1;
+        gameStarted = rooms[roomID].gameStarted;
+    }
+    res.json({ gameStarted: gameStarted, playersNb: playersNb });
+});
+
+
+
+
+
 io.on("connection", (socket) => {
-    const playerID = socket.handshake.query.playerID;
-    const clientRoomID = socket.handshake.query.roomID;
-    console.log("Player connected:", playerID);
-    
-    if (!users.hasOwnProperty(playerID)) {
-        users[playerID] = {
-            room: clientRoomID,
-            sockets: [socket.id]
-        }
+    const playerID = socket.id;
+    const userID = socket.handshake.query.userID;
+    console.log("Player connected:", playerID, "| userID:", userID);
+
+    if (!players[playerID]) {
+        players[playerID] = {
+            room: null
+        };
     } else {
-        users[playerID].sockets.push(socket.id);
+        players[playerID].room = null;
     }
 
 
-    socket.on("createRoom", () => {
-        // if user already present in an existing room we return error
-        const hasRoom = clientRoomID !== null;
-        const clientRoomExists = rooms.hasOwnProperty(clientRoomID);
-        const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
-        if (hasRoom && clientRoomExists && isPresent) {
-            socket.emit("createRoomResponse", { error: "Can't be in multiple rooms" });
-            return;
-        }
-        const roomID = new ShortUniqueId().rnd();
-        const room = {
-            roomID: roomID,
-            gameStarted: false,
-            players: {},
-            gameState: {}
-        };
-        rooms[roomID] = room;
-        socket.emit("createRoomResponse", { room: room, success: true });
-    })
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
-        const room = rooms[roomID];
-    
-        // if room does not exist or roomID is not in data we return error
+
+        // if room does not exist we create it
         if (!rooms.hasOwnProperty(roomID)) {
-          socket.emit("joinRoomResponse", { error: "Room does not exist." });
-          return;
-        }
-
-        // if room is full and no seat belongs to user we return error
-        if (Object.keys(room.players).length >= 2 && !room.players.hasOwnProperty(playerID)) {
-            socket.emit("joinRoomResponse", { error: "Room is full." });
-            return;
-        }
-
-        // if user already present in an existing room we return error
-        const hasRoom = clientRoomID !== null;
-        const clientRoomExists = rooms.hasOwnProperty(clientRoomID);
-        const isPresent = clientRoomExists? rooms[clientRoomID].players[playerID].isPresent : false;
-        if (hasRoom && clientRoomExists && isPresent) {
-            socket.emit("joinRoomResponse", { error: "Can't be in multiple rooms" });
-            return;
-        }
-
-        // update user
-        users[playerID].room = roomID;
-        // update room
-        if (room.players.hasOwnProperty(playerID)) {
-            rooms[roomID].players[playerID].isPresent = true;
-        } else {
-            rooms[roomID].players[playerID] = {
-                isReady: false,
-                isPresent: true
+            rooms[roomID] = {
+                roomID: roomID,
+                gameStarted: false,
+                gameState: null,
+                players: {}
             };
         }
 
-        // if socket is not already in room we join
-        if (!socket.rooms.has(roomID)) {
+        // if player not in room we join
+        // emit.joinRoom currently runs in Lobby.svelte and Game.svelte
+        // so a player going from Lobby to Game would be already in the room
+        if (!rooms[roomID].players[playerID]) {
+    
+            // update player
+            players[playerID].room = roomID;
+    
+            // update room
+            rooms[roomID].players[playerID] = { isReady: false };
+    
+            // join socket to a socket.io room with same roomID
             socket.join(roomID);
-        }
-
-        // emit response event
-        socket.emit("joinRoomResponse", { room: room, success: true });
-
-        // emit room update event
-        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(room.players).length })
-    })
-
-    socket.on("handleReady", (data) => {
-        // update player in rooms
-        rooms[data.roomID].players[playerID].isReady = data.isReady;
-
-        // if room is not full return
-        const players = rooms[data.roomID].players;
-        if (Object.keys(players).length !== 2) {
-            return;
-        }
-
-        // if both players in lobby are ready we emit response
-        let isLobbyReady = true;
-        for(const player in players) {
-            isLobbyReady = isLobbyReady && players[player].isReady;
-        }
-        if (isLobbyReady) {
-            rooms[data.roomID].gameStarted = true;
-            rooms[data.roomID].gameState = initGameState(rooms[data.roomID]);
-            io.to(data.roomID).emit("handleReadyResponse");
+    
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
         }
     })
 
     socket.on("gameStateRequest", (data) => {
-        const gameState = processGameState(rooms[data.roomID].gameState, playerID);
-        socket.emit("gameStateResponse", { gameState:gameState, success: true });
+        const roomID = data.roomID;
+        if (rooms[roomID].gameState) {
+            const gameState = processGameState(rooms[roomID].gameState, playerID);
+            socket.emit("gameStateResponse", { gameState:gameState,  success: true });
+        }
+    })
+
+    socket.on("handleReady", (data) => {
+        const roomID = data.roomID;
+
+        // update player in rooms
+        rooms[roomID].players[playerID].isReady = data.isReady;
+
+        // count players who are ready
+        let playersReadyCount = 0;
+        let players = rooms[roomID].players;
+        for (const playerID in players) {
+            if (players[playerID].isReady) {
+                playersReadyCount++;
+            }
+        }
+
+        // if 2 players ready we emit room ready response
+        if (playersReadyCount === 2) {
+            rooms[roomID].gameStarted = true;
+            rooms[roomID].gameState = initGameState(rooms[roomID]);
+            io.to(roomID).emit("handleReadyResponse");
+        }
     })
 
     socket.on("gameActionRequest", (data) => {
-        const gameState = rooms[data.roomID].gameState;
+        const roomID = data.roomID;
+        const gameState = rooms[roomID].gameState;
         const gameAction = handleActionRequest(playerID, data.playerSelection, gameState);
         if (gameAction.isGameOver) {
-            rooms[data.roomID].gameStarted = false;
-            Object.keys(rooms[data.roomID].players).forEach(playerID => {
-                rooms[data.roomID].players[playerID].isReady = false;
+            rooms[roomID].gameStarted = false;
+            Object.keys(rooms[roomID].players).forEach(playerID => {
+                rooms[roomID].players[playerID].isReady = false;
             });
         }
 
@@ -151,17 +144,18 @@ io.on("connection", (socket) => {
         const enemyGameAction = processGameAction(gameAction, playerID, false);
 
         socket.emit("gameActionResponse", { gameAction:playerGameAction, success: true });
-        socket.to(data.roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
+        socket.to(roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
     })
 
     socket.on("surrenderRequest", (data) => {
-        rooms[data.roomID].gameStarted = false;
-        Object.keys(rooms[data.roomID].players).forEach(playerID => {
-            rooms[data.roomID].players[playerID].isReady = false;
+        const roomID = data.roomID;
+        rooms[roomID].gameStarted = false;
+        Object.keys(rooms[roomID].players).forEach(playerID => {
+            rooms[roomID].players[playerID].isReady = false;
         });
 
         // Get gamestate
-        const gameState = rooms[data.roomID].gameState;
+        const gameState = rooms[roomID].gameState;
         // Get the players ids
         const playersIDS = Object.keys(gameState.players);
         // Get the enemy id
@@ -170,74 +164,72 @@ io.on("connection", (socket) => {
         gameState.isGameOver = true;
         gameState.winnerID = enemyID;
 
-        io.to(data.roomID).emit("surrenderResponse", { winnerID:enemyID, success: true });
+        io.to(roomID).emit("surrenderResponse", { winnerID:enemyID, success: true });
     })
 
-    socket.on("goBackLobbyRequest", (data) => {
-        socket.emit("goBackLobbyResponse");
-        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
-    })
-
-    socket.on("leftRoom", () => {
-        // if user was in a room
-        const userRoom = users[playerID].room;
-        if (userRoom !== null) {
-            // set room player status
-            rooms[userRoom].players[playerID].isPresent = false;
-            // if room empty after player leaves we delete it
-            let playersPresent = 0;
-            for (const key in rooms[userRoom].players) {
-                const player = rooms[userRoom].players[key];
-                if (player.isPresent) {
-                    playersPresent++;
-                }
-            }
-            if (playersPresent === 0) {
-                delete rooms[userRoom];
-            }
-        }
+    socket.on("rematchRequest", (data) => {
+        socket.emit("rematchResponse");
+        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length });
     })
 
     socket.on("messageRequest", (data) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("disconnect", (reason) => {
-        console.log("Player socket disconnected:", playerID, "- reason:", reason);
+    socket.on("leftRoom", () => {
+        // if player was in a room
+        const roomID = players[playerID].room;
+        if (roomID) {
+            // update room
+            delete rooms[roomID].players[playerID];
 
-        // remove socket from player sockets
-        const socketIndex = users[playerID].sockets.indexOf(socket.id);
-        if (socketIndex !== -1) {
-            users[playerID].sockets.splice(socketIndex, 1);
-        }
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
 
-        // If player has no sockets:
-        if (users[playerID].sockets.length === 0) {
-            // get player room
-            const userRoom = users[playerID].room;
+            // update player
+            players[playerID].room = null;
 
-            // if user was in a room that still exists
-            if (userRoom !== null && rooms.hasOwnProperty(userRoom)) {
-                // set room player status
-                rooms[userRoom].players[playerID].isPresent = false;
-                // if room empty after player leaves we delete it
-                let playersPresent = 0;
-                for (const key in rooms[userRoom].players) {
-                    const player = rooms[userRoom].players[key];
-                    if (player.isPresent) {
-                        playersPresent++;
-                    }
-                }
-                if (playersPresent === 0) {
-                    delete rooms[userRoom];
-                }
+            // if room empty after player leaves we delete it
+            if (Object.keys(rooms[roomID].players).length === 0) {
+                delete rooms[roomID];
             }
-
-            // remove user from users
-            delete users[playerID];
         }
     })
+
+    socket.on("disconnect", (reason) => {
+        console.log("Player disconnected:", playerID, "| userID:", userID, "| reason:", reason);
+
+        // get player room
+        const roomID = players[playerID].room;
+
+        // if player was in a room
+        if (roomID) {            
+            // remove player from room
+            delete rooms[roomID].players[playerID];
+
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+
+            // if room empty after room update
+            if (Object.keys(rooms[roomID].players).length === 0) {
+                // check again after 5 minutes
+                setTimeout(() => {
+                    // if still empty, delete room
+                    if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
+                        delete rooms[roomID];
+                    }
+                }, 300000);
+            }
+        }
+
+        // delete player
+        delete players[playerID];
+    })
 })
+
+
+
+
 
 
 server.listen(port, () => {

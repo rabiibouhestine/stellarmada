@@ -15,8 +15,8 @@ import { Button } from "./entities/Button";
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor(canvasRef, gameState) {
-        this.playerID = localStorage.getItem("playerID");
+    constructor(canvasRef, gameState, playerID) {
+        this.playerID = playerID;
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 720,
@@ -126,7 +126,9 @@ export class Game {
     }
 
     onConfirmButton(event) {
-        this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+        if (this.players[this.playerID]) {
+            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+        }
     }
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {

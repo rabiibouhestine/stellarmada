@@ -1,23 +1,10 @@
 <script>
-	import { socket } from '$lib/modules/socket.js';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		socket.on('createRoomResponse', (data) => {
-			if ('error' in data) {
-				return;
-			}
-			goto(`/${data.room.roomID}`);
-		});
-
-		return () => {
-			socket.off('createRoomResponse');
-		};
-	});
+	import ShortUniqueId from 'short-unique-id';
 
 	const createRoom = () => {
-		socket.emit('createRoom');
+		const roomID = new ShortUniqueId().rnd();
+		goto(`/${roomID}`);
 	};
 
 	const findGame = () => {

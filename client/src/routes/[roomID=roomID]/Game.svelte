@@ -3,12 +3,18 @@
 	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socket } from '$lib/modules/socket.js';
-	import Modal from '$lib/components/Modal.svelte';
+	import { socketStore } from '$lib/modules/stores.js';
 	import Timer from '$lib/modules/Timer.js';
+	import Modal from '$lib/components/Modal.svelte';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
+
+	const socket = $socketStore;
+	const playerID = socket.id;
+
+	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
+	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 
 	let canvas;
 	let winnerID;
@@ -18,9 +24,6 @@
 	let showQuitModal = false;
 	let playerTimeLeft = 0;
 	let opponentTimeLeft = 0;
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const playerID = localStorage.getItem('playerID');
 
 	let game;
 	let logs = [];
@@ -31,10 +34,11 @@
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
 
+		socket.emit('joinRoom', { roomID: $page.params.roomID });
 		socket.emit('gameStateRequest', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game(canvas, data.gameState);
+			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 		});
@@ -66,6 +70,7 @@
 		return () => {
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
+			socket.off('surrenderResponse');
 			game.end();
 		};
 	});
@@ -98,10 +103,12 @@
 	}
 
 	function handleRematch() {
-		socket.emit('goBackLobbyRequest', { roomID: $page.params.roomID });
+		showSurrenderModal = false;
+		socket.emit('rematchRequest', { roomID: $page.params.roomID });
 	}
 
 	function handleLeave() {
+		showQuitModal = false;
 		goto('/');
 	}
 

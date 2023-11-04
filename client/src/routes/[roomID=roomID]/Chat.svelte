@@ -1,9 +1,10 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
-	import { socket } from '$lib/modules/socket.js';
 	import { page } from '$app/stores';
+	import { socketStore } from '$lib/modules/stores.js';
 
-	const playerID = localStorage.getItem('playerID');
+	const socket = $socketStore;
+	const playerID = socket.id;
 
 	let messages = [
 		{
@@ -23,6 +24,10 @@
 		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});
+
+		return () => {
+			socket.off('messageResponse');
+		};
 	});
 
 	afterUpdate(() => {
