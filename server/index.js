@@ -37,18 +37,9 @@ app.get('/join', (req, res) => {
         return;
     }
 
-    // if room does not exist we create it
-    if (!rooms.hasOwnProperty(roomID)) {
-        rooms[roomID] = {
-            roomID: roomID,
-            gameStarted: false,
-            gameState: null,
-            players: {}
-        };
-    }
-
     // return room gameStarted status
-    res.json({ gameStarted: rooms[roomID].gameStarted });
+    const hasGameStarted = rooms[roomID]? rooms[roomID].gameStarted : false;
+    res.json({ gameStarted: hasGameStarted });
 });
 
 
@@ -72,7 +63,21 @@ io.on("connection", (socket) => {
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
-        if (rooms[roomID] && !rooms[roomID].players[playerID]) {
+
+        // if room does not exist we create it
+        if (!rooms.hasOwnProperty(roomID)) {
+            rooms[roomID] = {
+                roomID: roomID,
+                gameStarted: false,
+                gameState: null,
+                players: {}
+            };
+        }
+
+        // if player not in room we join
+        // emit.joinRoom currently runs in Lobby.svelte and Game.svelte
+        // so a player going from Lobby to Game would be already in the room
+        if (!rooms[roomID].players[playerID]) {
     
             // update player
             players[playerID].room = roomID;
