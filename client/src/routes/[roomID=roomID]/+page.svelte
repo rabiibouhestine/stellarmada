@@ -32,6 +32,7 @@
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
 			socket.off('gameStatus');
+			socket.disconnect();
 		};
 	});
 </script>
