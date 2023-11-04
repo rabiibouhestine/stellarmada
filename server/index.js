@@ -38,7 +38,10 @@ app.get('/join', (req, res) => {
     }
 
     // return room gameStarted status
-    const hasGameStarted = rooms[roomID]? rooms[roomID].gameStarted : false;
+    let hasGameStarted = false;
+    if (rooms[roomID] && Object.keys(rooms[roomID].players).length > 1) {
+        hasGameStarted = rooms[roomID].gameStarted
+    }
     res.json({ gameStarted: hasGameStarted });
 });
 
