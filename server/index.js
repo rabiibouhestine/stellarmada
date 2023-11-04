@@ -42,7 +42,7 @@ app.get('/join', (req, res) => {
     let hasGameStarted = false;
     if (rooms[roomID]) {
         playersNb = Object.keys(rooms[roomID].players).length;
-        if (playersNb > 1) {
+        if (playersNb > 0) {
             hasGameStarted = rooms[roomID].gameStarted;
         }
     }
