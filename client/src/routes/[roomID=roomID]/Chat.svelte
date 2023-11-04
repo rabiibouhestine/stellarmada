@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { socket } from '$lib/modules/stores.js';
 
-	let playerID;
+	let playerID = $socket.id;
 
 	let messages = [
 		{
@@ -20,8 +20,6 @@
 	let messageInput = '';
 
 	onMount(() => {
-		playerID = $socket.id;
-
 		$socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});
