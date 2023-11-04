@@ -95,7 +95,6 @@ io.on("connection", (socket) => {
     
             // emit room update event
             io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-            socket.emit("gameStatus", { gameStarted: rooms[roomID].gameStarted });
         }
     })
 
