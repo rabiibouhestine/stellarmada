@@ -96,7 +96,7 @@ io.on("connection", (socket) => {
             socket.join(roomID);
     
             // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
         }
     })
 
@@ -171,7 +171,7 @@ io.on("connection", (socket) => {
 
     socket.on("rematchRequest", (data) => {
         socket.emit("rematchResponse");
-        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length })
+        socket.emit("roomUpdate", { playersNb: Object.keys(rooms[data.roomID].players).length });
     })
 
     socket.on("messageRequest", (data) => {
@@ -182,12 +182,15 @@ io.on("connection", (socket) => {
         // if player was in a room
         const roomID = players[playerID].room;
         if (roomID) {
-            // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
             // update room
             delete rooms[roomID].players[playerID];
+
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+
             // update player
             players[playerID].room = null;
+
             // if room empty after player leaves we delete it
             if (Object.keys(rooms[roomID].players).length === 0) {
                 delete rooms[roomID];
@@ -202,12 +205,12 @@ io.on("connection", (socket) => {
         const roomID = players[playerID].room;
 
         // if player was in a room
-        if (roomID) {
-            // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
-
+        if (roomID) {            
             // remove player from room
             delete rooms[roomID].players[playerID];
+
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
 
             // if room empty after room update, delete room
             if (Object.keys(rooms[roomID].players).length === 0) {
