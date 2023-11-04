@@ -8,6 +8,7 @@
 	let logsDiv;
 
 	onMount(() => {
+		console.log('Logs mounted');
 		playerID = $socket.id;
 	});
 

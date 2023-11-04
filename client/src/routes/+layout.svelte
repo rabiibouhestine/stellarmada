@@ -3,6 +3,7 @@
 	import io from 'socket.io-client';
 	import { socket } from '$lib/modules/stores.js';
 	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -15,6 +16,10 @@
 			})
 		);
 	}
+
+	onMount(() => {
+		console.log('layout mounted');
+	});
 </script>
 
 <slot />

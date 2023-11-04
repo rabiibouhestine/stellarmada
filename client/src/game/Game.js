@@ -126,7 +126,9 @@ export class Game {
     }
 
     onConfirmButton(event) {
-        this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+        if (this.players[this.playerID]) {
+            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+        }
     }
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
