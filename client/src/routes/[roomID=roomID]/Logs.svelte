@@ -4,10 +4,10 @@
 
 	export let logs;
 
-	let logsDiv;
-
 	const socket = $socketStore;
 	const playerID = socket.id;
+
+	let logsDiv;
 
 	afterUpdate(() => {
 		logsDiv.scrollTo(0, logsDiv.scrollHeight);

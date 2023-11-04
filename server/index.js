@@ -96,10 +96,8 @@ io.on("connection", (socket) => {
             // emit room update event
             io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
         }
-    })
 
-    socket.on("gameStateRequest", (data) => {
-        const roomID = data.roomID;
+        // If room has game state we emit gameStateResponse
         if (rooms[roomID].gameState) {
             const gameState = processGameState(rooms[roomID].gameState, playerID);
             socket.emit("gameStateResponse", { gameState:gameState,  success: true });

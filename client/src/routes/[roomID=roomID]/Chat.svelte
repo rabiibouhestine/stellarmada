@@ -6,6 +6,9 @@
 	const socket = $socketStore;
 	const playerID = socket.id;
 
+	let messagesDiv;
+	let messageInput = '';
+
 	let messages = [
 		{
 			playerID: '',
@@ -16,9 +19,6 @@
 			content: 'We will see about that..'
 		}
 	];
-
-	let messagesDiv;
-	let messageInput = '';
 
 	onMount(() => {
 		socket.on('messageResponse', (data) => {
