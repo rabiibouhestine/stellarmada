@@ -1,11 +1,13 @@
 <script>
 	import { afterUpdate } from 'svelte';
-	import { socket } from '$lib/modules/stores.js';
+	import { socket as socketStore } from '$lib/modules/stores.js';
 
 	export let logs;
 
-	let playerID = $socket.id;
 	let logsDiv;
+
+	const socket = $socketStore;
+	const playerID = socket.id;
 
 	afterUpdate(() => {
 		logsDiv.scrollTo(0, logsDiv.scrollHeight);
