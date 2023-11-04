@@ -4,7 +4,10 @@
 	import { socketStore } from '$lib/modules/stores.js';
 
 	const socket = $socketStore;
-	const playerID = socket.id;
+
+	let playerID;
+	let messagesDiv;
+	let messageInput = '';
 
 	let messages = [
 		{
@@ -17,10 +20,9 @@
 		}
 	];
 
-	let messagesDiv;
-	let messageInput = '';
-
 	onMount(() => {
+		playerID = socket.id;
+
 		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});

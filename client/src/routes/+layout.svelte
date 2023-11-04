@@ -7,6 +7,7 @@
 	export let data;
 
 	if (browser) {
+		console.log('layout');
 		socketStore.set(
 			io.connect('http://localhost:3001', {
 				query: {
