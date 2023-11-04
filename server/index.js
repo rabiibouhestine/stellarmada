@@ -182,6 +182,8 @@ io.on("connection", (socket) => {
         // if player was in a room
         const roomID = players[playerID].room;
         if (roomID) {
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
             // update room
             delete rooms[roomID].players[playerID];
             // update player
@@ -199,11 +201,15 @@ io.on("connection", (socket) => {
         // get player room
         const roomID = players[playerID].room;
 
-        // if player was in a room, update room
+        // if player was in a room
         if (roomID) {
-            delete rooms[roomID].players[playerID];
-            // if room empty after room update, delete room
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length })
 
+            // remove player from room
+            delete rooms[roomID].players[playerID];
+
+            // if room empty after room update, delete room
             if (Object.keys(rooms[roomID].players).length === 0) {
                 delete rooms[roomID];
             } 
