@@ -46,7 +46,7 @@ app.get('/join', (req, res) => {
             hasGameStarted = rooms[roomID].gameStarted;
         }
     }
-    res.json({ gameStarted: hasGameStarted, playersNb: playersNb });
+    res.json({ gameStarted: hasGameStarted, playersNb: playersNb + 1 });
 });
 
 

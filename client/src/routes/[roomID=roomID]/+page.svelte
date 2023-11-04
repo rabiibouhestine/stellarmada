@@ -27,5 +27,5 @@
 {#if gameStarted}
 	<Game />
 {:else}
-	<Lobby />
+	<Lobby playersNb={data.playersNb} />
 {/if}

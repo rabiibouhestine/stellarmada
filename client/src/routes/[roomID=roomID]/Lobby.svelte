@@ -5,7 +5,8 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	let playersNb = 0;
+	export let playersNb;
+
 	let isReady = false;
 	let readyBtnClass = '';
 
