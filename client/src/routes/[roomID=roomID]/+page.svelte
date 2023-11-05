@@ -30,6 +30,10 @@
 			gameStarted = false;
 		});
 
+		socket.on('roomKick', () => {
+			goto('/');
+		});
+
 		return () => {
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
