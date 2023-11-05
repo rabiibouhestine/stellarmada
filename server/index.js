@@ -161,10 +161,14 @@ io.on("connection", (socket) => {
         const roomID = data.room;
 
         // update room
-        rooms[roomID].players[playerID] = {
-            isReady: false,
-            isPresent: false
-        };
+        if (rooms[roomID].gameStarted) {
+            rooms[roomID].players[playerID] = {
+                isReady: false,
+                isPresent: false
+            };
+        } else {
+            delete rooms[roomID].players[playerID];
+        }
 
         // emit room update event
         io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
