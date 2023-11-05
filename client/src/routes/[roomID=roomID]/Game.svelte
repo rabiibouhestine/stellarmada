@@ -11,12 +11,12 @@
 	import { Game } from '../../game/Game.js';
 
 	const socket = $socketStore;
-	const playerID = socket.id;
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 
 	let canvas;
+	let playerID;
 	let winnerID;
 	let isGameOver = false;
 	let showRulesModal = false;
@@ -35,6 +35,10 @@
 		}, 1000);
 
 		socket.emit('joinRoom', { roomID: $page.params.roomID });
+
+		socket.on('connect', () => {
+			playerID = socket.id;
+		});
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
@@ -67,6 +71,7 @@
 		});
 
 		return () => {
+			socket.off('connect');
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
 			socket.off('surrenderResponse');

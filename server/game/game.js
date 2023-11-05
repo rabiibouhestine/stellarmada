@@ -6,9 +6,10 @@ const handMax = 8;
 const initGameState = (room) => {
     // Create players states
     const players = {};
-    const playersIDs = Object.keys(room.players);
+    const playersIDs = Object.keys(room.players)
+        .filter(playerID => room.players[playerID].isPlaying);
     for (const id of playersIDs) {
-        players[id] = initPlayerState();
+        players[id] = initPlayerState(room.players[id].userID);
     }
 
     // Define gameState
@@ -34,7 +35,7 @@ const initGameState = (room) => {
     return gameState;
 }
 
-const initPlayerState = () => {
+const initPlayerState = (userID) => {
     // Define a standard playing cards deck split into diamonds and non diamonds
     const schPile = [
         'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS',
@@ -64,6 +65,7 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
+        userID: userID,
         timeLeft: 600000,
         turnStartTime: null,
         cards: {

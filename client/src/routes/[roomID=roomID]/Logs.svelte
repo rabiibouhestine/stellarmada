@@ -1,13 +1,23 @@
 <script>
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import { socketStore } from '$lib/modules/stores.js';
 
 	export let logs;
 
 	const socket = $socketStore;
-	const playerID = socket.id;
 
+	let playerID;
 	let logsDiv;
+
+	onMount(() => {
+		socket.on('connect', () => {
+			playerID = socket.id;
+		});
+
+		return () => {
+			socket.off('connect');
+		};
+	});
 
 	afterUpdate(() => {
 		logsDiv.scrollTo(0, logsDiv.scrollHeight);
