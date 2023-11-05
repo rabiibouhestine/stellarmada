@@ -58,6 +58,16 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
 
+        // if room does not exist we create it
+        if (!rooms.hasOwnProperty(roomID)) {
+            rooms[roomID] = {
+                roomID: roomID,
+                gameStarted: false,
+                gameState: null,
+                players: {}
+            };
+        }
+
         // if user already in a room, send signal to leave
         if (players[playerID]) {
             io.to(players[playerID].socket).emit('leaveRoom');
@@ -68,16 +78,6 @@ io.on("connection", (socket) => {
             room: roomID,
             socket: socket.id
         };
-
-        // if room does not exist we create it
-        if (!rooms.hasOwnProperty(roomID)) {
-            rooms[roomID] = {
-                roomID: roomID,
-                gameStarted: false,
-                gameState: null,
-                players: {}
-            };
-        }
 
         // add player to room
         rooms[roomID].players[playerID] = {
@@ -171,7 +171,7 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("leaveRoom", (data) => {
+    socket.on("roomLeft", (data) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
         // get room
