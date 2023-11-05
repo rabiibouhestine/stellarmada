@@ -173,6 +173,7 @@ io.on("connection", (socket) => {
         // emit room update event
         io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
 
+        // TODO also delete room if both players isPresent false
         // if room empty after room update
         if (Object.keys(rooms[roomID].players).length === 0) {
             // check again after 5 minutes
