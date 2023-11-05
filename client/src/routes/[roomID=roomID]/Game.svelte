@@ -33,9 +33,12 @@
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
 
-		socket.emit('joinRoom', { roomID: $page.params.roomID });
+		socket.emit('gameStateRequest', {
+			roomID: $page.params.roomID
+		});
 
 		socket.on('gameStateResponse', (data) => {
+			console.log('gameStateResponse');
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
@@ -66,7 +69,6 @@
 		});
 
 		return () => {
-			socket.off('connect');
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
 			socket.off('surrenderResponse');
