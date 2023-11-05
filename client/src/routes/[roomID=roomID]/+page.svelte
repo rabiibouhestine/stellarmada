@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 	import io from 'socket.io-client';
@@ -27,6 +28,10 @@
 
 		socket.on('rematchResponse', () => {
 			gameStarted = false;
+		});
+
+		socket.on('leaveRoom', () => {
+			goto('/');
 		});
 
 		return () => {
