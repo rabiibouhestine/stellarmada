@@ -26,12 +26,6 @@ app.get('/join', (req, res) => {
     const playerID = req.query.userID;
     const roomID = req.query.roomID;
 
-    // if roomID is not in query params we return error
-    if (!roomID) {
-        res.status(500).json({ error: 'roomID not found' });
-        return;
-    }
-
     let playersNb = 0;
     let gameStarted = false;
 
