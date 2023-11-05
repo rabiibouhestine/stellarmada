@@ -171,36 +171,31 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("disconnect", (reason) => {
+    socket.on("leaveRoom", (data) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
-        if (players[playerID]) {
-            // get player room
-            const roomID = players[playerID].room;
-    
-            // if player was in a room
-            if (roomID) {            
-                // remove player from room
-                delete rooms[roomID].players[playerID];
-    
-                // emit room update event
-                io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-    
-                // if room empty after room update
-                if (Object.keys(rooms[roomID].players).length === 0) {
-                    // check again after 5 minutes
-                    setTimeout(() => {
-                        // if still empty, delete room
-                        if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
-                            delete rooms[roomID];
-                        }
-                    }, 300000);
+        // get room
+        const roomID = data.room;
+
+        // remove player from room
+        delete rooms[roomID].players[playerID];
+
+        // emit room update event
+        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+
+        // if room empty after room update
+        if (Object.keys(rooms[roomID].players).length === 0) {
+            // check again after 5 minutes
+            setTimeout(() => {
+                // if still empty, delete room
+                if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
+                    delete rooms[roomID];
                 }
-            }
-    
-            // delete player
-            delete players[playerID];
+            }, 300000);
         }
+
+        // delete player
+        delete players[playerID];
     })
 })
 
