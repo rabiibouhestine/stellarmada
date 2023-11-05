@@ -162,11 +162,11 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("roomLeft", (data) => {
+    socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
         // get room
-        const roomID = data.room;
+        const roomID = players[playerID].room;
 
         // update room
         if (rooms[roomID].gameStarted) {

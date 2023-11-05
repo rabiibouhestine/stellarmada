@@ -33,9 +33,6 @@
 		return () => {
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
-			socket.emit('roomLeft', {
-				roomID: $page.params.roomID
-			});
 			socket.disconnect();
 		};
 	});
