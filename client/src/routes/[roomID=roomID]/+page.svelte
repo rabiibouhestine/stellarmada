@@ -16,11 +16,11 @@
 		}
 	});
 
-	onMount(() => {
-		socket.emit('joinRoom', {
-			roomID: $page.params.roomID
-		});
+	socket.emit('joinRoom', {
+		roomID: $page.params.roomID
+	});
 
+	onMount(() => {
 		socket.on('handleReadyResponse', () => {
 			gameStarted = true;
 		});
@@ -32,7 +32,6 @@
 		return () => {
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
-			socket.off('gameStatus');
 			socket.disconnect();
 		};
 	});

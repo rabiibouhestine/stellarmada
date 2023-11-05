@@ -12,6 +12,10 @@
 	export let socket;
 	export let playerID;
 
+	socket.emit('gameStateRequest', {
+		roomID: $page.params.roomID
+	});
+
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 
@@ -32,10 +36,6 @@
 			playerTimeLeft = playerTimer.timeLeft;
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
-
-		socket.emit('gameStateRequest', {
-			roomID: $page.params.roomID
-		});
 
 		socket.on('gameStateResponse', (data) => {
 			console.log('gameStateResponse');
