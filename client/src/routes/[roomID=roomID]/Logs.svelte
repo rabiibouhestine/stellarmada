@@ -1,11 +1,8 @@
 <script>
 	import { afterUpdate } from 'svelte';
-	import { socketStore } from '$lib/modules/stores.js';
 
 	export let logs;
-
-	const socket = $socketStore;
-	const playerID = socket.id;
+	export let playerID;
 
 	let logsDiv;
 

@@ -1,23 +1,25 @@
 <script>
 	import { onMount } from 'svelte';
-	import { socketStore } from '$lib/modules/stores.js';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import Lobby from './Lobby.svelte';
 	import Game from './Game.svelte';
 	import io from 'socket.io-client';
 
 	export let data;
-
+	const playerID = data.userID;
+	const playersNb = data.playersNb;
 	let gameStarted = data.gameStarted;
 
-	socketStore.set(
-		io.connect('https://server.stellarmada.com', {
-			query: {
-				userID: data.userID
-			}
-		})
-	);
+	const socket = io.connect('https://server.stellarmada.com', {
+		query: {
+			playerID: playerID
+		}
+	});
 
-	const socket = $socketStore;
+	socket.emit('joinRoom', {
+		roomID: $page.params.roomID
+	});
 
 	onMount(() => {
 		socket.on('handleReadyResponse', () => {
@@ -28,17 +30,20 @@
 			gameStarted = false;
 		});
 
+		socket.on('roomKick', () => {
+			goto('/');
+		});
+
 		return () => {
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
-			socket.off('gameStatus');
 			socket.disconnect();
 		};
 	});
 </script>
 
 {#if gameStarted}
-	<Game />
+	<Game {socket} {playerID} />
 {:else}
-	<Lobby playersNb={data.playersNb} />
+	<Lobby {socket} {playersNb} />
 {/if}

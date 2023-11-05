@@ -3,15 +3,18 @@
 	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { socketStore } from '$lib/modules/stores.js';
 	import Timer from '$lib/modules/Timer.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Chat from './Chat.svelte';
 	import Logs from './Logs.svelte';
 	import { Game } from '../../game/Game.js';
 
-	const socket = $socketStore;
-	const playerID = socket.id;
+	export let socket;
+	export let playerID;
+
+	socket.emit('gameStateRequest', {
+		roomID: $page.params.roomID
+	});
 
 	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
 	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
@@ -33,8 +36,6 @@
 			playerTimeLeft = playerTimer.timeLeft;
 			opponentTimeLeft = opponentTimer.timeLeft;
 		}, 1000);
-
-		socket.emit('joinRoom', { roomID: $page.params.roomID });
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
@@ -126,7 +127,7 @@
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
 		</div>
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Logs {logs} />
+			<Logs {logs} {playerID} />
 		</div>
 	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
@@ -168,7 +169,7 @@
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat />
+			<Chat {socket} {playerID} />
 		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"

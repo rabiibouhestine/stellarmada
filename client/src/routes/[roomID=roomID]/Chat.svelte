@@ -1,10 +1,9 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
 	import { page } from '$app/stores';
-	import { socketStore } from '$lib/modules/stores.js';
 
-	const socket = $socketStore;
-	const playerID = socket.id;
+	export let socket;
+	export let playerID;
 
 	let messagesDiv;
 	let messageInput = '';
@@ -26,6 +25,7 @@
 		});
 
 		return () => {
+			socket.off('connect');
 			socket.off('messageResponse');
 		};
 	});

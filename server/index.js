@@ -22,29 +22,25 @@ const rooms = {};
 const players = {};
 
 
-
-
-app.get('/api/users', (req, res) => {
-    res.json({ playersOnline: Object.keys(players).length });
-});
-
 app.get('/join', (req, res) => {
+    const playerID = req.query.userID;
     const roomID = req.query.roomID;
 
-    // if roomID is not in query params we return error
-    if (!roomID) {
-        res.status(500).json({ error: 'roomID not found' });
-        return;
+    let playersNb = 0;
+    let gameStarted = false;
+
+    if (rooms[roomID]) {
+        gameStarted = rooms[roomID].gameStarted;
+        playersNb = Object.keys(rooms[roomID].players).length;
+        // if room full we return error
+        if (playersNb === 2 && !(playerID in rooms[roomID].players)) {
+            res.status(500).json({ error: 'room is full' });
+            return;
+        }
     }
 
     // return room information
-    let playersNb = 0;
-    let gameStarted = false;
-    if (rooms[roomID]) {
-        playersNb = Object.keys(rooms[roomID].players).length + 1;
-        gameStarted = rooms[roomID].gameStarted;
-    }
-    res.json({ gameStarted: gameStarted, playersNb: playersNb });
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
 });
 
 
@@ -52,19 +48,8 @@ app.get('/join', (req, res) => {
 
 
 io.on("connection", (socket) => {
-    const playerID = socket.id;
-    const userID = socket.handshake.query.userID;
-    console.log("Player connected:", playerID, "| userID:", userID);
-
-    if (!players[playerID]) {
-        players[playerID] = {
-            room: null
-        };
-    } else {
-        players[playerID].room = null;
-    }
-
-
+    const playerID = socket.handshake.query.playerID;
+    console.log("socket connected:", socket.id, "| playerID:", playerID);
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
@@ -79,29 +64,38 @@ io.on("connection", (socket) => {
             };
         }
 
-        // if player not in room we join
-        // emit.joinRoom currently runs in Lobby.svelte and Game.svelte
-        // so a player going from Lobby to Game would be already in the room
-        if (!rooms[roomID].players[playerID]) {
-    
-            // update player
-            players[playerID].room = roomID;
-    
-            // update room
-            rooms[roomID].players[playerID] = { isReady: false };
-    
-            // join socket to a socket.io room with same roomID
-            socket.join(roomID);
-    
-            // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+        // update players
+        if (players[playerID]) {
+            const oldSocket = players[playerID].socket;
+            players[playerID] = {
+                room: roomID,
+                socket: socket.id
+            };
+            io.to(oldSocket).emit("roomKick");
+        } else {
+            players[playerID] = {
+                room: roomID,
+                socket: socket.id
+            };
         }
 
-        // If room has game state we emit gameStateResponse
-        if (rooms[roomID].gameState) {
-            const gameState = processGameState(rooms[roomID].gameState, playerID);
-            socket.emit("gameStateResponse", { gameState:gameState,  success: true });
-        }
+        // update room
+        rooms[roomID].players[playerID] = {
+            isReady: false,
+            isPresent: true
+        };
+
+        // join socket to a socket.io room with same roomID
+        socket.join(roomID);
+
+        // emit room update event
+        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+    })
+
+    socket.on("gameStateRequest", (data) => {
+        const gamestate = rooms[data.roomID].gameState;
+        const processedGameState = processGameState(gamestate, playerID);
+        socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
     })
 
     socket.on("handleReady", (data) => {
@@ -174,40 +168,28 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("leftRoom", () => {
-        // if player was in a room
-        const roomID = players[playerID].room;
-        if (roomID) {
-            // update room
-            delete rooms[roomID].players[playerID];
-
-            // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-
-            // update player
-            players[playerID].room = null;
-
-            // if room empty after player leaves we delete it
-            if (Object.keys(rooms[roomID].players).length === 0) {
-                delete rooms[roomID];
-            }
-        }
-    })
-
     socket.on("disconnect", (reason) => {
-        console.log("Player disconnected:", playerID, "| userID:", userID, "| reason:", reason);
+        console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
-        // get player room
-        const roomID = players[playerID].room;
-
-        // if player was in a room
-        if (roomID) {            
-            // remove player from room
-            delete rooms[roomID].players[playerID];
-
+        // if it's not a disconnect coming from a kick because of user opening multiple tabs
+        if (players[playerID].socket === socket.id) {
+            // get room
+            const roomID = players[playerID].room;
+    
+            // update players
+            delete players[playerID];
+    
+            // update room
+            if (rooms[roomID].gameStarted) {
+                rooms[roomID].players[playerID].isPresent = false;
+            } else {
+                delete rooms[roomID].players[playerID];
+            }
+    
             // emit room update event
             io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-
+    
+            // TODO also delete room if both players isPresent false
             // if room empty after room update
             if (Object.keys(rooms[roomID].players).length === 0) {
                 // check again after 5 minutes
@@ -219,9 +201,6 @@ io.on("connection", (socket) => {
                 }, 300000);
             }
         }
-
-        // delete player
-        delete players[playerID];
     })
 })
 

@@ -1,13 +1,11 @@
 <script>
 	import { page } from '$app/stores';
 	import { Icon, User, Clipboard } from 'svelte-hero-icons';
-	import { socketStore } from '$lib/modules/stores.js';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	export let playersNb;
-
-	const socket = $socketStore;
+	export let socket;
 
 	let isReady = false;
 	let readyBtnClass = '';
@@ -25,7 +23,6 @@
 	}
 
 	function handleLeave() {
-		socket.emit('leftRoom');
 		goto('/');
 	}
 
@@ -35,8 +32,6 @@
 	}
 
 	onMount(() => {
-		socket.emit('joinRoom', { roomID: $page.params.roomID });
-
 		socket.on('roomUpdate', (data) => {
 			playersNb = data.playersNb;
 		});
