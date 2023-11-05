@@ -171,6 +171,9 @@ io.on("connection", (socket) => {
         // get room
         const roomID = players[playerID].room;
 
+        // update players
+        delete players[playerID];
+
         // update room
         if (rooms[roomID].gameStarted) {
             rooms[roomID].players[playerID] = {
