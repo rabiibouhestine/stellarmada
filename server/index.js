@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
             io.to(players[playerID].socket).emit('leaveRoom');
         }
 
-        // add the player
+        // add the player to players
         players[playerID] = {
             room: roomID,
             socket: socket.id
