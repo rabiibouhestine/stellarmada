@@ -23,7 +23,6 @@
 	}
 
 	function handleLeave() {
-		socket.emit('leftRoom');
 		goto('/');
 	}
 

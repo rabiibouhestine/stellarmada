@@ -171,26 +171,6 @@ io.on("connection", (socket) => {
         io.to(data.roomID).emit("messageResponse", {message: data.message});
     })
 
-    socket.on("leftRoom", () => {
-        // if player was in a room
-        const roomID = players[playerID].room;
-        if (roomID) {
-            // update room
-            delete rooms[roomID].players[playerID];
-
-            // emit room update event
-            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-
-            // update player
-            players[playerID].room = null;
-
-            // if room empty after player leaves we delete it
-            if (Object.keys(rooms[roomID].players).length === 0) {
-                delete rooms[roomID];
-            }
-        }
-    })
-
     socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
