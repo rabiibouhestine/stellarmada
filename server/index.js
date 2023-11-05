@@ -71,7 +71,10 @@ io.on("connection", (socket) => {
         }
 
         // update players
-        players[playerID] = { room: roomID };
+        players[playerID] = {
+            room: roomID,
+            socket: socket.id
+        };
 
         // update room
         rooms[roomID].players[playerID] = {
