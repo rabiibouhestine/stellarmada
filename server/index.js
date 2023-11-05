@@ -80,13 +80,9 @@ io.on("connection", (socket) => {
     })
 
     socket.on("gameStateRequest", (data) => {
-        // If room has game state we emit gameStateResponse
-        const roomID = data.roomID;
-        const gamestate = rooms[roomID].gameState;
-        if (gamestate) {
-            const processedGameState = processGameState(gamestate, playerID);
-            socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
-        }
+        const gamestate = rooms[data.roomID].gameState;
+        const processedGameState = processGameState(gamestate, playerID);
+        socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
     })
 
     socket.on("handleReady", (data) => {
