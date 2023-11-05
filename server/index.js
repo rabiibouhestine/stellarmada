@@ -70,15 +70,20 @@ io.on("connection", (socket) => {
             };
         }
 
-        if (players[playerID]) {
-            io.to(players[playerID].socket).emit("roomKick");
-        }
-
         // update players
-        players[playerID] = {
-            room: roomID,
-            socket: socket.id
-        };
+        if (players[playerID]) {
+            const oldSocket = players[playerID].socket;
+            players[playerID] = {
+                room: roomID,
+                socket: socket.id
+            };
+            io.to(oldSocket).emit("roomKick");
+        } else {
+            players[playerID] = {
+                room: roomID,
+                socket: socket.id
+            };
+        }
 
         // update room
         rooms[roomID].players[playerID] = {
@@ -172,32 +177,34 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
-        // get room
-        const roomID = players[playerID].room;
-
-        // update players
-        delete players[playerID];
-
-        // update room
-        if (rooms[roomID].gameStarted) {
-            rooms[roomID].players[playerID].isPresent = false;
-        } else {
-            delete rooms[roomID].players[playerID];
-        }
-
-        // emit room update event
-        io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
-
-        // TODO also delete room if both players isPresent false
-        // if room empty after room update
-        if (Object.keys(rooms[roomID].players).length === 0) {
-            // check again after 5 minutes
-            setTimeout(() => {
-                // if still empty, delete room
-                if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
-                    delete rooms[roomID];
-                }
-            }, 300000);
+        if (players[playerID].socket === socket.id) {
+            // get room
+            const roomID = players[playerID].room;
+    
+            // update players
+            delete players[playerID];
+    
+            // update room
+            if (rooms[roomID].gameStarted) {
+                rooms[roomID].players[playerID].isPresent = false;
+            } else {
+                delete rooms[roomID].players[playerID];
+            }
+    
+            // emit room update event
+            io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
+    
+            // TODO also delete room if both players isPresent false
+            // if room empty after room update
+            if (Object.keys(rooms[roomID].players).length === 0) {
+                // check again after 5 minutes
+                setTimeout(() => {
+                    // if still empty, delete room
+                    if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
+                        delete rooms[roomID];
+                    }
+                }, 300000);
+            }
         }
     })
 })
