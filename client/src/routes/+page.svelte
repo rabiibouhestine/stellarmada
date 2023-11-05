@@ -2,6 +2,10 @@
 	import { goto } from '$app/navigation';
 	import ShortUniqueId from 'short-unique-id';
 
+	const findRoom = () => {
+		goto('/matchmaking');
+	};
+
 	const createRoom = () => {
 		const roomID = new ShortUniqueId().rnd();
 		goto(`/${roomID}`);
@@ -22,14 +26,20 @@
 		</div>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+			on:click={findRoom}
 		>
-			PLAY AGAINST AI
+			FIND A GAME
 		</button>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
 			on:click={createRoom}
 		>
 			CREATE A ROOM
+		</button>
+		<button
+			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+		>
+			PLAY AGAINST AI
 		</button>
 		<a
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
