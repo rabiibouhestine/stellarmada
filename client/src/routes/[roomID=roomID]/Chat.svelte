@@ -1,11 +1,10 @@
 <script>
 	import { onMount, afterUpdate } from 'svelte';
 	import { page } from '$app/stores';
-	import { socketStore } from '$lib/modules/stores.js';
 
-	const socket = $socketStore;
+	export let socket;
+	export let playerID;
 
-	let playerID;
 	let messagesDiv;
 	let messageInput = '';
 
@@ -21,10 +20,6 @@
 	];
 
 	onMount(() => {
-		socket.on('connect', () => {
-			playerID = socket.id;
-		});
-
 		socket.on('messageResponse', (data) => {
 			messages = [...messages, data.message];
 		});

@@ -9,17 +9,19 @@
 
 	let gameStarted = data.gameStarted;
 
-	socketStore.set(
-		io.connect('http://localhost:3001', {
-			query: {
-				userID: data.userID
-			}
-		})
-	);
+	const socket = io.connect('http://localhost:3001', {
+		query: {
+			userID: data.userID
+		}
+	});
 
-	const socket = $socketStore;
+	let playerID;
 
 	onMount(() => {
+		socket.on('connect', () => {
+			playerID = socket.id;
+		});
+
 		socket.on('handleReadyResponse', () => {
 			gameStarted = true;
 		});
@@ -38,7 +40,7 @@
 </script>
 
 {#if gameStarted}
-	<Game />
+	<Game {socket} {playerID} />
 {:else}
-	<Lobby playersNb={data.playersNb} />
+	<Lobby {socket} playersNb={data.playersNb} />
 {/if}
