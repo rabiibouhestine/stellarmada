@@ -72,14 +72,14 @@ io.on("connection", (socket) => {
 
         // update players
         players[playerID] = {
-            room: roomID,
-            socket: socket.id
+            room: roomID
         };
 
         // update room
         rooms[roomID].players[playerID] = {
             isReady: false,
-            isPresent: true
+            isPresent: true,
+            socket: socket.id
         };
 
         // join socket to a socket.io room with same roomID
