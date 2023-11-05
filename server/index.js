@@ -176,10 +176,7 @@ io.on("connection", (socket) => {
 
         // update room
         if (rooms[roomID].gameStarted) {
-            rooms[roomID].players[playerID] = {
-                isReady: false,
-                isPresent: false
-            };
+            rooms[roomID].players[playerID].isPresent = false;
         } else {
             delete rooms[roomID].players[playerID];
         }
