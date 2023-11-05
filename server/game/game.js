@@ -7,7 +7,7 @@ const initGameState = (room) => {
     // Create players states
     const players = {};
     const playersIDs = Object.keys(room.players)
-        .filter(playerID => room.players[playerID].isPlaying);
+        .filter(playerID => room.players[playerID].isReady);
     for (const id of playersIDs) {
         players[id] = initPlayerState(room.players[id].userID);
     }

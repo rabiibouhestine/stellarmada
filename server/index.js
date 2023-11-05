@@ -87,15 +87,9 @@ io.on("connection", (socket) => {
             // update player
             players[playerID].room = roomID;
 
-            // how many players in room are playing
-            const nbPlayersPlaying = Object.keys(rooms[roomID].players)
-                .filter(playerID => rooms[roomID].players[playerID].isPlaying)
-                .length;
-            
             // add player to room
             rooms[roomID].players[playerID] = {
                 userID: userID,
-                isPlaying: !rooms[roomID].gameState && nbPlayersPlaying < 2,
                 isReady: false
             };
 
@@ -109,40 +103,6 @@ io.on("connection", (socket) => {
         // If room has game state we emit gameStateResponse
         const gamestate = rooms[roomID].gameState;
         if (gamestate) {
-            // get ids of users in gamestate
-            const userIDs = Object.keys(gamestate.players).map(playerID => gamestate.players[playerID].userID);
-
-            // if user in gamestate update player and gamestate
-            if (userIDs.includes(userID)) {
-                // set player to isPlaying in the room players
-                rooms[roomID].players[playerID].isPlaying = true;
-
-                // find which player in gamestate used to belong to user
-                let previousPlayerID = null;
-                for (const gamestatePlayerID in gamestate.players) {
-                    if (gamestate.players[gamestatePlayerID].userID === userID) {
-                        previousPlayerID = gamestatePlayerID;
-                      break;
-                    }
-                }
-
-                // update gamestate with current playerID
-                if (playerID !== previousPlayerID) {
-                    gamestate.players[playerID] = gamestate.players[previousPlayerID];
-                    delete gamestate.players[previousPlayerID];
-                }
-
-                // update gamestate turn
-                if (gamestate.turn.playerID === previousPlayerID) {
-                    gamestate.turn.playerID = playerID;
-                }
-
-                // update gamestate winner
-                if (gamestate.winner === previousPlayerID) {
-                    gamestate.winner = playerID;
-                }
-            }
-
             const processedGameState = processGameState(gamestate, playerID);
             socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
         }
