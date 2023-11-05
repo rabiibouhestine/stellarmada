@@ -23,6 +23,7 @@ const players = {};
 
 
 app.get('/join', (req, res) => {
+    const playerID = req.query.playerID;
     const roomID = req.query.roomID;
 
     // if roomID is not in query params we return error
@@ -31,14 +32,21 @@ app.get('/join', (req, res) => {
         return;
     }
 
-    // return room information
     let playersNb = 0;
     let gameStarted = false;
+
     if (rooms[roomID]) {
-        playersNb = Object.keys(rooms[roomID].players).length + 1;
         gameStarted = rooms[roomID].gameStarted;
+        playersNb = Object.keys(rooms[roomID].players).length;
+        // if room full we return error
+        if (playersNb === 2 && !(playerID in rooms[roomID].players)) {
+            res.status(500).json({ error: 'room is full' });
+            return;
+        }
     }
-    res.json({ gameStarted: gameStarted, playersNb: playersNb });
+
+    // return room information
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
 });
 
 
