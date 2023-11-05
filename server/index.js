@@ -23,7 +23,7 @@ const players = {};
 
 
 app.get('/join', (req, res) => {
-    const playerID = req.query.playerID;
+    const playerID = req.query.userID;
     const roomID = req.query.roomID;
 
     // if roomID is not in query params we return error
