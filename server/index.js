@@ -19,14 +19,7 @@ const io = new Server(server, {
 });
 
 const rooms = {};
-const players = {};
 
-
-
-
-app.get('/api/users', (req, res) => {
-    res.json({ playersOnline: Object.keys(players).length });
-});
 
 app.get('/join', (req, res) => {
     const roomID = req.query.roomID;
@@ -72,12 +65,6 @@ io.on("connection", (socket) => {
         // if (players[playerID]) {
         //     io.to(players[playerID].socket).emit('leaveRoom');
         // }
-
-        // add the player to players
-        players[playerID] = {
-            room: roomID,
-            socket: socket.id
-        };
 
         // add player to room
         rooms[roomID].players[playerID] = {
@@ -194,9 +181,6 @@ io.on("connection", (socket) => {
                 }
             }, 300000);
         }
-
-        // delete player
-        delete players[playerID];
     })
 })
 
