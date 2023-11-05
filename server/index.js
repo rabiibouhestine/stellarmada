@@ -68,10 +68,10 @@ io.on("connection", (socket) => {
             };
         }
 
-        // if user already in a room, send signal to leave
-        if (players[playerID]) {
-            io.to(players[playerID].socket).emit('leaveRoom');
-        }
+        // // if user already in a room, send signal to leave
+        // if (players[playerID]) {
+        //     io.to(players[playerID].socket).emit('leaveRoom');
+        // }
 
         // add the player to players
         players[playerID] = {
@@ -81,7 +81,8 @@ io.on("connection", (socket) => {
 
         // add player to room
         rooms[roomID].players[playerID] = {
-            isReady: false
+            isReady: false,
+            socket: socket.id
         };
 
         // join socket to a socket.io room with same roomID
