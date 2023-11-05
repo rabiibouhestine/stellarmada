@@ -30,10 +30,6 @@
 			gameStarted = false;
 		});
 
-		socket.on('leaveRoom', () => {
-			goto('/');
-		});
-
 		return () => {
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');

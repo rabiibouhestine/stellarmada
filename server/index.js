@@ -62,11 +62,6 @@ io.on("connection", (socket) => {
             };
         }
 
-        // // if user already in a room, send signal to leave
-        // if (players[playerID]) {
-        //     io.to(players[playerID].socket).emit('leaveRoom');
-        // }
-
         // update players
         players[playerID] = { room: roomID };
 
