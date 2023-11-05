@@ -177,6 +177,7 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
+        // if it's not a disconnect coming from a kick because of user opening multiple tabs
         if (players[playerID].socket === socket.id) {
             // get room
             const roomID = players[playerID].room;
