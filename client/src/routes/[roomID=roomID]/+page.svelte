@@ -33,6 +33,7 @@
 			socket.off('handleReadyResponse');
 			socket.off('rematchResponse');
 			socket.off('gameStatus');
+			socket.off('connect');
 			socket.disconnect();
 		};
 	});
