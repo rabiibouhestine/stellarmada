@@ -38,7 +38,6 @@
 		}, 1000);
 
 		socket.on('gameStateResponse', (data) => {
-			console.log('gameStateResponse');
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
