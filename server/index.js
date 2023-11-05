@@ -70,6 +70,10 @@ io.on("connection", (socket) => {
             };
         }
 
+        if (players[playerID]) {
+            io.to(players[playerID].socket).emit("roomKick");
+        }
+
         // update players
         players[playerID] = {
             room: roomID,
