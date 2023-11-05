@@ -19,6 +19,7 @@ const io = new Server(server, {
 });
 
 const rooms = {};
+const players = {};
 
 
 app.get('/join', (req, res) => {
@@ -66,10 +67,13 @@ io.on("connection", (socket) => {
         //     io.to(players[playerID].socket).emit('leaveRoom');
         // }
 
-        // add player to room
+        // update players
+        players[playerID] = { room: roomID };
+
+        // update room
         rooms[roomID].players[playerID] = {
             isReady: false,
-            socket: socket.id
+            isPresent: true
         };
 
         // join socket to a socket.io room with same roomID
