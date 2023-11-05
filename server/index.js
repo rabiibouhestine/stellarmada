@@ -131,6 +131,16 @@ io.on("connection", (socket) => {
                     gamestate.players[playerID] = gamestate.players[previousPlayerID];
                     delete gamestate.players[previousPlayerID];
                 }
+
+                // update gamestate turn
+                if (gamestate.turn.playerID === previousPlayerID) {
+                    gamestate.turn.playerID = playerID;
+                }
+
+                // update gamestate winner
+                if (gamestate.winner === previousPlayerID) {
+                    gamestate.winner = playerID;
+                }
             }
 
             const processedGameState = processGameState(gamestate, playerID);
