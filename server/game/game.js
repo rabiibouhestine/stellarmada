@@ -6,8 +6,7 @@ const handMax = 8;
 const initGameState = (room) => {
     // Create players states
     const players = {};
-    const playersIDs = Object.keys(room.players)
-        .filter(playerID => room.players[playerID].isReady);
+    const playersIDs = Object.keys(room.players);
     for (const id of playersIDs) {
         players[id] = initPlayerState();
     }
