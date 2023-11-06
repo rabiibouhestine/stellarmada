@@ -3,15 +3,7 @@
 	import { onMount } from 'svelte';
 	import io from 'socket.io-client';
 
-	export let data;
-
-	const playerID = data.userID;
-
-	const socket = io.connect('http://localhost:3001', {
-		query: {
-			playerID: playerID
-		}
-	});
+	const socket = io.connect('http://localhost:3001');
 
 	socket.emit('findGame');
 
