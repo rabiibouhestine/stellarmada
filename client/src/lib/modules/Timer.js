@@ -4,18 +4,15 @@ class Timer {
       this.delay = delay;
       this.timerId = null;
       this.isRunning = false;
-      this.remainingTime = this.delay;
-      this.timeLeft = this.remainingTime;
+      this.timeLeft = this.delay;
     }
-  
+
     start() {
       if (!this.isRunning) {
         this.isRunning = true;
-        this.remainingTime = this.remainingTime || this.delay;
         this.timerId = setInterval(() => {
-          this.remainingTime -= 1000; // Subtract one second
-          this.timeLeft = this.remainingTime;
-          if (this.remainingTime <= 0) {
+          this.timeLeft -= 1000; // Subtract one second
+          if (this.timeLeft <= 0) {
             this.stop();
             this.callback();
           }
@@ -33,8 +30,7 @@ class Timer {
   
     reset() {
       this.stop();
-      this.remainingTime = this.delay;
-      this.timeLeft = this.remainingTime;
+      this.timeLeft = this.delay;
     }
 }
 
