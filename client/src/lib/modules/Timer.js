@@ -28,9 +28,15 @@ class Timer {
       }
     }
   
-    reset() {
+    reset(newDuration = null, start = false) {
       this.stop();
+      if (newDuration) {
+        this.duration = newDuration;
+      }
       this.timeLeft = this.duration;
+      if (start) {
+        this.start();
+      }
     }
 }
 
