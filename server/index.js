@@ -77,6 +77,7 @@ io.on("connection", (socket) => {
 
         // update room
         rooms[roomID].gameStarted = false;
+        rooms[roomID].messages = [];
 
         // update players
         Object.keys(rooms[roomID].players).forEach(playerID => {
