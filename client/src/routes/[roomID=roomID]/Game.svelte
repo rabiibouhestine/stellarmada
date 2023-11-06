@@ -76,6 +76,7 @@
 		return () => {
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
+			socket.off('gameEnded');
 			game.end();
 		};
 	});
