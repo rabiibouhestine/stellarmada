@@ -32,7 +32,7 @@ class Timer {
   
     reset(newDuration = null, start = false) {
       this.stop();
-      if (newDuration) {
+      if (newDuration !== null) {
         this.duration = newDuration;
       }
       this.timeLeft = this.duration;
