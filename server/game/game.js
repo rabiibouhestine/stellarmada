@@ -77,7 +77,10 @@ const initPlayerState = () => {
     return playerState;
 }
 
-const handleActionRequest = (playerID, playerSelection, gamestate) => {
+const handleActionRequest = (playerID, playerSelection, room) => {
+
+    // get gamestate
+    const gamestate = room.gameState;
 
     // If not player turn exit
     if (playerID !== gamestate.turn.playerID)

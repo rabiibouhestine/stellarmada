@@ -124,12 +124,12 @@ io.on("connection", (socket) => {
 
     socket.on("gameActionRequest", (data) => {
         const roomID = data.roomID;
-        const gameState = rooms[roomID].gameState;
-        const gameAction = handleActionRequest(playerID, data.playerSelection, gameState);
+        const room = rooms[roomID];
+        const gameAction = handleActionRequest(playerID, data.playerSelection, room);
         if (gameAction.isGameOver) {
-            rooms[roomID].gameStarted = false;
-            Object.keys(rooms[roomID].players).forEach(playerID => {
-                rooms[roomID].players[playerID].isReady = false;
+            room.gameStarted = false;
+            Object.keys(room.players).forEach(playerID => {
+                room.players[playerID].isReady = false;
             });
         }
 
