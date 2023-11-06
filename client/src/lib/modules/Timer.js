@@ -1,10 +1,10 @@
 class Timer {
-    constructor(callback, delay) {
+    constructor(callback, duration) {
       this.callback = callback;
-      this.delay = delay;
+      this.duration = duration;
       this.timerId = null;
       this.isRunning = false;
-      this.timeLeft = this.delay;
+      this.timeLeft = this.duration;
     }
 
     start() {
@@ -30,7 +30,7 @@ class Timer {
   
     reset() {
       this.stop();
-      this.timeLeft = this.delay;
+      this.timeLeft = this.duration;
     }
 }
 
