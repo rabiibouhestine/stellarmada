@@ -16,8 +16,8 @@
 		roomID: $page.params.roomID
 	});
 
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
+	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10, playerTimeUpdate);
+	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10, opponentTimeUpdate);
 
 	let canvas;
 	let winnerID;
@@ -32,11 +32,6 @@
 	let logs = [];
 
 	onMount(() => {
-		setInterval(() => {
-			playerTimeLeft = playerTimer.timeLeft;
-			opponentTimeLeft = opponentTimer.timeLeft;
-		}, 1000);
-
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
@@ -121,6 +116,14 @@
 	function handleLeave() {
 		showQuitModal = false;
 		goto('/');
+	}
+
+	function playerTimeUpdate() {
+		playerTimeLeft = playerTimer.timeLeft;
+	}
+
+	function opponentTimeUpdate() {
+		opponentTimeLeft = opponentTimer.timeLeft;
 	}
 
 	function onTimerEnd() {

@@ -1,10 +1,11 @@
 class Timer {
-    constructor(callback, duration) {
+    constructor(callback, duration, update) {
       this.callback = callback;
       this.duration = duration;
       this.timerId = null;
       this.isRunning = false;
       this.timeLeft = this.duration;
+      this.update = update;
     }
 
     start() {
@@ -12,6 +13,7 @@ class Timer {
         this.isRunning = true;
         this.timerId = setInterval(() => {
           this.timeLeft -= 1000; // Subtract one second
+          this.update();
           if (this.timeLeft <= 0) {
             this.stop();
             this.callback();
@@ -34,6 +36,7 @@ class Timer {
         this.duration = newDuration;
       }
       this.timeLeft = this.duration;
+      this.update();
       if (start) {
         this.start();
       }
