@@ -52,6 +52,24 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("socket connected:", socket.id, "| playerID:", playerID);
 
+    const endGame = () => {
+        // get player room id
+        const roomID = players[playerID].room;
+
+        // get the players ids
+        const playersIDS = Object.keys(rooms[roomID].players);
+
+        // get the winner id
+        const winnerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
+        // update gamestate
+        rooms[roomID].gameState.isGameOver = true;
+        rooms[roomID].gameState.winnerID = winnerID;
+
+        // emit game ended event
+        io.to(roomID).emit("gameEnded", { winnerID:winnerID, success: true });
+    }
+
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
 
@@ -87,7 +105,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID] = {
                 isReady: false,
                 isPresent: true,
-                timer: new Timer(() => {}, 1000 * 60 * 10)
+                timer: new Timer(endGame, 1000 * 60 * 10)
             };
         }
 
