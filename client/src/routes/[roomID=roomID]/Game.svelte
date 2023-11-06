@@ -25,8 +25,8 @@
 	let showRulesModal = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
-	let playerTimeLeft = 0;
-	let opponentTimeLeft = 0;
+	let playerTimeLeft = playerTimer.timeLeft;
+	let opponentTimeLeft = opponentTimer.timeLeft;
 
 	let game;
 	let logs = [];
