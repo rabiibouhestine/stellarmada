@@ -20,11 +20,6 @@ export class Game {
     }
 
     async initGame(canvasRef, gameState, playerID) {
-        this.sheet = new PIXI.Spritesheet(
-            PIXI.BaseTexture.from(cardsImage),
-            cardsSheet
-        );
-        await this.sheet.parse();
         this.playerID = playerID;
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -35,6 +30,11 @@ export class Game {
             backgroundColor: 0x475569,
             backgroundAlpha: 0
         });
+        this.sheet = new PIXI.Spritesheet(
+            PIXI.BaseTexture.from(cardsImage),
+            cardsSheet
+        );
+        await this.sheet.parse();
         canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress);

@@ -11,6 +11,7 @@
 
 	export let socket;
 	export let playerID;
+	export let messages;
 
 	socket.emit('gameStateRequest', {
 		roomID: $page.params.roomID
@@ -181,7 +182,7 @@
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat {socket} {playerID} />
+			<Chat {socket} {playerID} {messages} />
 		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"

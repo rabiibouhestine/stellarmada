@@ -9,6 +9,7 @@
 	export let data;
 	const playerID = data.userID;
 	const playersNb = data.playersNb;
+	const messages = data.messages;
 	let gameStarted = data.gameStarted;
 
 	const socket = io.connect('http://localhost:3001', {
@@ -43,7 +44,7 @@
 </script>
 
 {#if gameStarted}
-	<Game {socket} {playerID} />
+	<Game {socket} {playerID} {messages} />
 {:else}
 	<Lobby {socket} {playersNb} />
 {/if}
