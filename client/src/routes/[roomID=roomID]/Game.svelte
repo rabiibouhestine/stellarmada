@@ -16,8 +16,8 @@
 		roomID: $page.params.roomID
 	});
 
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10);
+	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10, playerTimeUpdate);
+	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10, opponentTimeUpdate);
 
 	let canvas;
 	let winnerID;
@@ -25,28 +25,32 @@
 	let showRulesModal = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
-	let playerTimeLeft = 0;
-	let opponentTimeLeft = 0;
+	let playerTimeLeft = playerTimer.timeLeft;
+	let opponentTimeLeft = opponentTimer.timeLeft;
 
 	let game;
 	let logs = [];
 
 	onMount(() => {
-		setInterval(() => {
-			playerTimeLeft = playerTimer.timeLeft;
-			opponentTimeLeft = opponentTimer.timeLeft;
-		}, 1000);
-
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
+
+			// update timers
+			for (const id in data.timeLeft) {
+				const timeLeft = data.timeLeft[id].timeLeft;
+				const isRunning = data.timeLeft[id].isRunning;
+				if (id === playerID) {
+					playerTimer.reset(timeLeft, isRunning);
+				} else {
+					opponentTimer.reset(timeLeft, isRunning);
+				}
+			}
 		});
 
 		socket.on('gameActionResponse', (data) => {
 			game.update(data.gameAction);
-			isGameOver = data.gameAction.isGameOver;
-			winnerID = data.gameAction.winnerID;
 			logs = [...logs, ...data.gameAction.logs];
 
 			if (data.gameAction.turn.stance === 'discarding') {
@@ -60,7 +64,7 @@
 			}
 		});
 
-		socket.on('surrenderResponse', (data) => {
+		socket.on('gameEnded', (data) => {
 			isGameOver = true;
 			winnerID = data.winnerID;
 			playerTimer.stop();
@@ -70,7 +74,7 @@
 		return () => {
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
-			socket.off('surrenderResponse');
+			socket.off('gameEnded');
 			game.end();
 		};
 	});
@@ -110,6 +114,14 @@
 	function handleLeave() {
 		showQuitModal = false;
 		goto('/');
+	}
+
+	function playerTimeUpdate(timeLeft) {
+		playerTimeLeft = timeLeft;
+	}
+
+	function opponentTimeUpdate(timeLeft) {
+		opponentTimeLeft = timeLeft;
 	}
 
 	function onTimerEnd() {

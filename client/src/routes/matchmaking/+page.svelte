@@ -1,0 +1,25 @@
+<script>
+	import { goto } from '$app/navigation';
+
+	const goHome = () => {
+		goto('/');
+	};
+</script>
+
+<div
+	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-black"
+>
+	<div class="grid justify-items-center">
+		<div class="mb-15 p-6">
+			<h1 class="text-2xl text-center text-slate-100 font-black drop-shadow-md">
+				MATCHMAKING COMING SOON
+			</h1>
+		</div>
+		<button
+			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white"
+			on:click={goHome}
+		>
+			QUIT
+		</button>
+	</div>
+</div>

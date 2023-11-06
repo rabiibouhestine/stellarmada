@@ -4,12 +4,6 @@ const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js
 const handMax = 8;
 
 const initGameState = (room) => {
-    // Create players states
-    const players = {};
-    const playersIDs = Object.keys(room.players);
-    for (const id of playersIDs) {
-        players[id] = initPlayerState();
-    }
 
     // Define gameState
     const gameState = {
@@ -20,9 +14,15 @@ const initGameState = (room) => {
             stance: "attacking", // "discarding", "attacking" or "waiting"
             damage: 0 // only set when state discarding
         },
-        players: players,
+        players: {},
         logs: []
     };
+
+    // Create players states
+    const playersIDs = Object.keys(room.players);
+    for (const id of playersIDs) {
+        gameState.players[id] = initPlayerState();
+    }
 
     // Pick a random player index
     const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
@@ -64,8 +64,6 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
-        timeLeft: 600000,
-        turnStartTime: null,
         cards: {
             hand: hand,
             battleField: [],
@@ -78,7 +76,10 @@ const initPlayerState = () => {
     return playerState;
 }
 
-const handleActionRequest = (playerID, playerSelection, gamestate) => {
+const handleActionRequest = (playerID, playerSelection, room) => {
+
+    // get gamestate
+    const gamestate = room.gameState;
 
     // If not player turn exit
     if (playerID !== gamestate.turn.playerID)
@@ -92,8 +93,6 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // Initialise game action
     const gameAction = {
-        isGameOver: gamestate.isGameOver,
-        winnerID: gamestate.winnerID,
         turn: gamestate.turn,
         moves: [],
         logs: []
@@ -101,6 +100,10 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
+
+        // update timers
+        room.players[enemyID].timer.start();
+        room.players[playerID].timer.stop();
 
         // Player cards
         const playerCards = gamestate.players[playerID].cards;
@@ -216,38 +219,21 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
             damage: selectionOffensivePower
         }
 
-        // Get current time
-        const currentDate = new Date();
-        const currentTime = currentDate.getTime();
-
-        // Update enemy turn start time
-        gamestate.players[enemyID].turnStartTime = currentTime;
-
-        // Update player turn start time if first attack
-        if (gamestate.players[playerID].turnStartTime === null) {
-            gamestate.players[playerID].turnStartTime = currentTime;
-        }
-
-        // If player has no time left, enemy wins
-        gamestate.players[playerID].timeLeft -= currentTime - gamestate.players[playerID].turnStartTime;
-        if (gamestate.players[playerID].timeLeft < 0) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = enemyID;
-        }
-
         // If enemy does not have enough to discard attack, player wins
         const enemyDefensivePower = gamestate.players[enemyID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].defensivePower;
         }, 0);
 
         if (enemyDefensivePower < selectionOffensivePower) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = playerID;
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
         }
     }
 
     // If player is discarding
     if (gamestate.turn.stance === "discarding") {
+
+        // get player cards
         const playerCards = gamestate.players[playerID].cards
 
         // If player selection does not make sense we exit
@@ -323,14 +309,12 @@ const handleActionRequest = (playerID, playerSelection, gamestate) => {
 
         // If hand empty after discard, enemy wins
         if (playerCards.hand.length === 0) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = enemyID;
+            gamestate.isGameOver = true;
+            gamestate.winnerID = enemyID;
         }
     }
 
-    // Update game state
-    gamestate.isGameOver = gameAction.isGameOver;
-    gamestate.winnerID = gameAction.winnerID;
+    // Update game state turn
     gamestate.turn = gameAction.turn;
 
     return gameAction;

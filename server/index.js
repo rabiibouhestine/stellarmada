@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const Timer = require("./game/Timer.js");
 
 const express = require("express");
 const http = require("http");
@@ -51,6 +52,40 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("socket connected:", socket.id, "| playerID:", playerID);
 
+    const endGame = () => {
+
+        let winnerID;
+        const roomID = players[playerID].room;
+
+        // if isGameOver this is triggered by action request and winner is already set
+        // otherwise this is triggered by timer or surrender and current playerID is loser
+        if (rooms[roomID].gameState.isGameOver) {
+            winnerID = rooms[roomID].gameState.winnerID;
+        } else {
+            // get the players ids
+            const playersIDS = Object.keys(rooms[roomID].players);
+
+            // set the winner id
+            winnerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+
+            // update gamestate
+            rooms[roomID].gameState.isGameOver = true;
+            rooms[roomID].gameState.winnerID = winnerID;
+        }
+
+        // update room
+        rooms[roomID].gameStarted = false;
+
+        // update players
+        Object.keys(rooms[roomID].players).forEach(playerID => {
+            rooms[roomID].players[playerID].isReady = false;
+            rooms[roomID].players[playerID].timer.reset();
+        });
+
+        // emit game ended event
+        io.to(roomID).emit("gameEnded", { winnerID:winnerID, success: true });
+    }
+
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
 
@@ -80,10 +115,15 @@ io.on("connection", (socket) => {
         }
 
         // update room
-        rooms[roomID].players[playerID] = {
-            isReady: false,
-            isPresent: true
-        };
+        if (rooms[roomID].players[playerID]) {
+            rooms[roomID].players[playerID].isPresent = true;
+        } else {
+            rooms[roomID].players[playerID] = {
+                isReady: false,
+                isPresent: true,
+                timer: new Timer(endGame, 1000 * 60 * 10)
+            };
+        }
 
         // join socket to a socket.io room with same roomID
         socket.join(roomID);
@@ -93,9 +133,20 @@ io.on("connection", (socket) => {
     })
 
     socket.on("gameStateRequest", (data) => {
-        const gamestate = rooms[data.roomID].gameState;
-        const processedGameState = processGameState(gamestate, playerID);
-        socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
+        const room = rooms[data.roomID];
+        if (room) {
+            const processedGameState = processGameState(room.gameState, playerID);
+            let timeLeft = {};
+            for (const playerID in room.players) {
+                if (room.players.hasOwnProperty(playerID)) {
+                    timeLeft[playerID] = {
+                        timeLeft: room.players[playerID].timer.timeLeft,
+                        isRunning: room.players[playerID].timer.isRunning
+                    };
+                }
+            }
+            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
+        }
     })
 
     socket.on("handleReady", (data) => {
@@ -123,40 +174,23 @@ io.on("connection", (socket) => {
 
     socket.on("gameActionRequest", (data) => {
         const roomID = data.roomID;
-        const gameState = rooms[roomID].gameState;
-        const gameAction = handleActionRequest(playerID, data.playerSelection, gameState);
-        if (gameAction.isGameOver) {
-            rooms[roomID].gameStarted = false;
-            Object.keys(rooms[roomID].players).forEach(playerID => {
-                rooms[roomID].players[playerID].isReady = false;
-            });
-        }
+        const room = rooms[roomID];
+
+        const gameAction = handleActionRequest(playerID, data.playerSelection, room);
 
         const playerGameAction = processGameAction(gameAction, playerID, true);
         const enemyGameAction = processGameAction(gameAction, playerID, false);
 
         socket.emit("gameActionResponse", { gameAction:playerGameAction, success: true });
         socket.to(roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
+
+        if (room.gameState.isGameOver) {
+            endGame();
+        }
     })
 
-    socket.on("surrenderRequest", (data) => {
-        const roomID = data.roomID;
-        rooms[roomID].gameStarted = false;
-        Object.keys(rooms[roomID].players).forEach(playerID => {
-            rooms[roomID].players[playerID].isReady = false;
-        });
-
-        // Get gamestate
-        const gameState = rooms[roomID].gameState;
-        // Get the players ids
-        const playersIDS = Object.keys(gameState.players);
-        // Get the enemy id
-        const enemyID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
-
-        gameState.isGameOver = true;
-        gameState.winnerID = enemyID;
-
-        io.to(roomID).emit("surrenderResponse", { winnerID:enemyID, success: true });
+    socket.on("surrenderRequest", () => {
+        endGame();
     })
 
     socket.on("rematchRequest", (data) => {
@@ -172,7 +206,7 @@ io.on("connection", (socket) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
         // if it's not a disconnect coming from a kick because of user opening multiple tabs
-        if (players[playerID].socket === socket.id) {
+        if (players[playerID] && players[playerID].socket === socket.id) {
             // get room
             const roomID = players[playerID].room;
     
