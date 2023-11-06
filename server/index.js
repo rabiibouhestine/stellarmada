@@ -66,6 +66,9 @@ io.on("connection", (socket) => {
         rooms[roomID].gameState.isGameOver = true;
         rooms[roomID].gameState.winnerID = winnerID;
 
+        // update room
+        rooms[roomID].gameStarted = false;
+
         // emit game ended event
         io.to(roomID).emit("gameEnded", { winnerID:winnerID, success: true });
     }
