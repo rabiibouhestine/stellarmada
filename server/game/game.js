@@ -93,8 +93,6 @@ const handleActionRequest = (playerID, playerSelection, room) => {
 
     // Initialise game action
     const gameAction = {
-        isGameOver: gamestate.isGameOver,
-        winnerID: gamestate.winnerID,
         turn: gamestate.turn,
         moves: [],
         logs: []
@@ -227,8 +225,8 @@ const handleActionRequest = (playerID, playerSelection, room) => {
         }, 0);
 
         if (enemyDefensivePower < selectionOffensivePower) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = playerID;
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
         }
     }
 
@@ -311,14 +309,12 @@ const handleActionRequest = (playerID, playerSelection, room) => {
 
         // If hand empty after discard, enemy wins
         if (playerCards.hand.length === 0) {
-            gameAction.isGameOver = true;
-            gameAction.winnerID = enemyID;
+            gamestate.isGameOver = true;
+            gamestate.winnerID = enemyID;
         }
     }
 
-    // Update game state
-    gamestate.isGameOver = gameAction.isGameOver;
-    gamestate.winnerID = gameAction.winnerID;
+    // Update game state turn
     gamestate.turn = gameAction.turn;
 
     return gameAction;

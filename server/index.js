@@ -53,18 +53,25 @@ io.on("connection", (socket) => {
     console.log("socket connected:", socket.id, "| playerID:", playerID);
 
     const endGame = () => {
-        // get player room id
+
+        let winnerID;
         const roomID = players[playerID].room;
 
-        // get the players ids
-        const playersIDS = Object.keys(rooms[roomID].players);
+        // if isGameOver this is triggered by action request and winner is already set
+        // otherwise this is triggered by timer or surrender and current playerID is loser
+        if (rooms[roomID].gameState.isGameOver) {
+            winnerID = rooms[roomID].gameState.winnerID;
+        } else {
+            // get the players ids
+            const playersIDS = Object.keys(rooms[roomID].players);
 
-        // get the winner id
-        const winnerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
+            // set the winner id
+            winnerID = playerID === playersIDS[0] ? playersIDS[1] : playersIDS[0];
 
-        // update gamestate
-        rooms[roomID].gameState.isGameOver = true;
-        rooms[roomID].gameState.winnerID = winnerID;
+            // update gamestate
+            rooms[roomID].gameState.isGameOver = true;
+            rooms[roomID].gameState.winnerID = winnerID;
+        }
 
         // update room
         rooms[roomID].gameStarted = false;
@@ -170,18 +177,15 @@ io.on("connection", (socket) => {
 
         const gameAction = handleActionRequest(playerID, data.playerSelection, room);
 
-        if (gameAction.isGameOver) {
-            room.gameStarted = false;
-            Object.keys(room.players).forEach(playerID => {
-                room.players[playerID].isReady = false;
-            });
-        }
-
         const playerGameAction = processGameAction(gameAction, playerID, true);
         const enemyGameAction = processGameAction(gameAction, playerID, false);
 
         socket.emit("gameActionResponse", { gameAction:playerGameAction, success: true });
         socket.to(roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
+
+        if (room.gameState.isGameOver) {
+            endGame();
+        }
     })
 
     socket.on("surrenderRequest", () => {
