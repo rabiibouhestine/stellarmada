@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const ShortUniqueId = require('short-unique-id');
 const Timer = require("./game/Timer.js");
 
 const express = require("express");
@@ -21,6 +22,7 @@ const io = new Server(server, {
 
 const rooms = {};
 const players = {};
+const waitingPlayers = [];
 
 
 app.get('/join', (req, res) => {
@@ -88,6 +90,24 @@ io.on("connection", (socket) => {
         // emit game ended event
         io.to(roomID).emit("gameEnded", { winnerID:winnerID, success: true });
     }
+
+    socket.on("findGame", () => {
+        if (waitingPlayers.length) {
+            const enemyID = waitingPlayers.shift();
+            const roomID = new ShortUniqueId().rnd();
+            rooms[roomID] = {
+                roomID: roomID,
+                gameStarted: false,
+                gameState: null,
+                players: {},
+                messages: []
+            };
+            socket.emit("gameFound", { roomID: roomID });
+            io.to(enemyID).emit("gameFound", { roomID: roomID });
+        } else {
+            waitingPlayers.push(socket.id);
+        }
+    })
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
