@@ -96,7 +96,6 @@ io.on("connection", (socket) => {
         if (!rooms.hasOwnProperty(roomID)) {
             rooms[roomID] = {
                 roomID: roomID,
-                matchmaking: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
