@@ -4,12 +4,6 @@ const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js
 const handMax = 8;
 
 const initGameState = (room) => {
-    // Create players states
-    const players = {};
-    const playersIDs = Object.keys(room.players);
-    for (const id of playersIDs) {
-        players[id] = initPlayerState();
-    }
 
     // Define gameState
     const gameState = {
@@ -20,9 +14,15 @@ const initGameState = (room) => {
             stance: "attacking", // "discarding", "attacking" or "waiting"
             damage: 0 // only set when state discarding
         },
-        players: players,
+        players: {},
         logs: []
     };
+
+    // Create players states
+    const playersIDs = Object.keys(room.players);
+    for (const id of playersIDs) {
+        gameState.players[id] = initPlayerState();
+    }
 
     // Pick a random player index
     const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
