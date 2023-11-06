@@ -141,7 +141,9 @@ io.on("connection", (socket) => {
     socket.on("gameActionRequest", (data) => {
         const roomID = data.roomID;
         const room = rooms[roomID];
+
         const gameAction = handleActionRequest(playerID, data.playerSelection, room);
+        
         if (gameAction.isGameOver) {
             room.gameStarted = false;
             Object.keys(room.players).forEach(playerID => {
