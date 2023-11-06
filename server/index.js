@@ -233,7 +233,8 @@ io.on("connection", (socket) => {
 
         // remove player from waiting players if they were in matchmaking
         if (waitingPlayers.includes(socket.id)) {
-            waitingPlayers.filter(socketID => socketID !== socket.id);
+            const indexToRemove = waitingPlayers.indexOf(socket.id);
+            waitingPlayers.splice(indexToRemove, 1); 
         }
 
         // if it's not a disconnect coming from a kick because of user opening multiple tabs
