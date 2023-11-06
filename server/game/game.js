@@ -64,6 +64,7 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
+        timeLeft: 0,
         cards: {
             hand: hand,
             battleField: [],
