@@ -95,9 +95,15 @@ io.on("connection", (socket) => {
     })
 
     socket.on("gameStateRequest", (data) => {
-        const gamestate = rooms[data.roomID].gameState;
-        const processedGameState = processGameState(gamestate, playerID);
-        socket.emit("gameStateResponse", { gameState: processedGameState,  success: true });
+        const room = rooms[data.roomID];
+        const processedGameState = processGameState(room.gameState, playerID);
+        let timeLeft;
+        for (const playerID in room.players) {
+            if (room.players.hasOwnProperty(playerID)) {
+              timeLeft[playerID] = room.players[playerID].timer.timeLeft;
+            }
+        }
+        socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
     })
 
     socket.on("handleReady", (data) => {
