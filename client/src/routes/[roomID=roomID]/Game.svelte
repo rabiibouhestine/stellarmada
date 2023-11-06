@@ -118,12 +118,12 @@
 		goto('/');
 	}
 
-	function playerTimeUpdate() {
-		playerTimeLeft = playerTimer.timeLeft;
+	function playerTimeUpdate(timeLeft) {
+		playerTimeLeft = timeLeft;
 	}
 
-	function opponentTimeUpdate() {
-		opponentTimeLeft = opponentTimer.timeLeft;
+	function opponentTimeUpdate(timeLeft) {
+		opponentTimeLeft = timeLeft;
 	}
 
 	function onTimerEnd() {

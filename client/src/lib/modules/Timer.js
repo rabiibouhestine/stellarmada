@@ -13,7 +13,7 @@ class Timer {
         this.isRunning = true;
         this.timerId = setInterval(() => {
           this.timeLeft -= 1000; // Subtract one second
-          this.update();
+          this.update(this.timeLeft);
           if (this.timeLeft <= 0) {
             this.stop();
             this.callback();
@@ -36,7 +36,7 @@ class Timer {
         this.duration = newDuration;
       }
       this.timeLeft = this.duration;
-      this.update();
+      this.update(this.timeLeft);
       if (start) {
         this.start();
       }
