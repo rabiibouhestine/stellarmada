@@ -79,6 +79,7 @@ io.on("connection", (socket) => {
         // update players
         Object.keys(rooms[roomID].players).forEach(playerID => {
             rooms[roomID].players[playerID].isReady = false;
+            rooms[roomID].players[playerID].timer.reset();
         });
 
         // emit game ended event
