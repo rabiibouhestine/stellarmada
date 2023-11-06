@@ -41,6 +41,7 @@
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
+			console.log(data.timeLeft);
 			for (const id in data.timeLeft) {
 				if (id === playerID) {
 					playerTimer.reset(data.timeLeft[id]);
