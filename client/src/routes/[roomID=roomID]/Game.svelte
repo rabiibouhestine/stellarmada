@@ -51,8 +51,6 @@
 
 		socket.on('gameActionResponse', (data) => {
 			game.update(data.gameAction);
-			isGameOver = data.gameAction.isGameOver;
-			winnerID = data.gameAction.winnerID;
 			logs = [...logs, ...data.gameAction.logs];
 
 			if (data.gameAction.turn.stance === 'discarding') {
