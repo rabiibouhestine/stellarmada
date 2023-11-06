@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const Timer = require("./game/Timer.js");
 
 const express = require("express");
 const http = require("http");
@@ -83,7 +84,7 @@ io.on("connection", (socket) => {
         rooms[roomID].players[playerID] = {
             isReady: false,
             isPresent: true,
-            timer: "new Timer()"
+            timer: new Timer(() => {}, 60000)
         };
 
         // join socket to a socket.io room with same roomID
