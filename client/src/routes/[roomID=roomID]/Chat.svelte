@@ -4,20 +4,10 @@
 
 	export let socket;
 	export let playerID;
+	export let messages = [];
 
 	let messagesDiv;
 	let messageInput = '';
-
-	let messages = [
-		{
-			playerID: '',
-			content: 'I am gonna win this battle!!'
-		},
-		{
-			playerID: playerID,
-			content: 'We will see about that..'
-		}
-	];
 
 	onMount(() => {
 		socket.on('messageResponse', (data) => {
