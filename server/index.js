@@ -87,7 +87,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID] = {
                 isReady: false,
                 isPresent: true,
-                timer: new Timer(() => {}, 60000)
+                timer: new Timer(() => {}, 1000 * 60 * 10)
             };
         }
 
@@ -143,7 +143,7 @@ io.on("connection", (socket) => {
         const room = rooms[roomID];
 
         const gameAction = handleActionRequest(playerID, data.playerSelection, room);
-        
+
         if (gameAction.isGameOver) {
             room.gameStarted = false;
             Object.keys(room.players).forEach(playerID => {
