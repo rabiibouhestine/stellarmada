@@ -41,12 +41,15 @@
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
-			console.log(data.timeLeft);
+
+			// update timers
 			for (const id in data.timeLeft) {
+				const timeLeft = data.timeLeft[id].timeLeft;
+				const isRunning = data.timeLeft[id].isRunning;
 				if (id === playerID) {
-					playerTimer.reset(data.timeLeft[id]);
+					playerTimer.reset(timeLeft, isRunning);
 				} else {
-					opponentTimer.reset(data.timeLeft[id]);
+					opponentTimer.reset(timeLeft, isRunning);
 				}
 			}
 		});

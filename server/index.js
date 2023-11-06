@@ -100,14 +100,19 @@ io.on("connection", (socket) => {
 
     socket.on("gameStateRequest", (data) => {
         const room = rooms[data.roomID];
-        const processedGameState = processGameState(room.gameState, playerID);
-        let timeLeft = {};
-        for (const playerID in room.players) {
-            if (room.players.hasOwnProperty(playerID)) {
-              timeLeft[playerID] = room.players[playerID].timer.timeLeft;
+        if (room) {
+            const processedGameState = processGameState(room.gameState, playerID);
+            let timeLeft = {};
+            for (const playerID in room.players) {
+                if (room.players.hasOwnProperty(playerID)) {
+                    timeLeft[playerID] = {
+                        timeLeft: room.players[playerID].timer.timeLeft,
+                        isRunning: room.players[playerID].timer.isRunning
+                    };
+                }
             }
+            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
         }
-        socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
     })
 
     socket.on("handleReady", (data) => {
@@ -184,7 +189,7 @@ io.on("connection", (socket) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
         // if it's not a disconnect coming from a kick because of user opening multiple tabs
-        if (players[playerID].socket === socket.id) {
+        if (players[playerID] && players[playerID].socket === socket.id) {
             // get room
             const roomID = players[playerID].room;
     
