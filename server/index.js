@@ -231,6 +231,11 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
+        // remove player from waiting players if they were in matchmaking
+        if (waitingPlayers.includes(socket.id)) {
+            waitingPlayers.filter(socketID => socketID !== socket.id);
+        }
+
         // if it's not a disconnect coming from a kick because of user opening multiple tabs
         if (players[playerID] && players[playerID].socket === socket.id) {
             // get room
