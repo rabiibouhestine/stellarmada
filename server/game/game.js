@@ -103,6 +103,10 @@ const handleActionRequest = (playerID, playerSelection, room) => {
     // If player is attacking
     if (gamestate.turn.stance === "attacking") {
 
+        // update timers
+        room.players[enemyID].timer.start();
+        room.players[playerID].timer.stop();
+
         // Player cards
         const playerCards = gamestate.players[playerID].cards;
 
@@ -230,15 +234,6 @@ const handleActionRequest = (playerID, playerSelection, room) => {
 
     // If player is discarding
     if (gamestate.turn.stance === "discarding") {
-
-        // update timers
-        if (gamestate.turn.playerID === playerID) {
-            room.players[playerID].timer.start();
-            room.players[enemyID].timer.stop();
-        } else {
-            room.players[enemyID].timer.start();
-            room.players[playerID].timer.stop();
-        }
 
         // get player cards
         const playerCards = gamestate.players[playerID].cards

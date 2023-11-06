@@ -97,7 +97,7 @@ io.on("connection", (socket) => {
     socket.on("gameStateRequest", (data) => {
         const room = rooms[data.roomID];
         const processedGameState = processGameState(room.gameState, playerID);
-        let timeLeft;
+        let timeLeft = {};
         for (const playerID in room.players) {
             if (room.players.hasOwnProperty(playerID)) {
               timeLeft[playerID] = room.players[playerID].timer.timeLeft;

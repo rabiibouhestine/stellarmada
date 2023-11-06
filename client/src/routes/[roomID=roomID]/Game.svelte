@@ -41,6 +41,13 @@
 			game = new Game(canvas, data.gameState, playerID);
 			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
+			for (const id in data.timeLeft) {
+				if (id === playerID) {
+					playerTimer.reset(data.timeLeft[id]);
+				} else {
+					opponentTimer.reset(data.timeLeft[id]);
+				}
+			}
 		});
 
 		socket.on('gameActionResponse', (data) => {
