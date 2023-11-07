@@ -20,6 +20,8 @@ export class Game {
     }
 
     async init(canvasRef, gameState, playerID) {
+        this.canvasRef = canvasRef;
+        this.gameState = gameState;
         this.playerID = playerID;
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -36,12 +38,12 @@ export class Game {
         );
         await this.sheet.parse();
 
-        canvasRef.appendChild(this.app.view);
+        this.canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress);
-        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, gameState.turn.damage);
+        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, this.gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
-        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, this.gameState, positions, this.damageIndicator, this.confirmButton);
 
         const confirmButtonClickedEvent = new Event("confirmButtonClicked", { bubbles: true, cancelable: false });
         this.confirmButton.button.on('pointerdown', () => window.dispatchEvent(confirmButtonClickedEvent));
@@ -50,15 +52,15 @@ export class Game {
             const player = this.players[key];
 
             // Get game turn state
-            const turnPlayerID = gameState.turn.playerID;
-            const stance = gameState.turn.stance;
+            const turnPlayerID = this.gameState.turn.playerID;
+            const stance = this.gameState.turn.stance;
 
             // Update player states
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
         }
 
         this.resize = () => {
-            const windowWidth = canvasRef.offsetWidth;
+            const windowWidth = this.canvasRef.offsetWidth;
             const windowHeight = window.innerHeight;
             const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
     
