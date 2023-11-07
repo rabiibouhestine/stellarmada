@@ -158,6 +158,9 @@
 	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
+		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
+			<Chat {socket} {playerID} {messages} />
+		</div>
 		<div
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
 		>
@@ -192,9 +195,6 @@
 		{#if false}
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
-		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat {socket} {playerID} {messages} />
-		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
 		>
