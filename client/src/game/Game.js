@@ -150,7 +150,6 @@ export class Game {
             }
         }
 
-
         return players;
     }
 }
