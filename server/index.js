@@ -29,12 +29,10 @@ app.get('/join', (req, res) => {
     const playerID = req.query.userID;
     const roomID = req.query.roomID;
 
-    let messages = [];
     let playersNb = 0;
     let gameStarted = false;
 
     if (rooms[roomID]) {
-        messages = rooms[roomID].messages;
         gameStarted = rooms[roomID].gameStarted;
         playersNb = Object.keys(rooms[roomID].players).length;
         // if room full we return error
@@ -45,7 +43,7 @@ app.get('/join', (req, res) => {
     }
 
     // return room information
-    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1, messages: messages });
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
 });
 
 
@@ -169,7 +167,7 @@ io.on("connection", (socket) => {
                     };
                 }
             }
-            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
+            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, messages: room.messages, success: true });
         }
     })
 

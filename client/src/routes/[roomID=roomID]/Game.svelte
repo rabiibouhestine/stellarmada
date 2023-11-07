@@ -11,7 +11,6 @@
 
 	export let socket;
 	export let playerID;
-	export let messages;
 
 	socket.emit('gameStateRequest', {
 		roomID: $page.params.roomID
@@ -31,6 +30,7 @@
 
 	let game;
 	let logs = [];
+	let messages = [];
 
 	onMount(() => {
 		window.addEventListener('confirmButtonClicked', (e) => {
@@ -47,6 +47,7 @@
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
 			logs = data.gameState.logs;
+			messages = data.messages;
 
 			// update timers
 			for (const id in data.timeLeft) {
