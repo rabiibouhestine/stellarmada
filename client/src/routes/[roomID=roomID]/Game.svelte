@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
+	import { Icon, Home, Flag, SpeakerWave, ArrowsPointingOut } from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import Timer from '$lib/modules/Timer.js';
@@ -22,7 +22,6 @@
 	let canvas;
 	let winnerID;
 	let isGameOver = false;
-	let showRulesModal = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
 	let playerTimeLeft = playerTimer.timeLeft;
@@ -145,12 +144,9 @@
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
 		>
 			<button
-				on:click={() => {
-					showRulesModal = true;
-				}}
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
 			>
-				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
+				<Icon src={SpeakerWave} class="h-8 w-8 text-white" />
 			</button>
 			<button
 				on:click={() => {
@@ -171,7 +167,7 @@
 			<button
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
 			>
-				<Icon src={Cog6Tooth} class="h-8 w-8 text-white" />
+				<Icon src={ArrowsPointingOut} class="h-8 w-8 text-white" />
 			</button>
 		</div>
 		{#if false}
@@ -186,9 +182,6 @@
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(playerTimeLeft)}</h1>
 		</div>
 	</div>
-	<Modal bind:showModal={showRulesModal}>
-		<div class="grid justify-items-center w-full text-slate-200">RULES HERE</div>
-	</Modal>
 	<Modal bind:showModal={showSurrenderModal}>
 		<div class="grid justify-items-center w-full">
 			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">
