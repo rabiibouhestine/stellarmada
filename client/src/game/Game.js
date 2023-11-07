@@ -23,6 +23,7 @@ export class Game {
         this.canvasRef = canvasRef;
         this.gameState = gameState;
         this.playerID = playerID;
+
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 720,
@@ -32,6 +33,7 @@ export class Game {
             backgroundColor: 0x475569,
             backgroundAlpha: 0
         });
+
         this.sheet = new PIXI.Spritesheet(
             PIXI.BaseTexture.from(cardsImage),
             cardsSheet
