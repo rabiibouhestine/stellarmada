@@ -87,6 +87,12 @@ export class Game {
         await this.sheet.parse();
     }
 
+    onConfirmButton(event) {
+        if (this.players[this.playerID]) {
+            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+        }
+    }
+
     update(data) {
         if (data.turn.stance === 'discarding') {
             this.soundShipsAttacked.play();
@@ -123,12 +129,6 @@ export class Game {
         this.sheet.destroy(true);
         this.app.stop();
         this.app.destroy(true, true);
-    }
-
-    onConfirmButton(event) {
-        if (this.players[this.playerID]) {
-            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
-        }
     }
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
