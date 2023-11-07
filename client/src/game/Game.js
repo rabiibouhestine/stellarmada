@@ -59,24 +59,8 @@ export class Game {
             player.setStance(this.playerID === turnPlayerID? stance : "waiting");
         }
 
-        this.resize = () => {
-            const windowWidth = this.canvasRef.offsetWidth;
-            const windowHeight = window.innerHeight;
-            const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
-    
-            // Update renderer dimensions
-            this.app.renderer.resize(windowWidth, windowHeight);
-
-            // Update stage scale
-            this.app.stage.scale.set(stageScale);
-
-            // Center the stage
-            this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
-            this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
-        }
-
         this.resize();
-        window.addEventListener('resize', this.resize, this);
+        window.addEventListener('resize', () => {this.resize()});
 
         this.soundShipsAttacked = new Howl({
             src: [sfxShipsAttacked]
@@ -90,6 +74,22 @@ export class Game {
             loop: true,
             volume: 0.05
         });
+    }
+
+    resize() {
+        const windowWidth = this.canvasRef.offsetWidth;
+        const windowHeight = window.innerHeight;
+        const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
+
+        // Update renderer dimensions
+        this.app.renderer.resize(windowWidth, windowHeight);
+
+        // Update stage scale
+        this.app.stage.scale.set(stageScale);
+
+        // Center the stage
+        this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
+        this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
     }
 
     update(data) {
