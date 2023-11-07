@@ -140,17 +140,17 @@ export class Game {
         }
       
         const firstPlayerKey = keys[0];
-        const enemyKey = keys[1];
+        const secondPlayerKey = keys[1];
       
         if (firstPlayerKey === playerID) {
             players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.top, damageIndicator, confirmButton, false);
-        } else if (enemyKey === playerID) {
+            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, confirmButton, false);
+        } else if (secondPlayerKey === playerID) {
             players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, true);
+            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
         } else {
             players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, false);
+            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, false);
         }
       
         return players;
