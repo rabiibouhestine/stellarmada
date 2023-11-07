@@ -238,14 +238,12 @@ io.on("connection", (socket) => {
             // get room
             const roomID = players[playerID].room;
     
-            // update players
-            delete players[playerID];
-    
-            // update room
+            // update room and players
             if (rooms[roomID].gameStarted) {
                 rooms[roomID].players[playerID].isPresent = false;
             } else {
                 delete rooms[roomID].players[playerID];
+                delete players[playerID];
             }
     
             // emit room update event
@@ -257,8 +255,15 @@ io.on("connection", (socket) => {
             if (isRoomEmpty || allPlayersAbsent) {
                 // check again after 5 minutes
                 setTimeout(() => {
-                    // if still empty or all players absent, delete room
+                    // if still empty or all players absent, delete room and players
                     if (rooms[roomID] && (isRoomEmpty || allPlayersAbsent)) {
+                        // delete players
+                        for (const key of Object.keys(rooms[roomID].players)) {
+                            if (players[key]) {
+                                delete players[key];
+                            }
+                        }
+                        // delete room
                         delete rooms[roomID];
                     }
                 }, 300000);
