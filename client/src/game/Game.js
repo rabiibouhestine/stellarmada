@@ -16,7 +16,14 @@ import { Mattress } from "./entities/Mattress";
 
 export class Game {
     constructor(canvasRef, gameState, playerID) {
+        this.init(canvasRef, gameState, playerID);
+    }
+
+    async init(canvasRef, gameState, playerID) {
+        this.canvasRef = canvasRef;
+        this.gameState = gameState;
         this.playerID = playerID;
+
         this.app = new PIXI.Application({
             // resizeTo: window,
             width: 720,
@@ -26,48 +33,25 @@ export class Game {
             backgroundColor: 0x475569,
             backgroundAlpha: 0
         });
+
         this.sheet = new PIXI.Spritesheet(
             PIXI.BaseTexture.from(cardsImage),
             cardsSheet
         );
-        this.parseSheet();
+        await this.sheet.parse();
 
-        canvasRef.appendChild(this.app.view);
+        this.canvasRef.appendChild(this.app.view);
 
         this.mattress = new Mattress(this.app, positions.mattress);
-        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, gameState.turn.damage);
+        this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, this.gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
-        this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
+        this.players = this.createPlayers(this.app, this.sheet, this.playerID, this.gameState, positions, this.damageIndicator, this.confirmButton);
 
-        for (const key of Object.keys(this.players)) {
-            const player = this.players[key];
-
-            // Get game turn state
-            const turnPlayerID = gameState.turn.playerID;
-            const stance = gameState.turn.stance;
-
-            // Update player states
-            player.setStance(this.playerID === turnPlayerID? stance : "waiting");
-        }
-
-        this.resize = () => {
-            const windowWidth = canvasRef.offsetWidth;
-            const windowHeight = window.innerHeight;
-            const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
-    
-            // Update renderer dimensions
-            this.app.renderer.resize(windowWidth, windowHeight);
-
-            // Update stage scale
-            this.app.stage.scale.set(stageScale);
-
-            // Center the stage
-            this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
-            this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
-        }
+        const confirmButtonClickedEvent = new Event("confirmButtonClicked", { bubbles: true, cancelable: false });
+        this.confirmButton.button.on('pointerdown', () => window.dispatchEvent(confirmButtonClickedEvent));
 
         this.resize();
-        window.addEventListener('resize', this.resize, this);
+        window.addEventListener('resize', () => {this.resize()});
 
         this.soundShipsAttacked = new Howl({
             src: [sfxShipsAttacked]
@@ -83,8 +67,20 @@ export class Game {
         });
     }
 
-    async parseSheet() {
-        await this.sheet.parse();
+    resize() {
+        const windowWidth = this.canvasRef.offsetWidth;
+        const windowHeight = window.innerHeight;
+        const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
+
+        // Update renderer dimensions
+        this.app.renderer.resize(windowWidth, windowHeight);
+
+        // Update stage scale
+        this.app.stage.scale.set(stageScale);
+
+        // Center the stage
+        this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
+        this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
     }
 
     update(data) {
@@ -125,34 +121,30 @@ export class Game {
         this.app.destroy(true, true);
     }
 
-    onConfirmButton(event) {
-        if (this.players[this.playerID]) {
-            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
-        }
-    }
-
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
         const players = {};
-        const keys = Object.keys(gameState.players);
-      
-        if (keys.length !== 2) {
-          throw new Error('gameState.players must have exactly 2 players.');
+
+        const gameStatePlayersKeys = Object.keys(gameState.players);
+
+        if (gameStatePlayersKeys.length !== 2) {
+            throw new Error('gameState.players must have exactly 2 players.');
         }
-      
-        const firstPlayerKey = keys[0];
-        const enemyKey = keys[1];
-      
-        if (firstPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.top, damageIndicator, confirmButton, false);
-        } else if (enemyKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, true);
-        } else {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, false);
+
+        let topSet = false;
+        for (const key of gameStatePlayersKeys) {
+
+            // create player
+            if (key !== playerID && !topSet) {
+                players[key] = new Player(app, sheet, gameState.players[key], positions.top, damageIndicator, confirmButton, false);
+                topSet = true;
+            } else {
+                players[key] = new Player(app, sheet, gameState.players[key], positions.bottom, damageIndicator, confirmButton, key === playerID);
+            }
+
+            // update player stance
+            players[key].setStance(playerID === gameState.turn.playerID? gameState.turn.stance : "waiting");
         }
-      
+
         return players;
     }
 }

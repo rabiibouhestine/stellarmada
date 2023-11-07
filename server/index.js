@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const ShortUniqueId = require('short-unique-id');
 const Timer = require("./game/Timer.js");
 
 const express = require("express");
@@ -21,18 +22,17 @@ const io = new Server(server, {
 
 const rooms = {};
 const players = {};
+const waitingPlayers = [];
 
 
 app.get('/join', (req, res) => {
     const playerID = req.query.userID;
     const roomID = req.query.roomID;
 
-    let messages = [];
     let playersNb = 0;
     let gameStarted = false;
 
     if (rooms[roomID]) {
-        messages = rooms[roomID].messages;
         gameStarted = rooms[roomID].gameStarted;
         playersNb = Object.keys(rooms[roomID].players).length;
         // if room full we return error
@@ -43,7 +43,7 @@ app.get('/join', (req, res) => {
     }
 
     // return room information
-    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1, messages: messages });
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
 });
 
 
@@ -54,10 +54,9 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("socket connected:", socket.id, "| playerID:", playerID);
 
-    const endGame = () => {
+    const endGame = (roomID) => {
 
         let winnerID;
-        const roomID = players[playerID].room;
 
         // if isGameOver this is triggered by action request and winner is already set
         // otherwise this is triggered by timer or surrender and current playerID is loser
@@ -88,6 +87,24 @@ io.on("connection", (socket) => {
         // emit game ended event
         io.to(roomID).emit("gameEnded", { winnerID:winnerID, success: true });
     }
+
+    socket.on("findGame", () => {
+        if (waitingPlayers.length) {
+            const enemyID = waitingPlayers.shift();
+            const roomID = new ShortUniqueId().rnd();
+            rooms[roomID] = {
+                roomID: roomID,
+                gameStarted: false,
+                gameState: null,
+                players: {},
+                messages: []
+            };
+            socket.emit("gameFound", { roomID: roomID });
+            io.to(enemyID).emit("gameFound", { roomID: roomID });
+        } else {
+            waitingPlayers.push(socket.id);
+        }
+    })
 
     socket.on("joinRoom", (data) => {
         const roomID = data.roomID;
@@ -125,7 +142,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID] = {
                 isReady: false,
                 isPresent: true,
-                timer: new Timer(endGame, 1000 * 60 * 10)
+                timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
             };
         }
 
@@ -149,7 +166,7 @@ io.on("connection", (socket) => {
                     };
                 }
             }
-            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, success: true });
+            socket.emit("gameStateResponse", { gameState: processedGameState, timeLeft: timeLeft, messages: room.messages, success: true });
         }
     })
 
@@ -161,9 +178,8 @@ io.on("connection", (socket) => {
 
         // count players who are ready
         let playersReadyCount = 0;
-        let players = rooms[roomID].players;
-        for (const playerID in players) {
-            if (players[playerID].isReady) {
+        for (const playerID in rooms[roomID].players) {
+            if (rooms[roomID].players[playerID].isReady) {
                 playersReadyCount++;
             }
         }
@@ -189,12 +205,12 @@ io.on("connection", (socket) => {
         socket.to(roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
 
         if (room.gameState.isGameOver) {
-            endGame();
+            endGame(roomID);
         }
     })
 
-    socket.on("surrenderRequest", () => {
-        endGame();
+    socket.on("surrenderRequest", (data) => {
+        endGame(data.roomID);
     })
 
     socket.on("rematchRequest", (data) => {
@@ -211,34 +227,47 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
         console.log("socket disconnected:", socket.id, "| playerID:", playerID, "| reason:", reason);
 
+        // remove player from waiting players if they were in matchmaking
+        if (waitingPlayers.includes(socket.id)) {
+            const indexToRemove = waitingPlayers.indexOf(socket.id);
+            waitingPlayers.splice(indexToRemove, 1); 
+        }
+
         // if it's not a disconnect coming from a kick because of user opening multiple tabs
         if (players[playerID] && players[playerID].socket === socket.id) {
             // get room
             const roomID = players[playerID].room;
     
-            // update players
-            delete players[playerID];
-    
-            // update room
+            // update room and players
             if (rooms[roomID].gameStarted) {
                 rooms[roomID].players[playerID].isPresent = false;
             } else {
                 delete rooms[roomID].players[playerID];
+                delete players[playerID];
             }
     
             // emit room update event
             io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
     
-            // TODO also delete room if both players isPresent false
-            // if room empty after room update
-            if (Object.keys(rooms[roomID].players).length === 0) {
+            // if room empty or all players absent after room update
+            const allPlayersAbsent = Object.values(rooms[roomID].players).every(player => player.isPresent === false);
+            const isRoomEmpty = Object.keys(rooms[roomID].players).length === 0;
+            if (isRoomEmpty || allPlayersAbsent) {
                 // check again after 5 minutes
                 setTimeout(() => {
-                    // if still empty, delete room
-                    if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
+                    // if still empty or all players absent, delete room and players
+                    if (rooms[roomID] && (isRoomEmpty || allPlayersAbsent)) {
+                        // delete players
+                        for (const key of Object.keys(rooms[roomID].players)) {
+                            rooms[roomID].players[key].timer.stop();
+                            if (players[key]) {
+                                delete players[key];
+                            }
+                        }
+                        // delete room
                         delete rooms[roomID];
                     }
-                }, 300000);
+                }, 60000);
             }
         }
     })

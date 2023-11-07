@@ -11,14 +11,13 @@
 
 	export let socket;
 	export let playerID;
-	export let messages;
 
 	socket.emit('gameStateRequest', {
 		roomID: $page.params.roomID
 	});
 
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10, playerTimeUpdate);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10, opponentTimeUpdate);
+	const playerTimer = new Timer(1000 * 60 * 10, playerTimeUpdate);
+	const opponentTimer = new Timer(1000 * 60 * 10, opponentTimeUpdate);
 
 	let canvas;
 	let winnerID;
@@ -31,12 +30,24 @@
 
 	let game;
 	let logs = [];
+	let messages = [];
 
 	onMount(() => {
+		window.addEventListener('confirmButtonClicked', (e) => {
+			const selectedCards = game.players[playerID].hand.cards
+				.filter((card) => card.selected)
+				.map((card) => card.name);
+
+			socket.emit('gameActionRequest', {
+				roomID: $page.params.roomID,
+				playerSelection: selectedCards
+			});
+		});
+
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
-			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
+			messages = data.messages;
 
 			// update timers
 			for (const id in data.timeLeft) {
@@ -91,17 +102,6 @@
 		return `${formattedMinutes}:${formattedSeconds}`;
 	}
 
-	function handleConfirmButton() {
-		const selectedCards = game.players[playerID].hand.cards
-			.filter((card) => card.selected)
-			.map((card) => card.name);
-
-		socket.emit('gameActionRequest', {
-			roomID: $page.params.roomID,
-			playerSelection: selectedCards
-		});
-	}
-
 	function handleSurrender() {
 		showSurrenderModal = false;
 		socket.emit('surrenderRequest', { roomID: $page.params.roomID });
@@ -123,10 +123,6 @@
 
 	function opponentTimeUpdate(timeLeft) {
 		opponentTimeLeft = timeLeft;
-	}
-
-	function onTimerEnd() {
-		console.log('Timer ended');
 	}
 </script>
 

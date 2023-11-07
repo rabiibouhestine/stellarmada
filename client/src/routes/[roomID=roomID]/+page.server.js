@@ -13,8 +13,7 @@ export async function load({ params, parent }) {
         return {
             userID: userID,
             gameStarted: responseData.gameStarted,
-            playersNb: responseData.playersNb,
-            messages: responseData.messages
+            playersNb: responseData.playersNb
         };
     } else {
         throw redirect(308, '/');

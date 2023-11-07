@@ -2,8 +2,8 @@ import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
 
 export class Pile {
-    constructor(app, sheet, isPlayer, position, size) {
-        this.app = app;
+    constructor(cardsContainer, sheet, isPlayer, position, size) {
+        this.cardsContainer = cardsContainer;
         this.sheet = sheet;
         this.name = isPlayer? "B1" : "B2";
         this.position = position;
@@ -53,7 +53,7 @@ export class Pile {
         this.container.addChild(this.text);
 
         // Add pile to app stage
-        this.app.stage.addChild(this.container);
+        this.cardsContainer.addChild(this.container);
     }
 
     setSize(x) {
