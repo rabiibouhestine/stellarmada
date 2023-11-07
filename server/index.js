@@ -266,7 +266,7 @@ io.on("connection", (socket) => {
                         // delete room
                         delete rooms[roomID];
                     }
-                }, 300000);
+                }, 60000);
             }
         }
     })
