@@ -54,10 +54,9 @@ io.on("connection", (socket) => {
     const playerID = socket.handshake.query.playerID;
     console.log("socket connected:", socket.id, "| playerID:", playerID);
 
-    const endGame = () => {
+    const endGame = (roomID) => {
 
         let winnerID;
-        const roomID = players[playerID].room;
 
         // if isGameOver this is triggered by action request and winner is already set
         // otherwise this is triggered by timer or surrender and current playerID is loser
@@ -143,7 +142,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID] = {
                 isReady: false,
                 isPresent: true,
-                timer: new Timer(endGame, 1000 * 60 * 10)
+                timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
             };
         }
 
@@ -207,12 +206,12 @@ io.on("connection", (socket) => {
         socket.to(roomID).emit("gameActionResponse", { gameAction:enemyGameAction, success: true });
 
         if (room.gameState.isGameOver) {
-            endGame();
+            endGame(roomID);
         }
     })
 
-    socket.on("surrenderRequest", () => {
-        endGame();
+    socket.on("surrenderRequest", (data) => {
+        endGame(data.roomID);
     })
 
     socket.on("rematchRequest", (data) => {
