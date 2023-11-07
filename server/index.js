@@ -178,9 +178,8 @@ io.on("connection", (socket) => {
 
         // count players who are ready
         let playersReadyCount = 0;
-        let players = rooms[roomID].players;
-        for (const playerID in players) {
-            if (players[playerID].isReady) {
+        for (const playerID in rooms[roomID].players) {
+            if (rooms[roomID].players[playerID].isReady) {
                 playersReadyCount++;
             }
         }
