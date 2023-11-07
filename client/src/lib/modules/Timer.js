@@ -1,6 +1,5 @@
 class Timer {
     constructor(duration, update) {
-      this.callback = callback;
       this.duration = duration;
       this.timerId = null;
       this.isRunning = false;
