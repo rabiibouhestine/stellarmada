@@ -1,4 +1,5 @@
 <script>
+	import screenfull from 'screenfull';
 	import { onMount } from 'svelte';
 	import {
 		Icon,
@@ -28,7 +29,7 @@
 
 	let canvas;
 	let winnerID;
-	let fullScreen = false;
+	let isFullScreen = false;
 	let isGameOver = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
@@ -39,7 +40,7 @@
 	let logs = [];
 	let messages = [];
 
-	$: fullScreenIcon = fullScreen ? ArrowsPointingIn : ArrowsPointingOut;
+	$: fullScreenIcon = isFullScreen ? ArrowsPointingIn : ArrowsPointingOut;
 
 	onMount(() => {
 		window.addEventListener('confirmButtonClicked', (e) => {
@@ -112,29 +113,9 @@
 	}
 
 	function toggleFullScreen() {
-		if (fullScreen) {
-			fullScreen = false;
-			if (document.exitFullscreen) {
-				document.exitFullscreen();
-			} else if (document.webkitExitFullscreen) {
-				/* Safari */
-				document.webkitExitFullscreen();
-			} else if (document.msExitFullscreen) {
-				/* IE11 */
-				document.msExitFullscreen();
-			}
-		} else {
-			fullScreen = true;
-			const docElement = document.documentElement;
-			if (docElement.requestFullscreen) {
-				docElement.requestFullscreen();
-			} else if (docElement.webkitRequestFullscreen) {
-				/* Safari */
-				docElement.webkitRequestFullscreen();
-			} else if (docElement.msRequestFullscreen) {
-				/* IE11 */
-				docElement.msRequestFullscreen();
-			}
+		if (screenfull.isEnabled) {
+			isFullScreen = !isFullScreen;
+			screenfull.toggle();
 		}
 	}
 
