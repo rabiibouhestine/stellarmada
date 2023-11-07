@@ -50,17 +50,6 @@ export class Game {
         const confirmButtonClickedEvent = new Event("confirmButtonClicked", { bubbles: true, cancelable: false });
         this.confirmButton.button.on('pointerdown', () => window.dispatchEvent(confirmButtonClickedEvent));
 
-        for (const key of Object.keys(this.players)) {
-            const player = this.players[key];
-
-            // Get game turn state
-            const turnPlayerID = this.gameState.turn.playerID;
-            const stance = this.gameState.turn.stance;
-
-            // Update player states
-            player.setStance(this.playerID === turnPlayerID? stance : "waiting");
-        }
-
         this.resize();
         window.addEventListener('resize', () => {this.resize()});
 
@@ -143,12 +132,17 @@ export class Game {
 
         let topSet = false;
         for (const key of gameStatePlayersKeys) {
+
+            // create player
             if (key !== playerID && !topSet) {
                 players[key] = new Player(app, sheet, gameState.players[key], positions.top, damageIndicator, confirmButton, false);
                 topSet = true;
             } else {
                 players[key] = new Player(app, sheet, gameState.players[key], positions.bottom, damageIndicator, confirmButton, key === playerID);
             }
+
+            // update player stance
+            players[key].setStance(playerID === gameState.turn.playerID? gameState.turn.stance : "waiting");
         }
 
         return players;
