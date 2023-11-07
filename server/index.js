@@ -253,13 +253,14 @@ io.on("connection", (socket) => {
             // emit room update event
             io.to(roomID).emit("roomUpdate", { playersNb: Object.keys(rooms[roomID].players).length });
     
-            // TODO also delete room if both players isPresent false
-            // if room empty after room update
-            if (Object.keys(rooms[roomID].players).length === 0) {
+            // if room empty or all players absent after room update
+            const allPlayersAbsent = Object.values(rooms[roomID].players).every(player => player.isPresent === false);
+            const isRoomEmpty = Object.keys(rooms[roomID].players).length === 0;
+            if (isRoomEmpty || allPlayersAbsent) {
                 // check again after 5 minutes
                 setTimeout(() => {
-                    // if still empty, delete room
-                    if (rooms[roomID] && Object.keys(rooms[roomID].players).length === 0) {
+                    // if still empty or all players absent, delete room
+                    if (rooms[roomID] && (isRoomEmpty || allPlayersAbsent)) {
                         delete rooms[roomID];
                     }
                 }, 300000);
