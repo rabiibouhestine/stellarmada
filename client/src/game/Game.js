@@ -136,21 +136,21 @@ export class Game {
         const keys = Object.keys(gameState.players);
       
         if (keys.length !== 2) {
-          throw new Error('gameState.players must have exactly 2 players.');
+            throw new Error('gameState.players must have exactly 2 players.');
         }
       
         const firstPlayerKey = keys[0];
         const enemyKey = keys[1];
       
         if (firstPlayerKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.top, damageIndicator, confirmButton, false);
+            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
+            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.top, damageIndicator, confirmButton, false);
         } else if (enemyKey === playerID) {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, true);
+            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
+            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, true);
         } else {
-          players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-          players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, false);
+            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
+            players[enemyKey] = new Player(app, sheet, gameState.players[enemyKey], positions.bottom, damageIndicator, confirmButton, false);
         }
       
         return players;
