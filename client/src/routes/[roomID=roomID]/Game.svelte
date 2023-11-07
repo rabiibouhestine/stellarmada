@@ -17,8 +17,8 @@
 		roomID: $page.params.roomID
 	});
 
-	const playerTimer = new Timer(onTimerEnd, 1000 * 60 * 10, playerTimeUpdate);
-	const opponentTimer = new Timer(onTimerEnd, 1000 * 60 * 10, opponentTimeUpdate);
+	const playerTimer = new Timer(1000 * 60 * 10, playerTimeUpdate);
+	const opponentTimer = new Timer(1000 * 60 * 10, opponentTimeUpdate);
 
 	let canvas;
 	let winnerID;
@@ -123,10 +123,6 @@
 
 	function opponentTimeUpdate(timeLeft) {
 		opponentTimeLeft = timeLeft;
-	}
-
-	function onTimerEnd() {
-		console.log('Timer ended');
 	}
 </script>
 
