@@ -33,9 +33,19 @@
 	let logs = [];
 
 	onMount(() => {
+		window.addEventListener('confirmButtonClicked', (e) => {
+			const selectedCards = game.players[playerID].hand.cards
+				.filter((card) => card.selected)
+				.map((card) => card.name);
+
+			socket.emit('gameActionRequest', {
+				roomID: $page.params.roomID,
+				playerSelection: selectedCards
+			});
+		});
+
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
-			game.onConfirmButton(() => handleConfirmButton());
 			logs = data.gameState.logs;
 
 			// update timers
@@ -89,17 +99,6 @@
 		const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
 		return `${formattedMinutes}:${formattedSeconds}`;
-	}
-
-	function handleConfirmButton() {
-		const selectedCards = game.players[playerID].hand.cards
-			.filter((card) => card.selected)
-			.map((card) => card.name);
-
-		socket.emit('gameActionRequest', {
-			roomID: $page.params.roomID,
-			playerSelection: selectedCards
-		});
 	}
 
 	function handleSurrender() {

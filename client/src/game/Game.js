@@ -39,6 +39,9 @@ export class Game {
         this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, gameState, positions, this.damageIndicator, this.confirmButton);
 
+        const confirmButtonClickedEvent = new Event("confirmButtonClicked", { bubbles: true, cancelable: false });
+        this.players[this.playerID].confirmButton.button.on('pointerdown', () => window.dispatchEvent(confirmButtonClickedEvent));
+
         for (const key of Object.keys(this.players)) {
             const player = this.players[key];
 
@@ -85,12 +88,6 @@ export class Game {
 
     async parseSheet() {
         await this.sheet.parse();
-    }
-
-    onConfirmButton(callback) {
-        if (this.players[this.playerID]) {
-            this.players[this.playerID].confirmButton.button.on('pointerdown', callback);
-        }
     }
 
     update(data) {

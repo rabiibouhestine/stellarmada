@@ -18,9 +18,9 @@ export class Player {
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
         
-        this.drawPile = new Pile(app, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
-        this.discardPile = new Pile(app, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
-        this.destroyPile = new Pile(app, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
+        this.drawPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
+        this.discardPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
+        this.destroyPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
         this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
         this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
