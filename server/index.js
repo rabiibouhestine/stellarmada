@@ -259,7 +259,9 @@ io.on("connection", (socket) => {
                     if (rooms[roomID] && (isRoomEmpty || allPlayersAbsent)) {
                         // delete players
                         for (const key of Object.keys(rooms[roomID].players)) {
-                            rooms[roomID].players[key].timer.stop();
+                            if (rooms[roomID].players[key]) {
+                                rooms[roomID].players[key].timer.stop();
+                            }
                             if (players[key]) {
                                 delete players[key];
                             }
