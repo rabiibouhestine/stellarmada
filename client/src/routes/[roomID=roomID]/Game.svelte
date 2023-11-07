@@ -1,6 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Icon, Home, Flag, SpeakerWave, ArrowsPointingOut } from 'svelte-hero-icons';
+	import {
+		Icon,
+		Home,
+		Flag,
+		SpeakerWave,
+		ArrowsPointingOut,
+		ArrowsPointingIn
+	} from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import Timer from '$lib/modules/Timer.js';
@@ -21,6 +28,7 @@
 
 	let canvas;
 	let winnerID;
+	let fullScreen = false;
 	let isGameOver = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
@@ -30,6 +38,8 @@
 	let game;
 	let logs = [];
 	let messages = [];
+
+	$: fullScreenIcon = fullScreen ? ArrowsPointingIn : ArrowsPointingOut;
 
 	onMount(() => {
 		window.addEventListener('confirmButtonClicked', (e) => {
@@ -101,6 +111,33 @@
 		return `${formattedMinutes}:${formattedSeconds}`;
 	}
 
+	function toggleFullScreen() {
+		if (fullScreen) {
+			fullScreen = false;
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.webkitExitFullscreen) {
+				/* Safari */
+				document.webkitExitFullscreen();
+			} else if (document.msExitFullscreen) {
+				/* IE11 */
+				document.msExitFullscreen();
+			}
+		} else {
+			fullScreen = true;
+			const docElement = document.documentElement;
+			if (docElement.requestFullscreen) {
+				docElement.requestFullscreen();
+			} else if (docElement.webkitRequestFullscreen) {
+				/* Safari */
+				docElement.webkitRequestFullscreen();
+			} else if (docElement.msRequestFullscreen) {
+				/* IE11 */
+				docElement.msRequestFullscreen();
+			}
+		}
+	}
+
 	function handleSurrender() {
 		showSurrenderModal = false;
 		socket.emit('surrenderRequest', { roomID: $page.params.roomID });
@@ -165,9 +202,10 @@
 				<Icon src={Home} class="h-8 w-8 text-white" />
 			</button>
 			<button
+				on:click={toggleFullScreen}
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
 			>
-				<Icon src={ArrowsPointingOut} class="h-8 w-8 text-white" />
+				<Icon src={fullScreenIcon} class="h-8 w-8 text-white" />
 			</button>
 		</div>
 		{#if false}
