@@ -6,6 +6,7 @@
 		Home,
 		Flag,
 		SpeakerWave,
+		SpeakerXMark,
 		ArrowsPointingOut,
 		ArrowsPointingIn
 	} from 'svelte-hero-icons';
@@ -29,6 +30,7 @@
 
 	let canvas;
 	let winnerID;
+	let isMuted = false;
 	let isFullScreen = false;
 	let isGameOver = false;
 	let showSurrenderModal = false;
@@ -41,6 +43,7 @@
 	let messages = [];
 
 	$: fullScreenIcon = isFullScreen ? ArrowsPointingIn : ArrowsPointingOut;
+	$: soundIcon = isMuted ? SpeakerXMark : SpeakerWave;
 
 	onMount(() => {
 		window.addEventListener('confirmButtonClicked', (e) => {
@@ -112,6 +115,10 @@
 		return `${formattedMinutes}:${formattedSeconds}`;
 	}
 
+	function toggleSound() {
+		isMuted = !isMuted;
+	}
+
 	function toggleFullScreen() {
 		if (screenfull.isEnabled) {
 			isFullScreen = !isFullScreen;
@@ -165,9 +172,10 @@
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
 		>
 			<button
+				on:click={toggleSound}
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
 			>
-				<Icon src={SpeakerWave} class="h-8 w-8 text-white" />
+				<Icon src={soundIcon} class="h-8 w-8 text-white" />
 			</button>
 			<button
 				on:click={() => {
