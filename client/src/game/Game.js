@@ -133,26 +133,24 @@ export class Game {
 
     createPlayers(app, sheet, playerID, gameState, positions, damageIndicator, confirmButton) {
         const players = {};
-        const keys = Object.keys(gameState.players);
-      
-        if (keys.length !== 2) {
+
+        const gameStatePlayersKeys = Object.keys(gameState.players);
+
+        if (gameStatePlayersKeys.length !== 2) {
             throw new Error('gameState.players must have exactly 2 players.');
         }
-      
-        const firstPlayerKey = keys[0];
-        const secondPlayerKey = keys[1];
-      
-        if (firstPlayerKey === playerID) {
-            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.top, damageIndicator, confirmButton, false);
-        } else if (secondPlayerKey === playerID) {
-            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, true);
-        } else {
-            players[firstPlayerKey] = new Player(app, sheet, gameState.players[firstPlayerKey], positions.top, damageIndicator, confirmButton, false);
-            players[secondPlayerKey] = new Player(app, sheet, gameState.players[secondPlayerKey], positions.bottom, damageIndicator, confirmButton, false);
+
+        let topSet = false;
+        for (const key of gameStatePlayersKeys) {
+            if (key !== playerID && !topSet) {
+                players[key] = new Player(app, sheet, gameState.players[key], positions.top, damageIndicator, confirmButton, false);
+                topSet = true;
+            } else {
+                players[key] = new Player(app, sheet, gameState.players[key], positions.bottom, damageIndicator, confirmButton, key === playerID);
+            }
         }
-      
+
+
         return players;
     }
 }
