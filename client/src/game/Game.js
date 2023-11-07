@@ -87,9 +87,9 @@ export class Game {
         await this.sheet.parse();
     }
 
-    onConfirmButton(event) {
+    onConfirmButton(callback) {
         if (this.players[this.playerID]) {
-            this.players[this.playerID].confirmButton.button.on('pointerdown', event);
+            this.players[this.playerID].confirmButton.button.on('pointerdown', callback);
         }
     }
 
