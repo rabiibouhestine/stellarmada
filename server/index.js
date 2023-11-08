@@ -60,6 +60,7 @@ app.get('/single', (req, res) => {
     };
 
     rooms[roomID].players['bot'] = {
+        isBot: true,
         isReady: true,
         isPresent: true,
         timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
@@ -100,7 +101,7 @@ io.on("connection", (socket) => {
 
         // update players
         Object.keys(rooms[roomID].players).forEach(playerID => {
-            rooms[roomID].players[playerID].isReady = false;
+            rooms[roomID].players[playerID].isReady = rooms[roomID].players[playerID].isBot;
             rooms[roomID].players[playerID].timer.reset();
         });
 
@@ -162,6 +163,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID].isPresent = true;
         } else {
             rooms[roomID].players[playerID] = {
+                isBot: false,
                 isReady: false,
                 isPresent: true,
                 timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
