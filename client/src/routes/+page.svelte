@@ -12,7 +12,7 @@
 	}
 
 	async function botRoom() {
-		const response = await fetch('http://localhost:3001/single');
+		const response = await fetch('https://server.stellarmada.com/single');
 		const data = await response.json();
 		await goto(`/${data.roomID}`);
 	}

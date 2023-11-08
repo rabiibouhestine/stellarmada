@@ -6,7 +6,7 @@ export async function load({ params, parent }) {
         roomID: params.roomID,
         userID: userID
     });
-    const response = await fetch(`http://localhost:3001/join?${joinParams.toString()}`);
+    const response = await fetch(`https://server.stellarmada.com/join?${joinParams.toString()}`);
     if (response.ok) {
         const responseData = await response.json();
 

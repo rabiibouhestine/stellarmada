@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import io from 'socket.io-client';
 
-	const socket = io.connect('http://localhost:3001');
+	const socket = io.connect('https://server.stellarmada.com');
 
 	socket.emit('findGame');
 
