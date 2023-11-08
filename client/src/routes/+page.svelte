@@ -11,7 +11,10 @@
 		goto(`/${roomID}`);
 	}
 
-	function getSinglePlayerRoom() {}
+	function getSinglePlayerRoom() {
+		// fetch roomID
+		// goto(`/${roomID}`);
+	}
 </script>
 
 <div
