@@ -237,9 +237,7 @@ io.on("connection", (socket) => {
 
         if (room.gameState.isGameOver) {
             endGame(roomID);
-        }
-
-        if (rooms[roomID].isBotRoom && gameAction.turn.playerID === 'bot') {
+        } else if (rooms[roomID].isBotRoom && gameAction.turn.playerID === 'bot') {
             setTimeout(() => {
                 handleGameAction('bot', roomID, botSelection(rooms[roomID].gameState));
             }, 1400);
