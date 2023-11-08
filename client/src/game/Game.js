@@ -6,7 +6,7 @@ import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
 
 import sfxAttack from './assets/audio/cardPlace1.ogg';
-import sfxDiscard from './assets/audio/cardShove1.ogg';
+import sfxDiscard from './assets/audio/cardSlide1.ogg';
 import sfxGameStart from './assets/audio/cardTakeOutPackage2.ogg';
 
 import { Player } from "./entities/Player";
