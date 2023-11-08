@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const { botSelection } = require("./game/bot.js");
 const ShortUniqueId = require('short-unique-id');
 const Timer = require("./game/Timer.js");
 
@@ -215,14 +216,6 @@ io.on("connection", (socket) => {
             io.to(roomID).emit("handleReadyResponse");
         }
     })
-
-    const botSelection = (gamestate) => {
-        if (gamestate.turn.stance === 'attacking') {
-            return [gamestate.players['bot'].cards.hand[0]];
-        } else {
-            return gamestate.players['bot'].cards.hand.slice(1);
-        }
-    }
 
     const handleGameAction = (playerID, roomID, cardSelection) => {
         const room = rooms[roomID];
