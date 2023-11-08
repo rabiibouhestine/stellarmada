@@ -23,6 +23,7 @@ export class Game {
         this.canvasRef = canvasRef;
         this.gameState = gameState;
         this.playerID = playerID;
+        this.gameMuted = false;
 
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -80,6 +81,11 @@ export class Game {
         // Center the stage
         this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
         this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
+    }
+
+    toggleMute() {
+        this.gameMuted = !this.gameMuted;
+        Howler.mute(this.gameMuted);
     }
 
     update(data) {

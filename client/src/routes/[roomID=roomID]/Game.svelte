@@ -120,6 +120,7 @@
 
 	function toggleSound() {
 		isMuted = !isMuted;
+		game.toggleMute();
 	}
 
 	function toggleFullScreen() {
