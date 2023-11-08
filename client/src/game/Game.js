@@ -35,8 +35,10 @@ export class Game {
             backgroundAlpha: 0
         });
 
+        const cardsTextures = await PIXI.Assets.load(cardsImage);
+
         this.sheet = new PIXI.Spritesheet(
-            PIXI.BaseTexture.from(cardsImage),
+            cardsTextures,
             cardsSheet
         );
         await this.sheet.parse();
