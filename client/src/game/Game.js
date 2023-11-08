@@ -5,8 +5,9 @@ import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
 
-import sfxShipsAttacked from './assets/audio/laserLarge_000.ogg';
-import sfxShipsDiscarded from './assets/audio/forceField_000.ogg';
+import sfxAttack from './assets/audio/cardPlace1.ogg';
+import sfxDiscard from './assets/audio/cardSlide1.ogg';
+import sfxGameStart from './assets/audio/cardTakeOutPackage2.ogg';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -22,6 +23,7 @@ export class Game {
         this.canvasRef = canvasRef;
         this.gameState = gameState;
         this.playerID = playerID;
+        this.gameMuted = false;
 
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -33,8 +35,10 @@ export class Game {
             backgroundAlpha: 0
         });
 
+        const cardsTextures = await PIXI.Assets.load(cardsImage);
+
         this.sheet = new PIXI.Spritesheet(
-            PIXI.BaseTexture.from(cardsImage),
+            cardsTextures,
             cardsSheet
         );
         await this.sheet.parse();
@@ -52,11 +56,16 @@ export class Game {
         this.resize();
         window.addEventListener('resize', () => {this.resize()});
 
-        this.soundShipsAttacked = new Howl({
-            src: [sfxShipsAttacked]
+        this.sfxAttackHowl = new Howl({
+            src: [sfxAttack]
         });
-        this.soundShipsDiscarded = new Howl({
-            src: [sfxShipsDiscarded]
+        this.sfxDiscardHowl = new Howl({
+            src: [sfxDiscard]
+        });
+        this.sfxGameStartHowl = new Howl({
+            src: [sfxGameStart],
+            autoplay: true,
+            loop: false
         });
     }
 
@@ -76,11 +85,16 @@ export class Game {
         this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
     }
 
+    toggleMute() {
+        this.gameMuted = !this.gameMuted;
+        Howler.mute(this.gameMuted);
+    }
+
     update(data) {
         if (data.turn.stance === 'discarding') {
-            this.soundShipsAttacked.play();
+            this.sfxAttackHowl.play();
         } else {
-            this.soundShipsDiscarded.play();
+            this.sfxDiscardHowl.play();
         }
         this.damageIndicator.setValue(data.turn.damage);
 
