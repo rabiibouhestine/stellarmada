@@ -1,6 +1,15 @@
 <script>
+	import screenfull from 'screenfull';
 	import { onMount } from 'svelte';
-	import { Icon, Home, Flag, QuestionMarkCircle, Cog6Tooth } from 'svelte-hero-icons';
+	import {
+		Icon,
+		Home,
+		Flag,
+		SpeakerWave,
+		SpeakerXMark,
+		ArrowsPointingOut,
+		ArrowsPointingIn
+	} from 'svelte-hero-icons';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import Timer from '$lib/modules/Timer.js';
@@ -21,8 +30,9 @@
 
 	let canvas;
 	let winnerID;
+	let isMuted = false;
+	let isFullScreen = false;
 	let isGameOver = false;
-	let showRulesModal = false;
 	let showSurrenderModal = false;
 	let showQuitModal = false;
 	let playerTimeLeft = playerTimer.timeLeft;
@@ -32,17 +42,11 @@
 	let logs = [];
 	let messages = [];
 
-	onMount(() => {
-		window.addEventListener('confirmButtonClicked', (e) => {
-			const selectedCards = game.players[playerID].hand.cards
-				.filter((card) => card.selected)
-				.map((card) => card.name);
+	$: fullScreenIcon = isFullScreen ? ArrowsPointingIn : ArrowsPointingOut;
+	$: soundIcon = isMuted ? SpeakerXMark : SpeakerWave;
 
-			socket.emit('gameActionRequest', {
-				roomID: $page.params.roomID,
-				playerSelection: selectedCards
-			});
-		});
+	onMount(() => {
+		window.addEventListener('confirmButtonClicked', onConfirmButtonClicked);
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
@@ -84,12 +88,24 @@
 		});
 
 		return () => {
+			window.removeEventListener('confirmButtonClicked', onConfirmButtonClicked);
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
 			socket.off('gameEnded');
 			game.end();
 		};
 	});
+
+	function onConfirmButtonClicked() {
+		const selectedCards = game.players[playerID].hand.cards
+			.filter((card) => card.selected)
+			.map((card) => card.name);
+
+		socket.emit('gameActionRequest', {
+			roomID: $page.params.roomID,
+			playerSelection: selectedCards
+		});
+	}
 
 	function formatTime(milliseconds) {
 		const totalSeconds = Math.floor(milliseconds / 1000);
@@ -100,6 +116,17 @@
 		const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
 		return `${formattedMinutes}:${formattedSeconds}`;
+	}
+
+	function toggleSound() {
+		isMuted = !isMuted;
+	}
+
+	function toggleFullScreen() {
+		if (screenfull.isEnabled) {
+			isFullScreen = !isFullScreen;
+			screenfull.toggle();
+		}
 	}
 
 	function handleSurrender() {
@@ -141,16 +168,17 @@
 	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
 	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
+		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
+			<Chat {socket} {playerID} {messages} />
+		</div>
 		<div
 			class="flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] w-full"
 		>
 			<button
-				on:click={() => {
-					showRulesModal = true;
-				}}
+				on:click={toggleSound}
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
 			>
-				<Icon src={QuestionMarkCircle} class="h-8 w-8 text-white" />
+				<Icon src={soundIcon} class="h-8 w-8 text-white" />
 			</button>
 			<button
 				on:click={() => {
@@ -169,26 +197,21 @@
 				<Icon src={Home} class="h-8 w-8 text-white" />
 			</button>
 			<button
+				on:click={toggleFullScreen}
 				class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
 			>
-				<Icon src={Cog6Tooth} class="h-8 w-8 text-white" />
+				<Icon src={fullScreenIcon} class="h-8 w-8 text-white" />
 			</button>
 		</div>
 		{#if false}
 			<div class="bg-black bg-opacity-25 w-full min-h-[260px] rounded-lg" />
 		{/if}
-		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
-			<Chat {socket} {playerID} {messages} />
-		</div>
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
 		>
 			<h1 class="text-slate-100 text-3xl font-bold">{formatTime(playerTimeLeft)}</h1>
 		</div>
 	</div>
-	<Modal bind:showModal={showRulesModal}>
-		<div class="grid justify-items-center w-full text-slate-200">RULES HERE</div>
-	</Modal>
 	<Modal bind:showModal={showSurrenderModal}>
 		<div class="grid justify-items-center w-full">
 			<div class="text-4xl text-center text-slate-200 font-black drop-shadow-md">

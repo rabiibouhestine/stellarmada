@@ -24,12 +24,16 @@ const initGameState = (room) => {
         gameState.players[id] = initPlayerState();
     }
 
-    // Pick a random player index
-    const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
-    // Get the player with the random index
-    const attackingPlayerID = playersIDs[randomPlayerIndex];
-    // Give the turn to the player
-    gameState.turn.playerID = attackingPlayerID;
+    if (room.isBotRoom) {
+        gameState.turn.playerID = playersIDs[0] === 'bot' ? playersIDs[1] : playersIDs[0];
+    } else {
+        // Pick a random player index
+        const randomPlayerIndex = Math.floor(Math.random() * playersIDs.length);
+        // Get the player with the random index
+        const attackingPlayerID = playersIDs[randomPlayerIndex];
+        // Give the turn to the player
+        gameState.turn.playerID = attackingPlayerID;
+    }
 
     return gameState;
 }
@@ -311,6 +315,10 @@ const handleActionRequest = (playerID, playerSelection, room) => {
         if (playerCards.hand.length === 0) {
             gamestate.isGameOver = true;
             gamestate.winnerID = enemyID;
+        } else if (gamestate.players[enemyID].cards.hand.length === 0) {
+        // If successful discard and enemy has no cards, player wins
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
         }
     }
 

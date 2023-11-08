@@ -2,14 +2,20 @@
 	import { goto } from '$app/navigation';
 	import ShortUniqueId from 'short-unique-id';
 
-	const findRoom = () => {
+	function findRoom() {
 		goto('/matchmaking');
-	};
+	}
 
-	const createRoom = () => {
+	function createRoom() {
 		const roomID = new ShortUniqueId().rnd();
 		goto(`/${roomID}`);
-	};
+	}
+
+	async function botRoom() {
+		const response = await fetch('http://localhost:3001/single');
+		const data = await response.json();
+		await goto(`/${data.roomID}`);
+	}
 </script>
 
 <div
@@ -38,6 +44,7 @@
 		</button>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+			on:click={botRoom}
 		>
 			PLAY AGAINST AI
 		</button>

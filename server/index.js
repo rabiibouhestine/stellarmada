@@ -1,5 +1,6 @@
 const { initGameState, handleActionRequest } = require("./game/game.js");
 const { processGameState, processGameAction } = require("./game/utils.js");
+const { botSelection } = require("./game/bot.js");
 const ShortUniqueId = require('short-unique-id');
 const Timer = require("./game/Timer.js");
 
@@ -47,7 +48,28 @@ app.get('/join', (req, res) => {
 });
 
 
+app.get('/single', (req, res) => {
 
+    const roomID = new ShortUniqueId().rnd();
+    rooms[roomID] = {
+        roomID: roomID,
+        isBotRoom: true,
+        gameStarted: false,
+        gameState: null,
+        players: {},
+        messages: []
+    };
+
+    rooms[roomID].players['bot'] = {
+        isBot: true,
+        isReady: true,
+        isPresent: true,
+        timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
+    };
+
+    // return room information
+    res.json({ roomID: roomID });
+});
 
 
 io.on("connection", (socket) => {
@@ -80,7 +102,7 @@ io.on("connection", (socket) => {
 
         // update players
         Object.keys(rooms[roomID].players).forEach(playerID => {
-            rooms[roomID].players[playerID].isReady = false;
+            rooms[roomID].players[playerID].isReady = rooms[roomID].players[playerID].isBot;
             rooms[roomID].players[playerID].timer.reset();
         });
 
@@ -94,6 +116,7 @@ io.on("connection", (socket) => {
             const roomID = new ShortUniqueId().rnd();
             rooms[roomID] = {
                 roomID: roomID,
+                isBotRoom: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
@@ -113,6 +136,7 @@ io.on("connection", (socket) => {
         if (!rooms.hasOwnProperty(roomID)) {
             rooms[roomID] = {
                 roomID: roomID,
+                isBotRoom: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
@@ -140,6 +164,7 @@ io.on("connection", (socket) => {
             rooms[roomID].players[playerID].isPresent = true;
         } else {
             rooms[roomID].players[playerID] = {
+                isBot: false,
                 isReady: false,
                 isPresent: true,
                 timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
@@ -192,11 +217,10 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("gameActionRequest", (data) => {
-        const roomID = data.roomID;
+    const handleGameAction = (playerID, roomID, cardSelection) => {
         const room = rooms[roomID];
 
-        const gameAction = handleActionRequest(playerID, data.playerSelection, room);
+        const gameAction = handleActionRequest(playerID, cardSelection, room);
 
         const playerGameAction = processGameAction(gameAction, playerID, true);
         const enemyGameAction = processGameAction(gameAction, playerID, false);
@@ -206,7 +230,18 @@ io.on("connection", (socket) => {
 
         if (room.gameState.isGameOver) {
             endGame(roomID);
+        } else if (rooms[roomID].isBotRoom && gameAction.turn.playerID === 'bot') {
+            setTimeout(() => {
+                handleGameAction('bot', roomID, botSelection(rooms[roomID].gameState));
+            }, 1400);
         }
+    }
+
+    socket.on("gameActionRequest", (data) => {
+        const roomID = data.roomID;
+        const playerSelection = data.playerSelection;
+
+        handleGameAction(playerID, roomID, playerSelection);
     })
 
     socket.on("surrenderRequest", (data) => {
