@@ -45,17 +45,6 @@
 	$: fullScreenIcon = isFullScreen ? ArrowsPointingIn : ArrowsPointingOut;
 	$: soundIcon = isMuted ? SpeakerXMark : SpeakerWave;
 
-	function onConfirmButtonClicked() {
-		const selectedCards = game.players[playerID].hand.cards
-			.filter((card) => card.selected)
-			.map((card) => card.name);
-
-		socket.emit('gameActionRequest', {
-			roomID: $page.params.roomID,
-			playerSelection: selectedCards
-		});
-	}
-
 	onMount(() => {
 		window.addEventListener('confirmButtonClicked', onConfirmButtonClicked);
 
@@ -106,6 +95,17 @@
 			game.end();
 		};
 	});
+
+	function onConfirmButtonClicked() {
+		const selectedCards = game.players[playerID].hand.cards
+			.filter((card) => card.selected)
+			.map((card) => card.name);
+
+		socket.emit('gameActionRequest', {
+			roomID: $page.params.roomID,
+			playerSelection: selectedCards
+		});
+	}
 
 	function formatTime(milliseconds) {
 		const totalSeconds = Math.floor(milliseconds / 1000);
