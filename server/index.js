@@ -49,8 +49,24 @@ app.get('/join', (req, res) => {
 
 app.get('/single', (req, res) => {
 
+    const roomID = new ShortUniqueId().rnd();
+    rooms[roomID] = {
+        roomID: roomID,
+        isBotRoom: true,
+        gameStarted: false,
+        gameState: null,
+        players: {},
+        messages: []
+    };
+
+    rooms[roomID].players['bot'] = {
+        isReady: true,
+        isPresent: true,
+        timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
+    };
+
     // return room information
-    res.json({ roomID: "single" });
+    res.json({ roomID: roomID });
 });
 
 
@@ -98,6 +114,7 @@ io.on("connection", (socket) => {
             const roomID = new ShortUniqueId().rnd();
             rooms[roomID] = {
                 roomID: roomID,
+                isBotRoom: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
@@ -117,6 +134,7 @@ io.on("connection", (socket) => {
         if (!rooms.hasOwnProperty(roomID)) {
             rooms[roomID] = {
                 roomID: roomID,
+                isBotRoom: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
