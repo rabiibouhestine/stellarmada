@@ -47,7 +47,11 @@ app.get('/join', (req, res) => {
 });
 
 
+app.get('/singleRoom', (req, res) => {
 
+    // return room information
+    res.json({ roomID: "singleRoom" });
+});
 
 
 io.on("connection", (socket) => {
