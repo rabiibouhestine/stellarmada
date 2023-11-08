@@ -45,17 +45,19 @@
 	$: fullScreenIcon = isFullScreen ? ArrowsPointingIn : ArrowsPointingOut;
 	$: soundIcon = isMuted ? SpeakerXMark : SpeakerWave;
 
-	onMount(() => {
-		window.addEventListener('confirmButtonClicked', (e) => {
-			const selectedCards = game.players[playerID].hand.cards
-				.filter((card) => card.selected)
-				.map((card) => card.name);
+	function onConfirmButtonClicked() {
+		const selectedCards = game.players[playerID].hand.cards
+			.filter((card) => card.selected)
+			.map((card) => card.name);
 
-			socket.emit('gameActionRequest', {
-				roomID: $page.params.roomID,
-				playerSelection: selectedCards
-			});
+		socket.emit('gameActionRequest', {
+			roomID: $page.params.roomID,
+			playerSelection: selectedCards
 		});
+	}
+
+	onMount(() => {
+		window.addEventListener('confirmButtonClicked', onConfirmButtonClicked);
 
 		socket.on('gameStateResponse', (data) => {
 			game = new Game(canvas, data.gameState, playerID);
@@ -97,6 +99,7 @@
 		});
 
 		return () => {
+			window.removeEventListener('confirmButtonClicked', onConfirmButtonClicked);
 			socket.off('gameStateResponse');
 			socket.off('gameActionResponse');
 			socket.off('gameEnded');
