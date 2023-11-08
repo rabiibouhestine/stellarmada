@@ -315,6 +315,10 @@ const handleActionRequest = (playerID, playerSelection, room) => {
         if (playerCards.hand.length === 0) {
             gamestate.isGameOver = true;
             gamestate.winnerID = enemyID;
+        } else if (gamestate.players[enemyID].cards.hand.length === 0) {
+        // If successful discard and enemy has no cards, player wins
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
         }
     }
 
