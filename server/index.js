@@ -47,10 +47,10 @@ app.get('/join', (req, res) => {
 });
 
 
-app.get('/singleRoom', (req, res) => {
+app.get('/single', (req, res) => {
 
     // return room information
-    res.json({ roomID: "singleRoom" });
+    res.json({ roomID: "single" });
 });
 
 

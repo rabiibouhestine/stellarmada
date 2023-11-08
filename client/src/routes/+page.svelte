@@ -11,9 +11,10 @@
 		goto(`/${roomID}`);
 	}
 
-	function getSinglePlayerRoom() {
-		// fetch roomID
-		// goto(`/${roomID}`);
+	async function getSinglePlayerRoom() {
+		const response = await fetch('http://localhost:3001/single');
+		const data = await response.json();
+		await goto(`/${data.roomID}`);
 	}
 </script>
 
