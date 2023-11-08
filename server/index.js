@@ -216,11 +216,18 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("gameActionRequest", (data) => {
-        const roomID = data.roomID;
+    const botSelection = (gamestate) => {
+        if (gamestate.turn.stance === 'attacking') {
+            return [gamestate.players['bot'].cards.hand[0]];
+        } else {
+            return gamestate.players['bot'].cards.hand.slice(1);
+        }
+    }
+
+    const handleGameAction = (playerID, roomID, cardSelection) => {
         const room = rooms[roomID];
 
-        const gameAction = handleActionRequest(playerID, data.playerSelection, room);
+        const gameAction = handleActionRequest(playerID, cardSelection, room);
 
         const playerGameAction = processGameAction(gameAction, playerID, true);
         const enemyGameAction = processGameAction(gameAction, playerID, false);
@@ -231,6 +238,19 @@ io.on("connection", (socket) => {
         if (room.gameState.isGameOver) {
             endGame(roomID);
         }
+
+        if (rooms[roomID].isBotRoom && gameAction.turn.playerID === 'bot') {
+            setTimeout(() => {
+                handleGameAction('bot', roomID, botSelection(rooms[roomID].gameState));
+            }, 1400);
+        }
+    }
+
+    socket.on("gameActionRequest", (data) => {
+        const roomID = data.roomID;
+        const playerSelection = data.playerSelection;
+
+        handleGameAction(playerID, roomID, playerSelection);
     })
 
     socket.on("surrenderRequest", (data) => {
