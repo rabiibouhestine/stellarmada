@@ -138,10 +138,10 @@ export class Player {
 
     moveCards(cardsNames, location, destination) {
 
-        if (location === "destroyPile" && destination === "discardPile") {
-            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
+        if (location === "drawPile" && destination === "discardPile") {
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.drawPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
-            this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
+            this.drawPile.setSize(this.drawPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 

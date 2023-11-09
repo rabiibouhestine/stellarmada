@@ -158,21 +158,20 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             );
         }
 
-        // If Spades in selection, move cards from destroyPile to discardPile
-        if (hasSpades && playerCards.destroyPile.length !== 0) {
-            // shuffle destroyPile
-            playerCards.destroyPile = shuffleArray(playerCards.destroyPile);
-            // pick one card from top of destroyPile
-            const revivedCard = playerCards.destroyPile.slice(-playerSelection.length);
-            // move them to bottom of discardPile
-            playerCards.destroyPile.splice(-playerSelection.length);
-            playerCards.discardPile.unshift(...revivedCard);
+        // If Spades in selection, move enemy cards from drawPile to discardPile
+        const enemyCards = gamestate.players[enemyID].cards;
+        if (hasSpades && enemyCards.drawPile.length !== 0) {
+            // pick playerSelectionSum from top of drawPile
+            const discardedCards = enemyCards.drawPile.slice(-playerSelectionSum);
+            // move them to discardPile
+            enemyCards.drawPile.splice(-playerSelectionSum);
+            enemyCards.discardPile.push(...discardedCards);
 
             gameAction.moves.push(
                 {
-                    playerID: playerID,
-                    cardsNames: makeUnknownCardsArray(revivedCard),
-                    location: "destroyPile",
+                    playerID: enemyID,
+                    cardsNames: makeUnknownCardsArray(discardedCards),
+                    location: "drawPile",
                     destination: "discardPile"
                 }
             );
