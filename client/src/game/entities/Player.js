@@ -116,19 +116,21 @@ export class Player {
         // Clone the attackSelection array and add the current card to it for checking the conditions
         const updatedSelection = [...this.attackSelection, card];
 
-        // Check if the updated selection has missiles
-        const hasMissiles = updatedSelection.some(card => card.isMissile === true);
+        // Check that there is a maximum of 4 cards in selection
+        const isMaxFour = updatedSelection.length >= 1 && updatedSelection.length <= 4;
 
-        // Check if the updated selection has ships
-        const hasShips = updatedSelection.some(card => card.isMissile === false);
+        // Check that there is a maximum of 1 ship card in selection
+        const isShipMaxOne = updatedSelection.filter(card => card.isMissile === false).length <= 1;
 
-        // Check allowed selections
-        const singleCard = updatedSelection.length === 1;
-        const shipAndMissile = updatedSelection.length === 2 && hasMissiles;
-        const allMissiles = updatedSelection.length > 2 && !hasShips;
-    
+        // Check that all suits are different
+        const isHeartsMaxOne = updatedSelection.filter(card => card.suit === 'H').length <= 1;
+        const isDiamondsMaxOne = updatedSelection.filter(card => card.suit === 'D').length <= 1;
+        const isSpadesMaxOne = updatedSelection.filter(card => card.suit === 'S').length <= 1;
+        const isClubsMaxOne = updatedSelection.filter(card => card.suit === 'C').length <= 1;
+        const isUniqueSuits = isHeartsMaxOne && isDiamondsMaxOne && isSpadesMaxOne && isClubsMaxOne;
+
         // Check if selection allowed
-        const conditionsMet = (singleCard || shipAndMissile || allMissiles);
+        const conditionsMet = isMaxFour && isShipMaxOne && isUniqueSuits;
 
         // Return conditionsMet check
         return conditionsMet;
