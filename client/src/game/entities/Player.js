@@ -32,14 +32,6 @@ export class Player {
         this.setStance(state.stance);
     }
 
-    adjustBoard() {
-        this.battleField.adjust();
-        this.hand.adjust();
-        this.discardPile.adjust();
-        this.drawPile.adjust();
-        this.destroyPile.adjust();
-    }
-
     onCardSelection(card) {
         if (!card.selectable || !["attacking", "discarding"].includes(this.stance)) return;
     
@@ -219,6 +211,11 @@ export class Player {
             }
         }
 
-        this.adjustBoard();
+        // move cards
+        this.battleField.adjust();
+        this.hand.adjust();
+        this.discardPile.adjust();
+        this.drawPile.adjust();
+        this.destroyPile.adjust();
     }
 }
