@@ -250,39 +250,19 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             return;
 
 
-        // Discard Missiles from Hand
-        const handHasMissiles = playerSelection.some(card => cardsMapping[card].isMissile === true);
-        if (handHasMissiles) {
-            const handSelectedMissiles = playerSelection.filter(card => cardsMapping[card].isMissile === true);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedMissiles.includes(card));
-            playerCards.destroyPile.push(...handSelectedMissiles);
+        // Discard selection from Hand
+        playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
+        playerCards.destroyPile.push(...playerSelection);
 
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: handSelectedMissiles,
-                    location: "hand",
-                    destination: "destroyPile"
-                }
-            );
-        }
+        gameAction.moves.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                location: "hand",
+                destination: "discardPile"
+            }
+        );
 
-        // Discard non Missiles from Hand
-        const handHasStandards = playerSelection.some(card => cardsMapping[card].isMissile === false);
-        if (handHasStandards) {
-            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
-            playerCards.discardPile.push(...handSelectedStandards);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: handSelectedStandards,
-                    location: "hand",
-                    destination: "discardPile"
-                }
-            );
-        }
 
         // Add counter to logs
         gamestate.logs.push(
