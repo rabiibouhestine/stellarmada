@@ -49,7 +49,7 @@
 		window.addEventListener('confirmButtonClicked', onConfirmButtonClicked);
 
 		socket.on('gameStateResponse', (data) => {
-			game = new Game(canvas, data.gameState, playerID);
+			game = new Game(canvas, data.gameState, playerID, isMuted);
 			logs = data.gameState.logs;
 			messages = data.messages;
 
@@ -120,7 +120,7 @@
 
 	function toggleSound() {
 		isMuted = !isMuted;
-		game.toggleMute();
+		game.toggleMute(isMuted);
 	}
 
 	function toggleFullScreen() {

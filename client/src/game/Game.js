@@ -15,15 +15,16 @@ import { Button } from "./entities/Button";
 import { Mattress } from "./entities/Mattress";
 
 export class Game {
-    constructor(canvasRef, gameState, playerID) {
-        this.init(canvasRef, gameState, playerID);
+    constructor(canvasRef, gameState, playerID, isMuted) {
+        this.init(canvasRef, gameState, playerID, isMuted);
     }
 
-    async init(canvasRef, gameState, playerID) {
+    async init(canvasRef, gameState, playerID, isMuted) {
         this.canvasRef = canvasRef;
         this.gameState = gameState;
         this.playerID = playerID;
-        this.gameMuted = false;
+        this.isMuted = isMuted;
+        this.toggleMute(this.isMuted);
 
         this.app = new PIXI.Application({
             // resizeTo: window,
@@ -85,9 +86,9 @@ export class Game {
         this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
     }
 
-    toggleMute() {
-        this.gameMuted = !this.gameMuted;
-        Howler.mute(this.gameMuted);
+    toggleMute(isMuted) {
+        this.isMuted = isMuted;
+        Howler.mute(isMuted);
     }
 
     update(data) {
