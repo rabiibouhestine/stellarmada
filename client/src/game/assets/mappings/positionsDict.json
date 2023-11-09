@@ -21,33 +21,23 @@
 	},
 	"mattress": [
 		{
-			"label": "Hangar Bay",
+			"label": "Draw",
 			"x": 450,
 			"y": 547
 		},
 		{
-			"label": "Repair Yard",
+			"label": "Discard",
 			"x": 360,
 			"y": 547
 		},
 		{
-			"label": "Space Junk",
-			"x": 270,
-			"y": 547
-		},
-		{
-			"label": "Hangar Bay",
+			"label": "Draw",
 			"x": 270,
 			"y": 173
 		},
 		{
-			"label": "Repair Yard",
+			"label": "Discard",
 			"x": 360,
-			"y": 173
-		},
-		{
-			"label": "Space Junk",
-			"x": 450,
 			"y": 173
 		}
 	]
