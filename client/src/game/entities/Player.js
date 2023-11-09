@@ -218,5 +218,7 @@ export class Player {
                 }
             }
         }
+
+        this.adjustBoard();
     }
 }

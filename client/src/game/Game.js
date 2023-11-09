@@ -118,11 +118,10 @@ export class Game {
         // Perform moves
         if (data.moves) {
             for (const move of data.moves) {
+                // get player
                 const player = this.players[move.playerID];
                 // move cards
                 player.moveCards(move.cardsNames, move.location, move.destination);
-                // adjust board
-                player.adjustBoard();
             };
         }
 
