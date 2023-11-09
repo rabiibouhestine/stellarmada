@@ -83,6 +83,7 @@
 		socket.on('gameEnded', (data) => {
 			isGameOver = true;
 			winnerID = data.winnerID;
+			game.handleGameOver(winnerID);
 			playerTimer.stop();
 			opponentTimer.stop();
 		});

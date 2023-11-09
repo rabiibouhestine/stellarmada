@@ -8,6 +8,8 @@ import positions from './assets/mappings/positionsDict.json';
 import sfxAttack from './assets/audio/cardPlace1.ogg';
 import sfxDiscard from './assets/audio/cardSlide1.ogg';
 import sfxGameStart from './assets/audio/cardTakeOutPackage2.ogg';
+import sfxGameVictory from './assets/audio/victory.mp3';
+import sfxGameDefeat from './assets/audio/defeat.mp3';
 
 import { Player } from "./entities/Player";
 import { Indicator } from "./entities/Indicator";
@@ -63,6 +65,12 @@ export class Game {
         this.sfxDiscardHowl = new Howl({
             src: [sfxDiscard]
         });
+        this.sfxGameVictoryHowl = new Howl({
+            src: [sfxGameVictory]
+        });
+        this.sfxGameDefeatHowl = new Howl({
+            src: [sfxGameDefeat]
+        });
         this.sfxGameStartHowl = new Howl({
             src: [sfxGameStart],
             autoplay: true,
@@ -84,6 +92,14 @@ export class Game {
         // Center the stage
         this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
         this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
+    }
+
+    handleGameOver(winnerID) {
+        if (winnerID === this.playerID) {
+            this.sfxGameVictoryHowl.play();
+        } else {
+            this.sfxGameDefeatHowl.play();
+        }
     }
 
     toggleMute(isMuted) {
