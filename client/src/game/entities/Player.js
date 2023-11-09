@@ -20,7 +20,6 @@ export class Player {
         
         this.drawPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
         this.discardPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
-        this.destroyPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
         this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
         this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
@@ -161,27 +160,6 @@ export class Player {
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
-        if (location === "battleField" && destination === "destroyPile") {
-            const cards = this.battleField.cards.filter(card => cardsNames.includes(card.name));
-            this.destroyPile.cardsToGet.push(...cards);
-            this.battleField.cards = this.battleField.cards.filter(card => !cardsNames.includes(card.name));
-            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
-        }
-
-        if (location === "hand" && destination === "destroyPile") {
-            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
-
-            if (this.isPlayer) {
-                const cards = this.hand.cards.filter(card => cardsNames.includes(card.name));
-                this.hand.cards = this.hand.cards.filter(card => !cardsNames.includes(card.name));
-                this.destroyPile.cardsToGet.push(...cards);
-            } else {
-                const cards = this.hand.cards.slice(-cardsNames.length);
-                this.hand.cards.splice(-cardsNames.length);
-                this.destroyPile.cardsToGet.push(...cards);
-            }
-        }
-
         if (location === "hand" && destination === "discardPile") {
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
 
@@ -216,6 +194,5 @@ export class Player {
         this.hand.adjust();
         this.discardPile.adjust();
         this.drawPile.adjust();
-        this.destroyPile.adjust();
     }
 }
