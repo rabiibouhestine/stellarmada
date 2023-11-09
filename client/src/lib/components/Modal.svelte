@@ -1,18 +1,56 @@
 <script>
-	export let showModal; // boolean
+	import { createEventDispatcher } from 'svelte';
 
-	let dialog; // HTMLDialogElement
+	export let showModal;
+	export let title;
+	export let closeButtonLabel;
+	export let confirmButtonLabel;
+
+	let dialog;
 
 	$: if (dialog && showModal) dialog.showModal();
 	$: if (dialog && !showModal) dialog.close();
+
+	const dispatch = createEventDispatcher();
+
+	function dispatchConfirm() {
+		dispatch('confirm', {
+			text: 'Hello!'
+		});
+	}
+
+	function dispatchClose() {
+		dispatch('close', {
+			text: 'Hello!'
+		});
+	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog bind:this={dialog} on:close={() => (showModal = false)}>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div on:click|stopPropagation>
-		<slot name="header" />
+	<div class="grid justify-items-center w-full" on:click|stopPropagation>
+		<div class="text-2xl text-center text-slate-200 font-black drop-shadow-md">
+			{title}
+		</div>
 		<slot />
+		<div class="p-6 flex justify-center">
+			<button
+				class="mx-2 px-4 py-2 rounded-lg bg-apollo-yellow-300 hover:bg-apollo-yellow-400 font-black text-lg text-white"
+				on:click={() => {
+					showModal = false;
+					dispatchClose();
+				}}
+			>
+				{closeButtonLabel}
+			</button>
+			<button
+				class="mx-2 px-4 py-2 rounded-lg font-black text-lg text-white bg-apollo-blue-400 hover:bg-apollo-blue-500"
+				on:click={dispatchConfirm}
+			>
+				{confirmButtonLabel}
+			</button>
+		</div>
 	</div>
 </dialog>
 
