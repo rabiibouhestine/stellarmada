@@ -32,9 +32,11 @@ app.get('/join', (req, res) => {
 
     let playersNb = 0;
     let gameStarted = false;
+    let isBotRoom = false;
 
     if (rooms[roomID]) {
         gameStarted = rooms[roomID].gameStarted;
+        isBotRoom = rooms[roomID].isBotRoom;
         playersNb = Object.keys(rooms[roomID].players).length;
         // if room full we return error
         if (playersNb === 2 && !(playerID in rooms[roomID].players)) {
@@ -44,7 +46,7 @@ app.get('/join', (req, res) => {
     }
 
     // return room information
-    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1, isBotRoom: isBotRoom });
 });
 
 
