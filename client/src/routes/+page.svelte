@@ -27,7 +27,7 @@
 				<span>STELL</span><span class="text-slate-400">AR</span><span>MADA</span>
 			</h1>
 			<h1 class="text-xl text-center text-slate-300 drop-shadow-md">
-				This website is still under construction!
+				A pvp digital version of the card game Regicide in your browser!
 			</h1>
 		</div>
 		<button

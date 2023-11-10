@@ -1,6 +1,8 @@
 import * as PIXI from "pixi.js";
 import {Howl} from 'howler';
 
+import loadingSVG from './assets/images/loading.svg';
+
 import cardsImage from './assets/images/cardsSpritesheet.png';
 import cardsSheet from './assets/mappings/cardsSpritesheet.json';
 import positions from './assets/mappings/positionsDict.json';
@@ -38,6 +40,15 @@ export class Game {
             backgroundAlpha: 0
         });
 
+        this.canvasRef.appendChild(this.app.view);
+
+        const loadingTexture = PIXI.Texture.from(loadingSVG);
+        const loadingSprite = new PIXI.Sprite(loadingTexture);
+        loadingSprite.anchor.set(0.5);
+        loadingSprite.x = 350;
+        loadingSprite.y = 350;
+        this.app.stage.addChild(loadingSprite);
+
         const cardsTextures = await PIXI.Assets.load(cardsImage);
 
         this.sheet = new PIXI.Spritesheet(
@@ -45,8 +56,7 @@ export class Game {
             cardsSheet
         );
         await this.sheet.parse();
-
-        this.canvasRef.appendChild(this.app.view);
+        this.app.stage.removeChild(loadingSprite);
 
         this.mattress = new Mattress(this.app, positions.mattress);
         this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, this.gameState.turn.damage);
