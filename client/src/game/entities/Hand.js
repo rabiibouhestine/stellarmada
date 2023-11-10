@@ -14,8 +14,8 @@ export class Hand {
 
     adjust() {
         // Calculate the total width of the cards in the array
-        const cardWidth = 80;
-        const cardGap = 9;
+        const cardWidth = 90;
+        const cardGap = 10;
 
         // Calculate the starting position to center the cards
         const startX = this.centerPosition.x - ((cardWidth + cardGap)/2) * (this.cards.length - 1);
@@ -29,7 +29,7 @@ export class Hand {
                 x: startX + (index * (cardWidth + cardGap)),
                 y: startY
             };
-            this.cards[index].moveTo(newPosition, 1.14, true, false);
+            this.cards[index].moveTo(newPosition, 1.28, true, false);
         }
     }
 }

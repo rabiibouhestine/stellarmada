@@ -20,7 +20,6 @@ export class Player {
         
         this.drawPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
         this.discardPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
-        this.destroyPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.destroyPile, state.cards.destroyPile);
         this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
         this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
         this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
@@ -30,14 +29,6 @@ export class Player {
         
         this.stance = "waiting";
         this.setStance(state.stance);
-    }
-
-    adjustBoard() {
-        this.battleField.adjust();
-        this.hand.adjust();
-        this.discardPile.adjust();
-        this.drawPile.adjust();
-        this.destroyPile.adjust();
     }
 
     onCardSelection(card) {
@@ -116,19 +107,21 @@ export class Player {
         // Clone the attackSelection array and add the current card to it for checking the conditions
         const updatedSelection = [...this.attackSelection, card];
 
-        // Check if the updated selection has missiles
-        const hasMissiles = updatedSelection.some(card => card.isMissile === true);
+        // Check that there is a maximum of 4 cards in selection
+        const isMaxFour = updatedSelection.length >= 1 && updatedSelection.length <= 4;
 
-        // Check if the updated selection has ships
-        const hasShips = updatedSelection.some(card => card.isMissile === false);
+        // Check that there is a maximum of 1 ship card in selection
+        const isShipMaxOne = updatedSelection.filter(card => card.isMissile === false).length <= 1;
 
-        // Check allowed selections
-        const singleCard = updatedSelection.length === 1;
-        const shipAndMissile = updatedSelection.length === 2 && hasMissiles;
-        const allMissiles = updatedSelection.length > 2 && !hasShips;
-    
+        // Check that all suits are different
+        const isHeartsMaxOne = updatedSelection.filter(card => card.suit === 'H').length <= 1;
+        const isDiamondsMaxOne = updatedSelection.filter(card => card.suit === 'D').length <= 1;
+        const isSpadesMaxOne = updatedSelection.filter(card => card.suit === 'S').length <= 1;
+        const isClubsMaxOne = updatedSelection.filter(card => card.suit === 'C').length <= 1;
+        const isUniqueSuits = isHeartsMaxOne && isDiamondsMaxOne && isSpadesMaxOne && isClubsMaxOne;
+
         // Check if selection allowed
-        const conditionsMet = (singleCard || shipAndMissile || allMissiles);
+        const conditionsMet = isMaxFour && isShipMaxOne && isUniqueSuits;
 
         // Return conditionsMet check
         return conditionsMet;
@@ -136,10 +129,10 @@ export class Player {
 
     moveCards(cardsNames, location, destination) {
 
-        if (location === "destroyPile" && destination === "discardPile") {
-            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.destroyPile, this.isPlayer);
+        if (location === "drawPile" && destination === "discardPile") {
+            const card = new Card(this.cardsContainer, this.sheet, this.isPlayer? "B1" : "B2", this.positions.drawPile, this.isPlayer);
             this.discardPile.cardsToGet.push(card);
-            this.destroyPile.setSize(this.destroyPile.size - cardsNames.length);
+            this.drawPile.setSize(this.drawPile.size - cardsNames.length);
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
         }
 
@@ -165,27 +158,6 @@ export class Player {
             this.discardPile.cardsToGet.push(...cards);
             this.battleField.cards = this.battleField.cards.filter(card => !cardsNames.includes(card.name));
             this.discardPile.setSize(this.discardPile.size + cardsNames.length);
-        }
-
-        if (location === "battleField" && destination === "destroyPile") {
-            const cards = this.battleField.cards.filter(card => cardsNames.includes(card.name));
-            this.destroyPile.cardsToGet.push(...cards);
-            this.battleField.cards = this.battleField.cards.filter(card => !cardsNames.includes(card.name));
-            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
-        }
-
-        if (location === "hand" && destination === "destroyPile") {
-            this.destroyPile.setSize(this.destroyPile.size + cardsNames.length);
-
-            if (this.isPlayer) {
-                const cards = this.hand.cards.filter(card => cardsNames.includes(card.name));
-                this.hand.cards = this.hand.cards.filter(card => !cardsNames.includes(card.name));
-                this.destroyPile.cardsToGet.push(...cards);
-            } else {
-                const cards = this.hand.cards.slice(-cardsNames.length);
-                this.hand.cards.splice(-cardsNames.length);
-                this.destroyPile.cardsToGet.push(...cards);
-            }
         }
 
         if (location === "hand" && destination === "discardPile") {
@@ -216,5 +188,11 @@ export class Player {
                 }
             }
         }
+
+        // move cards
+        this.battleField.adjust();
+        this.hand.adjust();
+        this.discardPile.adjust();
+        this.drawPile.adjust();
     }
 }

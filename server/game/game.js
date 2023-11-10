@@ -1,7 +1,7 @@
 const cardsMapping = require('./cardsDict.json');
 const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js');
 
-const handMax = 8;
+const handMax = 7;
 
 const initGameState = (room) => {
 
@@ -59,8 +59,8 @@ const initPlayerState = () => {
 
     // Draw all cards from shuffled diamonds pile and shuffled non diamnds pile into the draw pile
     while (dPileShuffled.length > 0) {
-        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
         drawPile.push(...schPileShuffled.splice(-3)); // Take three cards from schPileShuffled
+        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
     }
 
     // Draw handMax cards from the draw pile to hand
@@ -158,21 +158,20 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             );
         }
 
-        // If Spades in selection, move cards from destroyPile to discardPile
-        if (hasSpades && playerCards.destroyPile.length !== 0) {
-            // shuffle destroyPile
-            playerCards.destroyPile = shuffleArray(playerCards.destroyPile);
-            // pick one card from top of destroyPile
-            const revivedCard = playerCards.destroyPile.slice(-playerSelection.length);
-            // move them to bottom of discardPile
-            playerCards.destroyPile.splice(-playerSelection.length);
-            playerCards.discardPile.unshift(...revivedCard);
+        // If Spades in selection, move enemy cards from drawPile to discardPile
+        const enemyCards = gamestate.players[enemyID].cards;
+        if (hasSpades && enemyCards.drawPile.length !== 0) {
+            // pick 4 cards from top of drawPile
+            const discardedCards = enemyCards.drawPile.slice(-4);
+            // move them to discardPile
+            enemyCards.drawPile.splice(-4);
+            enemyCards.discardPile.push(...discardedCards);
 
             gameAction.moves.push(
                 {
-                    playerID: playerID,
-                    cardsNames: makeUnknownCardsArray(revivedCard),
-                    location: "destroyPile",
+                    playerID: enemyID,
+                    cardsNames: makeUnknownCardsArray(discardedCards),
+                    location: "drawPile",
                     destination: "discardPile"
                 }
             );
@@ -250,39 +249,19 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             return;
 
 
-        // Discard Missiles from Hand
-        const handHasMissiles = playerSelection.some(card => cardsMapping[card].isMissile === true);
-        if (handHasMissiles) {
-            const handSelectedMissiles = playerSelection.filter(card => cardsMapping[card].isMissile === true);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedMissiles.includes(card));
-            playerCards.destroyPile.push(...handSelectedMissiles);
+        // Discard selection from Hand
+        playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
+        playerCards.destroyPile.push(...playerSelection);
 
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: handSelectedMissiles,
-                    location: "hand",
-                    destination: "destroyPile"
-                }
-            );
-        }
+        gameAction.moves.push(
+            {
+                playerID: playerID,
+                cardsNames: playerSelection,
+                location: "hand",
+                destination: "discardPile"
+            }
+        );
 
-        // Discard non Missiles from Hand
-        const handHasStandards = playerSelection.some(card => cardsMapping[card].isMissile === false);
-        if (handHasStandards) {
-            const handSelectedStandards = playerSelection.filter(card => cardsMapping[card].isMissile === false);
-            playerCards.hand = playerCards.hand.filter(card => !handSelectedStandards.includes(card));
-            playerCards.discardPile.push(...handSelectedStandards);
-
-            gameAction.moves.push(
-                {
-                    playerID: playerID,
-                    cardsNames: handSelectedStandards,
-                    location: "hand",
-                    destination: "discardPile"
-                }
-            );
-        }
 
         // Add counter to logs
         gamestate.logs.push(

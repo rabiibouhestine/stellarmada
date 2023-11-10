@@ -64,39 +64,20 @@ const clearAttack = (playerID, gamestate) => {
     // Get player cards
     const playerCards = gamestate.players[playerID].cards;
 
-    // Discard player Missiles from battleField
-    const battleFieldHasMissiles = playerCards.battleField.some(card => cardsMapping[card].isMissile === true);
-    if (battleFieldHasMissiles) {
-        const battleFieldMissiles = playerCards.battleField.filter(card => cardsMapping[card].isMissile === true);
-        playerCards.battleField = playerCards.battleField.filter(card => !battleFieldMissiles.includes(card));
-        playerCards.destroyPile.push(...battleFieldMissiles);
 
-        clearAttackMoves.push(
-            {
-                playerID: playerID,
-                cardsNames: battleFieldMissiles,
-                location: "battleField",
-                destination: "destroyPile"
-            }
-        );
-    }
-    
-    // Discard player non Missiles from battleField
-    const battleFieldHasStandards = playerCards.battleField.some(card => cardsMapping[card].isMissile === false);
-    if (battleFieldHasStandards) {
-        const battleFieldStandards = playerCards.battleField.filter(card => cardsMapping[card].isMissile === false);
-        playerCards.battleField = playerCards.battleField.filter(card => !battleFieldStandards.includes(card));
-        playerCards.discardPile.push(...battleFieldStandards);
+    // Discard player cards from battleField
+    const cardsToDiscard = [...playerCards.battleField];
+    playerCards.destroyPile.push(...cardsToDiscard);
+    playerCards.battleField = [];
 
-        clearAttackMoves.push(
-            {
-                playerID: playerID,
-                cardsNames: battleFieldStandards,
-                location: "battleField",
-                destination: "discardPile"
-            }
-        );
-    }
+    clearAttackMoves.push(
+        {
+            playerID: playerID,
+            cardsNames: cardsToDiscard,
+            location: "battleField",
+            destination: "discardPile"
+        }
+    );
 
     // Return clear attack moves
     return clearAttackMoves;
