@@ -9,6 +9,8 @@
 	export let data;
 	const playerID = data.userID;
 	const playersNb = data.playersNb;
+	const isBotRoom = data.isBotRoom;
+	const isCreated = data.isCreated;
 	let gameStarted = data.gameStarted;
 
 	const socket = io.connect('https://server.stellarmada.com', {
@@ -45,5 +47,5 @@
 {#if gameStarted}
 	<Game {socket} {playerID} />
 {:else}
-	<Lobby {socket} {playersNb} />
+	<Lobby {socket} {playersNb} {isBotRoom} {isCreated} />
 {/if}

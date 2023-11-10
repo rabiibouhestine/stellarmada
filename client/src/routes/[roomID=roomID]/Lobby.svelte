@@ -1,11 +1,13 @@
 <script>
 	import { page } from '$app/stores';
-	import { Icon, User, Clipboard } from 'svelte-hero-icons';
+	import { Icon, User, Clipboard, CpuChip } from 'svelte-hero-icons';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	export let playersNb;
 	export let socket;
+	export let isBotRoom;
+	export let isCreated;
 
 	let isReady = false;
 	let readyBtnClass = '';
@@ -52,9 +54,15 @@
 			</div>
 			<h1 class="text-xl text-center text-slate-100 font-black">VS</h1>
 			{#if playersNb === 2}
-				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
-					<Icon src={User} class="h-12 w-12 text-white" />
-				</div>
+				{#if isBotRoom}
+					<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
+						<Icon src={CpuChip} class="h-12 w-12 text-white" />
+					</div>
+				{:else}
+					<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
+						<Icon src={User} class="h-12 w-12 text-white" />
+					</div>
+				{/if}
 			{:else}
 				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-slate-400" />
 			{/if}
@@ -68,20 +76,22 @@
 				{/if}
 			</h1>
 		</div>
-		<div class="my-6 flex justify-center items-center w-full">
-			<button
-				class="p-4 inline-flex space-x-2 items-center justify-center rounded-xl bg-black bg-opacity-40 hover:bg-opacity-80 font-black text-md text-white"
-				on:click={handleCopy}
-			>
-				<Icon src={Clipboard} class="h-6 w-6" />
-				<div class="flex flex-row space-x-4">
-					<span>COPY INVITE LINK :</span>
-					<h1 class="rounded-l-lg text-md text-center text-slate-100 font-medium">
-						{$page.url}
-					</h1>
-				</div>
-			</button>
-		</div>
+		{#if isCreated}
+			<div class="my-6 flex justify-center items-center w-full">
+				<button
+					class="p-4 inline-flex space-x-2 items-center justify-center rounded-xl bg-black bg-opacity-40 hover:bg-opacity-80 font-black text-md text-white"
+					on:click={handleCopy}
+				>
+					<Icon src={Clipboard} class="h-6 w-6" />
+					<div class="flex flex-row space-x-4">
+						<span>COPY INVITE LINK :</span>
+						<h1 class="rounded-l-lg text-md text-center text-slate-100 font-medium">
+							{$page.url}
+						</h1>
+					</div>
+				</button>
+			</div>
+		{/if}
 		<div class="p-6 flex justify-center w-2/3">
 			<button
 				class="w-1/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"

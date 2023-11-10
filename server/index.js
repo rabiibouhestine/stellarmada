@@ -32,9 +32,12 @@ app.get('/join', (req, res) => {
 
     let playersNb = 0;
     let gameStarted = false;
-
+    let isBotRoom = false;
+    let isCreated = true;
     if (rooms[roomID]) {
         gameStarted = rooms[roomID].gameStarted;
+        isBotRoom = rooms[roomID].isBotRoom;
+        isCreated = rooms[roomID].isCreated;
         playersNb = Object.keys(rooms[roomID].players).length;
         // if room full we return error
         if (playersNb === 2 && !(playerID in rooms[roomID].players)) {
@@ -44,7 +47,7 @@ app.get('/join', (req, res) => {
     }
 
     // return room information
-    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1 });
+    res.json({ gameStarted: gameStarted, playersNb: playersNb + 1, isBotRoom: isBotRoom, isCreated: isCreated });
 });
 
 
@@ -54,6 +57,7 @@ app.get('/single', (req, res) => {
     rooms[roomID] = {
         roomID: roomID,
         isBotRoom: true,
+        isCreated: false,
         gameStarted: false,
         gameState: null,
         players: {},
@@ -117,6 +121,7 @@ io.on("connection", (socket) => {
             rooms[roomID] = {
                 roomID: roomID,
                 isBotRoom: false,
+                isCreated: false,
                 gameStarted: false,
                 gameState: null,
                 players: {},
@@ -137,6 +142,7 @@ io.on("connection", (socket) => {
             rooms[roomID] = {
                 roomID: roomID,
                 isBotRoom: false,
+                isCreated: true,
                 gameStarted: false,
                 gameState: null,
                 players: {},
