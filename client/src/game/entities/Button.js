@@ -39,13 +39,15 @@ export class Button {
         // Define button graphic
         this.graphic = new PIXI.Graphics();
         this.graphic.beginFill(this.states[this.state].color, 0.25);
-        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
+        this.graphic.drawRoundedRect(0, 0, 150, 50, 8);
         this.graphic.endFill();
         this.button.addChild(this.graphic);
 
         // Define button icon
         this.iconSprite = new PIXI.Sprite(this.states[this.state].icon);
         this.iconSprite.anchor.set(0.5);
+        this.iconSprite.x = 25;
+        this.iconSprite.y = 25;
         this.iconSprite.scale.set(0.2);
         this.button.addChild(this.iconSprite);
 
@@ -53,12 +55,13 @@ export class Button {
         this.label = new PIXI.Text(this.states[this.state].text, {
             fontFamily: 'Arial',
             fontWeight: 'bold',
-            fontSize: 12,
+            fontSize: 16,
             fill: 0xFFFFFF,
             align: 'center'
         });
-        this.label.y = 40;
         this.label.anchor.set(0.5);
+        this.label.x = 90;
+        this.label.y = 25;
         this.button.addChild(this.label);
 
         // Add button container to app stage
@@ -95,7 +98,7 @@ export class Button {
     setColor(color, alpha) {
         this.graphic.clear();
         this.graphic.beginFill(color, alpha);
-        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
+        this.graphic.drawRoundedRect(0, 0, 150, 50, 8);
         this.graphic.endFill();
     }
 

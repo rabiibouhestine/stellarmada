@@ -1,44 +1,18 @@
 {
 	"top": {
 		"hand": { "x": 360, "y": 78 },
-		"battleField": { "x": 360, "y": 357.5 },
-		"drawPile": { "x": 270, "y": 232 },
-		"discardPile": { "x": 360, "y": 232 },
-		"destroyPile": { "x": 450, "y": 232 },
-		"joker": { "x": 360, "y": 233 }
+		"battleField": { "x": 360, "y": 360 },
+		"drawPile": { "x": 60, "y": 360 },
+		"discardPile": { "x": 140, "y": 360 }
 	},
 	"bottom": {
 		"hand": { "x": 360, "y": 637 },
-		"battleField": { "x": 360, "y": 357.5 },
-		"drawPile": { "x": 450, "y": 488 },
-		"discardPile": { "x": 360, "y": 488 },
-		"destroyPile": { "x": 270, "y": 488 },
-		"joker": { "x": 360, "y": 482 }
+		"battleField": { "x": 360, "y": 360 },
+		"drawPile": { "x": 660, "y": 360 },
+		"discardPile": { "x": 580, "y": 360 }
 	},
 	"battleField": {
-		"damageIndicator": { "x": 70, "y": 358 },
-		"confirmButton": { "x": 650, "y": 358 }
-	},
-	"mattress": [
-		{
-			"label": "Draw",
-			"x": 450,
-			"y": 547
-		},
-		{
-			"label": "Discard",
-			"x": 360,
-			"y": 547
-		},
-		{
-			"label": "Draw",
-			"x": 270,
-			"y": 173
-		},
-		{
-			"label": "Discard",
-			"x": 360,
-			"y": 173
-		}
-	]
+		"damageIndicator": { "x": 285, "y": 241 },
+		"confirmButton": { "x": 285, "y": 429 }
+	}
 }

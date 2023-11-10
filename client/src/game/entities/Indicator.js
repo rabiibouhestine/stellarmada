@@ -13,7 +13,7 @@ export class Indicator {
         // Define indicator graphic
         this.graphic = new PIXI.Graphics();
         this.graphic.beginFill(0x000000, 0.25);
-        this.graphic.drawRoundedRect(-30, -30, 60, 60, 8);
+        this.graphic.drawRoundedRect(0, 0, 150, 50, 8);
         this.graphic.endFill();
         this.container.addChild(this.graphic);
 
@@ -25,18 +25,21 @@ export class Indicator {
             align: 'center'
         });
         this.text.anchor.set(0.5);
+        this.text.x = 25;
+        this.text.y = 25;
         this.container.addChild(this.text);
 
         // Define indicator label
         this.label = new PIXI.Text("Power", {
             fontFamily: 'Arial',
             fontWeight: 'bold',
-            fontSize: 12,
+            fontSize: 16,
             fill: 0xFFFFFF,
             align: 'center'
         });
-        this.label.y = 40;
         this.label.anchor.set(0.5);
+        this.label.x = 80;
+        this.label.y = 25;
         this.container.addChild(this.label);
 
         // Add indicator container to app stage
