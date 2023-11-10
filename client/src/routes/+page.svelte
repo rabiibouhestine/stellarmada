@@ -56,7 +56,7 @@
 			disabled={isSingleDisabled}
 			on:click={botRoom}
 		>
-			PLAY AGAINST AI
+			PLAY AGAINST BOT
 		</button>
 		<a
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
