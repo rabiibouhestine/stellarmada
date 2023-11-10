@@ -1,11 +1,12 @@
 <script>
 	import { page } from '$app/stores';
-	import { Icon, User, Clipboard } from 'svelte-hero-icons';
+	import { Icon, User, Clipboard, CpuChip } from 'svelte-hero-icons';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	export let playersNb;
 	export let socket;
+	export let isBotRoom;
 
 	let isReady = false;
 	let readyBtnClass = '';
@@ -52,9 +53,15 @@
 			</div>
 			<h1 class="text-xl text-center text-slate-100 font-black">VS</h1>
 			{#if playersNb === 2}
-				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
-					<Icon src={User} class="h-12 w-12 text-white" />
-				</div>
+				{#if isBotRoom}
+					<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
+						<Icon src={CpuChip} class="h-12 w-12 text-white" />
+					</div>
+				{:else}
+					<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-yellow-300">
+						<Icon src={User} class="h-12 w-12 text-white" />
+					</div>
+				{/if}
 			{:else}
 				<div class="flex justify-center items-center rounded-full w-16 h-16 bg-slate-400" />
 			{/if}
