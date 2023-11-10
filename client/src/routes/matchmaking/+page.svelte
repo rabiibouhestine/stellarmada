@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import io from 'socket.io-client';
+	import loading from '$lib/assets/loading.svg';
 
 	const socket = io.connect('https://server.stellarmada.com');
 
@@ -27,9 +28,10 @@
 	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-black"
 >
 	<div class="grid justify-items-center">
+		<img src={loading} alt="My Happy SVG" />
 		<div class="mb-15 p-6">
 			<h1 class="text-2xl text-center text-slate-100 font-black drop-shadow-md">
-				LOOKING FOR A GAME...
+				LOOKING FOR A GAME
 			</h1>
 		</div>
 		<button
