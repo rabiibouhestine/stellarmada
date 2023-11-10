@@ -7,7 +7,7 @@ const botSelection = (gamestate) => {
 
     if (gamestate.turn.stance === 'attacking') {
         // if hand has more than 4 cards
-        if (hand.length >= 4) {
+        if (hand.length > 4) {
             const nonDiamondShips = hand.filter(card => cardsMapping[card].suit !== "D" && cardsMapping[card].isMissile === false);
             // if hand has non diamond ships
             if (nonDiamondShips.length) {
