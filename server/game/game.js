@@ -59,8 +59,8 @@ const initPlayerState = () => {
 
     // Draw all cards from shuffled diamonds pile and shuffled non diamnds pile into the draw pile
     while (dPileShuffled.length > 0) {
-        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
         drawPile.push(...schPileShuffled.splice(-3)); // Take three cards from schPileShuffled
+        drawPile.push(dPileShuffled.pop()); // Take one card from dPileShuffled
     }
 
     // Draw handMax cards from the draw pile to hand
