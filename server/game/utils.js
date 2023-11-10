@@ -16,12 +16,10 @@ const processGameState = (gameState, playerID) => {
         if (id === playerID) {
             processedState.players[id].cards.drawPile = gameState.players[id].cards.drawPile.length;
             processedState.players[id].cards.discardPile = gameState.players[id].cards.discardPile.length;
-            processedState.players[id].cards.destroyPile = gameState.players[id].cards.destroyPile.length;
         } else {
             processedState.players[id].cards.hand = makeUnknownCardsArray(gameState.players[id].cards.hand);
             processedState.players[id].cards.drawPile = gameState.players[id].cards.drawPile.length;
             processedState.players[id].cards.discardPile = gameState.players[id].cards.discardPile.length;
-            processedState.players[id].cards.destroyPile = gameState.players[id].cards.destroyPile.length;
         }
     }
 
@@ -67,7 +65,7 @@ const clearAttack = (playerID, gamestate) => {
 
     // Discard player cards from battleField
     const cardsToDiscard = [...playerCards.battleField];
-    playerCards.destroyPile.push(...cardsToDiscard);
+    playerCards.discardPile.push(...cardsToDiscard);
     playerCards.battleField = [];
 
     clearAttackMoves.push(

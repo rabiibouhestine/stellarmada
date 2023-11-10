@@ -72,8 +72,7 @@ const initPlayerState = () => {
             hand: hand,
             battleField: [],
             drawPile: drawPile,
-            discardPile: [],
-            destroyPile: []
+            discardPile: []
         }
     };
 
@@ -251,7 +250,7 @@ const handleActionRequest = (playerID, playerSelection, room) => {
 
         // Discard selection from Hand
         playerCards.hand = playerCards.hand.filter(card => !playerSelection.includes(card));
-        playerCards.destroyPile.push(...playerSelection);
+        playerCards.discardPile.push(...playerSelection);
 
         gameAction.moves.push(
             {
