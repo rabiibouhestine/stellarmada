@@ -3,12 +3,16 @@
 	import ShortUniqueId from 'short-unique-id';
 
 	let isSingleDisabled = false;
+	let isMatchmakingDisabled = false;
+	let isRoomDisabled = false;
 
 	function findRoom() {
+		isMatchmakingDisabled = true;
 		goto('/matchmaking');
 	}
 
 	function createRoom() {
+		isRoomDisabled = true;
 		const roomID = new ShortUniqueId().rnd();
 		goto(`/${roomID}`);
 	}
@@ -35,12 +39,14 @@
 		</div>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+			disabled={isMatchmakingDisabled}
 			on:click={findRoom}
 		>
 			FIND A GAME
 		</button>
 		<button
 			class="w-1/2 mt-4 px-4 py-2 rounded-lg bg-white bg-opacity-20 hover:bg-apollo-blue-400 font-black text-lg text-white text-center"
+			disabled={isRoomDisabled}
 			on:click={createRoom}
 		>
 			CREATE A ROOM
