@@ -10,6 +10,7 @@
 	const playerID = data.userID;
 	const playersNb = data.playersNb;
 	const isBotRoom = data.isBotRoom;
+	const isCreated = data.isCreated;
 	let gameStarted = data.gameStarted;
 
 	const socket = io.connect('http://localhost:3001', {
@@ -46,5 +47,5 @@
 {#if gameStarted}
 	<Game {socket} {playerID} />
 {:else}
-	<Lobby {socket} {playersNb} {isBotRoom} />
+	<Lobby {socket} {playersNb} {isBotRoom} {isCreated} />
 {/if}

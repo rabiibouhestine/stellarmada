@@ -14,7 +14,8 @@ export async function load({ params, parent }) {
             userID: userID,
             gameStarted: responseData.gameStarted,
             playersNb: responseData.playersNb,
-            isBotRoom: responseData.isBotRoom
+            isBotRoom: responseData.isBotRoom,
+            isCreated: responseData.isCreated
         };
     } else {
         throw redirect(308, '/');
