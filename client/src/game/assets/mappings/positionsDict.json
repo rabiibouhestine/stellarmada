@@ -1,12 +1,12 @@
 {
 	"top": {
-		"hand": { "x": 360, "y": 78 },
+		"hand": { "x": 360, "y": 98 },
 		"battleField": { "x": 360, "y": 360 },
 		"drawPile": { "x": 60, "y": 360 },
 		"discardPile": { "x": 140, "y": 360 }
 	},
 	"bottom": {
-		"hand": { "x": 360, "y": 637 },
+		"hand": { "x": 360, "y": 617 },
 		"battleField": { "x": 360, "y": 360 },
 		"drawPile": { "x": 660, "y": 360 },
 		"discardPile": { "x": 580, "y": 360 }

@@ -1,7 +1,7 @@
 const cardsMapping = require('./cardsDict.json');
 const { shuffleArray, clearAttack, makeUnknownCardsArray } = require('./utils.js');
 
-const handMax = 8;
+const handMax = 7;
 
 const initGameState = (room) => {
 
