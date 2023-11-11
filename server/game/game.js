@@ -68,6 +68,7 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
+        shield: 500,
         cards: {
             hand: hand,
             battleField: [],
@@ -213,6 +214,9 @@ const handleActionRequest = (playerID, playerSelection, room) => {
                 }
             );
         }
+
+        // Update enemy shield
+        gamestate.players[enemyID].shield = Math.max(0, gamestate.players[enemyID].shield - selectionOffensivePower);
 
         // Update gameAction turn
         gameAction.turn = {
