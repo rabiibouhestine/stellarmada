@@ -48,7 +48,7 @@ export class Game {
         );
         await this.sheet.parse();
 
-        this.mattress = new Mattress(this.app, positions.mattress);
+        this.mattress = new Mattress(this.app);
         this.damageIndicator = new Indicator(this.app, positions.battleField.damageIndicator, this.gameState.turn.damage);
         this.confirmButton = new Button(this.app, positions.battleField.confirmButton);
         this.players = this.createPlayers(this.app, this.sheet, this.playerID, this.gameState, positions, this.damageIndicator, this.confirmButton);

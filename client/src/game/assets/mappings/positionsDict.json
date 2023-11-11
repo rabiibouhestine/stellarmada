@@ -3,16 +3,18 @@
 		"hand": { "x": 360, "y": 98 },
 		"battleField": { "x": 360, "y": 360 },
 		"drawPile": { "x": 60, "y": 360 },
-		"discardPile": { "x": 140, "y": 360 }
+		"discardPile": { "x": 140, "y": 360 },
+		"shield": { "x": 360, "y": 281 }
 	},
 	"bottom": {
 		"hand": { "x": 360, "y": 617 },
 		"battleField": { "x": 360, "y": 360 },
 		"drawPile": { "x": 660, "y": 360 },
-		"discardPile": { "x": 580, "y": 360 }
+		"discardPile": { "x": 580, "y": 360 },
+		"shield": { "x": 360, "y": 439 }
 	},
 	"battleField": {
-		"damageIndicator": { "x": 285, "y": 241 },
-		"confirmButton": { "x": 285, "y": 429 }
+		"damageIndicator": { "x": 285, "y": 211 },
+		"confirmButton": { "x": 285, "y": 459 }
 	}
 }
