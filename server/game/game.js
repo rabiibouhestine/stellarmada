@@ -108,7 +108,7 @@ const handleActionRequest = (playerID, playerSelection, room) => {
 
         // update timers
         room.players[enemyID].timer.start();
-        room.players[playerID].timer.stop();
+        room.players[playerID].timer.reset();
 
         // Player cards
         const playerCards = gamestate.players[playerID].cards;
