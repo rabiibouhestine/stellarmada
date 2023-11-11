@@ -98,6 +98,7 @@ const handleActionRequest = (playerID, playerSelection, room) => {
     // Initialise game action
     const gameAction = {
         turn: gamestate.turn,
+        shields: {},
         moves: [],
         logs: []
     };
@@ -303,6 +304,10 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             gamestate.winnerID = playerID;
         }
     }
+
+    // Update game action shields
+    gameAction.shields[playerID] = gamestate.players[playerID].shield;
+    gameAction.shields[enemyID] = gamestate.players[enemyID].shield;
 
     // Update game state turn
     gamestate.turn = gameAction.turn;

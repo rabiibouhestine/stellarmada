@@ -134,6 +134,7 @@ export class Game {
 
             // Update player states
             player.setStance(key === turnPlayerID? stance : "waiting");
+            player.shield.setValue(data.shields[key]);
         }
     }
 

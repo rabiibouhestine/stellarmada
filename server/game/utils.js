@@ -50,6 +50,7 @@ const processGameAction = (gameAction, playerID, isCurrentPlayer) => {
         isGameOver: gameAction.isGameOver,
         winnerID: gameAction.winnerID,
         turn: gameAction.turn,
+        shields: gameAction.shields,
         logs: gameAction.logs,
         moves: processedMoves
     };

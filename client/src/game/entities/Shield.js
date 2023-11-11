@@ -2,7 +2,9 @@ import * as PIXI from "pixi.js";
 import rectPNG from '../assets/images/rect.png';
 
 export class Shield {
-    constructor(app, position, maxHealth) {
+    constructor(app, position, health) {
+
+        this.health = health;
 
         this.x = position.x;
         this.y = position.y;
@@ -10,8 +12,7 @@ export class Shield {
         this.width = 330;
         this.height = 20;
 
-        this.maxHealth = maxHealth;
-        this.health = this.maxHealth;
+        this.widthHealthRatio = 330/500;
 
         this.mask = new PIXI.Graphics();
         this.mask.beginFill(0x000000);
@@ -26,14 +27,14 @@ export class Shield {
         this.healthBgTexture = PIXI.Texture.from(rectPNG);
         this.healthBgSprite = new PIXI.Sprite(this.healthBgTexture);
         this.healthBgSprite.anchor.set(0.5);
-        this.healthBgSprite.width = this.width;
+        this.healthBgSprite.width = this.health * this.widthHealthRatio;
         this.healthBgSprite.height = this.height;
         this.healthBgSprite.mask = this.mask;
 
         this.healthTexture = PIXI.Texture.from(rectPNG);
         this.healthSprite = new PIXI.Sprite(this.healthTexture);
         this.healthSprite.anchor.set(0.5);
-        this.healthSprite.width = this.width;
+        this.healthSprite.width = this.health * this.widthHealthRatio;
         this.healthSprite.height = this.height;
         this.healthSprite.mask = this.mask;
         this.healthSprite.tint = 0xa53030;
@@ -61,10 +62,8 @@ export class Shield {
 
     setValue(value) {
         this.health = value;
-        if (value > this.maxHealth) this.health = this.maxHealth;
-        if (value < 0) this.health = 0;
-        this.label.text = value;
-        this.healthSprite.width = this.health;
-        this.healthBgSprite.width = this.health;
+        this.label.text = this.health;
+        this.healthSprite.width = this.health * this.widthHealthRatio;
+        this.healthBgSprite.width = this.health * this.widthHealthRatio;
     }
 }
