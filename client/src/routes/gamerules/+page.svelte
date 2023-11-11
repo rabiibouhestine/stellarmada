@@ -42,7 +42,7 @@
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">HOW TO PLAY</h1>
 			<p class="text-slate-400">
 				The game is played in a series of turns consisting of a defense phase and an attack phase,
-				the game starts with one of the players in an attack phase.
+				the game starts with one of the players in the attack phase.
 			</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">ATTACK PHASE</h1>
 			<p class="text-slate-400">
@@ -107,7 +107,7 @@
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">END OF THE GAME</h1>
 			<p class="text-slate-400">The game ends when a player either:</p>
 			<ul class="text-slate-400">
-				<li>- Lose their shield.</li>
+				<li>- Loses their shield.</li>
 				<li>
 					- Cannot defend against an attack (a successful defense is discarding enough cards to
 					cover the opponent's attack offensive power AND still have cards in your hand to attack
