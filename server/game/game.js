@@ -216,14 +216,20 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             );
         }
 
-        // Update enemy shield
-        gamestate.players[enemyID].shield = Math.max(0, gamestate.players[enemyID].shield - selectionOffensivePower);
-
         // Update gameAction turn
         gameAction.turn = {
             playerID: enemyID,
             stance: "discarding",
             damage: selectionOffensivePower
+        }
+
+        // Update enemy shield
+        gamestate.players[enemyID].shield = Math.max(0, gamestate.players[enemyID].shield - selectionOffensivePower);
+
+        // If Enemy shield destroyed, player wins
+        if (gamestate.players[enemyID].shield <= 0) {
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
         }
 
         // If enemy does not have enough to discard attack, player wins
