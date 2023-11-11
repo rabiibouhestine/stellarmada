@@ -26,7 +26,8 @@
 			<p class="text-slate-400">
 				Each player draws 7 cards to start the game with (which is the maximum number of cards they
 				can have in their hand), from their shuffled standard deck of 52 playing cards. The
-				remaining cards are placed face down. They form the draw pile.
+				remaining cards are placed face down. They form the draw pile. Each player starts with 300
+				'health points' in their 'Shield'.
 			</p>
 			<p class="text-red-400">include image here.</p>
 			<p class="text-slate-400">Note that decks are shuffled in a specific way:</p>
