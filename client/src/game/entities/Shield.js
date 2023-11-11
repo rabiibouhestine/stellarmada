@@ -12,7 +12,7 @@ export class Shield {
         this.width = 690;
         this.height = 20;
 
-        this.widthHealthRatio = 690/500;
+        this.widthHealthRatio = 690/300;
 
         this.mask = new PIXI.Graphics();
         this.mask.beginFill(0x000000);
