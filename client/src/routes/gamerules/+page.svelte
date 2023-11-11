@@ -13,100 +13,108 @@
 				class="w-full h-14 sticky top-10 p-4 rounded-lg bg-white bg-opacity-5 hover:bg-apollo-blue-400 font-black text-lg text-white"
 				on:click={goHome}
 			>
-				QUIT
+				PLAY
 			</button>
 		</div>
 		<div class="col-span-10 p-8 bg-white bg-opacity-5 rounded-lg">
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">AIM OF THE GAME</h1>
-			<p class="text-slate-400">The aim of the game is to defeat the other player.</p>
+			<p class="text-slate-400">
+				The aim of the game is to defeat the other player (duh), by either destroying their shield,
+				or making an attack they cannot counter.
+			</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">SETUP</h1>
 			<p class="text-slate-400">
-				Prepare the Castle deck similarly to a standard game of Regicide:
+				Each player draws 7 cards to start the game with (which is the maximum number of cards they
+				can have in their hand), from their shuffled standard deck of 52 playing cards. The
+				remaining cards are placed face down. They form the draw pile.
 			</p>
-			<ul class="text-slate-500">
-				<li>- Shuffle the 4 Kings and put them facedown on the table.</li>
-				<li>- Shuffle the 4 Queens and add them facedown on top of the Kings.</li>
+			<p class="text-red-400">include image here.</p>
+			<p class="text-slate-400">Note that decks are shuffled in a specific way:</p>
+			<ol class="text-slate-400">
+				<li>1. Diamond suit cards are shuffled separately.</li>
+				<li>2. The rest of the cards are shuffled separately.</li>
 				<li>
-					- Shuffle the 4 Jacks and add them facedown on top of the Queens. Do not reveal the first
-					card. The Jester cards are not used. Shuffle the remaining cards and set them facedown on
-					the table. They form the Tavern deck.
+					3. The deck is formed back together by placing 1 Diamond suit card, then 3 non Diamond
+					suit card, repeatedly, untill we form the deck.
 				</li>
-			</ul>
-			<p class="text-slate-400">
-				The Jester cards are not used. Shuffle the remaining cards and set them facedown on the
-				table. They form the Tavern deck.
-			</p>
-			<p class="text-slate-400">Deal 7 cards to each player from the Tavern deck.</p>
+			</ol>
+			<p class="text-red-400">include example of shuffled deck here.</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">HOW TO PLAY</h1>
 			<p class="text-slate-400">
-				On your turn, you play a card (or multiple cards) and deal damage to your opponent according
-				to the value of the cards you have played. In addition, every suit has a special power that
-				is the same or similar as in standard Regicide.
+				The game is played in a series of turns consisting of a defense phase and an attack phase,
+				the game starts with one of the players in an attack phase.
 			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♥ Hearts heal the deck</h2>
-			<p class="text-slate-400">When you play a Heart, refill the Tavern deck.</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♦ Diamonds draw cards</h2>
+			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">ATTACK PHASE</h1>
 			<p class="text-slate-400">
-				When you play a Diamond, draw (hire) new cards from the Tavern deck.
+				In your attack phase, you attack your opponent with a card (or multiple cards) and deal
+				damage to your opponent's shield according to the offensive power of the cards you have
+				played. In addition, every suit has a special effect that is the same or similar as in
+				standard Regicide. The effects are applied in this order:
 			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♣ Clubs double the attack</h2>
-			<p class="text-slate-400">When you play a Club, your attack value is doubled.</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♠ Spades shield you</h2>
+			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♠ Spades</h2>
 			<p class="text-slate-400">
-				When you play a Spade, it is added to the shield against your opponent's attacks.
+				Attacking with Spades discards the top 4 cards of the opponent's draw pile to their discard
+				pile.
 			</p>
-			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">
-				STEPS TO PERFORM ON YOUR TURN
-			</h1>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">1. Play a card (or a combo)</h2>
+			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♥ Hearts</h2>
 			<p class="text-slate-400">
-				On your turn, you must play one or multiple cards from your hand. Multiple cards (a combo)
-				can be played if the cards have the same number, but their total value must not exceed 10.
+				Attacking with Hearts refills the draw pile from the discard pile. The amount of cards
+				refilled is equal to the total offensive power of the cards you attacked with.
 			</p>
-			<p class="text-slate-400">Played value is the total value of the cards you have played.</p>
+			<p class="text-slate-500">
+				Note that the the cards refilled are picked randomly from the discard pile.
+			</p>
+			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♦ Diamonds</h2>
 			<p class="text-slate-400">
-				If you play a pair of threes, the played value is 6. Both suit powers are applied.
+				Attacking with Diamonds refills your hand from the draw pile. The amount of cards refilled
+				is equal to the total offensive power of the cards you attacked with.
+			</p>
+			<p class="text-slate-500">
+				Note that you can only hold a maximum of 7 cards in your hand. This effect does not bypass
+				that and only restores cards untill your hand is full.
+			</p>
+			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♣ Clubs</h2>
+			<p class="text-slate-400">
+				Attacking with Clubs doubles the total offensive power of the cards you attacked with.
+			</p>
+			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">DEFENSE PHASE</h1>
+			<p class="text-slate-400">
+				In your defence phase, you must discard cards from your hand to the discard pile. The cards
+				discarded need to have a total defensive power that is greater or equal to the total
+				offensive power of the cards the opponent attacked you with.
+			</p>
+			<p class="text-slate-500">
+				Note that you can discard as many cards as you would like, be mindfull however that
+				discarding all cards from your hand makes you lose the game.
+			</p>
+			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">CARDS POWER</h1>
+			<p class="text-slate-400">
+				Aces and Face Cards (A, J, Q & K) have an offensive power of 1 and a defensive power of 10.
 			</p>
 			<p class="text-slate-400">
-				If you play four twos, the played value is 8. All suit powers are applied.
-			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">2. Refill the Discard deck ♥</h2>
-			<p class="text-slate-400">
-				If you played a Heart, shuffle the Discard deck and add a number of cards equal to the
-				played value to the bottom of the Tavern deck (same as you would do in standard Regicide).
-			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">
-				3. Draw cards from the Tavern deck ♦
-			</h2>
-			<p class="text-slate-400">
-				If you played a Diamond, draw a number of cards up to the played value from the Tavern deck.
-				Stop drawing when you have 7 cards in your hand, or when the Tavern deck is empty.
-			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">
-				4. Deal damage to your opponent
-			</h2>
-			<p class="text-slate-400">
-				Your attack value is normally equal to the played value. If you played a Club, your attack
-				value is double the played value. Your opponent’s shield value is the total value of all
-				cards in their play area. (These will be only Spades or combos that include a Spade.)
-			</p>
-			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">5. Cleanup</h2>
-			<p class="text-slate-400">
-				At the end of your turn, discard the cards you have played, unless you have played a Spade.
-				A played Spade (or a combo that includes a Spade) is added to your shield and stays in your
-				play area until the shield is destroyed by your opponent.
+				Numbered Cards (2...9) have their number as both their offensive power and defensive power.
 			</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">PLAYING COMBOS</h1>
 			<p class="text-slate-400">
-				Aces, or animal companions, are the same as in standard Regicide. Ace has a value of 1. It
-				can be played alone, or it can be played together with any one card to form a combo. This
-				type of combo can be played even if the played value exceeds 10.
+				You can attack with multiple cards. However, the cards you attack with must follow these
+				rules:
 			</p>
+			<ul class="text-slate-400">
+				<li>- No more than one numbered card (2...9).</li>
+				<li>- Only one card of each Suit.</li>
+			</ul>
+			<p class="text-red-400">include examples of allowed combos.</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">END OF THE GAME</h1>
-			<p class="text-slate-400">
-				The game ends when a player does not have enough cards to satisfy the damage, or cannot play
-				a card on his turn. The other player is the winner
-			</p>
+			<p class="text-slate-400">The game ends when a player either:</p>
+			<ul class="text-slate-400">
+				<li>- Lose their shield.</li>
+				<li>
+					- Cannot defend against an attack (a successful defense is discarding enough cards to
+					cover the opponent's attack offensive power AND still have cards in your hand to attack
+					with.)
+				</li>
+			</ul>
+			<p class="text-slate-400">In both these cases, the opponent wins (duh).</p>
 		</div>
 	</div>
 </div>
