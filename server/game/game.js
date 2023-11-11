@@ -68,6 +68,7 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
+        shield: 500,
         cards: {
             hand: hand,
             battleField: [],
@@ -97,6 +98,7 @@ const handleActionRequest = (playerID, playerSelection, room) => {
     // Initialise game action
     const gameAction = {
         turn: gamestate.turn,
+        shields: {},
         moves: [],
         logs: []
     };
@@ -221,6 +223,15 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             damage: selectionOffensivePower
         }
 
+        // Update enemy shield
+        gamestate.players[enemyID].shield = Math.max(0, gamestate.players[enemyID].shield - selectionOffensivePower);
+
+        // If Enemy shield destroyed, player wins
+        if (gamestate.players[enemyID].shield <= 0) {
+            gamestate.isGameOver = true;
+            gamestate.winnerID = playerID;
+        }
+
         // If enemy does not have enough to discard attack, player wins
         const enemyDefensivePower = gamestate.players[enemyID].cards.hand.reduce((accumulator, card) => {
             return accumulator + cardsMapping[card].defensivePower;
@@ -299,6 +310,10 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             gamestate.winnerID = playerID;
         }
     }
+
+    // Update game action shields
+    gameAction.shields[playerID] = gamestate.players[playerID].shield;
+    gameAction.shields[enemyID] = gamestate.players[enemyID].shield;
 
     // Update game state turn
     gamestate.turn = gameAction.turn;

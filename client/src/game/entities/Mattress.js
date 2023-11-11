@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 
 export class Mattress {
-    constructor(app, positions) {
+    constructor(app) {
 
         // Add battlefield to mattress
         const battlefield = new PIXI.Graphics();
