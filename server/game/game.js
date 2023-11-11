@@ -163,9 +163,9 @@ const handleActionRequest = (playerID, playerSelection, room) => {
         const enemyCards = gamestate.players[enemyID].cards;
         if (hasSpades && enemyCards.drawPile.length !== 0) {
             // pick 4 cards from top of drawPile
-            const discardedCards = enemyCards.drawPile.slice(-4);
+            const discardedCards = enemyCards.drawPile.slice(-3);
             // move them to discardPile
-            enemyCards.drawPile.splice(-4);
+            enemyCards.drawPile.splice(-3);
             enemyCards.discardPile.push(...discardedCards);
 
             gameAction.moves.push(

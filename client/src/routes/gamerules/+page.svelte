@@ -53,7 +53,7 @@
 			</p>
 			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♠ Spades</h2>
 			<p class="text-slate-400">
-				Attacking with Spades discards the top 4 cards of the opponent's draw pile to their discard
+				Attacking with Spades discards the top 3 cards of the opponent's draw pile to their discard
 				pile.
 			</p>
 			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♥ Hearts</h2>
