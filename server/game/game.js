@@ -68,7 +68,7 @@ const initPlayerState = () => {
 
     // Define playerState
     const playerState = {
-        shield: 500,
+        shield: 300,
         cards: {
             hand: hand,
             battleField: [],
