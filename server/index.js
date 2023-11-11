@@ -68,7 +68,7 @@ app.get('/single', (req, res) => {
         isBot: true,
         isReady: true,
         isPresent: true,
-        timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
+        timer: new Timer(() => {endGame(roomID)}, 1000 * 60)
     };
 
     // return room information
@@ -173,7 +173,7 @@ io.on("connection", (socket) => {
                 isBot: false,
                 isReady: false,
                 isPresent: true,
-                timer: new Timer(() => {endGame(roomID)}, 1000 * 60 * 10)
+                timer: new Timer(() => {endGame(roomID)}, 1000 * 60)
             };
         }
 

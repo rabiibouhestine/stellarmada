@@ -25,8 +25,8 @@
 		roomID: $page.params.roomID
 	});
 
-	const playerTimer = new Timer(1000 * 60 * 10, playerTimeUpdate);
-	const opponentTimer = new Timer(1000 * 60 * 10, opponentTimeUpdate);
+	const playerTimer = new Timer(1000 * 60, playerTimeUpdate);
+	const opponentTimer = new Timer(1000 * 60, opponentTimeUpdate);
 
 	let canvas;
 	let winnerID;
@@ -72,10 +72,10 @@
 			if (data.gameAction.turn.stance === 'discarding') {
 				if (data.gameAction.turn.playerID === playerID) {
 					playerTimer.start();
-					opponentTimer.stop();
+					opponentTimer.reset();
 				} else {
 					opponentTimer.start();
-					playerTimer.stop();
+					playerTimer.reset();
 				}
 			}
 		});
@@ -84,8 +84,8 @@
 			isGameOver = true;
 			winnerID = data.winnerID;
 			game.handleGameOver(winnerID);
-			playerTimer.stop();
-			opponentTimer.stop();
+			playerTimer.reset();
+			opponentTimer.reset();
 		});
 
 		return () => {
