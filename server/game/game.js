@@ -272,6 +272,23 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             }
         );
 
+        // If discarded defensive power exactly equal to attack offensive power, draw 1 card
+        if (selectionDefensivePower === gamestate.turn.damage) {
+            const nCardsMissingFromHand = handMax - playerCards.hand.length;
+            const nCardsToDraw = Math.min(1, nCardsMissingFromHand);
+            const cardsToDraw = playerCards.drawPile.slice(-nCardsToDraw);
+            playerCards.drawPile.splice(-nCardsToDraw);
+            playerCards.hand.push(...cardsToDraw.reverse());
+
+            gameAction.moves.push(
+                {
+                    playerID: playerID,
+                    cardsNames: cardsToDraw,
+                    location: "drawPile",
+                    destination: "hand"
+                }
+            );
+        }
 
         // Add counter to logs
         gamestate.logs.push(
