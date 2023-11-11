@@ -15,6 +15,8 @@ export class Player {
         this.confirmButton = confirmButton;
         this.isPlayer = isPlayer;
         
+        this.shield = new Shield(app, this.positions.shield, state.shield);
+        
         this.cardsContainer = new PIXI.Container();
         this.cardsContainer.sortableChildren = true;
         this.app.stage.addChild(this.cardsContainer);
@@ -22,7 +24,6 @@ export class Player {
         this.drawPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.drawPile, state.cards.drawPile);
         this.discardPile = new Pile(this.cardsContainer, sheet, this.isPlayer, this.positions.discardPile, state.cards.discardPile);
         this.battleField = new Field(this.cardsContainer, sheet, state.cards.battleField, positions.battleField);
-        this.shield = new Shield(app, this.positions.shield, state.shield);
         this.hand = new Hand(this.cardsContainer, sheet, state.cards.hand, positions.hand, isPlayer);
         this.hand.cards.map((card) => card.container.on('pointerdown', () => this.onCardSelection(card)));
 
