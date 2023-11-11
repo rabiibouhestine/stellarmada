@@ -53,7 +53,7 @@
 			</p>
 			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♠ Spades</h2>
 			<p class="text-slate-400">
-				Attacking with Spades discards the top 4 cards of the opponent's draw pile to their discard
+				Attacking with Spades discards the top 3 cards of the opponent's draw pile to their discard
 				pile.
 			</p>
 			<h2 class="text-xl text-slate-100 font-black drop-shadow-md">♥ Hearts</h2>
@@ -79,9 +79,13 @@
 			</p>
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">DEFENSE PHASE</h1>
 			<p class="text-slate-400">
-				In your defence phase, you must discard cards from your hand to the discard pile. The cards
+				In your defense phase, you must discard cards from your hand to the discard pile. The cards
 				discarded need to have a total defensive power that is greater or equal to the total
 				offensive power of the cards the opponent attacked you with.
+			</p>
+			<p class="text-slate-400">
+				If the defensive power of the discarded cards is exactly equal to the offensive power of the
+				attack, you draw 1 card from the draw pile.
 			</p>
 			<p class="text-slate-500">
 				Note that you can discard as many cards as you would like, be mindfull however that

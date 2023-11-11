@@ -163,9 +163,9 @@ const handleActionRequest = (playerID, playerSelection, room) => {
         const enemyCards = gamestate.players[enemyID].cards;
         if (hasSpades && enemyCards.drawPile.length !== 0) {
             // pick 4 cards from top of drawPile
-            const discardedCards = enemyCards.drawPile.slice(-4);
+            const discardedCards = enemyCards.drawPile.slice(-3);
             // move them to discardPile
-            enemyCards.drawPile.splice(-4);
+            enemyCards.drawPile.splice(-3);
             enemyCards.discardPile.push(...discardedCards);
 
             gameAction.moves.push(
@@ -272,6 +272,23 @@ const handleActionRequest = (playerID, playerSelection, room) => {
             }
         );
 
+        // If discarded defensive power exactly equal to attack offensive power, draw 1 card
+        if (selectionDefensivePower === gamestate.turn.damage) {
+            const nCardsMissingFromHand = handMax - playerCards.hand.length;
+            const nCardsToDraw = Math.min(1, nCardsMissingFromHand);
+            const cardsToDraw = playerCards.drawPile.slice(-nCardsToDraw);
+            playerCards.drawPile.splice(-nCardsToDraw);
+            playerCards.hand.push(...cardsToDraw.reverse());
+
+            gameAction.moves.push(
+                {
+                    playerID: playerID,
+                    cardsNames: cardsToDraw,
+                    location: "drawPile",
+                    destination: "hand"
+                }
+            );
+        }
 
         // Add counter to logs
         gamestate.logs.push(

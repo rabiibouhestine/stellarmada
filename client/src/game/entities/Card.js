@@ -1,6 +1,10 @@
 import * as PIXI from "pixi.js";
 import * as TWEEN from '@tweenjs/tween.js';
+
 import cardsDict from '../assets/mappings/cardsDict.json';
+
+import shieldImage from '../assets/images/shield.png';
+import crosshairImage from '../assets/images/crosshair.png';
 
 export class Card {
     constructor(cardsContainer, sheet, name, position, isPlayer) {
@@ -21,10 +25,62 @@ export class Card {
 
         // Define card container
         this.container = new PIXI.Container();
-        this.container.eventMode = 'static';
+        this.container.eventMode = this.isPlayer ? 'static' : 'none';
         this.container.cursor = 'default';
         this.container.x = this.position.x;
         this.container.y = this.position.y;
+
+        // Define card helper
+        this.helperGraphic = new PIXI.Graphics();
+        this.helperGraphic.beginFill(0x090a14);
+        this.helperGraphic.drawRoundedRect(-40, -10, 80, 20, 4);
+        this.helperGraphic.endFill();
+
+        this.helperOffenseTexture = PIXI.Texture.from(crosshairImage);
+        this.helperOffenseSprite = new PIXI.Sprite(this.helperOffenseTexture);
+        this.helperOffenseSprite.anchor.set(0.5);
+        this.helperOffenseSprite.width = 16;
+        this.helperOffenseSprite.height = 16;
+        this.helperOffenseSprite.x = -30;
+
+        this.helperDefenseTexture = PIXI.Texture.from(shieldImage);
+        this.helperDefenseSprite = new PIXI.Sprite(this.helperDefenseTexture);
+        this.helperDefenseSprite.anchor.set(0.5);
+        this.helperDefenseSprite.width = 10;
+        this.helperDefenseSprite.height = 10;
+        this.helperDefenseSprite.x = 30;        
+
+        this.helperOffenseLabel = new PIXI.Text(this.offensivePower, {
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            fontSize: 12,
+            fill: 0xFFFFFF,
+            align: 'center'
+        });
+        this.helperOffenseLabel.anchor.set(0.5);
+        this.helperOffenseLabel.x = -15;
+
+        this.helperDefenseLabel = new PIXI.Text(this.defensivePower, {
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            fontSize: 12,
+            fill: 0xFFFFFF,
+            align: 'center'
+        });
+        this.helperDefenseLabel.anchor.set(0.5);
+        this.helperDefenseLabel.x = 15;
+
+        this.helperContainer = new PIXI.Container();
+        this.helperContainer.eventMode = 'none';
+        this.helperContainer.addChild(this.helperGraphic);
+        this.helperContainer.addChild(this.helperOffenseSprite);
+        this.helperContainer.addChild(this.helperDefenseSprite);
+        this.helperContainer.addChild(this.helperOffenseLabel);
+        this.helperContainer.addChild(this.helperDefenseLabel);
+        this.helperContainer.x = 0;
+        this.helperContainer.y = -65;
+        this.helperContainer.visible = false;
+        this.container.addChild(this.helperContainer);
 
         // Define card glow
         this.glow = new PIXI.Graphics();
@@ -79,10 +135,12 @@ export class Card {
     }
 
     onPointerOver() {
+        this.helperContainer.visible = true;
         this.container.scale.set(this.scale * 1.1);
     }
 
     onPointerOut() {
+        this.helperContainer.visible = false;
         this.container.scale.set(this.scale);
     }
 
