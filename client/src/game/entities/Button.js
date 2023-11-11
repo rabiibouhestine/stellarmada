@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-import swordImage from '../assets/images/sword.png';
+import crosshairImage from '../assets/images/crosshairBig.png';
 import skullImage from '../assets/images/skull.png';
 import hourImage from '../assets/images/hourglass.png';
 
@@ -12,7 +12,7 @@ export class Button {
             attacking: {
                 color: 0x73bed3,
                 colorHover: 0x4f8fba,
-                icon: PIXI.Texture.from(swordImage),
+                icon: PIXI.Texture.from(crosshairImage),
                 text: "Attack"
             },
             discarding: {
@@ -48,8 +48,10 @@ export class Button {
         this.iconSprite.anchor.set(0.5);
         this.iconSprite.x = 25;
         this.iconSprite.y = 25;
-        this.iconSprite.scale.set(0.2);
+        this.iconSprite.width = 25;
+        this.iconSprite.height = 25;
         this.button.addChild(this.iconSprite);
+        console.log("scale:", this.iconSprite.scale);
 
         // Define button label
         this.label = new PIXI.Text(this.states[this.state].text, {
@@ -73,9 +75,11 @@ export class Button {
         {
             time += 0.1;
             if ( this.enabled ) {
-                this.iconSprite.scale.set(0.25 + 0.05 * Math.sin(time));
+                this.iconSprite.width = 25 + 5 * Math.sin(time);
+                this.iconSprite.height = 25 + 5 * Math.sin(time);
             } else {
-                this.iconSprite.scale.set(0.2);
+                this.iconSprite.width = 25;
+                this.iconSprite.height = 25;
                 time = 0;
             }
         });
