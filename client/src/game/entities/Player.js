@@ -15,7 +15,7 @@ export class Player {
         this.confirmButton = confirmButton;
         this.isPlayer = isPlayer;
         
-        this.shield = new Shield(app, this.positions.shield, state.shield);
+        this.shield = new Shield(app, this.positions.shield, state.shield, this.isPlayer);
         
         this.cardsContainer = new PIXI.Container();
         this.cardsContainer.sortableChildren = true;

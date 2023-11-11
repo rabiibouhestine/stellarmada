@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import rectPNG from '../assets/images/rect.png';
 
 export class Shield {
-    constructor(app, position, health) {
+    constructor(app, position, health, isPlayer) {
 
         this.health = health;
 
@@ -37,7 +37,7 @@ export class Shield {
         this.healthSprite.width = this.health * this.widthHealthRatio;
         this.healthSprite.height = this.height;
         this.healthSprite.mask = this.mask;
-        this.healthSprite.tint = 0xa53030;
+        this.healthSprite.tint = isPlayer ? 0x4f8fba : 0xda863e;
 
         this.label = new PIXI.Text(this.health, {
             fontFamily: 'Arial',
