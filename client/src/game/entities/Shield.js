@@ -9,10 +9,10 @@ export class Shield {
         this.x = position.x;
         this.y = position.y;
 
-        this.width = 330;
+        this.width = 690;
         this.height = 20;
 
-        this.widthHealthRatio = 330/500;
+        this.widthHealthRatio = 690/500;
 
         this.mask = new PIXI.Graphics();
         this.mask.beginFill(0x000000);
