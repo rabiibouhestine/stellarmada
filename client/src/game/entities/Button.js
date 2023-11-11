@@ -51,7 +51,6 @@ export class Button {
         this.iconSprite.width = 25;
         this.iconSprite.height = 25;
         this.button.addChild(this.iconSprite);
-        console.log("scale:", this.iconSprite.scale);
 
         // Define button label
         this.label = new PIXI.Text(this.states[this.state].text, {
