@@ -1,8 +1,10 @@
 import * as PIXI from "pixi.js";
+import * as TWEEN from '@tweenjs/tween.js';
+
 import rectPNG from '../assets/images/rect.png';
 
 export class Shield {
-    constructor(app, position, health) {
+    constructor(app, position, health, isPlayer) {
 
         this.health = health;
 
@@ -37,7 +39,7 @@ export class Shield {
         this.healthSprite.width = this.health * this.widthHealthRatio;
         this.healthSprite.height = this.height;
         this.healthSprite.mask = this.mask;
-        this.healthSprite.tint = 0xa53030;
+        this.healthSprite.tint = isPlayer ? 0x4f8fba : 0xda863e;
 
         this.label = new PIXI.Text(this.health, {
             fontFamily: 'Arial',
@@ -61,9 +63,35 @@ export class Shield {
     }
 
     setValue(value) {
+        if (this.health === value) {
+            return;
+        }
+
         this.health = value;
         this.label.text = this.health;
         this.healthSprite.width = this.health * this.widthHealthRatio;
-        this.healthBgSprite.width = this.health * this.widthHealthRatio;
+
+        const propreties = {
+            width: this.healthBgSprite.width
+        };
+
+        const healthBgTween = new TWEEN.Tween(propreties, false)
+        .to({
+            width: this.health * this.widthHealthRatio
+        }, 600)
+        .easing(TWEEN.Easing.Exponential.In)
+        .onUpdate(() => {
+            this.healthBgSprite.width = propreties.width;
+        })
+        .start()
+
+        const updateValue = (delta) => {
+            if (!healthBgTween.isPlaying()) return;
+            healthBgTween.update(delta);
+            requestAnimationFrame(updateValue);
+        };
+
+        requestAnimationFrame(updateValue);
     }
+
 }
