@@ -10,13 +10,13 @@
 	<div class="max-w-screen-xl mx-auto grid grid-cols-12 gap-x-2 my-10 px-4">
 		<div class="col-span-1">
 			<button
-				class="w-full h-14 sticky top-10 p-4 rounded-lg bg-white bg-opacity-5 hover:bg-apollo-blue-400 font-black text-lg text-white"
+				class="w-full h-12 flex justify-center items-center sticky top-10 p-4 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white"
 				on:click={goHome}
 			>
 				PLAY
 			</button>
 		</div>
-		<div class="col-span-10 p-8 bg-white bg-opacity-5 rounded-lg">
+		<div class="col-span-10 p-8 bg-gray-600 rounded-lg">
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">AIM OF THE GAME</h1>
 			<p class="text-slate-400">
 				The aim of the game is to defeat the other player (duh), by either destroying their shield,
