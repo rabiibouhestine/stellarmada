@@ -156,9 +156,9 @@
 </script>
 
 <div
-	class="flex flex-row justify-center w-full h-screen bg-gradient-to-t from-apollo-blue-500 to-apollo-yellow-500"
+	class="flex flex-col md:flex-row justify-center w-full h-screen bg-gradient-to-t from-apollo-blue-500 to-apollo-yellow-500"
 >
-	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
+	<div class="hidden md:flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div
 			class="flex items-center justify-center bg-black bg-opacity-25 w-full min-h-[50px] rounded-lg"
 		>
@@ -168,8 +168,50 @@
 			<Logs {logs} {playerID} />
 		</div>
 	</div>
+	<div
+		class="md:hidden flex items-center justify-center bg-black bg-opacity-25 min-h-[50px] rounded-lg mx-6"
+	>
+		<h1 class="text-slate-100 text-3xl font-bold">{formatTime(opponentTimeLeft)}</h1>
+	</div>
 	<div bind:this={canvas} id="pixi-container" class="min-w-0 aspect-square" />
-	<div class="flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
+	<div
+		class="md:hidden flex flex-row items-center justify-center bg-black bg-opacity-25 rounded-lg space-x-4 min-h-[60px] my-4 mx-6"
+	>
+		<button
+			on:click={toggleSound}
+			class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-yellow-300"
+		>
+			<Icon src={soundIcon} class="h-8 w-8 text-white" />
+		</button>
+		<button
+			on:click={() => {
+				showSurrenderModal = true;
+			}}
+			class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-red-300"
+		>
+			<Icon src={Flag} class="h-8 w-8 text-white" />
+		</button>
+		<button
+			on:click={() => {
+				showQuitModal = true;
+			}}
+			class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-blue-300"
+		>
+			<Icon src={Home} class="h-8 w-8 text-white" />
+		</button>
+		<button
+			on:click={toggleFullScreen}
+			class="flex items-center justify-center bg-black bg-opacity-25 h-10 w-12 rounded-lg hover:bg-apollo-green-300"
+		>
+			<Icon src={fullScreenIcon} class="h-8 w-8 text-white" />
+		</button>
+	</div>
+	<div
+		class="md:hidden flex items-center justify-center bg-black bg-opacity-25 mx-6 min-h-[50px] rounded-lg"
+	>
+		<h1 class="text-slate-100 text-3xl font-bold">{formatTime(playerTimeLeft)}</h1>
+	</div>
+	<div class="hidden md:flex flex-col min-w-[300px] max-w-[300px] p-5 space-y-5">
 		<div class="bg-black bg-opacity-25 w-full h-full rounded-xl overflow-y-auto">
 			<Chat {socket} {playerID} {messages} />
 		</div>
