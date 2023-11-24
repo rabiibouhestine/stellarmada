@@ -92,9 +92,9 @@
 				</button>
 			</div>
 		{/if}
-		<div class="p-6 flex justify-center w-2/3">
+		<div class="p-6 flex justify-center w-full">
 			<button
-				class="w-1/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
+				class="w-2/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 				on:click={handleLeave}
 			>
 				LEAVE
