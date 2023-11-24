@@ -34,7 +34,7 @@
 				<span>STELL</span><span class="text-slate-400">AR</span><span>MADA</span>
 			</h1>
 			<h1 class="text-xl text-center text-slate-300 drop-shadow-md">
-				A pvp online alternative of the card game Regicide
+				A dueling card game inspired by the mechanics of Regicide
 			</h1>
 		</div>
 		<button
