@@ -8,7 +8,7 @@
 
 <div class="max-h-screen overflow-auto bg-gradient-to-t from-apollo-blue-500 to-black">
 	<div class="max-w-screen-xl mx-auto grid grid-cols-12 gap-x-2 my-10 px-4">
-		<div class="col-span-1">
+		<div class="col-span-1 hidden md:block">
 			<button
 				class="w-full h-12 flex justify-center items-center sticky top-10 p-4 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white"
 				on:click={goHome}
@@ -16,7 +16,13 @@
 				PLAY
 			</button>
 		</div>
-		<div class="flex flex-col col-span-10 p-8 gap-y-4 bg-gray-600 rounded-lg">
+		<button
+			class="block md:hidden col-span-12 h-12 flex justify-center items-center mb-4 p-4 rounded-lg bg-apollo-blue-300 hover:bg-apollo-blue-400 font-black text-lg text-white"
+			on:click={goHome}
+		>
+			PLAY
+		</button>
+		<div class="flex flex-col col-span-12 md:col-span-10 p-8 gap-y-4 bg-gray-600 rounded-lg">
 			<h1 class="text-2xl text-slate-100 font-black drop-shadow-md">AIM OF THE GAME</h1>
 			<p class="text-slate-300">
 				The aim of the game is to defeat the other player (duh), by either destroying their shield,
