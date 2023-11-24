@@ -84,14 +84,14 @@ export class Game {
         const stageScale = Math.min(windowWidth / 720, windowHeight / 720);
 
         // Update renderer dimensions
-        this.app.renderer.resize(windowWidth, windowHeight);
+        this.app.renderer.resize(windowWidth, windowWidth);
 
         // Update stage scale
         this.app.stage.scale.set(stageScale);
 
         // Center the stage
         this.app.stage.x = (windowWidth - 720 * stageScale ) / 2;
-        this.app.stage.y = (windowHeight - 720 * stageScale ) / 2;
+        this.app.stage.y = (windowWidth - 720 * stageScale ) / 2;
     }
 
     handleGameOver(winnerID) {

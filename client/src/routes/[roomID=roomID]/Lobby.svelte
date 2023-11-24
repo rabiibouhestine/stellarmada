@@ -47,8 +47,8 @@
 <div
 	class="flex items-center justify-center h-screen bg-gradient-to-t from-apollo-blue-500 to-apollo-yellow-500"
 >
-	<div class="grid justify-items-center w-2/3">
-		<div class="flex items-center justify-between w-1/3">
+	<div class="grid justify-items-center max-w-screen-xl mx-auto">
+		<div class="flex items-center justify-between w-2/3">
 			<div class="flex justify-center items-center rounded-full w-16 h-16 bg-apollo-blue-300">
 				<Icon src={User} class="h-12 w-12 text-white" />
 			</div>
@@ -83,7 +83,7 @@
 					on:click={handleCopy}
 				>
 					<Icon src={Clipboard} class="h-6 w-6" />
-					<div class="flex flex-row space-x-4">
+					<div class="flex flex-col md:flex-row space-x-4">
 						<span>COPY INVITE LINK :</span>
 						<h1 class="rounded-l-lg text-md text-center text-slate-100 font-medium">
 							{$page.url}
@@ -92,9 +92,9 @@
 				</button>
 			</div>
 		{/if}
-		<div class="p-6 flex justify-center w-2/3">
+		<div class="p-6 flex justify-center w-full">
 			<button
-				class="w-1/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
+				class="w-2/5 mx-2 px-4 py-2 rounded-lg bg-apollo-red-300 hover:bg-apollo-red-400 font-black text-lg text-white"
 				on:click={handleLeave}
 			>
 				LEAVE
